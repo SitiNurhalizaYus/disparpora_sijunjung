@@ -53,6 +53,10 @@
     <!-- SwiperSlider css -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/swiperSlider/swiper-bundle.min.css') }}">
     <link rel="stylesheet" href="{{ asset('landing-pages/assets/css/landing-pages.min.css') }}">
+
+
+    {{-- News --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/rtl.min.css') }}">
 </head>
 
 <body class=" body-bg landing-pages">
