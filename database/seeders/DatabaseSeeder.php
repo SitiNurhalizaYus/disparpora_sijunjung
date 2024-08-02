@@ -97,8 +97,9 @@ class DatabaseSeeder extends Seeder
         \App\Models\Setting::factory()->create(['id' => 1, 'is_active'=> true, 'type' => 'text', 'key' => 'name', 'value' => 'DISPARPORA Sijunjung']);
         \App\Models\Setting::factory()->create(['id' => 2, 'is_active'=> true, 'type' => 'text', 'key' => 'copyright', 'value' => 'Copyright @2024 Dinas Pariwisata dan Olahraga Kabupaten Sijunjung']);
         \App\Models\Setting::factory()->create(['id' => 3, 'is_active'=> true, 'type' => 'longtext', 'key' => 'footer-about', 'value' => 'Lorem Ipsum']);
-        \App\Models\Setting::factory()->create(['id' => 4, 'is_active'=> true, 'type' => 'text', 'key' => 'address', 'value' => 'Sijunjung']);
-        \App\Models\Setting::factory()->create(['id' => 5, 'is_active'=> true, 'type' => 'text', 'key' => 'phone', 'value' => '085']);
+        \App\Models\Setting::factory()->create(['id' => 4, 'is_active'=> true, 'type' => 'text', 'key' => 'address', 'value' => 'Jl. Pasar Inpres, Muaro,
+                        Kecamaten Sijunjung, Kabupaten Sijunjung, Sumatera Barat 27562']);
+        \App\Models\Setting::factory()->create(['id' => 5, 'is_active'=> true, 'type' => 'text', 'key' => 'phone', 'value' => '0751-xxxx']);
         \App\Models\Setting::factory()->create(['id' => 6, 'is_active'=> true, 'type' => 'text', 'key' => 'email', 'value' => 'disparpora@email.com']);
         \App\Models\Setting::factory()->create(['id' => 7, 'is_active'=> true, 'type' => 'text', 'key' => 'socmed-twitter', 'value' => 'http://google.com']);
         \App\Models\Setting::factory()->create(['id' => 8, 'is_active'=> true, 'type' => 'text', 'key' => 'socmed-instagram', 'value' => 'http://google.com']);

@@ -2,14 +2,19 @@
 
 @section('content')
     <div class="container-fluid position-relative p-0">
-        <div class="container-fluid bg-primary py-5 bg-header" style="margin-bottom: 90px;">
+        <div class="container-fluid bg-primary py-5 bg-header">
             <div class="row py-5">
                 <div class="col-12 pt-lg-5 mt-lg-5 text-center">
-                    <h1 class="display-4 text-white animated zoomIn">About Us</h1>
-                    <a href="" class="h5 text-white">Home</a>
-                    <i class="far fa-circle text-white px-2"></i>
-                    <a href="" class="h5 text-white">About</a>
+                    <h1 class="display-10 text-light animated zoomIn">Dinas Pariwisata dan Olahraga Kab.Sijunjung</h1>
                 </div>
+            </div>
+        </div>
+        <div class="container-fluid bg-primary py-3 bg-light">
+            <div class="text-star">
+                <a href="/beranda" class="text-green">Beranda</a><i class="bi bi-arrow-right-short text-green px-2"></i><a
+                    href="/profil" class="text-green">Profil</a>
+                <i class="bi bi-arrow-right-short text-green px-2"></i>
+                <a href="/visimisi" class="text-green">Visi dan Misi</a>
             </div>
         </div>
     </div>
@@ -17,14 +22,14 @@
     <!-- Full Screen Search Start -->
     <div class="modal fade" id="searchModal" tabindex="-1">
         <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content" style="background: rgba(9, 30, 62, .7);">
+            <div class="modal-content" style="background: rgba(10, 50, 29, 0.59);">
                 <div class="modal-header border-0">
                     <button type="button" class="btn bg-white btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex align-items-center justify-content-center">
                     <div class="input-group" style="max-width: 600px;">
-                        <input type="text" class="form-control bg-transparent border-primary p-3"
+                        <input type="text" class="form-control bg-white border-green p-3"
                             placeholder="Type search keyword">
                         <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
                     </div>
@@ -33,6 +38,24 @@
         </div>
     </div>
     <!-- Full Screen Search End -->
+
+     {{-- <!-- Full Screen Search Start -->
+     <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(9, 30, 62, .7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn bg-white btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-primary p-3" placeholder="Type search keyword">
+                        <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End --> --}}
 
     <!-- About Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -43,8 +66,10 @@
                         <h5 class="fw-bold text-primary text-uppercase">About Us</h5>
                         <h1 class="mb-0">The Best IT Solution With 10 Years of Experience</h1>
                     </div>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam amet
-                        diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita
+                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam
+                        amet
+                        diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus
+                        clita
                         duo justo et tempor eirmod magna dolore erat amet</p>
                     <div class="row g-0 mb-3">
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
@@ -66,7 +91,8 @@
                             <h4 class="text-primary mb-0">+012 345 6789</h4>
                         </div>
                     </div>
-                    <a href="quote.html" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">Request A
+                    <a href="quote.html" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">Request
+                        A
                         Quote</a>
                 </div>
                 <div class="col-lg-5" style="min-height: 500px;">

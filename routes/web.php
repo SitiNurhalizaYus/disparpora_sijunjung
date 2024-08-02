@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function () {
-    Route::get('/', [App\Http\Controllers\Client\HomeController::class, 'index']);
-    Route::get('/home', [App\Http\Controllers\Client\HomeController::class, 'index']);
-    Route::get('/about', [App\Http\Controllers\Client\AboutController::class, 'index']);
+    Route::get('/', [App\Http\Controllers\Client\BerandaController::class, 'index']);
+    Route::get('/beranda', [App\Http\Controllers\Client\BerandaController::class, 'index']);
+    Route::get('/profil', [App\Http\Controllers\Client\ProfilController::class, 'index']);
     Route::get('/feature', [App\Http\Controllers\Client\FeatureController::class, 'index']);
     Route::get('/pricing', [App\Http\Controllers\Client\PricingController::class, 'index']);
     Route::get('/blog', [App\Http\Controllers\Client\BlogController::class, 'index']);

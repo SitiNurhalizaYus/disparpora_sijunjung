@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AboutController extends Controller
+class ProfilController extends Controller
 {
     public function __construct()
     {
@@ -15,11 +15,11 @@ class AboutController extends Controller
     {
         $data = [];
         $data['og'] = [];
-        $data['og']['url'] = url('/').'/about';
-        $data['og']['title'] = 'About';
-        $data['og']['description'] = 'About';
+        $data['og']['url'] = url('/').'/profil';
+        $data['og']['title'] = 'Profil';
+        $data['og']['description'] = 'profil';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
-        return view('client.about.index', $data);
+        return view('client.profil.index', $data);
     }
 }

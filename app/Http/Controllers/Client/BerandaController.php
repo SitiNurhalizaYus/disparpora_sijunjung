@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Helpers;
 
-class HomeController extends Controller
+class BerandaController extends Controller
 {
 
     public function __construct()
@@ -19,9 +19,9 @@ class HomeController extends Controller
     {
         $data = [];
         $data['og'] = [];
-        $data['og']['url'] = url('/').'/home';
-        $data['og']['title'] = 'Home';
-        $data['og']['description'] = 'Home';
+        $data['og']['url'] = url('/').'/beranda';
+        $data['og']['title'] = 'Beranda';
+        $data['og']['description'] = 'beranda';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting(); 
         $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
         $data['sliders'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/slider');
@@ -29,6 +29,6 @@ class HomeController extends Controller
         $data['teams'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/team');
         $data['partners'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/partner');
         $data['testimonies'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/testimony');
-        return view('client.home.index', $data);
+        return view('client.beranda.index', $data);
     }
 }

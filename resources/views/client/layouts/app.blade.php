@@ -70,10 +70,10 @@
         <div class="row gx-0">
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 50px;">
-                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>Jl. Pasar Inpres, Muaro,
-                        Kecamaten Sijunjung, Kabupaten Sijunjung, Sumatera Barat 27562</small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>+012 345 6789</small>
-                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i>disparpora@gmail.com</small>
+                    <small class="me-3 text-light"><i
+                            class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
+                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
                 </div>
             </div>
             <div class="col-lg-4 text-center text-lg-end">
@@ -82,8 +82,6 @@
                             class="fab fa-twitter fw-normal"></i></a>
                     <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
                             class="fab fa-facebook-f fw-normal"></i></a>
-                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
-                            class="fab fa-linkedin-in fw-normal"></i></a>
                     <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
                             class="fab fa-instagram fw-normal"></i></a>
                     <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle" href=""><i
@@ -101,19 +99,25 @@
             <a href="index.html" class="navbar-brand p-0">
                 <h2 class="m-0"><img
                         src="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
-                        {{ $setting['name-short'] }}</h2>
+                    {{ $setting['name-short'] }}</h2>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
-                    <a href="{{ url('/home') }}"
-                        class="nav-item nav-link {{ Request::is('home') ? 'active' : '' }}">Home</a>
-                    <a href="{{ url('/about') }}"
-                        class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">About</a>
-                    <a href="{{ url('/service') }}"
-                        class="nav-item nav-link {{ Request::is('service') ? 'active' : '' }}">Services</a>
+                    <a href="{{ url('/beranda') }}"
+                        class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }}">Beranda</a>
+                    <div class="nav-item dropdown">
+                        <a href="{{ url('/profil') }}" class="nav-link dropdown-toggle {{ Request::is('profil') ? 'active' : '' }}" data-bs-toggle="dropdown">Profil</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="/visimisi" class="dropdown-item {{ Request::is('profil') ? 'active' : '' }}">Visi dan Misi</a>
+                            <a href="feature.html" class="dropdown-item">Our features</a>
+                            <a href="team.html" class="dropdown-item">Team Members</a>
+                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                            <a href="quote.html" class="dropdown-item">Free Quote</a>
+                        </div>
+                    </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Blog</a>
                         <div class="dropdown-menu m-0">
@@ -132,9 +136,9 @@
                         </div>
                     </div>
                     <a href="contact.html" class="nav-item nav-link">Contact</a>
-                    <a href="#" class="btn btn-primary py-2 px-4 ms-3">Ayo Bergabung </a>
+                        Akun</a>
                 </div>
-                <butaton type="button" class="btn text-green ms-3" data-bs-toggle="modal"
+                <butaton type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
                     data-bs-target="#searchModal">
                     <i class="fa fa-search"></i>
                 </butaton>
@@ -203,10 +207,10 @@
                                 <h3 class="text-light mb-0">Quick Links</h3>
                             </div>
                             <div class="link-animated d-flex flex-column justify-content-start">
-                                <a class="text-light mb-2" href="{{ url('/home') }}"><i
-                                        class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                                <a class="text-light mb-2" href="{{ url('/about') }}"><i
-                                        class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
+                                <a class="text-light mb-2" href="{{ url('/beranda') }}"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Beranda</a>
+                                <a class="text-light mb-2" href="{{ url('/profil') }}"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Profil Us</a>
                                 <a class="text-light mb-2" href="{{ url('/service') }}"><i
                                         class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
                                 <a class="text-light mb-2" href="#"><i
@@ -223,9 +227,9 @@
                             </div>
                             <div class="link-animated d-flex flex-column justify-content-start">
                                 <a class="text-light mb-2" href="#"><i
-                                        class="bi bi-arrow-right text-primary me-2"></i>Home</a>
+                                        class="bi bi-arrow-right text-primary me-2"></i>Beranda</a>
                                 <a class="text-light mb-2" href="#"><i
-                                        class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
+                                        class="bi bi-arrow-right text-primary me-2"></i>Profil Us</a>
                                 <a class="text-light mb-2" href="#"><i
                                         class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
                                 <a class="text-light mb-2" href="#"><i
