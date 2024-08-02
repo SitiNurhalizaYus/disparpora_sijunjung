@@ -23,9 +23,10 @@ class EventFactory extends Factory
             'nama_acara' => $this->faker->sentence,
             'tanggal_acara' => $this->faker->date,
             'deskripsi' => $this->faker->paragraph,
-            'gambar' => 'img/' . $this->faker->word . '.jpg',
+            // 'gambar' => 'img/' . $this->faker->word . '.jpg',
+            'gambar' => 'uploads/xxx/noimage.jpg',  
             'link_event' => $this->faker->url,
-            'id_admin' => $this->faker->numberBetween(1, 2),
+            'admin_id' => $this->faker->numberBetween(1, 2),
         ];
     }
 }

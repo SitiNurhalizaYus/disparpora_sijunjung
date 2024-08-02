@@ -20,8 +20,8 @@ class AppHelper
     function setSession($user, $token) {
         session([
             'user_id' => $user['id'],
-            'user_level_id' => $user['level_id'],
-            'user_level_name' => $user['level_name'],
+            'user_role_id' => $user['role_id'],
+            'user_role_name' => $user['role_name'],
             'user_name' => $user['name'],
             'user_email' => $user['email'],
             'user_picture' => $user['photo'],
@@ -32,8 +32,8 @@ class AppHelper
     function getSessionData() {
         return [
             'user_id' => session('user_id', null),
-            'user_level_id' => session('user_level_id', null),
-            'user_level_name' => session('user_level_name', null),
+            'user_role_id' => session('user_role_id', null),
+            'user_role_name' => session('user_role_name', null),
             'user_name' => session('user_name', null),
             'user_email' => session('user_email', null),
             'user_picture' => session('user_picture', null)

@@ -7,7 +7,7 @@ use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
-use App\Models\UserLevel;
+use App\Models\Role;
 
 class LoginController extends Controller
 {
@@ -36,7 +36,7 @@ class LoginController extends Controller
                     'token'   => $token
                 ];
                 $data['user']['last_login'] = date('Y-m-d H:i:s');
-                $data['user']['level_name'] = UserLevel::find($data['user']['level_id'])['role'];
+                $data['user']['role_name'] = Role::find($data['user']['role_id'])['role'];
 
                 return new ApiResource(true, 200, 'Login successfull.', $data, []);
             } else {

@@ -23,15 +23,15 @@
                             {{ csrf_field() }}
                             {{-- @method('PUT') --}}
                             <div class="form-group">
-                                <label class="form-label" for="level_id">Role</label>
-                                <select class="form-control" id="level_id" name="level_id" required>
+                                <label class="form-label" for="role_id">Role</label>
+                                <select class="form-control" id="role_id" name="role_id" required>
                                     <option value="" disabled selected>Pilih role</option>
                                     <option value="1">Administrator</option>
                                     <option value="2">Pengelola Objek Wisata</option>
                                     <option value="3">Pengelola Penginapan</option>
                                     <option value="4">Pengelola Restoran</option>
                                 </select>
-                                <p class="text-danger" id="invalid-level_id" style="display: none;font-size: 0.75rem;">Silahkan Pilih Role</p>
+                                <p class="text-danger" id="invalid-role_id" style="display: none;font-size: 0.75rem;">Silahkan Pilih Role</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="nik">NIK</label>
@@ -134,11 +134,11 @@
             e.preventDefault();
             var valid = true;
 
-            if (!document.getElementById('level_id').value) {
-                document.getElementById('invalid-level_id').style.display = 'block';
+            if (!document.getElementById('role_id').value) {
+                document.getElementById('invalid-role_id').style.display = 'block';
                 valid = false;
             } else {
-                document.getElementById('invalid-level_id').style.display = 'none';
+                document.getElementById('invalid-role_id').style.display = 'none';
             }
 
             if (!document.getElementById('nik').value || !/^\d+$/.test(document.getElementById('nik').value)) {

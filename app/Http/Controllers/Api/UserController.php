@@ -30,11 +30,11 @@ class UserController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = User::select('users.*', 'user_levels.role as level_name')->join('user_levels','users.level_id','=','user_levels.id')->where([['users.id','>','0']]);
+        $query = User::select('users.*', 'roles.role as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['level_id'] != 1) {
+        if($jwt_payload['role_id'] != 1) {
             $query = $query->where('users.id', $jwt_payload['id']);
         }
 
@@ -93,11 +93,11 @@ class UserController extends Controller
     public function show($id)
     {
         // query
-        $query = User::select('users.*', 'user_levels.role as level_name')->join('user_levels','users.level_id','=','user_levels.id')->where([['users.id','>','0']]);
+        $query = User::select('users.*', 'roles.role as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['level_id'] != 1) {
+        if($jwt_payload['role_id'] != 1) {
             $query = $query->where('users.id', $jwt_payload['id']);
         }
 
@@ -117,7 +117,7 @@ class UserController extends Controller
     {
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['level_id'] != 1) {
+        if($jwt_payload['role_id'] != 1) {
             return new ApiResource(false, 401, 'Does Not Have Access', [], []);
         }
 
@@ -143,7 +143,7 @@ class UserController extends Controller
     {
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['level_id'] != 1) {
+        if($jwt_payload['role_id'] != 1) {
             if ($jwt_payload['id'] != $id) {
                 return new ApiResource(false, 401, 'Does Not Have Access', [], []);
             }
@@ -170,7 +170,7 @@ class UserController extends Controller
     {
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['level_id'] != 1) {
+        if($jwt_payload['role_id'] != 1) {
             return new ApiResource(false, 401, 'Does Not Have Access', [], []);
         }
 

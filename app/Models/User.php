@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\UserLevel;
+use App\Models\Role;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
@@ -29,7 +29,9 @@ class User extends Authenticatable implements JWTSubject
         'address',
         'phone_number',
         'photo',
-        'is_active'
+        'is_active',
+        'created_by',
+        'updated_by'
     ];
 
     protected $hidden = [
@@ -65,7 +67,7 @@ class User extends Authenticatable implements JWTSubject
     
     public function role()
     {
-        return $this->belongsTo(UserLevel::class);
+        return $this->belongsTo(Role::class);
     }
 
     public function events()
@@ -75,6 +77,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function umpanBaliks()
     {
-        return $this->hasMany(UmpanBalik::class, 'pengguna_id');
+        return $this->hasMany(UmpanBalik::class, 'user_id');
     }
 }

@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class UserLevel extends Model
+class Role extends Model
 {
     use HasFactory;
     use BlameableTrait;
     protected $fillable = [
-        'role',
+        'name',
         'description',
         'is_active',
         'created_by',

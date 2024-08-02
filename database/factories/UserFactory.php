@@ -24,6 +24,8 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'address' => $this->faker->address,
             'phone_number' => $this->faker->phoneNumber,
+            'photo' => 'uploads/xxx/noimage.jpg',            
+            'role_id' => 1, 
         ];
     }
 

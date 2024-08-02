@@ -25,24 +25,30 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'role_id' => 1,
-            'nik' => '1234567890',
             'name' => 'admin',
+            'gender' => 'male',
+            // 'reg_date' => '20-03-2024',
             'email' => 'admin@email.com',
             'password' => 'admin',
             'address' => 'padang',
             'phone_number' => '08xxxx',
 			'photo' => 'uploads/xxx/noimage.jpg',
+            'created_by'=> 1,
+            'updated_by'=> 1,
         ]);
 
         User::factory()->create([
-            'level_id' => 2,
-            'nik' => '1234567890',
+            'role_id' => 2,
             'name' => 'user',
+            'gender' => 'male',            
+            // 'reg_date' => '20-03-2024',
             'email' => 'user@email.com',
             'password' => 'user',
             'address' => 'padang',
             'phone_number' => '08xxxx',
 			'photo' => 'uploads/xxx/noimage.jpg',
+            'created_by'=> 1,
+            'updated_by'=> 1,
         ]);
 
         User::factory(10)->create();
@@ -80,13 +86,13 @@ class DatabaseSeeder extends Seeder
             'deskripsi' => 'Event tahunan di Sijunjung',
             'gambar' => 'img/event.jpg',
             'link_event' => 'http://sijunjungtour.com/festival',
-            'id_admin' => 1,
+            'admin_id' => 1,
         ]);
 
         Event::factory(10)->create();
 
-        \App\Models\UserLevel::factory()->create(['id' => 1, 'role' => 'Admin (Pemerintah)', 'created_by' => '1', 'updated_by' => '1']);
-        \App\Models\UserLevel::factory()->create(['id' => 2, 'role' => 'Masyarakat Umum', 'created_by' => '1', 'updated_by' => '1']);
+        \App\Models\Role::factory()->create(['id' => 1, 'name' => 'Admin (Pemerintah)', 'created_by' => '1', 'updated_by' => '1']);
+        \App\Models\Role::factory()->create(['id' => 2, 'name' => 'Masyarakat Umum', 'created_by' => '1', 'updated_by' => '1']);
        
         \App\Models\Setting::factory()->create(['id' => 1, 'is_active'=> true, 'type' => 'text', 'key' => 'name', 'value' => 'DISPARPORA Sijunjung']);
         \App\Models\Setting::factory()->create(['id' => 2, 'is_active'=> true, 'type' => 'text', 'key' => 'copyright', 'value' => 'Copyright @2024 Dinas Pariwisata dan Olahraga Kabupaten Sijunjung']);

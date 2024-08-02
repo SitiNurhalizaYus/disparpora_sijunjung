@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('agen_id')->nullable()->constrained('agents')->onDelete('cascade');
-            $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('agen_id')->nullable();
+            $table->foreignId('admin_id')->nullable();
             $table->string('nama_acara', 100);
             $table->date('tanggal_acara');
             $table->text('deskripsi');

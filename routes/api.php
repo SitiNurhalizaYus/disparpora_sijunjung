@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Route;
     Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
     Route::apiResource('upload', App\Http\Controllers\Api\UploadController::class);
     Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
-    Route::apiResource('user_level', App\Http\Controllers\Api\UserLevelController::class);
+    Route::apiResource('role', App\Http\Controllers\Api\RoleController::class);
 
     Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
     Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);

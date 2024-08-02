@@ -22,9 +22,8 @@ class KontenFactory extends Factory
         return [
             'judul' => $this->faker->sentence,
             'konten' => $this->faker->paragraph,
-            'gambar' => 'img/' . $this->faker->word . '.jpg',
-            'tipe' => $this->faker->randomElement(['berita', 'destinasi', 'acara', 'profil']),
-            'id_kategori' => $this->faker->numberBetween(1, 2),
+            'gambar' => 'uploads/xxx/noimage.jpg',  
+            'kategori_id' => $this->faker->numberBetween(1, 2),
         ];
     }
 }

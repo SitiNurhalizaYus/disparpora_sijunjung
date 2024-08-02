@@ -243,7 +243,7 @@
                             <span class="item-name">Setting</span>
                         </a>
                     </li>
-                    @if ($session_data['user_level_id'] == 1)
+                    @if ($session_data['user_role_id'] == 1)
                         <li class="nav-item">
                             <a class="nav-link @if (str_contains($menu, 'user')) {{'active'}} @endif" aria-current="page" href="{{ url('/admin/user') }}">
                                 <i class="icon">
@@ -372,7 +372,7 @@
                                     <img src="{{ asset('/'. str_replace("/xxx/", "/100/", $session_data['user_picture'])) }}" class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
                                     <div class="caption ms-3 d-none d-md-block ">
                                         <h6 class="mb-0 caption-title">{{ $session_data['user_name'] }}</h6>
-                                        <p class="mb-0 caption-sub-title">{{ $session_data['user_level_name'] }}</p>
+                                        <p class="mb-0 caption-sub-title">{{ $session_data['user_role_name'] }}</p>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

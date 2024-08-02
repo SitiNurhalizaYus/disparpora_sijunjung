@@ -1282,7 +1282,7 @@
                                     "data": {
                                         "user": {
                                             "id": "",
-                                            "level_id": "",
+                                            "role_id": "",
                                             "username": "",
                                             "name": "",
                                             "email": "",
@@ -3798,14 +3798,14 @@
                 ]
             }
         },
-        "/user_level": {
+        "/user_role": {
             "get": {
                 "tags": [
-                    "User Level"
+                    "User role"
                 ],
                 "summary": "",
                 "description": "Get all data",
-                "operationId": "user_level_index",
+                "operationId": "user_role_index",
                 "parameters": [
                     {
                         "name": "per_page",
@@ -3876,11 +3876,11 @@
             },
             "post": {
                 "tags": [
-                    "User Level"
+                    "User role"
                 ],
                 "summary": "",
                 "description": "Insert data",
-                "operationId": "user_level_store",
+                "operationId": "user_role_store",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -3917,14 +3917,14 @@
                 ]
             }
         },
-        "/user_level/{id}": {
+        "/user_role/{id}": {
             "get": {
                 "tags": [
-                    "User Level"
+                    "User role"
                 ],
                 "summary": "",
                 "description": "Get data by id",
-                "operationId": "user_level_show",
+                "operationId": "user_role_show",
                 "parameters": [
                     {
                         "name": "id",
@@ -3954,11 +3954,11 @@
             },
             "put": {
                 "tags": [
-                    "User Level"
+                    "User role"
                 ],
                 "summary": "",
                 "description": "Update data",
-                "operationId": "user_level_update",
+                "operationId": "user_role_update",
                 "parameters": [
                     {
                         "name": "id",
@@ -4007,11 +4007,11 @@
             },
             "delete": {
                 "tags": [
-                    "User Level"
+                    "User role"
                 ],
                 "summary": "",
                 "description": "Delete data",
-                "operationId": "user_level_destroy",
+                "operationId": "user_role_destroy",
                 "parameters": [
                     {
                         "name": "id",

@@ -21,8 +21,8 @@
                         <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label class="form-label" for="name">Level </label>
-                                <select class="form-select" id="level_id" name="level_id" required>
+                                <label class="form-label" for="name">role </label>
+                                <select class="form-select" id="role_id" name="role_id" required>
                                     <option value="2">User</option>
                                     <option value="1">Super Admin</option>
                                 </select>
@@ -104,7 +104,7 @@
                     $("#detail-data-success").show();
                     $("#detail-data-failed").hide();
 
-                    $('#level_id').val(result['data']['level_id']);
+                    $('#role_id').val(result['data']['role_id']);
                     $('#username').val(result['data']['username']);
                     $('#email').val(result['data']['email']);
                     $('#name').val(result['data']['name']);

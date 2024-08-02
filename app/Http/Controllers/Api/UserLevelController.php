@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\UserLevel;
+use App\Models\Role;
 
-class UserLevelController extends Controller
+class RoleController extends Controller
 {
 
     public function __construct()
@@ -30,7 +30,7 @@ class UserLevelController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = UserLevel::where([['id','>','0']]);
+        $query = Role::where([['id','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
@@ -92,7 +92,7 @@ class UserLevelController extends Controller
     public function show($id)
     {
         // query
-        $query = UserLevel::where([['id','>','0']]);
+        $query = Role::where([['id','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
@@ -117,7 +117,7 @@ class UserLevelController extends Controller
         ]);
 
         $req = $request->post();
-        $data = UserLevel::create($req);
+        $data = Role::create($req);
 
         if($data) {
             return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
@@ -133,10 +133,10 @@ class UserLevelController extends Controller
         ]);
 
         $req = $request->post();
-        $query = UserLevel::findOrFail($id);
+        $query = Role::findOrFail($id);
         $query->update($req);
 
-        $data = UserLevel::findOrFail($id);
+        $data = Role::findOrFail($id);
 
         if($data) {
             return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
@@ -147,7 +147,7 @@ class UserLevelController extends Controller
 
     public function destroy($id)
     {
-        $query = UserLevel::findOrFail($id);
+        $query = Role::findOrFail($id);
         $query->delete();
 
         if($query) {

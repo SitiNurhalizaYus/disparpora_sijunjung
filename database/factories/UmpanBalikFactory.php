@@ -20,7 +20,7 @@ class UmpanBalikFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_pengguna' => $this->faker->numberBetween(1, 12),
+            'user_id' => $this->faker->numberBetween(1, 12),
             'topik_feedback' => $this->faker->sentence,
             'pesan_feedback' => $this->faker->paragraph,
         ];

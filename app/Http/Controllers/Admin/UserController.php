@@ -17,7 +17,7 @@ class UserController extends Controller
         $session = \App\Helpers\AppHelper::instance()->getSessionData();
 
         if($has_session) {
-            if($session['user_level_id'] == 1) {
+            if($session['user_role_id'] == 1) {
                 $data = [];
                 $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
                 $data['menu'] = 'user-list';
@@ -40,7 +40,7 @@ class UserController extends Controller
         $session = \App\Helpers\AppHelper::instance()->getSessionData();
 
         if($has_session) {
-            if($session['user_level_id'] == 1) {
+            if($session['user_role_id'] == 1) {
                 $data = [];
                 $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
                 $data['menu'] = 'user-show';
@@ -64,7 +64,7 @@ class UserController extends Controller
         $session = \App\Helpers\AppHelper::instance()->getSessionData();
 
         if($has_session) {
-            if($session['user_level_id'] == 1) {
+            if($session['user_role_id'] == 1) {
                 $data = [];
                 $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
                 $data['menu'] = 'user-create';
@@ -87,7 +87,7 @@ class UserController extends Controller
         $session = \App\Helpers\AppHelper::instance()->getSessionData();
 
         if($has_session) {
-            if($session['user_level_id'] == 1) {
+            if($session['user_role_id'] == 1) {
                 $data = [];
                 $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
                 $data['menu'] = 'user-edit';

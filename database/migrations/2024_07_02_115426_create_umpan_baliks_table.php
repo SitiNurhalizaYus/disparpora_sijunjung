@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('umpan_baliks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id');
             $table->string('topik_feedback', 255);
             $table->text('pesan_feedback');
             $table->boolean('is_active')->default(1);

@@ -20,8 +20,8 @@ class TagKontenFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_konten' => $this->faker->numberBetween(1, 10),
-            'id_tag' => $this->faker->numberBetween(1, 10),
+            'konten_id' => $this->faker->numberBetween(1, 10),
+            'tag_id' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
