@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_agen')->nullable()->constrained('agents')->onDelete('cascade');
-            $table->foreignId('id_admin')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('agen_id')->nullable()->constrained('agents')->onDelete('cascade');
+            $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->string('nama_acara', 100);
             $table->date('tanggal_acara');
             $table->text('deskripsi');
             $table->string('gambar', 255)->nullable();
             $table->string('link_event', 255)->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }

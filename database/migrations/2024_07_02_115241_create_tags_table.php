@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('nama_tag', 255);
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }

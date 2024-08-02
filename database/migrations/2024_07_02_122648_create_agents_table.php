@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('telepon', 15);
             $table->string('email', 100)->unique();
             $table->string('website', 100)->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }

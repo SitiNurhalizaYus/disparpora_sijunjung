@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('total_pilihan_2')->default(0);
             $table->integer('total_pilihan_3')->default(0);
             $table->integer('total_pilihan_4')->default(0);
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }

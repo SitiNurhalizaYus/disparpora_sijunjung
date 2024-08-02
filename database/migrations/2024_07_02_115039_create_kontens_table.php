@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('judul', 255);
             $table->text('konten');
             $table->string('gambar', 255)->nullable();
-            $table->foreignId('id_kategori')->constrained('kategoris')->onDelete('cascade');
+            $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }

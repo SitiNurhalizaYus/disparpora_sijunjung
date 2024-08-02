@@ -9,10 +9,8 @@ use App\Models\User;
 use App\Models\Event;
 use App\Models\Konten;
 use App\Models\Survei;
-use App\Models\Setting;
 use App\Models\Kategori;
 use App\Models\TagKonten;
-use App\Models\UserLevel;
 use App\Models\UmpanBalik;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +24,7 @@ class DatabaseSeeder extends Seeder
     {
 
         User::factory()->create([
-            'level_id' => 1,
+            'role_id' => 1,
             'nik' => '1234567890',
             'name' => 'admin',
             'email' => 'admin@email.com',

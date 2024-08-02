@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_kategori', 255);
             $table->string('halaman', 255);
             $table->text('deskripsi')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }

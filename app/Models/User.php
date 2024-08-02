@@ -3,12 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\Models\UserLevel;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -16,18 +17,19 @@ class User extends Authenticatable implements JWTSubject
     use BlameableTrait;
 
     protected $fillable = [
-        'level_id',
-        'nik', 
-        'name', 
-        'gender', 
+        'role_id',
+        'nik',
+        'name',
+        'gender',
         'reg_date',
-        'email', 
-        'password', 
-        'address', 
-        'phone_number', 
-        'photo', 
-        'is_active',
+        'email',
         'last_login',
+        'email_verified_at',
+        'password',
+        'address',
+        'phone_number',
+        'photo',
+        'is_active'
     ];
 
     protected $hidden = [
@@ -59,5 +61,20 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+    
+    public function role()
+    {
+        return $this->belongsTo(UserLevel::class);
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'admin_id');
+    }
+
+    public function umpanBaliks()
+    {
+        return $this->hasMany(UmpanBalik::class, 'pengguna_id');
     }
 }
