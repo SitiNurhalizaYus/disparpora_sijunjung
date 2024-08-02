@@ -1,10 +1,11 @@
 /********** Template CSS **********/
 :root {
-    /* --primary: #06A3DA; */
-    --primary: #018d7f;
+    --primary: #06A3DA;
+    --green: #017454;
     --secondary: #34AD54;
     --light: #EEF9FF;
-    --dark: #091E3E;
+    --dark: #00281d;
+    /* --dark: #091E3E; */
 }
 
 
@@ -12,7 +13,7 @@
 .spinner {
     width: 40px;
     height: 40px;
-    background: var(--primary);
+    background: var(--green);
     margin: 100px auto;
     -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
     animation: sk-rotateplane 1.2s infinite ease-in-out;
@@ -81,7 +82,7 @@ h6,
 
 /*** Button ***/
 .btn {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     font-weight: 600;
     transition: .5s;
 }
@@ -93,7 +94,7 @@ h6,
 }
 
 .btn-primary:hover {
-    box-shadow: inset 0 0 0 0 var(--primary);
+    box-shadow: inset 0 0 0 0 var(--green);
 }
 
 .btn-secondary:hover {
@@ -126,7 +127,7 @@ h6,
 
 /*** Navbar ***/
 .navbar-dark .navbar-nav .nav-link {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     position: relative;
     margin-left: 25px;
     padding: 35px 0;
@@ -144,16 +145,20 @@ h6,
 
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link.active {
-    color: var(--primary);
+    color: var(--secondary);
 }
 
 .navbar-dark .navbar-brand h1 {
     color: #FFFFFF;
 }
 
+.navbar-dark .navbar-brand h2 {
+    color: #FFFFFF;
+}
+
 .navbar-dark .navbar-toggler {
-    color: var(--primary) !important;
-    border-color: var(--primary) !important;
+    color: var(--light) !important;
+    border-color: var(--light) !important;
 }
 
 @media (max-width: 991.98px) {
@@ -170,8 +175,13 @@ h6,
     }
 
     .navbar-dark .navbar-brand h1 {
-        color: var(--primary);
+        color: var(--green);
     }
+
+    .navbar-dark .navbar-brand h2 {
+        color: var(--green);
+    }
+
 }
 
 @media (min-width: 992px) {
@@ -196,7 +206,7 @@ h6,
         height: 2px;
         bottom: -1px;
         left: 50%;
-        background: var(--primary);
+        background: var(--secondary);
         transition: .5s;
     }
 
@@ -211,7 +221,11 @@ h6,
     }
 
     .sticky-top.navbar-dark .navbar-brand h1 {
-        color: var(--primary);
+        color: var(--green);
+    }
+
+    .sticky-top.navbar-dark .navbar-brand h2 {
+        color: var(--green);
     }
 }
 
@@ -258,7 +272,7 @@ h6,
     height: 5px;
     left: 0;
     bottom: 0;
-    background: var(--primary);
+    background: var(--green);
     border-radius: 2px;
 }
 
@@ -326,7 +340,7 @@ h6,
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--primary);
+    background: var(--green);
     border-radius: 2px;
     transform: rotate(-45deg);
 }
@@ -371,7 +385,7 @@ h6,
 
 .testimonial-carousel .owl-dot.active {
     width: 30px;
-    background: var(--primary);
+    background: var(--green);
 }
 
 .testimonial-carousel .owl-item.center {

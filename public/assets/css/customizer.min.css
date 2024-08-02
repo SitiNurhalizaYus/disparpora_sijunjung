@@ -35,11 +35,11 @@ body {
 
 :root {
     --bs-heading-color: #0c112e;
-    --bs-primary: #228B22;
+    --bs-primary: #017454;
     --bs-primary-shade-80: #0c112e;
     --bs-primary-shade-60: #17235d;
     --bs-primary-shade-40: #23348b;
-    --bs-primary-shade-20: #82cc48;
+    --bs-primary-shade-20: #018d7f;
     --bs-primary-tint-90: #ebeefd;
     --bs-primary-tint-80: #d8ddfa;
     --bs-primary-tint-60: #b0bcf6;
@@ -62,11 +62,11 @@ body {
 
 :root .theme-color-blue {
     --bs-heading-color: #0c112e;
-    --bs-blue: #228B22;
+    --bs-blue: #017454;
     --bs-blue-shade-80: #0c112e;
     --bs-blue-shade-60: #17235d;
     --bs-blue-shade-40: #23348b;
-    --bs-blue-shade-20: #82cc48;
+    --bs-blue-shade-20: #018d7f;
     --bs-blue-tint-90: #ebeefd;
     --bs-blue-tint-80: #d8ddfa;
     --bs-blue-tint-60: #b0bcf6;
@@ -245,11 +245,11 @@ body {
 
 :root .theme-color-gray {
     --bs-heading-color: #0c112e;
-    --bs-blue: #228B22;
+    --bs-blue: #017454;
     --bs-blue-shade-80: #0c112e;
     --bs-blue-shade-60: #17235d;
     --bs-blue-shade-40: #23348b;
-    --bs-blue-shade-20: #82cc48;
+    --bs-blue-shade-20: #018d7f;
     --bs-blue-tint-90: #ebeefd;
     --bs-blue-tint-80: #d8ddfa;
     --bs-blue-tint-60: #b0bcf6;
@@ -428,11 +428,11 @@ body {
 
 :root .theme-color-red {
     --bs-heading-color: #0c112e;
-    --bs-blue: #228B22;
+    --bs-blue: #017454;
     --bs-blue-shade-80: #0c112e;
     --bs-blue-shade-60: #17235d;
     --bs-blue-shade-40: #23348b;
-    --bs-blue-shade-20: #82cc48;
+    --bs-blue-shade-20: #018d7f;
     --bs-blue-tint-90: #ebeefd;
     --bs-blue-tint-80: #d8ddfa;
     --bs-blue-tint-60: #b0bcf6;
@@ -611,11 +611,11 @@ body {
 
 :root .theme-color-yellow {
     --bs-heading-color: #0c112e;
-    --bs-blue: #228B22;
+    --bs-blue: #017454;
     --bs-blue-shade-80: #0c112e;
     --bs-blue-shade-60: #17235d;
     --bs-blue-shade-40: #23348b;
-    --bs-blue-shade-20: #82cc48;
+    --bs-blue-shade-20: #018d7f;
     --bs-blue-tint-90: #ebeefd;
     --bs-blue-tint-80: #d8ddfa;
     --bs-blue-tint-60: #b0bcf6;
@@ -794,11 +794,11 @@ body {
 
 :root .theme-color-pink {
     --bs-heading-color: #0c112e;
-    --bs-blue: #228B22;
+    --bs-blue: #017454;
     --bs-blue-shade-80: #0c112e;
     --bs-blue-shade-60: #17235d;
     --bs-blue-shade-40: #23348b;
-    --bs-blue-shade-20: #82cc48;
+    --bs-blue-shade-20: #018d7f;
     --bs-blue-tint-90: #ebeefd;
     --bs-blue-tint-80: #d8ddfa;
     --bs-blue-tint-60: #b0bcf6;

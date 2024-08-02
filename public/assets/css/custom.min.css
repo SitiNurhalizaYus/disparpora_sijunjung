@@ -147,7 +147,7 @@ hr {
 
 .type {
     position: absolute;
-    background: #228B22;
+    background: #017454;
     padding: 9px 25px;
     color: #fff;
     top: -15px;
@@ -181,7 +181,7 @@ hr {
 }
 
 .prc-box.active {
-    background: #228B22
+    background: #017454
 }
 
 .prc-box.active .h3 {
@@ -208,8 +208,8 @@ hr {
 }
 
 .child-cell.active {
-    color: #228B22;
-    stroke: #228B22
+    color: #017454;
+    stroke: #017454
 }
 
 .line-around {
@@ -354,7 +354,7 @@ hr {
 .bd-aside .active {
     font-weight: 600;
     background-color: rgba(58, 87, 232, .1);
-    color: #228B22
+    color: #017454
 }
 
 .bd-aside .btn {
@@ -375,7 +375,7 @@ hr {
 .bd-aside .btn:hover,
 .bd-aside .btn:focus {
     background-color: rgba(58, 87, 232, .1);
-    color: #228B22
+    color: #017454
 }
 
 .bd-aside .btn:focus {
@@ -633,7 +633,7 @@ body.uikit .btn-download {
     z-index: 999;
     text-align: center;
     cursor: pointer;
-    background: #228B22;
+    background: #017454;
     color: #fff;
     padding: .2rem;
     -webkit-border-radius: 0 1rem 1rem 0;

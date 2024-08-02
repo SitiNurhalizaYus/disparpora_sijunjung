@@ -99,18 +99,21 @@
     <div class="container-fluid position-relative p-0">
         <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
             <a href="index.html" class="navbar-brand p-0">
-                <h1 class="m-0"><img
+                <h2 class="m-0"><img
                         src="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
-                    Disparpora</h1>
+                        {{ $setting['name-short'] }}</h2>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
-                    <a href="{{ url('/home') }}" class="nav-item nav-link {{ Request::is('home') ? 'active' : '' }}">Home</a>
-                    <a href="{{ url('/about') }}" class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">About</a>
-                    <a href="{{ url('/service') }}" class="nav-item nav-link {{ Request::is('service') ? 'active' : '' }}">Services</a>
+                    <a href="{{ url('/home') }}"
+                        class="nav-item nav-link {{ Request::is('home') ? 'active' : '' }}">Home</a>
+                    <a href="{{ url('/about') }}"
+                        class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">About</a>
+                    <a href="{{ url('/service') }}"
+                        class="nav-item nav-link {{ Request::is('service') ? 'active' : '' }}">Services</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Blog</a>
                         <div class="dropdown-menu m-0">
@@ -131,8 +134,10 @@
                     <a href="contact.html" class="nav-item nav-link">Contact</a>
                     <a href="#" class="btn btn-primary py-2 px-4 ms-3">Ayo Bergabung </a>
                 </div>
-                <butaton type="button" class="btn text-primary ms-3" data-bs-toggle="modal"
-                    data-bs-target="#searchModal"><i class="fa fa-search"></i></butaton>
+                <butaton type="button" class="btn text-green ms-3" data-bs-toggle="modal"
+                    data-bs-target="#searchModal">
+                    <i class="fa fa-search"></i>
+                </butaton>
             </div>
         </nav>
     </div>
@@ -236,7 +241,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid text-white" style="background: #061429;">
+    <div class="container-fluid text-white" style="background: #000f0b;">
         <div class="container text-center">
             <div class="row justify-content-end">
                 <div class="col-lg-8 col-md-6">
