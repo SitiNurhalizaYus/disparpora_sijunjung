@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('level_id');
+            $table->foreignId('role_id')->constrained('user_levels')->onDelete('cascade');
             $table->string('nik')->unique();
             $table->string('name');
             $table->enum('gender', ['male', 'female']);
@@ -27,9 +27,8 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->boolean('is_active')->default(0);
             $table->timestamps();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
         });
+
     }
 
     /**

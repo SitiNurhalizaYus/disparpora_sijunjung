@@ -3,7 +3,19 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Tag;
+use App\Models\User;
+use App\Models\Event;
+use App\Models\Konten;
+use App\Models\Survei;
+use App\Models\Setting;
+use App\Models\Kategori;
+use App\Models\TagKonten;
+use App\Models\UserLevel;
+use App\Models\UmpanBalik;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,7 +25,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        \App\Models\User::factory()->create([
+        User::factory()->create([
             'level_id' => 1,
             'nik' => '1234567890',
             'name' => 'admin',
@@ -22,15 +34,62 @@ class DatabaseSeeder extends Seeder
             'address' => 'padang',
             'phone_number' => '08xxxx',
 			'photo' => 'uploads/xxx/noimage.jpg',
-            'created_by' => '1',
-            'updated_by' => '1',
         ]);
 
-        \App\Models\UserLevel::factory()->create(['id' => 1, 'role' => 'Administrator', 'created_by' => '1', 'updated_by' => '1']);
-        \App\Models\UserLevel::factory()->create(['id' => 2, 'role' => 'Pengelola Objek Wisata', 'created_by' => '1', 'updated_by' => '1']);
-        \App\Models\UserLevel::factory()->create(['id' => 3, 'role' => 'Pengelola Penginapan', 'created_by' => '1', 'updated_by' => '1']);
-        \App\Models\UserLevel::factory()->create(['id' => 4, 'role' => 'Pengelola Restoran', 'created_by' => '1', 'updated_by' => '1']);
+        User::factory()->create([
+            'level_id' => 2,
+            'nik' => '1234567890',
+            'name' => 'user',
+            'email' => 'user@email.com',
+            'password' => 'user',
+            'address' => 'padang',
+            'phone_number' => '08xxxx',
+			'photo' => 'uploads/xxx/noimage.jpg',
+        ]);
 
+        User::factory(10)->create();
+
+        Kategori::create([
+            'nama_kategori' => 'Budaya',
+            'deskripsi' => 'Konten terkait budaya',
+        ]);
+
+        Kategori::create([
+            'nama_kategori' => 'Wisata',
+            'deskripsi' => 'Konten terkait wisata',
+        ]);
+
+        Konten::factory(10)->create();
+        Tag::factory(10)->create();
+        TagKonten::factory(20)->create();
+        UmpanBalik::factory(10)->create();
+
+        Survei::create([
+            'pertanyaan' => 'Bagaimana pendapat Anda tentang layanan kami?',
+            'pilihan_1' => 'Sangat Baik',
+            'pilihan_2' => 'Baik',
+            'pilihan_3' => 'Cukup',
+            'pilihan_4' => 'Buruk',
+            'total_pilihan_1' => 0,
+            'total_pilihan_2' => 0,
+            'total_pilihan_3' => 0,
+            'total_pilihan_4' => 0,
+        ]);
+
+        Event::create([
+            'nama_acara' => 'Festival Sijunjung',
+            'tanggal_acara' => '2024-08-15',
+            'deskripsi' => 'Event tahunan di Sijunjung',
+            'gambar' => 'img/event.jpg',
+            'link_event' => 'http://sijunjungtour.com/festival',
+            'id_admin' => 1,
+        ]);
+
+        Event::factory(10)->create();
+
+        \App\Models\UserLevel::factory()->create(['id' => 1, 'role' => 'Admin (Pemerintah)', 'created_by' => '1', 'updated_by' => '1']);
+        \App\Models\UserLevel::factory()->create(['id' => 2, 'role' => 'Masyarakat Umum', 'created_by' => '1', 'updated_by' => '1']);
+       
         \App\Models\Setting::factory()->create(['id' => 1, 'is_active'=> true, 'type' => 'text', 'key' => 'name', 'value' => 'DISPARPORA Sijunjung']);
         \App\Models\Setting::factory()->create(['id' => 2, 'is_active'=> true, 'type' => 'text', 'key' => 'copyright', 'value' => 'Copyright @2024 Dinas Pariwisata dan Olahraga Kabupaten Sijunjung']);
         \App\Models\Setting::factory()->create(['id' => 3, 'is_active'=> true, 'type' => 'longtext', 'key' => 'footer-about', 'value' => 'Lorem Ipsum']);
