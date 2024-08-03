@@ -70,8 +70,7 @@
         <div class="row gx-0">
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 50px;">
-                    <small class="me-3 text-light"><i
-                            class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
+                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
                     <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
                     <small class="text-light"><i class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
                 </div>
@@ -96,10 +95,11 @@
     <!-- Navbar Start -->
     <div class="container-fluid position-relative p-0">
         <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
-            <a href="index.html" class="navbar-brand p-0">
-                <h2 class="m-0"><img
-                        src="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
-                    {{ $setting['name-short'] }}</h2>
+            <a href="/beranda" class="navbar-brand p-0">
+                <h2 class="m-0">
+                    <img src="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
+                    {{ $setting['name-short'] }}
+                </h2>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
@@ -107,25 +107,26 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
                     <a href="{{ url('/beranda') }}"
-                        class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }}">Beranda</a>
-                    <div class="nav-item dropdown">
-                        <a href="{{ url('/profil') }}" class="nav-link dropdown-toggle {{ Request::is('profil') ? 'active' : '' }}" data-bs-toggle="dropdown">Profil</a>
+                        class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
+                    <div class="nav-item dropdown me-3">
+                        <a href="{{ url('/profil') }}"
+                            class="nav-link dropdown-toggle {{ Request::is('profil') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">Profil</a>
                         <div class="dropdown-menu m-0">
-                            <a href="/visimisi" class="dropdown-item {{ Request::is('profil') ? 'active' : '' }}">Visi dan Misi</a>
+                            <a href="/visimisi"
+                                class="dropdown-item {{ Request::is('profil') ? 'active' : '' }}">Visi dan Misi</a>
                             <a href="feature.html" class="dropdown-item">Our features</a>
                             <a href="team.html" class="dropdown-item">Team Members</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="quote.html" class="dropdown-item">Free Quote</a>
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
+                    <div class="nav-item dropdown me-3">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Blog</a>
                         <div class="dropdown-menu m-0">
                             <a href="blog.html" class="dropdown-item">Blog Grid</a>
                             <a href="detail.html" class="dropdown-item">Blog Detail</a>
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
+                    <div class="nav-item dropdown me-3">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0">
                             <a href="price.html" class="dropdown-item">Pricing Plan</a>
@@ -135,17 +136,19 @@
                             <a href="quote.html" class="dropdown-item">Free Quote</a>
                         </div>
                     </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    <a href="contact.html" class="nav-item nav-link me-3">Contact</a>
+                    <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
+                        data-bs-target="#searchModal">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <a href="#" class="btn btn-primary py-2 px-4 ms-3"><i class="bi bi-person-fill"></i>
                         Akun</a>
                 </div>
-                <butaton type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
-                    data-bs-target="#searchModal">
-                    <i class="fa fa-search"></i>
-                </butaton>
             </div>
         </nav>
     </div>
     <!-- Navbar End -->
+
 
 
     @yield('content')

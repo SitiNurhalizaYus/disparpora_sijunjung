@@ -20,6 +20,8 @@ class ProfilController extends Controller
         $data['og']['description'] = 'profil';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
+        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
+        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/konten');
         return view('client.profil.index', $data);
     }
 }

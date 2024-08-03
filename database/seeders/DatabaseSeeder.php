@@ -64,8 +64,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Konten::factory(10)->create();
-        Tag::factory(10)->create();
-        TagKonten::factory(20)->create();
+        Tag::factory(5)->create();
+        TagKonten::factory(5)->create();
         UmpanBalik::factory(10)->create();
 
         Survei::create([
