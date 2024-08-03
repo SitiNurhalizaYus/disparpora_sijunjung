@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProfilController extends Controller
+class Visimisiontroller extends Controller
 {
     public function __construct()
     {
@@ -15,13 +15,13 @@ class ProfilController extends Controller
     {
         $data = [];
         $data['og'] = [];
-        $data['og']['url'] = url('/').'/profil';
-        $data['og']['title'] = 'Profil';
-        $data['og']['description'] = 'profil';
+        $data['og']['url'] = url('/').'/visimisi';
+        $data['og']['title'] = 'Visimisi';
+        $data['og']['description'] = 'visimisi';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
         $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
         $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/konten');
-        return view('client.profil.index', $data);
+        return view('client.visimisi.index', $data);
     }
 }

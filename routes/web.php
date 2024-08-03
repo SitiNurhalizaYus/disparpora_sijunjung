@@ -16,8 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function () {
     Route::get('/', [App\Http\Controllers\Client\BerandaController::class, 'index']);
     Route::get('/beranda', [App\Http\Controllers\Client\BerandaController::class, 'index']);
-    Route::get('/profil', [App\Http\Controllers\Client\ProfilController::class, 'index']);
-    Route::get('/visimisi', [App\Http\Controllers\Client\ProfilController::class, 'index']);
+    Route::get('/visimisi', [App\Http\Controllers\Client\Visimisiontroller::class, 'index']);
     Route::get('/feature', [App\Http\Controllers\Client\FeatureController::class, 'index']);
     Route::get('/pricing', [App\Http\Controllers\Client\PricingController::class, 'index']);
     Route::get('/blog', [App\Http\Controllers\Client\BlogController::class, 'index']);
@@ -39,7 +38,7 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::get('auth/forgot',[App\Http\Controllers\Admin\AuthController::class, 'forgot']);
     Route::get('auth/error',[App\Http\Controllers\Admin\AuthController::class, 'error'])->name('admin.error');
 
-    Route::get('profile',[App\Http\Controllers\Admin\ProfileController::class, 'index']);
+    Route::get('akun',[App\Http\Controllers\Admin\AkunController::class, 'index']);
     Route::get('dashboard',[App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('slider', App\Http\Controllers\Admin\SliderController::class);
     Route::resource('bignumber', App\Http\Controllers\Admin\BigNumberController::class);
