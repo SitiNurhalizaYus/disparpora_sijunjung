@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('kontens', function (Blueprint $table) {
             $table->id();
             $table->string('judul', 255);
-            $table->text('konten');
+            $table->string('slug')->nullable();
+            $table->text('description_short')->nullable();
+            $table->text('description_long')->nullable();
             $table->string('gambar', 255)->nullable();
-            $table->foreignId('kategori_id');
             $table->boolean('is_active')->default(1);
             $table->timestamps();
+            $table->integer('created_by')->nullable();
         });
     }
 

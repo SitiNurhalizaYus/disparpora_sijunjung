@@ -6,22 +6,13 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>{{ $og['title'] . ' - ' . $setting['name'] }}</title>
 
-    <!-- logo-geopark -->
-    <link rel="shortcut icon" href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-geopark'])) }}">
-    <link rel="apple-touch-icon" href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-geopark'])) }}">
+    <!-- logo-parpora -->
+    <link rel="shortcut icon" href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
+    <link rel="apple-touch-icon" href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
     <link rel="apple-touch-icon" sizes="72x72"
-        href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-geopark'])) }}">
+        href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
     <link rel="apple-touch-icon" sizes="114x114"
-        href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-geopark'])) }}">
-
-    <!-- SEO -->
-    <meta name="description" content="{{ $setting['seo-description'] }}">
-    <meta name="keywords" content="{{ $setting['seo-keywords'] }}">
-    <meta name="author" content="{{ $setting['seo-author'] }}">
-    <meta name="keyphrases" content="{{ $setting['seo-keyphrases'] }}">
-    <meta name="mytopic" content="{{ $setting['seo-mytopic'] }}">
-    <meta name="classification" content="{{ $setting['seo-classification'] }}">
-    <meta name="robots" content="{{ $setting['seo-robots'] }}>">
+        href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
 
     <!-- social media shared -->
     <meta property="og:type" content="website">
@@ -31,7 +22,7 @@
     @if (isset($og['image']))
         <meta property="og:image" content="{{ asset('/' . $og['image']) }}">
     @else
-        <meta property="og:image" content="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
+        <meta property="og:image" content="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-parpora'])) }}">
     @endif
 
     <!-- Google Web Fonts -->
@@ -70,7 +61,8 @@
         <div class="row gx-0">
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 50px;">
-                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
+                    <small class="me-3 text-light"><i
+                            class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
                     <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
                     <small class="text-light"><i class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
                 </div>
@@ -109,14 +101,13 @@
                     <a href="{{ url('/beranda') }}"
                         class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
                     <div class="nav-item dropdown me-3">
-                        <a href="{{ url('/profil') }}"
-                            class="nav-link dropdown-toggle {{ Request::is('profil') ? 'active' : '' }}"
+                        <a href="{{ url('/profil') }}" class="nav-link dropdown-toggle"
                             data-bs-toggle="dropdown">Profil</a>
                         <div class="dropdown-menu m-0">
-                            <a href="/visimisi"
-                                class="dropdown-item {{ Request::is('profil') ? 'active' : '' }}">Visi dan Misi</a>
-                            <a href="feature.html" class="dropdown-item">Our features</a>
-                            <a href="team.html" class="dropdown-item">Team Members</a>
+                            <a href="{{ url('/profil/struktur-organisasi-dinas') }}" class="dropdown-item">Struktur Organisasi Dinas</a>
+                            <a href="{{ url('/profil/visi-misi') }}" class="dropdown-item">Visi dan Misi</a>
+                            <a href="{{ url('/profil/tujuan-sasaran') }}" class="dropdown-item">Tujuan dan Sasaran</a>
+                            </li>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
@@ -150,8 +141,8 @@
     <!-- Navbar End -->
 
 
-
     @yield('content')
+
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light mt-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -165,9 +156,7 @@
                                     src="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
                                 Disparpora</h1>
                         </a>
-                        <p class="mt-3 mb-4">Lorem diam sit erat dolor elitr et, diam lorem justo amet clita stet eos
-                            sit. Elitr dolor duo lorem, elitr clita ipsum sea. Diam amet erat lorem stet eos. Diam amet
-                            et kasd eos duo.</p>
+                        <p class="mt-3 mb-4">{{ $setting['address'] }}</p>
                         <form action="">
                             <div class="input-group">
                                 <input type="text" class="form-control border-white p-3" placeholder="Your Email">
@@ -184,15 +173,15 @@
                             </div>
                             <div class="d-flex mb-2">
                                 <i class="bi bi-geo-alt text-primary me-2"></i>
-                                <p class="mb-0">123 Street, New York, USA</p>
+                                <p class="mb-0">maps..</p>
                             </div>
                             <div class="d-flex mb-2">
                                 <i class="bi bi-envelope-open text-primary me-2"></i>
-                                <p class="mb-0">info@example.com</p>
+                                <p class="mb-0">{{ $setting['email'] }}</p>
                             </div>
                             <div class="d-flex mb-2">
                                 <i class="bi bi-telephone text-primary me-2"></i>
-                                <p class="mb-0">+012 345 67890</p>
+                                <p class="mb-0">{{ $setting['phone'] }}</p>
                             </div>
                             <div class="d-flex mt-4">
                                 <a class="btn btn-primary btn-square me-2" href="#"><i
@@ -212,8 +201,8 @@
                             <div class="link-animated d-flex flex-column justify-content-start">
                                 <a class="text-light mb-2" href="{{ url('/beranda') }}"><i
                                         class="bi bi-arrow-right text-primary me-2"></i>Beranda</a>
-                                <a class="text-light mb-2" href="{{ url('/profil') }}"><i
-                                        class="bi bi-arrow-right text-primary me-2"></i>Profil Us</a>
+                                <a class="text-light mb-2" href="{{ url('/profildinas') }}"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Profil</a>
                                 <a class="text-light mb-2" href="{{ url('/service') }}"><i
                                         class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
                                 <a class="text-light mb-2" href="#"><i
@@ -229,10 +218,10 @@
                                 <h3 class="text-light mb-0">Popular Links</h3>
                             </div>
                             <div class="link-animated d-flex flex-column justify-content-start">
-                                <a class="text-light mb-2" href="#"><i
+                                <a class="text-light mb-2" href="/beranda"><i
                                         class="bi bi-arrow-right text-primary me-2"></i>Beranda</a>
-                                <a class="text-light mb-2" href="#"><i
-                                        class="bi bi-arrow-right text-primary me-2"></i>Profil Us</a>
+                                <a class="text-light mb-2" href="/profildinas"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Profil</a>
                                 <a class="text-light mb-2" href="#"><i
                                         class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
                                 <a class="text-light mb-2" href="#"><i
@@ -253,9 +242,8 @@
             <div class="row justify-content-end">
                 <div class="col-lg-8 col-md-6">
                     <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
-                        <p class="mb-0">&copy; <a class="text-white border-bottom"
-                                href="#">disparpora.sijunjung.go.id</a>. Dinas Pariwisata dan Olahraga Kabupaten
-                            Sijunjung.
+                        <p class="mb-0">copyright &copy; 2024 - <a class="text-white border-bottom"
+                                href="#">{{ $setting['name-long'] }}</a>.
 
                             <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                             <a class="text-white border-bottom" href="https://htmlcodex.com"></a>
@@ -283,6 +271,41 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('landingpage/assets/js/main.js') }}"></script>
+
+    <!-- offcanvas start -->
+    <!-- Library Bundle Script -->
+    <script src="{{ asset('assets/js/core/libs.min.js') }}"></script>
+
+    <!-- External Library Bundle Script -->
+    <script src="{{ asset('assets/js/core/external.min.js') }}"></script>
+
+    <!-- Widgetchart Script -->
+    <script src="{{ asset('assets/js/charts/widgetcharts.js') }}"></script>
+
+    <!-- mapchart Script -->
+    <script src="{{ asset('assets/js/charts/vectore-chart.js') }}"></script>
+    <script src="{{ asset('assets/js/charts/dashboard.js') }}"></script>
+
+    <!-- fslightbox Script -->
+    <script src="{{ asset('assets/js/plugins/fslightbox.js') }}"></script>
+
+    <!-- Settings Script -->
+    <script src="{{ asset('assets/js/plugins/setting.js') }}"></script>
+
+    <!-- Slider-tab Script -->
+    <script src="{{ asset('assets/js/plugins/slider-tabs.js') }}"></script>
+
+    <!-- Form Wizard Script -->
+    <script src="{{ asset('assets/js/plugins/form-wizard.js') }}"></script>
+
+    <!-- AOS Animation Plugin-->
+
+    <!-- App Script -->
+    <script src="{{ asset('assets/js/hope-ui.js') }}" defer="defer"></script>
+
+    <!-- SwiperSlider Script -->
+    <script src="{{ asset('assets/vendor/swiperSlider/swiper-bundle.min.js') }}"></script>
+    <script src="{{ asset('landing-pages/assets/js/app-landing.js') }}" defer="defer"></script>
 </body>
 
 </html>

@@ -134,6 +134,77 @@ h6,
     text-align: center;
 }
 
+/* Container for Share Buttons */
+.share-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Share Button Styles */
+.share-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin: 0.5rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Share Button Color */
+.share-btn.facebook i {
+    color: #1877f2; /* Facebook color */
+}
+
+.share-btn.twitter i {
+    color: #1da1f2; /* Twitter color */
+}
+
+.share-btn.linkedin i {
+    color: #0a66c2; /* LinkedIn color */
+}
+
+.share-btn.whatsapp i {
+    color: #25d366; /* WhatsApp color */
+}
+
+.share-btn.email i {
+    color: #ea4335; /* Email color */
+}
+
+/* Hover Effect */
+.share-btn:hover {
+    color: #000; /* Change color to black on hover */
+    transform: scale(1.1); /* Slightly enlarge the icon */
+}
+
+/* Share Button Icon Style */
+.share-btn i {
+    font-size: 2rem; /* Adjust icon size */
+}
+
+/* Share on Text */
+.share-buttons p {
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+/* Media Query for Responsive Design */
+@media (max-width: 767px) {
+    .share-buttons {
+        align-items: center;
+    }
+
+    .share-btn {
+        margin: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .share-btn i {
+        font-size: 1.5rem;
+    }
+}
+
 
 /*** Navbar ***/
 .navbar-dark .navbar-nav .nav-link {
@@ -550,4 +621,22 @@ h6,
     .footer-about {
         margin-bottom: -75px;
     }
+}
+
+/* CSS untuk Logo dan Nama */
+.logo-section {
+    margin-bottom: 30px; /* Jarak antara logo dan nama dengan konten berikutnya */
+}
+
+.logo-img {
+    max-width: 150px; /* Sesuaikan ukuran maksimum logo */
+    height: auto; /* Mengatur tinggi otomatis agar sesuai dengan proporsi */
+    display: block;
+    margin: 0 auto; /* Tengah-tengah secara horizontal */
+}
+
+.logo-text {
+    font-size: 24px; /* Ukuran font nama logo, sesuaikan jika perlu */
+    color: #ffffff; /* Warna font */
+    margin-top: 10px; /* Jarak antara logo dan teks */
 }

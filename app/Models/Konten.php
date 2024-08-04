@@ -13,10 +13,12 @@ class Konten extends Model
 
     protected $fillable = [
         'judul',
-        'konten',
+        'slug',
+        'description_short',
+        'description_long',
         'gambar',
-        'kategori_id',
-        'is_active'
+        'is_active',
+        'created_by'
     ];
 
     public function kategori()

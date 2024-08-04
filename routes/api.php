@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
     Route::apiResource('feature', App\Http\Controllers\Api\FeatureController::class);
     Route::apiResource('review', App\Http\Controllers\Api\ReviewController::class);
     Route::apiResource('page', App\Http\Controllers\Api\PageController::class);
+    Route::apiResource('konten', App\Http\Controllers\Api\KontenController::class);//api untuk postingan
     Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class);
     Route::apiResource('pricing', App\Http\Controllers\Api\PricingController::class);
     Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);

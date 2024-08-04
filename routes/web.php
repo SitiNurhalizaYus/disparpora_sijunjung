@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function () {
     Route::get('/', [App\Http\Controllers\Client\BerandaController::class, 'index']);
     Route::get('/beranda', [App\Http\Controllers\Client\BerandaController::class, 'index']);
-    Route::get('/visimisi', [App\Http\Controllers\Client\Visimisiontroller::class, 'index']);
     Route::get('/feature', [App\Http\Controllers\Client\FeatureController::class, 'index']);
     Route::get('/pricing', [App\Http\Controllers\Client\PricingController::class, 'index']);
     Route::get('/blog', [App\Http\Controllers\Client\BlogController::class, 'index']);
@@ -25,6 +24,8 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/contact', [App\Http\Controllers\Client\ContactController::class, 'index']);
     Route::post('/contact/submit', [App\Http\Controllers\Client\ContactController::class, 'submit']);
     Route::get('/page/{id}', [App\Http\Controllers\Client\PageController::class, 'detail']);
+    Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'profil']);
+    // Route::get('/profil/struktur-organisasi-dinas', [App\Http\Controllers\Client\ProfilController::class, 'profil']);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {

@@ -15,15 +15,15 @@ class KontenFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    protected $model = Konten::class;
+    // protected $model = Konten::class;
 
     public function definition(): array
     {
         return [
-            'judul' => $this->faker->sentence,
-            'konten' => $this->faker->paragraph,
-            'gambar' => 'uploads/xxx/noimage.jpg',  
-            'kategori_id' => $this->faker->numberBetween(1, 2),
+    //         'judul' => $this->faker->sentence,
+    //         'konten' => $this->faker->paragraph,
+    //         'gambar' => 'uploads/xxx/noimage.jpg',  
+    //         'kategori_id' => $this->faker->numberBetween(1, 2),
         ];
     }
 }
