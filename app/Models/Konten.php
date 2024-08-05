@@ -16,9 +16,11 @@ class Konten extends Model
         'slug',
         'description_short',
         'description_long',
+        'kategori_id',
         'gambar',
         'is_active',
-        'created_by'
+        'created_by',
+        'updated_by'
     ];
 
     public function kategori()

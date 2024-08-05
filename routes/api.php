@@ -36,6 +36,11 @@ use Illuminate\Support\Facades\Route;
     Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
     Route::apiResource('role', App\Http\Controllers\Api\RoleController::class);
 
+    // Rute untuk mendapatkan all data
+    Route::get('/konten_all', [App\Http\Controllers\Api\KontenController::class, 'getAllData']);
+    // Rute untuk mendapatkan data kategori dropdown dari tabel berelasi
+    Route::get('/kategori_id', [App\Http\Controllers\Api\KontenController::class, 'getKategori']);
+
     Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
     Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);
     Route::get('dashboard/top-os', [App\Http\Controllers\Api\DashboardController::class, 'topOs']);

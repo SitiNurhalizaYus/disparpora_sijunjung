@@ -50,7 +50,10 @@ class ProfilController extends Controller
                 'image' => $konten['gambar']
             ]
         ];
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();        
+        $data['kategoris'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
+        $data['tags'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag');
+        $data['tag_kontens'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag_konten');
         // Mengembalikan view yang sesuai dengan data yang sudah disiapkan
         return view($view, $data);
     }

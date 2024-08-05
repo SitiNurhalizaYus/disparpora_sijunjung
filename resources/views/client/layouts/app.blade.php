@@ -53,7 +53,7 @@
         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner"></div>
     </div>
-    <!-- Spinner End -->
+    <!-- Spinner End --> 
 
 
     <!-- Topbar Start -->
@@ -104,7 +104,7 @@
                         <a href="{{ url('/profil') }}" class="nav-link dropdown-toggle"
                             data-bs-toggle="dropdown">Profil</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/profil/struktur-organisasi-dinas') }}" class="dropdown-item">Struktur Organisasi Dinas</a>
+                            <a href="{{ url('/profil/struktur-organisasi-dinas') }}"" class="dropdown-item">Struktur Organisasi Dinas</a>
                             <a href="{{ url('/profil/visi-misi') }}" class="dropdown-item">Visi dan Misi</a>
                             <a href="{{ url('/profil/tujuan-sasaran') }}" class="dropdown-item">Tujuan dan Sasaran</a>
                             </li>
@@ -271,41 +271,6 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('landingpage/assets/js/main.js') }}"></script>
-
-    <!-- offcanvas start -->
-    <!-- Library Bundle Script -->
-    <script src="{{ asset('assets/js/core/libs.min.js') }}"></script>
-
-    <!-- External Library Bundle Script -->
-    <script src="{{ asset('assets/js/core/external.min.js') }}"></script>
-
-    <!-- Widgetchart Script -->
-    <script src="{{ asset('assets/js/charts/widgetcharts.js') }}"></script>
-
-    <!-- mapchart Script -->
-    <script src="{{ asset('assets/js/charts/vectore-chart.js') }}"></script>
-    <script src="{{ asset('assets/js/charts/dashboard.js') }}"></script>
-
-    <!-- fslightbox Script -->
-    <script src="{{ asset('assets/js/plugins/fslightbox.js') }}"></script>
-
-    <!-- Settings Script -->
-    <script src="{{ asset('assets/js/plugins/setting.js') }}"></script>
-
-    <!-- Slider-tab Script -->
-    <script src="{{ asset('assets/js/plugins/slider-tabs.js') }}"></script>
-
-    <!-- Form Wizard Script -->
-    <script src="{{ asset('assets/js/plugins/form-wizard.js') }}"></script>
-
-    <!-- AOS Animation Plugin-->
-
-    <!-- App Script -->
-    <script src="{{ asset('assets/js/hope-ui.js') }}" defer="defer"></script>
-
-    <!-- SwiperSlider Script -->
-    <script src="{{ asset('assets/vendor/swiperSlider/swiper-bundle.min.js') }}"></script>
-    <script src="{{ asset('landing-pages/assets/js/app-landing.js') }}" defer="defer"></script>
 </body>
 
 </html>

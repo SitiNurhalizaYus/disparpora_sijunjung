@@ -10,7 +10,6 @@
                     <div class="logo-text">
                         <h3 class="text-light">{{ $setting['name-long'] }}</h3>
                         <p>Kabupaten Sijunjung</p>
-
                     </div>
                 </div>
             </div>
@@ -19,7 +18,7 @@
             <div class="text-star px-5">
                 <a href="href={{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ url('/client/profil/struktur') }}" class="text-green">Struktur Organisasi Dinas</a>
+                <a href="{{ url('/profil/struktur-organisasi-dinas') }}" class="text-green">Struktur Organisasi Dinas</a>
             </div>
         </div>
 
@@ -137,5 +136,5 @@
                 </div>
             </div>
         </div>
-        <!-- Visi misi End -->
+        <!-- Struktur organisasi End -->
     @endsection

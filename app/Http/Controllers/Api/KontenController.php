@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 use App\Models\Konten;
 
@@ -12,7 +13,13 @@ class KontenController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api')->except("index", "show");
+        $this->middleware('auth:api')->except("index", "show","getAllData","getKategori");
+    }
+
+    public function getKategori()
+    {
+        $categories = Kategori::all();
+        return response()->json($categories);
     }
 
     public function index(Request $request)
@@ -30,9 +37,9 @@ class KontenController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Konten::select('kontens.*', 'users.name as created_name')
-                        ->join('users', 'kontens.created_by', '=', 'users.id')
-                        ->where([['kontens.id', '>', '0']]);
+        $query = Konten::select('kontens.*', 'kategoris.name as kategori')
+            ->join('kategoris', 'kontens.kategori_id', '=', 'kategoris.id')
+            ->where([['kontens.id', '>', '0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
@@ -70,15 +77,22 @@ class KontenController extends Controller
         }
         // get data
         else {
-            $query = $query
-                ->orderBy($sort[0], $sort[1])
-                ->limit($per_page)
-                ->offset(($page-1) * $per_page)
-                ->get()
-                ->makeHidden(['description_long'])
-                ->toArray();
+            if ($per_page > 0) {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->limit($per_page)
+                    ->offset(($page-1) * $per_page)
+                    ->get()
+                    ->makeHidden(['description_long'])
+                    ->toArray();
+            } else {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->get()
+                    ->toArray();
+            }
 
-            foreach($query as $qry) {
+            foreach ($query as $qry) {
                 $temp = $qry;
                 $temp['datetime_local'] = \App\Helpers\AppHelper::instance()->convertDateTimeIndo($temp['created_at']);
                 array_push($data, $temp);
@@ -97,9 +111,9 @@ class KontenController extends Controller
     public function show($id)
     {
         // query
-        $query = Konten::select('kontens.*', 'users.name as created_name')
-                        ->join('users', 'kontens.created_by', '=', 'users.id')
-                        ->where([['kontens.id', '>', '0']]);
+        $query = Konten::select('kontens.*', 'kategoris.name as kategori')
+            ->join('kategoris', 'kontens.kategori_id', '=', 'kategoris.id')
+            ->where([['kontens.id', '>', '0']]);
                         
         // cek token
         if(!auth()->guard('api')->user()) {
@@ -129,6 +143,85 @@ class KontenController extends Controller
         }
     }
 
+    public function getAllData(Request $request)
+    {
+        // parameter
+        $count = $request->has('count') ? $request->get('count') : false;
+        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
+        $where = $request->has('where') ? $request->get('where') : '{}';
+        $search = $request->has('search') ? $request->get('search') : '';
+        $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
+        $page = $request->has('page') ? $request->get('page') : 1;
+
+        $sort = explode(':', $sort);
+        $where = str_replace("'", "\"", $where);
+        $where = json_decode($where, true);
+
+        // query
+        $query = Konten::select('kontens.*', 'kategoris.name as kategori')
+            ->join('kategoris', 'kontens.kategori_id', '=', 'kategoris.id')
+            ->where([['kontens.id', '>', '0']]);
+
+        // check token
+        if (!auth()->guard('api')->user()) {
+            $query = $query->where('kontens.is_active', 1);
+        }
+
+        if ($where) {
+            foreach ($where as $key => $value) {
+                if (is_array($value)) {
+                    $query = $query->whereIn('kontens.' . $key, $value);
+                } else {
+                    $query = $query->where('kontens.' . $key, $value);
+                }
+            }
+        }
+
+        if ($search) {
+            $query = $query->whereAny(['kontens.judul'], 'like', "%{$search}%");
+        }
+
+        // data
+        $data = [];
+        $metadata = [];
+
+        // metadata
+        $metadata['total_data'] = $query->count('kontens.id');
+
+        // get count
+        if ($count == true) {
+            $query = $query->count('id');
+            $data['count'] = $query;
+        }
+        // get data
+        else {
+            if ($per_page > 0) {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->limit($per_page)
+                    ->offset(($page - 1) * $per_page)
+                    ->get()
+                    ->toArray();
+            } else {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->get()
+                    ->toArray();
+            }
+
+            foreach ($query as $qry) {
+                $temp = $qry;
+                array_push($data, $temp);
+            };
+        }
+
+        // result
+        if ($data) {
+            return new ApiResource(true, 200, 'Get all data successfull', $data, $metadata);
+        } else {
+            return new ApiResource(false, 200, 'No data found', [], $metadata);
+        }
+    }
     
     public function store(Request $request)
     {

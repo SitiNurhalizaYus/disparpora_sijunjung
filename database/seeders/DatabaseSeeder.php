@@ -55,33 +55,54 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
 
         Kategori::create([
-            'nama_kategori' => 'Budaya',
-            'deskripsi' => 'Konten terkait budaya',
+            'name' => 'Profil',
+            'deskripsi' => 'Konten terkait profil dinas',
         ]);
 
         Kategori::create([
-            'nama_kategori' => 'Wisata',
-            'deskripsi' => 'Konten terkait wisata',
+            'name' => 'Acara/Kegiatan',
+            'deskripsi' => 'Konten terkait kegiatan',
         ]);
 
         Kategori::create([
-            'nama_kategori' => 'Kuliner',
+            'name' => 'Anugerah',
+            'deskripsi' => 'Konten terkait anugerah',
+        ]);
+
+        Kategori::create([
+            'name' => 'Culturediversity',
+            'deskripsi' => 'Konten terkait culturediversity',
+        ]);
+
+
+        Kategori::create([
+            'name' => 'Geodiversity',
+            'deskripsi' => 'Konten terkait geodiversity',
+        ]);
+
+        Kategori::create([
+            'name' => 'Geopark Ranah Minang Silokek',
+            'deskripsi' => 'Konten terkait geopark',
+        ]);
+
+        Kategori::create([
+            'name' => 'Olahraga',
             'deskripsi' => 'Konten terkait kuliner',
         ]);
 
         Kategori::create([
-            'nama_kategori' => 'Penginapan',
+            'name' => 'Wisata',
+            'deskripsi' => 'Konten terkait wisata',
+        ]);
+
+        Kategori::create([
+            'name' => 'Restoran',
+            'deskripsi' => 'Konten terkait restoran',
+        ]);
+
+        Kategori::create([
+            'name' => 'Penginapan',
             'deskripsi' => 'Konten terkait penginapan',
-        ]);
-
-        Kategori::create([
-            'nama_kategori' => 'Berita',
-            'deskripsi' => 'Konten terkait berita',
-        ]);
-
-        Kategori::create([
-            'nama_kategori' => 'Acara/Kegiatan',
-            'deskripsi' => 'Konten terkait kegiatan',
         ]);
         
 
@@ -91,32 +112,38 @@ class DatabaseSeeder extends Seeder
             'description_short' => 'Short description for sample post 1.',
             'description_long' => 'Long description for sample post 1. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
+            'updated_by'=> 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         Konten::create([
             'judul' => 'Visi dan Misi',
-            'slug' => Str::slug('Visi dan Misi'),
+            'slug' => Str::slug('Visi Misi'),
             'description_short' => 'Short description for sample post 2.',
             'description_long' => 'Long description for sample post 2. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
+            'updated_by'=> 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         
         Konten::create([
             'judul' => 'Tujuan dan Sasaran',
-            'slug' => Str::slug('Tujuan dan Sasaran'),
+            'slug' => Str::slug('Tujuan Sasaran'),
             'description_short' => 'Short description for sample post 2.',
             'description_long' => 'Long description for sample post 2. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
+            'updated_by'=> 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
