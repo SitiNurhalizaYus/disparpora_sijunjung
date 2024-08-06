@@ -5,21 +5,26 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProfilController extends Controller
+class PublikasiController extends Controller
 {
     public function __construct()
     {
         // Optional: middleware or other initializations
     }
 
-    public function profil($slug)
+    public function publikasi($slug)
     {
         // Mapping slug ke view
         $slugMethodViewMapping = [
-            'struktur-organisasi-dinas' => 'client.profil.struktur',
-            'visi-misi' => 'client.profil.visimisi',
-            'tujuan-strategis' => 'client.profil.tujuan',
-            'sasaran-strategis' => 'client.profil.sasaran',
+            'struktur-organisasi-dinas' => 'client.publikasi.informasi',
+            'visi-misi' => 'client.publikasi.produkhukum',
+            'tujuan-strategis' => 'client.publikasi.keuangan',
+            'sasaran-strategis' => 'client.publikasi.kinerja',
+            'sasaran-strategis' => 'client.publikasi.renja',
+            'sasaran-strategis' => 'client.publikasi.renstra',
+            'sasaran-strategis' => 'client.publikasi.pengadaan',
+            'sasaran-strategis' => 'client.publikasi.aset',
+            'sasaran-strategis' => 'client.publikasi.prosedur',
         ];
 
         // Periksa apakah slug ada dalam mapping
@@ -41,7 +46,7 @@ class ProfilController extends Controller
         $data = [
             'konten' => $konten,
             'og' => [
-                'url' => url('/profil/' . $konten['slug']),
+                'url' => url('/publikasi/' . $konten['slug']),
                 'title' => $konten['judul'],
                 'description' => $konten['description_short'],
                 'image' => $konten['gambar']

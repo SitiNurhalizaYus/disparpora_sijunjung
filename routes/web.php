@@ -24,7 +24,7 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/contact', [App\Http\Controllers\Client\ContactController::class, 'index']);
     Route::post('/contact/submit', [App\Http\Controllers\Client\ContactController::class, 'submit']);
     Route::get('/page/{id}', [App\Http\Controllers\Client\PageController::class, 'detail']);
-    Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'profil']);
+    Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'profil'])->name('profil');
     // Route::get('/profil/struktur-organisasi-dinas', [App\Http\Controllers\Client\ProfilController::class, 'profil']);
 });
 

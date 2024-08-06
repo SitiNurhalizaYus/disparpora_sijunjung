@@ -5,20 +5,20 @@
         <div class="container-fluid bg-primary py-5 bg-header">
             <div class="row py-5">
                 <div class="col-12 pt-lg-5 mt-lg-5 text-center">
-                    <img src="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}" alt="Logo"
-                        class="logo">
                     <div class="logo-text">
-                        <h3 class="text-light">{{ $setting['name-long'] }}</h3>
-                        <p>Kabupaten Sijunjung</p>
+                        <h3 class="text-light">Publikasi</h3>
+                        <p>
+                            Publikasi adalah konten terbaru dari DISPARPORA, termasuk informasi, produk hukum, laporan, dan dokumen penting lainnya, diperbarui secara berkala untuk memastikan transparansi dan akses publik.</p>
+
                     </div>
                 </div>
             </div>
         </div>
         <div class="container-fluid bg-primary py-3 bg-light">
             <div class="text-star px-5">
-                <a href="href={{ url('/beranda') }}" class="text-green">Beranda</a>
+                <a href="href="{{ url('/beranda') }}"" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('profil', ['slug' => 'struktur-organisasi-dinas']) }}" class="text-green">Struktur Organisasi Dinas</a>
+                <a href="{{url('publikasi/' . $konten['slug'])}}" class="text-green">{{ $konten['judul']}}</a>
             </div>
         </div>
 
@@ -42,7 +42,7 @@
         </div>
         <!-- Full Screen Search End -->
 
-        <!-- Struktur Organisasi Start -->
+        <!-- Visi misi Start -->
         <div class="container-fluid py-3 wow fadeInUp" data-wow-delay="0.1s">
             <div class="container py-5">
                 <div class="row g-5">
@@ -50,14 +50,20 @@
                         <!-- Detail Start -->
                         <div class="section-title position-relative pb-3 mb-5">
                             <h5 class="fw-bold text-primary text-uppercase">Profil</h5>
-                            <h1 class="mb-0">{{ $konten['judul'] }}</h1>
+                            <h1 class="mb-0">Visi dan Misi</h1>
                         </div>
                         <div class="mb-2">
                             <img class="position-relative w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
-                            src="{{ asset('/' . str_replace('/xxx/', '/500/', $konten['gambar'])) }}" style="object-fit: cover;">
+                                src="{{ asset('landingpage/assets/img/about.jpg') }}" style="object-fit: cover;">
                         </div>
                         <p class="mb-4">
-                            {!! $konten['description_long'] !!}
+                            {{-- {!! $item['konten'] !!} --}}
+                            Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam
+                            amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus
+                            clita duo justo et tempor eirmod magna dolore erat amet Tempor erat elitr rebum at clita. Diam
+                            dolor diam ipsum et tempor sit. Aliqu diam
+                            amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus
+                            clita duo justo et tempor eirmod magna dolore erat amet
                         </p>
                         <!-- Detail End -->
 
@@ -136,5 +142,5 @@
                 </div>
             </div>
         </div>
-        <!-- Struktur organisasi End -->
+        <!-- Visi misi End -->
     @endsection

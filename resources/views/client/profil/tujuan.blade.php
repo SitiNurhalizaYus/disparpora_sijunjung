@@ -43,7 +43,7 @@
         </div>
         <!-- Full Screen Search End -->
 
-        <!-- Visi misi Start -->
+        <!-- Tujuan Start -->
         <div class="container-fluid py-3 wow fadeInUp" data-wow-delay="0.1s">
             <div class="container py-5">
                 <div class="row g-5">
@@ -137,5 +137,5 @@
                 </div>
             </div>
         </div>
-        <!-- Visi misi End -->
+        <!-- Tujuan End -->
     @endsection

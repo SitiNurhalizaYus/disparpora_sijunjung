@@ -101,14 +101,14 @@
                     <a href="{{ url('/beranda') }}"
                         class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
                     <div class="nav-item dropdown me-3">
-                        <a href="{{ url('/profil') }}" class="nav-link dropdown-toggle"
+                        <a href="#" class="nav-link dropdown-toggle"
                             data-bs-toggle="dropdown">Profil</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/profil/struktur-organisasi-dinas') }}"" class="dropdown-item">Struktur
+                            <a href="{{ route('profil', ['slug' => 'struktur-organisasi-dinas']) }}" class="dropdown-item">Struktur
                                 Organisasi Dinas</a>
-                            <a href="{{ url('/profil/visi-misi') }}" class="dropdown-item">Visi dan Misi</a>
-                            <a href="{{ url('/profil/tujuan-strategis') }}" class="dropdown-item">Tujuan Strategis</a>
-                            <a href="{{ url('/profil/sasaran-strategis') }}" class="dropdown-item">Sasaran
+                            <a href="{{ route('profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan Misi</a>
+                            <a href="{{ route('profil', ['slug' => 'tujuan-strategis']) }}" class="dropdown-item">Tujuan Strategis</a>
+                            <a href="{{ route('profil', ['slug' => 'sasaran-strategis']) }}" class="dropdown-item">Sasaran
                                 Strategis</a>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                             data-bs-toggle="dropdown">Publikasi</a>
                         <div class="dropdown-menu m-0">
                             <a href="{{ url('/publikasi/informasi') }}"" class="dropdown-item">Informasi</a>
-                            <a href="{{ url('/publikasi/produk hukum') }}" class="dropdown-item">Produk Hukum</a>
+                            <a href="{{ url('/publikasi/produkhukum') }}" class="dropdown-item">Produk Hukum</a>
                             <a href="{{ url('/publikasi/keuangan') }}" class="dropdown-item">Laporan Keuangan</a>
                             <a href="{{ url('/publikasi/kinerja') }}" class="dropdown-item">Laporan Kinerja Instansi
                                 Pemerintah</a>
@@ -134,21 +134,21 @@
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
-                        <a href="{{ url('/publikasi') }}" class="nav-link dropdown-toggle"
+                        <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle"
                             data-bs-toggle="dropdown">PPID</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/publikasi/laporan') }}" class="dropdown-item">Laporan Layanan Informasi
+                            <a href="{{ url('/ppid/laporan') }}" class="dropdown-item">Laporan Layanan Informasi
                                 Publik</a>
-                            <a href="{{ url('/publikasi/statistik') }}" class="dropdown-item">Statistik Informasi
+                            <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi
                                 Publik</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
-                        <a href="{{ url('/wisata') }}" class="nav-link dropdown-toggle"
+                        <a href="{{ url('/lokawisata') }}" class="nav-link dropdown-toggle"
                             data-bs-toggle="dropdown">Lokawisata</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/wisata/alam') }}" class="dropdown-item">Wisata Alam</a>
-                            <a href="{{ url('/wisata/buatan') }}" class="dropdown-item">Wisata Buatan</a>
+                            <a href="{{ url('/lokawisata/alam') }}" class="dropdown-item">Wisata Alam</a>
+                            <a href="{{ url('/lokawisata/buatan') }}" class="dropdown-item">Wisata Buatan</a>
                         </div>
                     </div>
 

@@ -58,6 +58,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Profil',
             'deskripsi' => 'Konten terkait profil dinas',
         ]);
+        
+        Kategori::create([
+            'name' => 'Publikasi',
+            'deskripsi' => 'Konten terkait publikasi',
+        ]);
 
         Kategori::create([
             'name' => 'Acara/Kegiatan',
@@ -156,6 +161,20 @@ class DatabaseSeeder extends Seeder
             'description_long' => 'Long description for sample post 2. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
             'kategori_id' => 1,
+            'is_active' => 1,
+            'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
+            'updated_by'=> 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Konten::create([
+            'judul' => 'Informasi Terkait',
+            'slug' => Str::slug('Informasi Terkait'),
+            'description_short' => 'Short description for sample post 2.',
+            'description_long' => 'Long description for sample post 2. Detailed information goes here.',
+            'gambar' => 'uploads/xxx/noimage.jpg',
+            'kategori_id' => 2,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
             'updated_by'=> 1,
