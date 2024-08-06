@@ -86,8 +86,23 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Kategori::create([
+            'name' => 'Pemuda',
+            'deskripsi' => 'Konten terkait pemuda',
+        ]);
+
+        Kategori::create([
             'name' => 'Olahraga',
-            'deskripsi' => 'Konten terkait kuliner',
+            'deskripsi' => 'Konten terkait olahraga',
+        ]);
+        
+        Kategori::create([
+            'name' => 'Pelatihan',
+            'deskripsi' => 'Konten terkait pelatihan',
+        ]);
+
+        Kategori::create([
+            'name' => 'Penghargaan',
+            'deskripsi' => 'Konten terkait penghargaan',
         ]);
 
         Kategori::create([
@@ -135,8 +150,22 @@ class DatabaseSeeder extends Seeder
         ]);
         
         Konten::create([
-            'judul' => 'Tujuan dan Sasaran',
-            'slug' => Str::slug('Tujuan Sasaran'),
+            'judul' => 'Tujuan Strategis',
+            'slug' => Str::slug('Tujuan Strategis'),
+            'description_short' => 'Short description for sample post 2.',
+            'description_long' => 'Long description for sample post 2. Detailed information goes here.',
+            'gambar' => 'uploads/xxx/noimage.jpg',
+            'kategori_id' => 1,
+            'is_active' => 1,
+            'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
+            'updated_by'=> 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Konten::create([
+            'judul' => 'Sasaran Strategis',
+            'slug' => Str::slug('Sasaran Strategis'),
             'description_short' => 'Short description for sample post 2.',
             'description_long' => 'Long description for sample post 2. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',

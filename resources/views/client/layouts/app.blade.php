@@ -53,7 +53,7 @@
         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner"></div>
     </div>
-    <!-- Spinner End --> 
+    <!-- Spinner End -->
 
 
     <!-- Topbar Start -->
@@ -104,35 +104,62 @@
                         <a href="{{ url('/profil') }}" class="nav-link dropdown-toggle"
                             data-bs-toggle="dropdown">Profil</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/profil/struktur-organisasi-dinas') }}"" class="dropdown-item">Struktur Organisasi Dinas</a>
+                            <a href="{{ url('/profil/struktur-organisasi-dinas') }}"" class="dropdown-item">Struktur
+                                Organisasi Dinas</a>
                             <a href="{{ url('/profil/visi-misi') }}" class="dropdown-item">Visi dan Misi</a>
-                            <a href="{{ url('/profil/tujuan-sasaran') }}" class="dropdown-item">Tujuan dan Sasaran</a>
-                            </li>
+                            <a href="{{ url('/profil/tujuan-strategis') }}" class="dropdown-item">Tujuan Strategis</a>
+                            <a href="{{ url('/profil/sasaran-strategis') }}" class="dropdown-item">Sasaran
+                                Strategis</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Blog</a>
+                        <a href="{{ url('/publikasi') }}" class="nav-link dropdown-toggle"
+                            data-bs-toggle="dropdown">Publikasi</a>
                         <div class="dropdown-menu m-0">
-                            <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                            <a href="detail.html" class="dropdown-item">Blog Detail</a>
+                            <a href="{{ url('/publikasi/informasi') }}"" class="dropdown-item">Informasi</a>
+                            <a href="{{ url('/publikasi/produk hukum') }}" class="dropdown-item">Produk Hukum</a>
+                            <a href="{{ url('/publikasi/keuangan') }}" class="dropdown-item">Laporan Keuangan</a>
+                            <a href="{{ url('/publikasi/kinerja') }}" class="dropdown-item">Laporan Kinerja Instansi
+                                Pemerintah</a>
+                            <a href="{{ url('/publikasi/renja') }}" class="dropdown-item">Dokumen Renja DISPARPORA
+                                Sijunjung</a>
+                            <a href="{{ url('/publikasi/renstra') }}" class="dropdown-item">Dokumen Renstra
+                                DISPARPORA Sijunjung</a>
+                            <a href="{{ url('/publikasi/pengadaan') }}" class="dropdown-item">Pengadaan Barang dan
+                                Jasa</a>
+                            <a href="{{ url('/publikasi/aset') }}" class="dropdown-item">Aset Dan Persediaan
+                                DISPARPORA</a>
+                            <a href="{{ url('/publikasi/prosedur') }}" class="dropdown-item">Prosedur Tanggap Darurat
+                                DISPARPORA</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <a href="{{ url('/publikasi') }}" class="nav-link dropdown-toggle"
+                            data-bs-toggle="dropdown">PPID</a>
                         <div class="dropdown-menu m-0">
-                            <a href="price.html" class="dropdown-item">Pricing Plan</a>
-                            <a href="feature.html" class="dropdown-item">Our features</a>
-                            <a href="team.html" class="dropdown-item">Team Members</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="quote.html" class="dropdown-item">Free Quote</a>
+                            <a href="{{ url('/publikasi/laporan') }}" class="dropdown-item">Laporan Layanan Informasi
+                                Publik</a>
+                            <a href="{{ url('/publikasi/statistik') }}" class="dropdown-item">Statistik Informasi
+                                Publik</a>
                         </div>
                     </div>
-                    <a href="contact.html" class="nav-item nav-link me-3">Contact</a>
+                    <div class="nav-item dropdown me-3">
+                        <a href="{{ url('/wisata') }}" class="nav-link dropdown-toggle"
+                            data-bs-toggle="dropdown">Lokawisata</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{{ url('/wisata/alam') }}" class="dropdown-item">Wisata Alam</a>
+                            <a href="{{ url('/wisata/buatan') }}" class="dropdown-item">Wisata Buatan</a>
+                        </div>
+                    </div>
+
+                    <a href="{{ url('/event') }}" class="nav-item nav-link me-3">Event</a>
+                    <a href="{{ url('/hubungikami') }}" class="nav-item nav-link me-3">Hubungi Kami</a>
                     <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
                         data-bs-target="#searchModal">
                         <i class="fa fa-search"></i>
                     </button>
-                    <a href="#" class="btn btn-primary py-2 px-4 ms-3"><i class="bi bi-person-fill"></i>
+                    <a href="{{ url('/akun') }}" class="btn btn-primary py-2 px-4 ms-3"><i
+                            class="bi bi-person-fill"></i>
                         Akun</a>
                 </div>
             </div>
@@ -271,6 +298,65 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('landingpage/assets/js/main.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mendapatkan elemen dropdown-toggle untuk sub-menu
+            var dropdownToggles = document.querySelectorAll('.dropdown-item.dropdown-toggle');
+
+            // Menambahkan event listener untuk hover dan click pada setiap dropdown-toggle
+            dropdownToggles.forEach(function(toggle) {
+                var submenu = toggle.nextElementSibling;
+
+                // Event listener untuk hover
+                toggle.addEventListener('mouseenter', function() {
+                    submenu.classList.add('show');
+                });
+
+                // Event listener untuk hover keluar
+                toggle.addEventListener('mouseleave', function() {
+                    submenu.classList.remove('show');
+                });
+
+                // Event listener untuk klik
+                toggle.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation(); // Mencegah event bubbling
+
+                    var isOpen = submenu.classList.contains('show');
+
+                    // Tutup semua sub-menu terlebih dahulu
+                    document.querySelectorAll('.dropdown-menu .dropdown-menu.show').forEach(
+                        function(openMenu) {
+                            openMenu.classList.remove('show');
+                        });
+
+                    // Toggle sub-menu saat ini
+                    if (!isOpen) {
+                        submenu.classList.add('show');
+                    }
+                });
+
+                // Event listener untuk hover keluar dari submenu
+                submenu.addEventListener('mouseleave', function() {
+                    submenu.classList.remove('show');
+                });
+
+                submenu.addEventListener('mouseenter', function() {
+                    submenu.classList.add('show');
+                });
+            });
+
+            // Menambahkan event listener untuk klik di luar dropdown
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.dropdown-menu')) {
+                    document.querySelectorAll('.dropdown-menu .dropdown-menu.show').forEach(function(
+                        openMenu) {
+                        openMenu.classList.remove('show');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -24,9 +24,13 @@ class ProfilController extends Controller
                 'method' => 'getVisi',
                 'view' => 'client.profil.visimisi'
             ],
-            'tujuan-sasaran' => [
+            'tujuan-strategis' => [
                 'method' => 'getTujuan',
                 'view' => 'client.profil.tujuan'
+            ],
+            'sasaran-strategis' => [
+                'method' => 'getSasaran',
+                'view' => 'client.profil.sasaran'
             ],
         ];
 
@@ -82,7 +86,18 @@ class ProfilController extends Controller
 
     private function getTujuan()
     {
-        $konten = \App\Helpers\AppHelper::instance()->requestApiGet('api/konten/tujuan-sasaran');
+        $konten = \App\Helpers\AppHelper::instance()->requestApiGet('api/konten/tujuan-strategis');
+
+        if (!$konten) {
+            abort(404, 'Konten tidak ditemukan');
+        }
+
+        return $konten;
+    }
+
+    private function getSasaran()
+    {
+        $konten = \App\Helpers\AppHelper::instance()->requestApiGet('api/konten/sasaran-strategis');
 
         if (!$konten) {
             abort(404, 'Konten tidak ditemukan');

@@ -19,7 +19,7 @@
             <div class="text-star px-5">
                 <a href="href={{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ url('/profil/tujuan-strategis') }}" class="text-green">Tujuan Strategis</a>
+                <a href="{{ url('/profil/sasaran-strategis') }}" class="text-green">Sasaran Strategis</a>
             </div>
         </div>
 
