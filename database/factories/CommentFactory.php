@@ -2,27 +2,27 @@
 
 namespace Database\Factories;
 
-use App\Models\UmpanBalik;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UmpanBalik>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
  */
-class UmpanBalikFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = UmpanBalik::class;
+    protected $model = Comment::class;
 
     public function definition(): array
     {
         return [
+            'konten_id' => $this->faker->numberBetween(1, 12),
             'user_id' => $this->faker->numberBetween(1, 12),
-            'topik_feedback' => $this->faker->sentence,
-            'pesan_feedback' => $this->faker->paragraph,
+            'content' => $this->faker->paragraph,
         ];
     }
 }

@@ -25,9 +25,9 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::post('/contact/submit', [App\Http\Controllers\Client\ContactController::class, 'submit']);
     Route::get('/page/{id}', [App\Http\Controllers\Client\PageController::class, 'detail']);
     Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail'])->name('profil');
-    Route::get('/publikasi', [App\Http\Controllers\Client\PublikasiController::class, 'index'])->name('publikasi.index');
-    Route::get('/publikasi/{slug}', [App\Http\Controllers\Client\PublikasiController::class, 'detail'])->name('publikasi.detail');
-    // Route::get('/profil/struktur-organisasi-dinas', [App\Http\Controllers\Client\ProfilController::class, 'profil']);
+    Route::get('/informasi', [App\Http\Controllers\Client\InformasiController::class, 'index'])->name('informasi.index');
+    Route::get('/informasi/{slug}', [App\Http\Controllers\Client\InformasiController::class, 'detail'])->name('informasi.detail');
+    Route::post('/comments', [App\Http\Controllers\Client\CommentController::class, 'store'])->name('comments.store');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {

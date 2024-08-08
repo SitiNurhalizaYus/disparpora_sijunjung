@@ -11,7 +11,7 @@ use App\Models\Konten;
 use App\Models\Survei;
 use App\Models\Kategori;
 use App\Models\TagKonten;
-use App\Models\UmpanBalik;
+use App\Models\Comment;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -60,8 +60,8 @@ class DatabaseSeeder extends Seeder
         ]);
         
         Kategori::create([
-            'name' => 'Publikasi',
-            'deskripsi' => 'Konten terkait publikasi',
+            'name' => 'Informasi',
+            'deskripsi' => 'Konten terkait publikasi/informasi',
         ]);
 
         Kategori::create([
@@ -199,7 +199,7 @@ class DatabaseSeeder extends Seeder
         // Konten::factory(10)->create();
         Tag::factory(5)->create();
         TagKonten::factory(5)->create();
-        UmpanBalik::factory(10)->create();
+        Comment::factory(5)->create();
 
         Survei::create([
             'pertanyaan' => 'Bagaimana pendapat Anda tentang layanan kami?',

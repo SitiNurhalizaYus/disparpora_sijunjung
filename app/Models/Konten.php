@@ -11,6 +11,10 @@ class Konten extends Model
 {
     use HasFactory;
 
+    // Nama tabel yang digunakan oleh model
+    protected $table = 'kontens';
+
+    // Kolom yang bisa diisi secara massal  
     protected $fillable = [
         'judul',
         'slug',
@@ -23,14 +27,22 @@ class Konten extends Model
         'updated_by'
     ];
 
-    public function tags()
+    // Relasi dengan model Kategori
+    public function kategori()
     {
-        return $this->belongsToMany(Tag::class, 'tag_kontens');
+        return $this->belongsTo(Kategori::class, 'kategori_id');
     }
 
-    public function kategori()
-{
-    return $this->belongsTo(Kategori::class, 'kategori_id');
-}
+    // Relasi many-to-many dengan model Tag melalui tabel pivot tag_kontens
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_kontens', 'konten_id', 'tag_id');
+    }
+
+    // Relasi one-to-many dengan model Comment
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'konten_id');
+    }
 
 }
