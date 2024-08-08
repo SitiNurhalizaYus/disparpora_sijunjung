@@ -31,6 +31,7 @@ class KontenController extends Controller
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
         $page = $request->has('page') ? $request->get('page') : 1;
+        $kategoriId = $request->query('kategori_id'); // Tambahkan kategori_id
 
         $sort = explode(':', $sort);
         $where = str_replace("'", "\"", $where);
@@ -44,6 +45,11 @@ class KontenController extends Controller
         // cek token
         if(!auth()->guard('api')->user()) {
             $query = $query->where('kontens.is_active', 1);
+        }
+
+        // Tambahkan filter kategori_id
+        if ($kategoriId) {
+            $query = $query->where('kontens.kategori_id', $kategoriId);
         }
 
         if($where){
@@ -83,7 +89,6 @@ class KontenController extends Controller
                     ->limit($per_page)
                     ->offset(($page-1) * $per_page)
                     ->get()
-                    ->makeHidden(['description_long'])
                     ->toArray();
             } else {
                 $query = $query

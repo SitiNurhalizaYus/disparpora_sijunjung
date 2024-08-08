@@ -113,10 +113,10 @@
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
-                        <a href="{{ url('/publikasi') }}" class="nav-link dropdown-toggle"
+                        <a href="#" class="nav-link dropdown-toggle"
                             data-bs-toggle="dropdown">Publikasi</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/publikasi/informasi') }}"" class="dropdown-item">Informasi</a>
+                            <a href="{{ route('publikasi.index', ['kategori_id' => 2]) }}"" class="dropdown-item">Informasi</a>
                             <a href="{{ url('/publikasi/produkhukum') }}" class="dropdown-item">Produk Hukum</a>
                             <a href="{{ url('/publikasi/keuangan') }}" class="dropdown-item">Laporan Keuangan</a>
                             <a href="{{ url('/publikasi/kinerja') }}" class="dropdown-item">Laporan Kinerja Instansi

@@ -4,67 +4,55 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
+use App\Helpers;
 
 class ProfilController extends Controller
 {
+
     public function __construct()
     {
-        // Optional: middleware or other initializations
     }
 
-    public function profil($slug)
-    {
-        // Mapping slug ke view
-        $slugMethodViewMapping = [
-            'struktur-organisasi-dinas' => 'client.profil.struktur',
-            'visi-misi' => 'client.profil.visimisi',
-            'tujuan-strategis' => 'client.profil.tujuan',
-            'sasaran-strategis' => 'client.profil.sasaran',
-        ];
+    public function detail($slug)
+{
+    $kategoriId = 1; // Menggunakan kategori_id = 1
+    $kontens = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}");
 
-        // Periksa apakah slug ada dalam mapping
-        if (!array_key_exists($slug, $slugMethodViewMapping)) {
-            abort(404, 'Konten tidak ditemukan');
+    // Cari konten yang sesuai dengan slug yang diberikan
+    $konten = null;
+    foreach ($kontens as $k) {
+        if ($k['slug'] == $slug) {
+            $konten = $k;
+            break;
         }
-
-        // Ambil konten berdasarkan slug
-        $konten = $this->getContenBySlug($slug);
-
-        if (!$konten) {
-            abort(404, 'Konten tidak ditemukan');
-        }
-
-        // Tentukan view berdasarkan slug
-        $view = $slugMethodViewMapping[$slug];
-
-        // Mengatur data yang akan dikirim ke view
-        $data = [
-            'konten' => $konten,
-            'og' => [
-                'url' => url('/profil/' . $konten['slug']),
-                'title' => $konten['judul'],
-                'description' => $konten['description_short'],
-                'image' => $konten['gambar']
-            ]
-        ];
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();        
-        $data['kategoris'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
-        $data['tags'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag');
-        $data['tag_kontens'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag_konten');
-
-        // Mengembalikan view yang sesuai dengan data yang sudah disiapkan
-        return view($view, $data);
     }
 
-    private function getContenBySlug($slug)
-    {
-        // Mengambil konten berdasarkan slug
-        $response = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten/{$slug}");
-
-        if (!$response) {
-            abort(404, 'Konten tidak ditemukan');
-        }
-
-        return $response;
+    // Jika konten tidak ditemukan, tampilkan halaman 404
+    if (!$konten) {
+        abort(404, 'Konten tidak ditemukan');
     }
+
+    // Filter out the current content from the list and limit to 5 items
+    $kontensKategori = collect($kontens)->filter(function ($item) use ($slug) {
+        return $item['slug'] !== $slug;
+    })->take(5);
+
+    // Mengatur data yang akan dikirim ke view
+    $data = [];
+    $data['konten'] = $konten;
+    $data['kontensKategori'] = $kontensKategori; // Konten dengan kategori_id = 1, kecuali konten yang sedang ditampilkan, dibatasi 5 entri
+    $data['og'] = [];
+    $data['og']['url'] = url('/') . '/profil/' . $konten['slug'];
+    $data['og']['title'] = $konten['judul'];
+    $data['og']['description'] = $konten['description_short'];
+    $data['og']['image'] = $konten['gambar'];
+    $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+    $data['kategoris'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
+    $data['tags'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag');
+    $data['tag_kontens'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag_konten');
+
+    return view('client.konten.detail', $data);
+}
 }

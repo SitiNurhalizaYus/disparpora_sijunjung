@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
@@ -9,67 +8,64 @@ class PublikasiController extends Controller
 {
     public function __construct()
     {
-        // Optional: middleware or other initializations
     }
 
-    public function publikasi($slug)
+    // Method untuk menampilkan daftar publikasi
+    public function index()
     {
-        // Mapping slug ke view
-        $slugMethodViewMapping = [
-            'struktur-organisasi-dinas' => 'client.publikasi.informasi',
-            'visi-misi' => 'client.publikasi.produkhukum',
-            'tujuan-strategis' => 'client.publikasi.keuangan',
-            'sasaran-strategis' => 'client.publikasi.kinerja',
-            'sasaran-strategis' => 'client.publikasi.renja',
-            'sasaran-strategis' => 'client.publikasi.renstra',
-            'sasaran-strategis' => 'client.publikasi.pengadaan',
-            'sasaran-strategis' => 'client.publikasi.aset',
-            'sasaran-strategis' => 'client.publikasi.prosedur',
-        ];
-
-        // Periksa apakah slug ada dalam mapping
-        if (!array_key_exists($slug, $slugMethodViewMapping)) {
-            abort(404, 'Konten tidak ditemukan');
-        }
-
-        // Ambil konten berdasarkan slug
-        $konten = $this->getContenBySlug($slug);
-
-        if (!$konten) {
-            abort(404, 'Konten tidak ditemukan');
-        }
-
-        // Tentukan view berdasarkan slug
-        $view = $slugMethodViewMapping[$slug];
-
+        $kategoriId = '2'; // Menggunakan kategori_id = 2 untuk publikasi
+        $kontens = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}");
+ 
         // Mengatur data yang akan dikirim ke view
-        $data = [
-            'konten' => $konten,
-            'og' => [
-                'url' => url('/publikasi/' . $konten['slug']),
-                'title' => $konten['judul'],
-                'description' => $konten['description_short'],
-                'image' => $konten['gambar']
-            ]
-        ];
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();        
+        $data = [];
+        $data['konten'] = $kontens;
+        $data['og'] = [];
+        $data['og']['url'] = url('/') . '/publikasi/' . $kontens['kategori'];
+        $data['og']['title'] = $kontens['judul'];
+        $data['og']['description'] = $kontens['description_short'];
+        $data['og']['image'] = $kontens['gambar'];
+        $data['kontens'] = $kontens;
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['kategoris'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
         $data['tags'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag');
         $data['tag_kontens'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag_konten');
 
-        // Mengembalikan view yang sesuai dengan data yang sudah disiapkan
-        return view($view, $data);
+        return view('client.publikasi.index', $data);
     }
 
-    private function getContenBySlug($slug)
+    // Method untuk menampilkan detail publikasi berdasarkan slug
+    public function detail($slug)
     {
-        // Mengambil konten berdasarkan slug
-        $response = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten/{$slug}");
+        $kategoriId = 2; // Menggunakan kategori_id = 2 untuk publikasi
+        $kontens = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}");
 
-        if (!$response) {
+        // Cari konten yang sesuai dengan slug yang diberikan
+        $konten = null;
+        foreach ($kontens as $k) {
+            if ($k['slug'] == $slug) {
+                $konten = $k;
+                break;
+            }
+        }
+
+        // Jika konten tidak ditemukan, tampilkan halaman 404
+        if (!$konten) {
             abort(404, 'Konten tidak ditemukan');
         }
 
-        return $response;
+        // Mengatur data yang akan dikirim ke view
+        $data = [];
+        $data['konten'] = $konten;
+        $data['og'] = [];
+        $data['og']['url'] = url('/') . '/publikasi/' . $konten['slug'];
+        $data['og']['title'] = $konten['judul'];
+        $data['og']['description'] = $konten['description_short'];
+        $data['og']['image'] = $konten['gambar'];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['kategoris'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
+        $data['tags'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag');
+        $data['tag_kontens'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/tag_konten');
+
+        return view('client.publikasi.detail', $data);
     }
 }

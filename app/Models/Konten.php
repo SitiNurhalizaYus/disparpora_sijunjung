@@ -23,13 +23,14 @@ class Konten extends Model
         'updated_by'
     ];
 
-    public function kategori()
-    {
-        return $this->belongsTo(Kategori::class);
-    }
-
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'tag_kontens');
     }
+
+    public function kategori()
+{
+    return $this->belongsTo(Kategori::class, 'kategori_id');
+}
+
 }

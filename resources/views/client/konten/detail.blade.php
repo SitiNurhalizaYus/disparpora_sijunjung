@@ -16,9 +16,9 @@
         </div>
         <div class="container-fluid bg-primary py-3 bg-light">
             <div class="text-star px-5">
-                <a href="href={{ url('/beranda') }}" class="text-green">Beranda</a>
+                <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('profil', ['slug' => 'struktur-organisasi-dinas']) }}" class="text-green">Struktur Organisasi Dinas</a>
+                <a href="{{ route('profil', ['slug']) }}" class="text-green">{{ $konten['judul'] }}</a>
             </div>
         </div>
 
@@ -42,7 +42,7 @@
         </div>
         <!-- Full Screen Search End -->
 
-        <!-- Struktur Organisasi Start -->
+        <!-- Konten Start -->
         <div class="container-fluid py-3 wow fadeInUp" data-wow-delay="0.1s">
             <div class="container py-5">
                 <div class="row g-5">
@@ -54,7 +54,8 @@
                         </div>
                         <div class="mb-2">
                             <img class="position-relative w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
-                            src="{{ asset('/' . str_replace('/xxx/', '/500/', $konten['gambar'])) }}" style="object-fit: cover;">
+                                src="{{ asset('/' . str_replace('/xxx/', '/500/', $konten['gambar'])) }}"
+                                style="object-fit: cover;">
                         </div>
                         <p class="mb-4">
                             {!! $konten['description_long'] !!}
@@ -123,11 +124,15 @@
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
                                 <h3 class="mb-0">Plain Text</h3>
                             </div>
-                            <div class="bg-light text-center" style="padding: 30px;">
-                                <p>Vero sea et accusam justo dolor accusam lorem consetetur, dolores sit amet sit dolor
-                                    clita kasd justo, diam accusam no sea ut tempor magna takimata, amet sit et diam dolor
-                                    ipsum amet diam</p>
-                                <a href="" class="btn btn-primary py-2 px-4">Read More</a>
+                            <div class="text-start" style="padding: 30px;">
+                                @foreach($kontensKategori as $item)
+                                    @if($item['is_active'])
+                                        <a href="{{ route('profil', ['slug' => $item['slug']]) }}"
+                                        class="d-block bg-light text-dark text-decoration-none p-3 mb-3 rounded shadow-sm hover:bg-primary hover:text-light transition-colors">
+                                            {!! $item['description_short'] !!}
+                                        </a>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
                         <!-- Plain Text End -->
@@ -136,5 +141,5 @@
                 </div>
             </div>
         </div>
-        <!-- Struktur organisasi End -->
+        <!-- Konten End -->
     @endsection

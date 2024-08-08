@@ -12543,4 +12543,23 @@ fieldset:disabled .btn {
     .d-print-none {
         display: none !important
     }
+
+    .custom-tag {
+        display: inline-block;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        margin: 0.25rem;
+        color: #333;
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .custom-tag:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
 }
