@@ -27,22 +27,42 @@ class Konten extends Model
         'updated_by'
     ];
 
-    // Relasi dengan model Kategori
+   /**
+     * Relasi ke model Kategori
+     * 
+     * Setiap Konten dimiliki oleh satu Kategori
+     */
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'kategori_id');
+        return $this->belongsTo(Kategori::class);
     }
 
-    // Relasi many-to-many dengan model Tag melalui tabel pivot tag_kontens
-    public function tags()
+    /**
+     * Relasi ke model Label
+     * 
+     * Setiap Konten dapat memiliki banyak Label
+     */
+    public function labels()
     {
-        return $this->belongsToMany(Tag::class, 'tag_kontens', 'konten_id', 'tag_id');
+        return $this->belongsToMany(Label::class, 'label_kontens', 'konten_id', 'label_id');
     }
 
-    // Relasi one-to-many dengan model Comment
+    /**
+     * Relasi ke model Comment
+     * 
+     * Setiap Konten dapat memiliki banyak Comment
+     */
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'konten_id');
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Mengambil tahun dari kolom created_at
+     */
+    public function getYearAttribute()
+    {
+        return $this->created_at->format('Y');
     }
 
 }

@@ -2,25 +2,23 @@
 
 namespace Database\Factories;
 
-use App\Models\Tag;
+use App\Models\Arsip;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Arsip>
  */
-class TagFactory extends Factory
+class ArsipFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    protected $model = Tag::class;
+    protected $model = Arsip::class;
 
     public function definition(): array
     {
-        return [
-            'nama_tag' => $this->faker->word,
-        ];
+        return [];
     }
 }

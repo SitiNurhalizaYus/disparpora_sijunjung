@@ -21,6 +21,8 @@
             <div class="px-5">
                 <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
+                <a href="{{ route('informasi.index', ['kategori_id' => 2]) }}" class="text-green">Informasi</a>
+                <i class="bi bi-arrow-right-short text-green px-2"></i>
                 <a href="{{ route('informasi.detail', ['slug' => $konten['slug']]) }}"
                     class="text-green">{{ $konten['judul'] }}</a>
             </div>
@@ -138,19 +140,19 @@
                         </div> --}}
                         <!-- Recent Posts End -->
 
-                        <!-- Tags Start -->
+                        <!-- Label Start -->
                         <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="mb-0">Tag Cloud</h3>
+                                <h3 class="mb-0">Label</h3>
                             </div>
                             <div class="d-flex flex-wrap m-n1">
-                                @foreach ($tags as $tag)
-                                    <a href="{{ route('tags.show', $tag['slug']) }}"
-                                        class="btn btn-light m-1">{{ $tag['name'] }}</a>
+                                @foreach ($labels as $label)
+                                    <a href="{{ route('labels.show', $label['slug']) }}"
+                                        class="btn btn-light m-1">{{ $label['name'] }}</a>
                                 @endforeach
                             </div>
                         </div>
-                        <!-- Tags End -->
+                        <!-- Label End -->
                     </div>
                     <!-- Sidebar End -->
                 </div>

@@ -111,11 +111,11 @@
                         <!-- Tags Start -->
                         <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="mb-0">Tag Cloud</h3>
+                                <h3 class="mb-0">Label</h3>
                             </div>
                             <div class="d-flex flex-wrap m-n1">
-                                @foreach($tags as $tag)
-                                    <a href="{{ route('tag.show', $tag['slug']) }}" class="btn btn-light m-1">{{ $tag['nama'] }}</a>
+                                @foreach($labels as $label)
+                                    <a href="{{ route('label.show', $label['slug']) }}" class="btn btn-light m-1">{{ $label['nama'] }}</a>
                                 @endforeach
                             </div>
                         </div>

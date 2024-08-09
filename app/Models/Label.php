@@ -6,17 +6,18 @@ use App\Models\Konten;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Tag extends Model
+class Label extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nama_tag',
+        'name',
+        'slug',
         'is_active'
     ];
 
     public function kontens()
     {
-        return $this->belongsToMany(Konten::class, 'tag_kontens');
+        return $this->belongsToMany(Konten::class, 'label_konten', 'label_id', 'konten_id');
     }
 }

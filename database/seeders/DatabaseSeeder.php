@@ -4,14 +4,14 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Tag;
 use App\Models\User;
+use App\Models\Arsip;
 use App\Models\Event;
+use App\Models\Label;
 use App\Models\Konten;
 use App\Models\Survei;
-use App\Models\Kategori;
-use App\Models\TagKonten;
 use App\Models\Comment;
+use App\Models\Kategori;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -197,8 +197,67 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Konten::factory(10)->create();
-        Tag::factory(5)->create();
-        TagKonten::factory(5)->create();
+        // Tag::factory(5)->create();
+
+
+        Label::create([
+            'name' => 'anugerah',
+            'slug' => Str::slug('anugerah'),
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        Label::create([
+            'name' => 'geopark',
+            'slug' => Str::slug('geopark'),
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        Label::create([
+            'name' => 'pariwisata',
+            'slug' => Str::slug('pariwisata'),
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        Label::create([
+            'name' => 'pemuda',
+            'slug' => Str::slug('pemuda'),
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        Label::create([
+            'name' => 'olahraga',
+            'slug' => Str::slug('olahraga'),
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        Label::create([
+            'name' => 'pelatihan',
+            'slug' => Str::slug('pelatihan'),
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        Label::create([
+            'name' => 'penghargaan',
+            'slug' => Str::slug('penghargaan'),
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        
+
         Comment::factory(5)->create();
 
         Survei::create([
