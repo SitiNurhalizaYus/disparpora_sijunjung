@@ -258,6 +258,7 @@ class DatabaseSeeder extends Seeder
 
         
 
+        Arsip::factory(5)->create();
         Comment::factory(5)->create();
 
         Survei::create([

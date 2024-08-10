@@ -52,7 +52,6 @@
                                     <div class="blog-item bg-light rounded overflow-hidden">
                                         <div class="blog-img position-relative overflow-hidden">
                                             <img class="img-fluid" src="{{ asset('/' . str_replace('/xxx/', '/500/', $konten['gambar'])) }}" alt="">
-                                            {{-- <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="{{ route('kategori.show', $konten['kategori']['slug']) }}">{{ $konten['kategori']['name'] }}</a> --}}
                                         </div>
                                         <div class="p-4">
                                             <div class="d-flex mb-3">
@@ -115,7 +114,7 @@
                             </div>
                             <div class="d-flex flex-wrap m-n1">
                                 @foreach($labels as $label)
-                                    <a href="{{ route('label.show', $label['slug']) }}" class="btn btn-light m-1">{{ $label['nama'] }}</a>
+                                    <a href="{{ route('label.show', $label['slug']) }}" class="btn btn-light m-1">{{ $label['name'] }}</a>
                                 @endforeach
                             </div>
                         </div>

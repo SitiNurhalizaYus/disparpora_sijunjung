@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('tahun')->nullable(); // Tahun arsip
             $table->integer('bulan')->nullable(); // Bulan arsip (1-12)
             $table->string('label_slug'); // Slug dari label terkait
+            $table->boolean('is_active')->default(1);
             $table->timestamps(); // Created_at dan updated_at
         });
     }

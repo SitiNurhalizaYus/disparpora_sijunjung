@@ -23,7 +23,7 @@ class BerandaController extends Controller
         $data['og']['title'] = 'Beranda';
         $data['og']['description'] = 'beranda';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting(); 
-        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
+        $data['kontens'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/konten');
         $data['sliders'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/slider');
         $data['big_numbers'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/big_number');
         $data['teams'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/team');

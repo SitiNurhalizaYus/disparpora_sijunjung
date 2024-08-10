@@ -5,15 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Message;
+use App\Models\Kategori;;
 
-class MessageController extends Controller
+class KategoriController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth:api')->except("index", "show", "store");
+        $this->middleware('auth:api')->except("index", "show");
     }
+
 
     public function index(Request $request)
     {
@@ -30,15 +31,15 @@ class MessageController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Message::where([['id','>','0']]);
+        $query = Kategori::where([['id', '>', '0']]);
 
         // cek token
-        if(!auth()->guard('api')->user()) {
+        if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
-        if($where){
-            foreach($where as $key => $value) {
+        if ($where) {
+            foreach ($where as $key => $value) {
                 if (is_array($value)) {
                     $query = $query->whereIn($key, $value);
                 } else {
@@ -47,7 +48,7 @@ class MessageController extends Controller
             }
         }
 
-        if($search){
+        if ($search) {
             $query = $query->whereAny(['name'], 'like', "%{$search}%");
         }
 
@@ -62,27 +63,34 @@ class MessageController extends Controller
         $metadata['page'] = $page;
 
         // get count
-        if($count == true) {
+        if ($count == true) {
             $query = $query->count('id');
             $data['count'] = $query;
         }
         // get data
         else {
-            $query = $query
-                ->orderBy($sort[0], $sort[1])
-                ->limit($per_page)
-                ->offset(($page-1) * $per_page)
-                ->get()
-                ->toArray();
+            if ($per_page > 0) {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->limit($per_page)
+                    ->offset(($page - 1) * $per_page)
+                    ->get()
+                    ->toArray();
+            } else {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->get()
+                    ->toArray();
+            }
 
-            foreach($query as $qry) {
+            foreach ($query as $qry) {
                 $temp = $qry;
                 array_push($data, $temp);
             };
         }
 
         // result
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
@@ -92,10 +100,10 @@ class MessageController extends Controller
     public function show($id)
     {
         // query
-        $query = Message::where([['id','>','0']]);
+        $query = Kategori::where([['id', '>', '0']]);
 
         // cek token
-        if(!auth()->guard('api')->user()) {
+        if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
@@ -103,14 +111,14 @@ class MessageController extends Controller
         $data = $query->find($id);
 
         // result
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
 
-    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -118,14 +126,15 @@ class MessageController extends Controller
         ]);
 
         $req = $request->post();
-        $data = Message::create($req);
+        $data = Kategori::create($req);
 
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Failed to insert data', [], []);
         }
     }
+
 
     public function update(Request $request, $id)
     {
@@ -134,25 +143,25 @@ class MessageController extends Controller
         ]);
 
         $req = $request->post();
-        $query = Message::findOrFail($id);
+        $query = Kategori::findOrFail($id);
         $query->update($req);
 
-        $data = Message::findOrFail($id);
+        $data = Kategori::findOrFail($id);
 
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Failed to update data', [], []);
         }
     }
 
-   
+
     public function destroy($id)
     {
-        $query = Message::findOrFail($id);
+        $query = Kategori::findOrFail($id);
         $query->delete();
 
-        if($query) {
+        if ($query) {
             return new ApiResource(true, 201, 'Delete data successfull', [], []);
         } else {
             return new ApiResource(false, 400, 'Failed to delete data', [], []);

@@ -5,19 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Message;
+use App\Models\Arsip;
 
-class MessageController extends Controller
+class ArsipController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware('auth:api')->except("index", "show", "store");
+        $this->middleware('auth:api')->except("index", "show");
     }
 
     public function index(Request $request)
     {
-        // parameter
+        // Parameters
         $count = $request->has('count') ? $request->get('count') : false;
         $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
@@ -29,16 +28,16 @@ class MessageController extends Controller
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-        // query
-        $query = Message::where([['id','>','0']]);
+        // Query
+        $query = Arsip::where([['id', '>', '0']]);
 
-        // cek token
-        if(!auth()->guard('api')->user()) {
+        // Cek token
+        if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
-        if($where){
-            foreach($where as $key => $value) {
+        if ($where) {
+            foreach ($where as $key => $value) {
                 if (is_array($value)) {
                     $query = $query->whereIn($key, $value);
                 } else {
@@ -47,42 +46,49 @@ class MessageController extends Controller
             }
         }
 
-        if($search){
-            $query = $query->whereAny(['name'], 'like', "%{$search}%");
+        if ($search) {
+            $query = $query->where('label_slug', 'like', "%{$search}%");
         }
 
-        // data
+        // Data
         $data = [];
         $metadata = [];
 
-        // metadata
+        // Metadata
         $metadata['total_data'] = $query->count('id');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-        // get count
-        if($count == true) {
+        // Get count
+        if ($count == true) {
             $query = $query->count('id');
             $data['count'] = $query;
         }
-        // get data
+        // Get data
         else {
-            $query = $query
-                ->orderBy($sort[0], $sort[1])
-                ->limit($per_page)
-                ->offset(($page-1) * $per_page)
-                ->get()
-                ->toArray();
+            if ($per_page > 0) {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->limit($per_page)
+                    ->offset(($page - 1) * $per_page)
+                    ->get()
+                    ->toArray();
+            } else {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->get()
+                    ->toArray();
+            }
 
-            foreach($query as $qry) {
+            foreach ($query as $qry) {
                 $temp = $qry;
                 array_push($data, $temp);
-            };
+            }
         }
 
-        // result
-        if($data) {
+        // Result
+        if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
@@ -91,36 +97,35 @@ class MessageController extends Controller
 
     public function show($id)
     {
-        // query
-        $query = Message::where([['id','>','0']]);
+        // Query
+        $query = Arsip::where([['id', '>', '0']]);
 
-        // cek token
-        if(!auth()->guard('api')->user()) {
+        // Cek token
+        if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
-        // data
+        // Data
         $data = $query->find($id);
 
-        // result
-        if($data) {
+        // Result
+        if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
 
-    
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'label_slug' => 'required',
         ]);
 
         $req = $request->post();
-        $data = Message::create($req);
+        $data = Arsip::create($req);
 
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Failed to insert data', [], []);
@@ -130,29 +135,28 @@ class MessageController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
+            'label_slug' => 'required|string',
         ]);
 
         $req = $request->post();
-        $query = Message::findOrFail($id);
+        $query = Arsip::findOrFail($id);
         $query->update($req);
 
-        $data = Message::findOrFail($id);
+        $data = Arsip::findOrFail($id);
 
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Failed to update data', [], []);
         }
     }
 
-   
     public function destroy($id)
     {
-        $query = Message::findOrFail($id);
+        $query = Arsip::findOrFail($id);
         $query->delete();
 
-        if($query) {
+        if ($query) {
             return new ApiResource(true, 201, 'Delete data successfull', [], []);
         } else {
             return new ApiResource(false, 400, 'Failed to delete data', [], []);

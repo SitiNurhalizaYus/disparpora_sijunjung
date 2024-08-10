@@ -19,6 +19,10 @@ class ArsipFactory extends Factory
 
     public function definition(): array
     {
-        return [];
+        return [
+            'tahun' => $this->faker->year(), // Menghasilkan tahun acak
+            'bulan' => $this->faker->numberBetween(1, 12), // Menghasilkan bulan acak dari 1 hingga 12
+            'label_slug' => $this->faker->slug(),
+        ];
     }
 }

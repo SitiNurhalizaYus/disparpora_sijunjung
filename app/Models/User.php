@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Role;
+use App\Models\Event;
+use App\Models\Comment;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
@@ -77,6 +79,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function umpanBaliks()
     {
-        return $this->hasMany(UmpanBalik::class, 'user_id');
+        return $this->hasMany(Comment::class, 'user_id');
     }
 }

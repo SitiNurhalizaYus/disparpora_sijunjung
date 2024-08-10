@@ -11,72 +11,79 @@ class InformasiController extends Controller
     {
     }
 
-    // Method untuk menampilkan daftar informasi
     public function index()
     {
         $kategoriId = 2;
-        $kontens = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}");
-        // dd($kategoriId, $kontens);
-
-        // Mengatur data yang akan dikirim ke view
         $data = [];
-        $data['kontens'] = $kontens;
-        $data['og'] = [];
-        $data['og']['url'] = url('/').'/informasi';
-        $data['og']['title'] = 'Informasi';
-        $data['og']['description'] = 'Informasi';
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['kategoris'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
-        $data['labels'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/label');
+        try {
+            $kontens = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}");
+            $data['kontens'] = $kontens;
+            $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+            $data['labels'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/label');
+        } catch (\Exception $e) {
+            // Log error or handle exception
+            $data['kontens'] = [];
+            $data['setting'] = [];
+            $data['labels'] = [];
+        }
+
+        $data['og'] = [
+            'url' => url('/') . '/informasi',
+            'title' => 'Informasi',
+            'description' => 'Informasi'
+        ];
 
         return view('client.informasi.index', $data);
     }
 
-    // Method untuk menampilkan detail informasi berdasarkan slug
     public function detail($slug)
     {
-        $kategoriId = 2; // Menggunakan kategori_id = 2
-        
-        // Mengambil daftar konten
-        $kontens = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}");
+        $kategoriId = 2;
 
-        // Mencari konten yang sesuai dengan slug yang diberikan
-        $konten = null;
-        foreach ($kontens as $k) {
-            if ($k['slug'] == $slug) {
-                $konten = $k;
-                break;
-            }
+        try {
+            $kontens = \App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}");
+        } catch (\Exception $e) {
+            // Log error or handle exception
+            abort(404, 'Konten tidak ditemukan');
         }
 
-        // Jika konten tidak ditemukan, tampilkan halaman 404
+        $konten = collect($kontens)->firstWhere('slug', $slug);
+
         if (!$konten) {
             abort(404, 'Konten tidak ditemukan');
         }
 
-        // Mengambil komentar untuk konten ini
-        $comments = \App\Helpers\AppHelper::instance()->requestApiGet("api/comments?konten_id={$konten['id']}");
+        try {
+            $comments = \App\Helpers\AppHelper::instance()->requestApiGet("api/comment?konten_id={$konten['id']}");
+            $arsips = \App\Helpers\AppHelper::instance()->requestApiGet('api/arsip');
+            $setting = \App\Helpers\AppHelper::instance()->requestApiSetting();
+            $labels = \App\Helpers\AppHelper::instance()->requestApiGet('api/label');
+        } catch (\Exception $e) {
+            $comments = [];
+            $arsips = [];
+            $setting = [];
+            $labels = [];
+        }
 
-        // Filter konten dari kategori yang sama kecuali konten yang sedang ditampilkan dan batasi 5 entri
         $kontensKategori = collect($kontens)->filter(function ($item) use ($slug) {
-            return $item['slug'] !== $slug;
+            return isset($item['slug']) && $item['slug'] !== $slug;
         })->take(5);
 
-        // Mengatur data yang akan dikirim ke view
-        $data = [];
-        $data['konten'] = $konten;
-        $data['konten']['comments'] = $comments; // Menambahkan komentar ke data
-        $data['kontensKategori'] = $kontensKategori; // Konten dengan kategori_id = 2, kecuali konten yang sedang ditampilkan, dibatasi 5 entri
-        $data['og'] = [];
-        $data['og']['url'] = url('/') . '/informasi/' . $konten['slug'];
-        $data['og']['title'] = $konten['judul'];
-        $data['og']['description'] = $konten['description_short'];
-        $data['og']['image'] = $konten['gambar'];
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['kategoris'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/kategori');
-        $data['labels'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/label');
+        $data = [
+            'konten' => $konten,
+            'kontensKategori' => $kontensKategori,
+            'konten_comments' => $comments,
+            'og' => [
+                'url' => url('/') . '/informasi/' . $konten['slug'],
+                'title' => $konten['judul'],
+                'description' => $konten['description_short'],
+                'image' => $konten['gambar'],
+            ],
+            'setting' => $setting,
+            'labels' => $labels,
+            'arsips' => $arsips,
+        ];
 
         return view('client.informasi.detail', $data);
     }
-
 }

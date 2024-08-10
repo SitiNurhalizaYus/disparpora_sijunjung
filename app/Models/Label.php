@@ -18,6 +18,6 @@ class Label extends Model
 
     public function kontens()
     {
-        return $this->belongsToMany(Konten::class, 'label_konten', 'label_id', 'konten_id');
+        return $this->belongsToMany(Konten::class, 'label_kontens', 'label_id', 'konten_id');
     }
 }

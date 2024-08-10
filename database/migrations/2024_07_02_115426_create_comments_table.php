@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('konten_id'); // Foreign key to 'kontens' table
             $table->foreignId('user_id'); // Foreign key to 'users' table
             $table->text('content'); // The comment content
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(1);
             $table->timestamps(); // Created and updated timestamps
         });
     }

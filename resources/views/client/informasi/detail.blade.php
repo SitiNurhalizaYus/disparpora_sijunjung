@@ -45,52 +45,56 @@
                         <!-- Comment List Start -->
                         <div class="mb-5">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="mb-0">{{ count($konten['comments']) }} Comments</h3>
+                                <h3 class="mb-0">{{ is_array($konten_comments) ? count($konten_comments) : 0 }} Comments
+                                </h3>
                             </div>
 
-                            @foreach ($konten['comments'] as $comment)
+                            @forelse ($konten_comments as $comment)
                                 <div class="d-flex mb-4">
                                     <img src="{{ asset('img/user.jpg') }}" class="img-fluid rounded"
                                         style="width: 45px; height: 45px;">
                                     <div class="ps-3">
-                                        <h6><a href="#">{{ $comment['user']['name'] }}</a>
+                                        <h6><a href="#">{{ isset($comment['user']['name']) ? $comment['user']['name'] : 'Anonymous' }}</a>
                                             <small><i>{{ \Carbon\Carbon::parse($comment['created_at'])->format('d M Y') }}</i></small>
                                         </h6>
                                         <p>{{ $comment['content'] }}</p>
                                         <button class="btn btn-sm btn-light">Reply</button>
                                     </div>
                                 </div>
-                            @endforeach
+                            @empty
+                                <p>No comments available.</p>
+                            @endforelse
                         </div>
                         <!-- Comment List End -->
 
                         <!-- Comment Form Start -->
-                        <div class="bg-light rounded p-5">
-                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="mb-0">Leave A Comment</h3>
-                            </div>
-                            <form action="{{ route('comments.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="konten_id" value="{{ $konten['id'] }}">
-                                <div class="row g-3">
-                                    <div class="col-12 col-sm-6">
-                                        <input type="text" class="form-control bg-white border-0" placeholder="Your Name"
-                                            name="name" style="height: 55px;" required>
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <input type="email" class="form-control bg-white border-0"
-                                            placeholder="Your Email" name="email" style="height: 55px;" required>
-                                    </div>
-                                    <div class="col-12">
-                                        <textarea class="form-control bg-white border-0" rows="5" placeholder="Comment" name="content" required></textarea>
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-primary w-100 py-3" type="submit">Leave Your
-                                            Comment</button>
-                                    </div>
+                        @auth
+                            <div class="bg-light rounded p-5">
+                                <div class="section-title section-title-sm position-relative pb-3 mb-4">
+                                    <h3 class="mb-0">Leave A Comment</h3>
                                 </div>
-                            </form>
-                        </div>
+                                <form action="{{ route('informasi.detail') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="konten_id" value="{{ $konten['id'] }}">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <textarea class="form-control bg-white border-0" rows="5" placeholder="Comment" name="content" required></textarea>
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn btn-primary w-100 py-3" type="submit">Leave Your
+                                                Comment</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        @else
+                            <div class="bg-light rounded p-5">
+                                <div class="section-title section-title-sm position-relative pb-3 mb-4">
+                                    <h3 class="mb-0">Leave A Comment</h3>
+                                </div>
+                                <p>Please <a href="{{ route('client.login') }}">log in</a> to leave a comment.</p>
+                            </div>
+                        @endauth
                         <!-- Comment Form End -->
                     </div>
                     <!-- Blog Content End -->
@@ -140,6 +144,23 @@
                         </div> --}}
                         <!-- Recent Posts End -->
 
+                        <!-- Archives Start -->
+                        <!-- Label Start -->
+                        <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
+                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
+                                <h3 class="mb-0">Archives</h3>
+                            </div>
+                            <div class="d-flex flex-wrap m-n1">
+                                @foreach ($arsips as $arsip)
+                                    <a href="{{ route('informasi.detail', $arsip['label_slug']) }}"
+                                        class="btn btn-light m-1">{{ $arsip['tahun'] }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                        <!-- Label End -->
+                        <!-- Archives End -->
+
+
                         <!-- Label Start -->
                         <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
@@ -147,7 +168,7 @@
                             </div>
                             <div class="d-flex flex-wrap m-n1">
                                 @foreach ($labels as $label)
-                                    <a href="{{ route('labels.show', $label['slug']) }}"
+                                    <a href="{{ route('informasi.detail', $label['slug']) }}"
                                         class="btn btn-light m-1">{{ $label['name'] }}</a>
                                 @endforeach
                             </div>

@@ -12,6 +12,7 @@ class Arsip extends Model
         'tahun',
         'bulan',
         'label_slug',
+        'is_active',
     ];
 
     // Relasi dengan model Label
