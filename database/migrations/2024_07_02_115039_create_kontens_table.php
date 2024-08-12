@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description_short')->nullable();
             $table->text('description_long')->nullable();
             $table->foreignId('kategori_id');
+            $table->foreignId('label_id');
             $table->string('gambar', 255)->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();

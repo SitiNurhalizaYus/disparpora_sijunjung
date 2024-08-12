@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id(); // Auto-incrementing ID
-            $table->foreignId('konten_id'); // Foreign key to 'kontens' table
+            $table->foreignId('berita_id')->nullable(); // Foreign key to 'kontens' table
+            $table->foreignId('artikel_id')->nullable(); // Foreign key to 'kontens' table
             $table->foreignId('user_id'); // Foreign key to 'users' table
             $table->text('content'); // The comment content
             $table->boolean('is_active')->default(1);

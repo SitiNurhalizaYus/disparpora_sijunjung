@@ -10,14 +10,13 @@ class Arsip extends Model
 
     protected $fillable = [
         'tahun',
-        'bulan',
-        'label_slug',
+        'konten_id',
         'is_active',
     ];
 
-    // Relasi dengan model Label
-    public function label()
+    // Relasi many-to-one dengan Konten
+    public function konten()
     {
-        return $this->belongsTo(Label::class, 'label_slug', 'slug');
+        return $this->belongsTo(Konten::class, 'konten_id');
     }
 }

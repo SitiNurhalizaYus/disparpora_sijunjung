@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Page;
+use App\Models\Berita;
 
-class PageController extends Controller
+class BeritaController extends Controller
 {
 
     public function __construct()
@@ -19,7 +19,7 @@ class PageController extends Controller
     {
         // parameter
         $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'pages.id:asc';
+        $sort = $request->has('sort') ? $request->get('sort') : 'beritas.id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
@@ -30,25 +30,25 @@ class PageController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Page::select('pages.*', 'users.name as created_name')->join('users','pages.created_by','=','users.id')->where([['pages.id','>','0']]);
+        $query = Berita::select('beritas.*', 'users.name as created_name')->join('users','beritas.created_by','=','users.id')->where([['beritas.id','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
-            $query = $query->where('pages.is_active', 1);
+            $query = $query->where('beritas.is_active', 1);
         }
 
         if($where){
             foreach($where as $key => $value) {
                 if (is_array($value)) {
-                    $query = $query->whereIn('pages.'.$key, $value);
+                    $query = $query->whereIn('beritas.'.$key, $value);
                 } else {
-                    $query = $query->where('pages.'.$key, $value);
+                    $query = $query->where('beritas.'.$key, $value);
                 }
             }
         }
 
         if($search){
-            $query = $query->whereAny(['pages.name'], 'like', "%{$search}%");
+            $query = $query->whereAny(['beritas.name'], 'like', "%{$search}%");
         }
 
         // data
@@ -56,14 +56,14 @@ class PageController extends Controller
         $metadata = [];
 
         // metadata
-        $metadata['total_data'] = $query->count('pages.id');
+        $metadata['total_data'] = $query->count('beritas.id');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
         // get count
         if($count == true) {
-            $query = $query->count('pages.id');
+            $query = $query->count('beritas.id');
             $data['count'] = $query;
         }
         // get data
@@ -95,18 +95,18 @@ class PageController extends Controller
     public function show($id)
     {
         // query
-        $query = Page::select('pages.*', 'users.name as created_name')->join('users','pages.created_by','=','users.id')->where([['pages.id','>','0']]);
+        $query = Berita::select('beritas.*', 'users.name as created_name')->join('users','beritas.created_by','=','users.id')->where([['beritas.id','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
-            $query = $query->where('pages.is_active', 1);
+            $query = $query->where('beritas.is_active', 1);
         }
 
         // data
         if(is_numeric($id)) {
             $data = $query->find($id);
         } else {
-            $query = $query->where('pages.slug', $id);
+            $query = $query->where('beritas.slug', $id);
             $data = $query->first();
         }
 
@@ -132,7 +132,7 @@ class PageController extends Controller
         ]);
 
         $req = $request->post();
-        $data = Page::create($req);
+        $data = Berita::create($req);
 
         if($data) {
             return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
@@ -148,10 +148,10 @@ class PageController extends Controller
         ]);
 
         $req = $request->post();
-        $query = Page::findOrFail($id);
+        $query = Berita::findOrFail($id);
         $query->update($req);
 
-        $data = Page::findOrFail($id);
+        $data = Berita::findOrFail($id);
 
         if($data) {
             return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
@@ -162,7 +162,7 @@ class PageController extends Controller
 
     public function destroy($id)
     {
-        $query = Page::findOrFail($id);
+        $query = Berita::findOrFail($id);
         $query->delete();
 
         if($query) {

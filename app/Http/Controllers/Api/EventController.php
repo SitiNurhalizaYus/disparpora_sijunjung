@@ -1,15 +1,14 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Upload;
-use Carbon\Carbon;
-use Intervention\Image\Laravel\Facades\Image;
-use Intervention\Image\ImageManager;
+use App\Models\Event;
+;
 
-class UploadController extends Controller
+class EventController extends Controller
 {
 
     public function __construct()
@@ -17,7 +16,6 @@ class UploadController extends Controller
         $this->middleware('auth:api')->except("index", "show");
     }
 
-    
     public function index(Request $request)
     {
         // parameter
@@ -33,7 +31,7 @@ class UploadController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Upload::where([['id','>','0']]);
+        $query = Event::where([['id','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
@@ -51,7 +49,7 @@ class UploadController extends Controller
         }
 
         if($search){
-            $query = $query->whereAny(['name'], 'like', "%{$search}%");
+            $query = $query->whereAny(['nama_acara'], 'like', "%{$search}%");
         }
 
         // data
@@ -71,12 +69,19 @@ class UploadController extends Controller
         }
         // get data
         else {
-            $query = $query
-                ->orderBy($sort[0], $sort[1])
-                ->limit($per_page)
-                ->offset(($page-1) * $per_page)
-                ->get()
-                ->toArray();
+            if ($per_page > 0) {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->limit($per_page)
+                    ->offset(($page-1) * $per_page)
+                    ->get()
+                    ->toArray();
+            } else {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->get()
+                    ->toArray();
+            }
 
             foreach($query as $qry) {
                 $temp = $qry;
@@ -92,11 +97,11 @@ class UploadController extends Controller
         }
     }
 
-   
+    
     public function show($id)
     {
         // query
-        $query = Upload::where([['id','>','0']]);
+        $query = Event::where([['id','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
@@ -104,7 +109,7 @@ class UploadController extends Controller
         }
 
         // data
-        $data = $query->first();
+        $data = $query->find($id);
 
         // result
         if($data) {
@@ -117,68 +122,33 @@ class UploadController extends Controller
 
     public function store(Request $request)
     {
-        if($request->hasFile('image')) {
-
-            $image = $request->file('image');
-            $file = $image->getClientOriginalName();
-            $filename = pathinfo($file, PATHINFO_FILENAME);
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $size = $request->file('image')->getSize();
-
-            setlocale(LC_TIME, 'IND');
-            $date_format = Carbon::now()->format('Ymd_His');
-            $filename_new = $date_format.'-'.str_replace(' ','_', $filename).'.'.$extension;
-
-            $hd = $request->has('hd') ? $request->get('hd') == true : false;
-
-            if ($hd == true) {
-                $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' .$filename_new));
-                $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' .$filename_new));
-                $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' .$filename_new));
-                $image_resize_1000 = ImageManager::gd()->read($image->getRealPath())->resize(1000, 1000)->save(public_path('uploads/1000/' .$filename_new));
-            }else {
-                $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' .$filename_new));
-                $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' .$filename_new));
-                $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' .$filename_new));
-            }
-            
-            $req = [
-                'name' => $filename,
-                'type' => $extension,
-                'ext' => '.' . $extension,
-                'size' => $size,
-                'hd' => $hd,
-                'hash' => $filename_new,
-                'url' => 'uploads/xxx/' . $filename_new,
-            ];
-            $data = Upload::create($req);
-
-            if($data) {
-                return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), ['url'=>'change xxx to 100/300/500/1000']);
-            } else {
-                return new ApiResource(false, 400, 'Failed to insert data', [], []);
-            }
-
-        } else {
-            return new ApiResource(false, 400, 'Image not found', [], []);
-        }
-
-    }
-
-    
-    public function update(Request $request, $id)
-    {
         $request->validate([
-            'name' => 'required',
+            'nama_acara' => 'required',
         ]);
 
         $req = $request->post();
-        $query = Upload::findOrFail($id);
-        
-        $req = $request->only(['name', 'type', 'ext', 'size', 'hd', 'hash', 'url']); // Sesuaikan dengan kolom yang ingin diperbarui
+        $data = Event::create($req);
+
+        if($data) {
+            return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
+        } else {
+            return new ApiResource(false, 400, 'Failed to insert data', [], []);
+        }
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_acara' => 'required',
+            
+        ]);
+
+        $req = $request->post();
+        $query = Event::findOrFail($id);
         $query->update($req);
 
-        $data = Upload::findOrFail($id);
+        $data = Event::findOrFail($id);
 
         if($data) {
             return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
@@ -187,9 +157,10 @@ class UploadController extends Controller
         }
     }
 
+
     public function destroy($id)
     {
-        $query = Upload::findOrFail($id);
+        $query = Event::findOrFail($id);
         $query->delete();
 
         if($query) {

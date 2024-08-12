@@ -13,11 +13,19 @@ class Label extends Model
     protected $fillable = [
         'name',
         'slug',
+        'kategori_id',
         'is_active'
     ];
+    
+    // Relasi many-to-one dengan Kategori
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
 
+    // Relasi one-to-many dengan Konten
     public function kontens()
     {
-        return $this->belongsToMany(Konten::class, 'label_kontens', 'label_id', 'konten_id');
+        return $this->hasMany(Konten::class, 'label_id');
     }
 }

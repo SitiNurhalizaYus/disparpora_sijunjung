@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('url')->nullable();
             // default
             $table->text('notes')->nullable();
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

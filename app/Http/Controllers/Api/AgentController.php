@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
-use App\Models\Konten;
+use App\Models\Agent;
 
-class KontenController extends Controller
+class AgentController extends Controller
 {
 
     public function __construct()
@@ -26,57 +26,42 @@ class KontenController extends Controller
     {
         // parameter
         $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'kontens.id:asc';
+        $sort = $request->has('sort') ? $request->get('sort') : 'agents.id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
         $page = $request->has('page') ? $request->get('page') : 1;
-        $kategoriId = $request->query('kategori_id'); // Filter berdasarkan kategori_id
-        $labelId = $request->query('label_id'); // Filter berdasarkan label_id
+        $kategoriId = $request->query('kategori_id'); // Tambahkan kategori_id
 
         $sort = explode(':', $sort);
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-        // Query dasar
-        $query = Konten::select('kontens.*', 'kategoris.name as kategori_name', 'labels.name as label_name')
-            ->join('kategoris', 'kontens.kategori_id', '=', 'kategoris.id')
-            ->join('labels', 'kontens.label_id', '=', 'labels.id')
-            ->where([['kontens.id', '>', '0']]);
+        // query
+        $query = Agent::where([['id','>','0']]);
 
-        // Query dasar
-        // $query = Konten::with(['kategori', 'label'])
-        //             ->where([['kontens.id', '>', '0']]);
-
-        // Cek token
-        if (!auth()->guard('api')->user()) {
-            $query = $query->where('kontens.is_active', 1);
+        // cek token
+        if(!auth()->guard('api')->user()) {
+            $query = $query->where('agents.is_active', 1);
         }
 
-        // Filter berdasarkan kategori_id
+        // Tambahkan filter kategori_id
         if ($kategoriId) {
-            $query = $query->where('kontens.kategori_id', $kategoriId);
+            $query = $query->where('agents.kategori_id', $kategoriId);
         }
 
-        // Filter berdasarkan label_id
-        if ($labelId) {
-            $query = $query->where('kontens.label_id', $labelId);
-        }
-
-        // Filter tambahan berdasarkan 'where' yang dikirimkan melalui request
-        if ($where) {
-            foreach ($where as $key => $value) {
+        if($where){
+            foreach($where as $key => $value) {
                 if (is_array($value)) {
-                    $query = $query->whereIn('kontens.' . $key, $value);
+                    $query = $query->whereIn('agents.'.$key, $value);
                 } else {
-                    $query = $query->where('kontens.' . $key, $value);
+                    $query = $query->where('agents.'.$key, $value);
                 }
             }
         }
 
-        // Pencarian berdasarkan 'search' yang dikirimkan melalui request
-        if ($search) {
-            $query = $query->where('kontens.judul', 'like', "%{$search}%");
+        if($search){
+            $query = $query->whereAny(['agents.nama'], 'like', "%{$search}%");
         }
 
         // data
@@ -84,14 +69,14 @@ class KontenController extends Controller
         $metadata = [];
 
         // metadata
-        $metadata['total_data'] = $query->count('kontens.id');
+        $metadata['total_data'] = $query->count('agents.id');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
         // get count
         if($count == true) {
-            $query = $query->count('kontens.id');
+            $query = $query->count('agents.id');
             $data['count'] = $query;
         }
         // get data
@@ -129,20 +114,18 @@ class KontenController extends Controller
     public function show($id)
     {
         // query
-        $query = Konten::select('kontens.*', 'kategoris.name as kategori')
-            ->join('kategoris', 'kontens.kategori_id', '=', 'kategoris.id')
-            ->where([['kontens.id', '>', '0']]);
+        $query = Agent::where([['id','>','0']]);
                         
         // cek token
         if(!auth()->guard('api')->user()) {
-            $query = $query->where('kontens.is_active', 1);
+            $query = $query->where('agents.is_active', 1);
         }
 
         // data
         if(is_numeric($id)) {
             $data = $query->find($id);
         } else {
-            $query = $query->where('kontens.slug', $id);
+            $query = $query->where('agents.slug', $id);
             $data = $query->first();
         }
 
@@ -176,27 +159,27 @@ class KontenController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Konten::select('kontens.*', 'kategoris.name as kategori')
-            ->join('kategoris', 'kontens.kategori_id', '=', 'kategoris.id')
-            ->where([['kontens.id', '>', '0']]);
+        $query = Agent::select('agents.*', 'kategoris.name as kategori')
+            ->join('kategoris', 'agents.kategori_id', '=', 'kategoris.id')
+            ->where([['agents.id', '>', '0']]);
 
         // check token
         if (!auth()->guard('api')->user()) {
-            $query = $query->where('kontens.is_active', 1);
+            $query = $query->where('agents.is_active', 1);
         }
 
         if ($where) {
             foreach ($where as $key => $value) {
                 if (is_array($value)) {
-                    $query = $query->whereIn('kontens.' . $key, $value);
+                    $query = $query->whereIn('agents.' . $key, $value);
                 } else {
-                    $query = $query->where('kontens.' . $key, $value);
+                    $query = $query->where('agents.' . $key, $value);
                 }
             }
         }
 
         if ($search) {
-            $query = $query->whereAny(['kontens.judul'], 'like', "%{$search}%");
+            $query = $query->whereAny(['agents.nama'], 'like', "%{$search}%");
         }
 
         // data
@@ -204,7 +187,7 @@ class KontenController extends Controller
         $metadata = [];
 
         // metadata
-        $metadata['total_data'] = $query->count('kontens.id');
+        $metadata['total_data'] = $query->count('agents.id');
 
         // get count
         if ($count == true) {
@@ -244,11 +227,11 @@ class KontenController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required',
+            'nama' => 'required',
         ]);
 
         $req = $request->post();
-        $data = Konten::create($req);
+        $data = Agent::create($req);
 
         if($data) {
             return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
@@ -261,14 +244,14 @@ class KontenController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required',
+            'nama' => 'required',
         ]);
 
         $req = $request->post();
-        $query = Konten::findOrFail($id);
+        $query = Agent::findOrFail($id);
         $query->update($req);
 
-        $data = Konten::findOrFail($id);
+        $data = Agent::findOrFail($id);
 
         if($data) {
             return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
@@ -280,7 +263,7 @@ class KontenController extends Controller
     
     public function destroy($id)
     {
-        $query = Konten::findOrFail($id);
+        $query = Agent::findOrFail($id);
         $query->delete();
 
         if($query) {

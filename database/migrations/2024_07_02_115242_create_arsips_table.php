@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('arsips', function (Blueprint $table) {
             $table->id(); // Primary key
-            $table->integer('tahun')->nullable(); // Tahun arsip
-            $table->integer('bulan')->nullable(); // Bulan arsip (1-12)
-            $table->string('label_slug'); // Slug dari label terkait
+            $table->integer('year')->nullable(); // Tahun arsip
+            $table->integer('year')->nullable(); // bulan arsip
+            $table->foreignId('berita_id')->nullable();  
+            $table->foreignId('artikel_id')->nullable();  
             $table->boolean('is_active')->default(1);
             $table->timestamps(); // Created_at dan updated_at
         });

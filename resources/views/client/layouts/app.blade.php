@@ -116,21 +116,13 @@
                         <a href="#" class="nav-link dropdown-toggle"
                             data-bs-toggle="dropdown">Publikasi</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ route('informasi.index', ['kategori_id' =>2]) }}" class="dropdown-item">Informasi</a>
+                            <a href="{{ route('berita.index',['kategori_id' =>2]) }}" class="dropdown-item">Berita</a>
                             {{-- <a href="{{ route('produkhukum.index') }}" class="dropdown-item">Produk Hukum</a> --}}
-                            <a href="{{ url('/publikasi/keuangan') }}" class="dropdown-item">Laporan Keuangan</a>
-                            <a href="{{ url('/publikasi/kinerja') }}" class="dropdown-item">Laporan Kinerja Instansi
-                                Pemerintah</a>
-                            <a href="{{ url('/publikasi/renja') }}" class="dropdown-item">Dokumen Renja DISPARPORA
-                                Sijunjung</a>
-                            <a href="{{ url('/publikasi/renstra') }}" class="dropdown-item">Dokumen Renstra
-                                DISPARPORA Sijunjung</a>
-                            <a href="{{ url('/publikasi/pengadaan') }}" class="dropdown-item">Pengadaan Barang dan
-                                Jasa</a>
-                            <a href="{{ url('/publikasi/aset') }}" class="dropdown-item">Aset Dan Persediaan
-                                DISPARPORA</a>
-                            <a href="{{ url('/publikasi/prosedur') }}" class="dropdown-item">Prosedur Tanggap Darurat
-                                DISPARPORA</a>
+                            <a href="{{ url('/artikel') }}" class="dropdown-item">Artikel</a>
+                            <a href="{{ url('/dokumen') }}" class="dropdown-item">Dokumen Publik</a>
+                            <a href="{{ url('/galeri') }}" class="dropdown-item">Galeri</a>
+                            <a href="{{ url('/pengumuman') }}" class="dropdown-item">Pengumuman</a>
+                            <a href="{{ url('/event') }}" class="dropdown-item">Agenda</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
@@ -151,8 +143,6 @@
                             <a href="{{ url('/lokawisata/buatan') }}" class="dropdown-item">Wisata Buatan</a>
                         </div>
                     </div>
-
-                    <a href="{{ url('/event') }}" class="nav-item nav-link me-3">Event</a>
                     <a href="{{ url('/hubungikami') }}" class="nav-item nav-link me-3">Hubungi Kami</a>
                     <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
                         data-bs-target="#searchModal">

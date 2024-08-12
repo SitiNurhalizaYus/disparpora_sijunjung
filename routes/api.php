@@ -26,21 +26,27 @@ use Illuminate\Support\Facades\Route;
     Route::apiResource('review', App\Http\Controllers\Api\ReviewController::class);
     Route::apiResource('page', App\Http\Controllers\Api\PageController::class);
 
+    Route::apiResource('kategori', App\Http\Controllers\Api\KategoriController::class);//api untuk kategori
     Route::apiResource('konten', App\Http\Controllers\Api\KontenController::class);//api untuk postingan
     Route::apiResource('label', App\Http\Controllers\Api\LabelController::class);//api untuk label
-    Route::apiResource('kategori', App\Http\Controllers\Api\KategoriController::class);//api untuk kategori
     Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class);//api untuk arsip
     Route::apiResource('comment', App\Http\Controllers\Api\CommentController::class);//api untuk comment
+    Route::apiResource('event', App\Http\Controllers\Api\EventController::class);//api untuk event
+    Route::apiResource('pesan', App\Http\Controllers\Api\PesanController::class);//api untuk pesan
+    
+    Route::apiResource('agent', App\Http\Controllers\Api\AgentController::class);//api untuk agent
+    Route::apiResource('info_tempat', App\Http\Controllers\Api\TempatController::class);//api untuk tempat
 
-    Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class);
-    Route::apiResource('pricing', App\Http\Controllers\Api\PricingController::class);
-    Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
-    Route::apiResource('slider', App\Http\Controllers\Api\SliderController::class);
-    Route::apiResource('team', App\Http\Controllers\Api\TeamController::class);
-    Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
     Route::apiResource('upload', App\Http\Controllers\Api\UploadController::class);
     Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
     Route::apiResource('role', App\Http\Controllers\Api\RoleController::class);
+    Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
+
+    Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class);
+    Route::apiResource('pricing', App\Http\Controllers\Api\PricingController::class);
+    Route::apiResource('slider', App\Http\Controllers\Api\SliderController::class);
+    Route::apiResource('team', App\Http\Controllers\Api\TeamController::class);
+    Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
 
     // Rute untuk mendapatkan all data
     Route::get('/konten_all', [App\Http\Controllers\Api\KontenController::class, 'getAllData']);

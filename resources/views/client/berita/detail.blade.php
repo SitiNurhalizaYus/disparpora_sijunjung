@@ -21,9 +21,9 @@
             <div class="px-5">
                 <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('informasi.index', ['kategori_id' => 2]) }}" class="text-green">Informasi</a>
+                <a href="{{ route('berita.index', ['kategori_id' => 2]) }}" class="text-green">Informasi</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('informasi.detail', ['slug' => $konten['slug']]) }}"
+                <a href="{{ route('berita.detail', ['slug' => $konten['slug']]) }}"
                     class="text-green">{{ $konten['judul'] }}</a>
             </div>
         </div>
@@ -54,7 +54,8 @@
                                     <img src="{{ asset('img/user.jpg') }}" class="img-fluid rounded"
                                         style="width: 45px; height: 45px;">
                                     <div class="ps-3">
-                                        <h6><a href="#">{{ isset($comment['user']['name']) ? $comment['user']['name'] : 'Anonymous' }}</a>
+                                        <h6><a
+                                                href="#">{{ isset($comment['user']['name']) ? $comment['user']['name'] : 'Anonymous' }}</a>
                                             <small><i>{{ \Carbon\Carbon::parse($comment['created_at'])->format('d M Y') }}</i></small>
                                         </h6>
                                         <p>{{ $comment['content'] }}</p>
@@ -73,7 +74,7 @@
                                 <div class="section-title section-title-sm position-relative pb-3 mb-4">
                                     <h3 class="mb-0">Leave A Comment</h3>
                                 </div>
-                                <form action="{{ route('informasi.detail') }}" method="POST">
+                                <form action="{{ route('berita.detail') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="konten_id" value="{{ $konten['id'] }}">
                                     <div class="row g-3">
@@ -111,19 +112,18 @@
                         <!-- Search Form End -->
 
                         <!-- Category Start -->
-                        {{-- <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
+                        <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
                                 <h3 class="mb-0">Categories</h3>
                             </div>
                             <div class="link-animated d-flex flex-column justify-content-start">
-                                @foreach ($categories as $category)
-                                    <a class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2"
-                                        href="{{ route('category.show', $category['slug']) }}">
-                                        <i class="bi bi-arrow-right me-2"></i>{{ $category['name'] }}
-                                    </a>
+                                @foreach ($labels as $label)
+                                    <a href="{{ route('berita.label', ['kategoriId' => $label['kategori_id'], 'labelId' => $label['id']]) }}"
+                                        class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2">
+                                        <i class="bi bi-arrow-right me-2"></i>{{ $label['name'] }}</a>
                                 @endforeach
                             </div>
-                        </div> --}}
+                        </div>
                         <!-- Category End -->
 
                         <!-- Recent Posts Start -->
@@ -145,19 +145,17 @@
                         <!-- Recent Posts End -->
 
                         <!-- Archives Start -->
-                        <!-- Label Start -->
-                        <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
+                        {{-- <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
                                 <h3 class="mb-0">Archives</h3>
                             </div>
                             <div class="d-flex flex-wrap m-n1">
                                 @foreach ($arsips as $arsip)
-                                    <a href="{{ route('informasi.detail', $arsip['label_slug']) }}"
+                                    <a href="{{ route('berita.index', $arsip['label_slug']) }}"
                                         class="btn btn-light m-1">{{ $arsip['tahun'] }}</a>
                                 @endforeach
                             </div>
-                        </div>
-                        <!-- Label End -->
+                        </div> --}}
                         <!-- Archives End -->
 
 
@@ -168,7 +166,7 @@
                             </div>
                             <div class="d-flex flex-wrap m-n1">
                                 @foreach ($labels as $label)
-                                    <a href="{{ route('informasi.detail', $label['slug']) }}"
+                                    <a href="{{ route('berita.index', $label['slug']) }}"
                                         class="btn btn-light m-1">{{ $label['name'] }}</a>
                                 @endforeach
                             </div>

@@ -133,6 +133,7 @@ class DatabaseSeeder extends Seeder
             'description_long' => 'Long description for sample post 1. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
             'kategori_id' => 1,
+            'label_id' => 1,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
             'updated_by'=> 1,
@@ -147,6 +148,7 @@ class DatabaseSeeder extends Seeder
             'description_long' => 'Long description for sample post 2. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
             'kategori_id' => 1,
+            'label_id' => 1,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
             'updated_by'=> 1,
@@ -161,6 +163,7 @@ class DatabaseSeeder extends Seeder
             'description_long' => 'Long description for sample post 2. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
             'kategori_id' => 1,
+            'label_id' => 1,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
             'updated_by'=> 1,
@@ -175,6 +178,7 @@ class DatabaseSeeder extends Seeder
             'description_long' => 'Long description for sample post 2. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
             'kategori_id' => 2,
+            'label_id' => 1,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
             'updated_by'=> 1,
@@ -189,6 +193,7 @@ class DatabaseSeeder extends Seeder
             'description_long' => 'Long description for sample post 2. Detailed information goes here.',
             'gambar' => 'uploads/xxx/noimage.jpg',
             'kategori_id' => 1,
+            'label_id' => 1,
             'is_active' => 1,
             'created_by' => 1, // Sesuaikan dengan ID pengguna yang valid
             'updated_by'=> 1,
@@ -199,10 +204,19 @@ class DatabaseSeeder extends Seeder
         // Konten::factory(10)->create();
         // Tag::factory(5)->create();
 
+        Label::create([
+            'name' => 'profil',
+            'slug' => Str::slug('profil'),
+            'kategori_id' => 1,
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         Label::create([
             'name' => 'anugerah',
             'slug' => Str::slug('anugerah'),
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -211,6 +225,7 @@ class DatabaseSeeder extends Seeder
         Label::create([
             'name' => 'geopark',
             'slug' => Str::slug('geopark'),
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -219,6 +234,7 @@ class DatabaseSeeder extends Seeder
         Label::create([
             'name' => 'pariwisata',
             'slug' => Str::slug('pariwisata'),
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -227,6 +243,7 @@ class DatabaseSeeder extends Seeder
         Label::create([
             'name' => 'pemuda',
             'slug' => Str::slug('pemuda'),
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -235,6 +252,7 @@ class DatabaseSeeder extends Seeder
         Label::create([
             'name' => 'olahraga',
             'slug' => Str::slug('olahraga'),
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -243,6 +261,7 @@ class DatabaseSeeder extends Seeder
         Label::create([
             'name' => 'pelatihan',
             'slug' => Str::slug('pelatihan'),
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -251,6 +270,7 @@ class DatabaseSeeder extends Seeder
         Label::create([
             'name' => 'penghargaan',
             'slug' => Str::slug('penghargaan'),
+            'kategori_id' => 1,
             'is_active' => 1,
             'created_at' => now(),
             'updated_at' => now(),

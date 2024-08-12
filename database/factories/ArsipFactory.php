@@ -21,8 +21,7 @@ class ArsipFactory extends Factory
     {
         return [
             'tahun' => $this->faker->year(), // Menghasilkan tahun acak
-            'bulan' => $this->faker->numberBetween(1, 12), // Menghasilkan bulan acak dari 1 hingga 12
-            'label_slug' => $this->faker->slug(),
+            'konten_id' => 1,
         ];
     }
 }

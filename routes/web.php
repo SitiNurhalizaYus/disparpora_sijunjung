@@ -19,16 +19,20 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
 
     Route::get('/feature', [App\Http\Controllers\Client\FeatureController::class, 'index']);
     Route::get('/pricing', [App\Http\Controllers\Client\PricingController::class, 'index']);
-    Route::get('/blog', [App\Http\Controllers\Client\BlogController::class, 'index']);
-    Route::get('/blog/detail/{id}', [App\Http\Controllers\Client\BlogController::class, 'detail']);
+    // Route::get('/blog', [App\Http\Controllers\Client\BlogController::class, 'index']);
+    // Route::get('/blog/detail/{id}', [App\Http\Controllers\Client\BlogController::class, 'detail']);
     Route::get('/faq', [App\Http\Controllers\Client\FaqController::class, 'index']);
     Route::get('/contact', [App\Http\Controllers\Client\ContactController::class, 'index']);
     Route::post('/contact/submit', [App\Http\Controllers\Client\ContactController::class, 'submit']);
     Route::get('/page/{id}', [App\Http\Controllers\Client\PageController::class, 'detail']);
 
     Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail'])->name('profil');
-    Route::get('/informasi', [App\Http\Controllers\Client\InformasiController::class, 'index'])->name('informasi.index');
-    Route::get('/informasi/{slug}', [App\Http\Controllers\Client\InformasiController::class, 'detail'])->name('informasi.detail');
+    Route::get('/berita', [App\Http\Controllers\Client\BeritaController::class, 'index'])->name('berita.index');
+    Route::get('/berita/{slug}', [App\Http\Controllers\Client\BeritaController::class, 'detail'])->name('berita.detail');
+    Route::get('/berita/label/{kategoriId}/{labelId}', [\App\Http\Controllers\Client\BeritaController::class, 'showByLabel'])->name('berita.label');
+    Route::get('/berita/arsip/{year}/{month}', [\App\Http\Controllers\Client\BeritaController::class, 'showByArsip'])->name('berita.arsip');
+
+
 });
 
 Route::group(['prefix' => 'client', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {

@@ -9,7 +9,7 @@
                     <img class="w-100" src="{{ asset('landingpage/assets/img/carousel-1.jpg') }}" alt="Image">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 900px;">
-                            <h5 class="text-white text-uppercase mb-3 animated slideInDown">{{ $kontens['judul'] }}</h5>
+                            <h5 class="text-white text-uppercase mb-3 animated slideInDown"></h5>
                             <h1 class="display-1 text-white mb-md-4 animated zoomIn">Creative & Innovative Digital
                                 Solution</h1>
                             <a href="quote.html" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Free

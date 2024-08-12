@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('deskripsi');
             $table->string('gambar', 255)->nullable();
             $table->string('link_event', 255)->nullable();
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }
