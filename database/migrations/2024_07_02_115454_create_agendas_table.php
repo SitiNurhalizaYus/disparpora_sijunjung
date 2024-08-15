@@ -17,9 +17,9 @@ return new class extends Migration
             $table->text('content');
             $table->date('event_date');
             $table->string('organizer');
-            $table->string('attachment_path')->nullable();
+            $table->string('file_path')->nullable();
             $table->boolean('is_active')->default(1);
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('created_by');
             $table->timestamps();
         });
     }

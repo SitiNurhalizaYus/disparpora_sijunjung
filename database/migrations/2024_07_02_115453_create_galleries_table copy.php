@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('file_path');
             $table->boolean('is_active')->default(1);
             $table->timestamps();
+            $table->foreignId('created_by');
         });
     }
 

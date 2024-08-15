@@ -19,10 +19,10 @@ return new class extends Migration
             $table->text('description_short')->nullable();
             $table->string('image')->nullable();
             $table->enum('type', ['berita', 'artikel', 'profil']);
-            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
-            $table->foreignId('arsip_id')->nullable()->constrained('arsips')->onDelete('set null'); 
+            $table->foreignId('category_id')->nullable();
+            $table->foreignId('arsip_id')->nullable();
             $table->boolean('is_active')->default(1);
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('created_by');
             $table->timestamps();
         });
     }

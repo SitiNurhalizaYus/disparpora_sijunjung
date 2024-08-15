@@ -12,21 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
-            $table->string('name');
-            $table->enum('gender', ['male', 'female']);
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->text('address')->nullable();
-            $table->string('phone_number', 20)->nullable();
-            $table->string('photo')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestamp('last_login')->nullable();
-            $table->foreignId('created_by')->nullable();
-            $table->foreignId('updated_by')->nullable();
-            $table->timestamps();
+            $table->id(); // Primary key bigint(20)
+            $table->foreignId('role_id');
+            $table->string('username')->unique(); 
+            $table->string('password'); 
+            $table->string('name'); 
+            $table->string('email')->unique(); 
+            $table->string('picture')->nullable(); 
+            $table->timestamp('last_login')->nullable(); 
+            $table->timestamp('email_verified_at')->nullable(); 
+            $table->rememberToken(); 
+            $table->text('notes')->nullable(); 
+            $table->boolean('is_active')->default(1); 
+            $table->timestamps(); 
+            $table->integer('created_by')->nullable(); 
+            $table->integer('updated_by')->nullable(); 
         });
 
     }

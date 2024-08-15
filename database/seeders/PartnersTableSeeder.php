@@ -20,7 +20,6 @@ class PartnersTableSeeder extends Seeder
                 'link' => 'http://wisatanusantara.com',
                 'notes' => 'Mitra resmi Dinas Pariwisata dan Olahraga.',
                 'is_active' => true,
-                'created_by' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
