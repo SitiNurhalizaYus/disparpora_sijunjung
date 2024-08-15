@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('arsips', function (Blueprint $table) {
+        Schema::create('announcements', function (Blueprint $table) {
             $table->id();
-            $table->integer('tahun');
-            $table->integer('bulan');
+            $table->string('title');
+            $table->text('content');
             $table->boolean('is_active')->default(1);
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('arsips');
+        Schema::dropIfExists('announcements');
     }
 };

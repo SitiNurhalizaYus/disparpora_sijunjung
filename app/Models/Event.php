@@ -12,13 +12,12 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = [
-        'agent_id',
-        'admin_id',
-        'nama_acara',
-        'tanggal_acara',
-        'deskripsi',
-        'gambar',
-        'link_event',
+        'event_name',
+        'organizer', // Tambahkan penyelenggara di sini
+        'event_date',
+        'description',
+        'image',
+        'event_link',
         'is_active'
     ];
 
@@ -29,6 +28,6 @@ class Event extends Model
 
     public function admin()
     {
-        return $this->belongsTo(User::class, 'admin_id');
+        return $this->belongsTo(User::class);
     }
 }

@@ -49,6 +49,7 @@ use Illuminate\Support\Facades\Route;
     Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
 
     // Rute untuk mendapatkan all data
+    Route::get('/user_all', [App\Http\Controllers\Api\UserController::class, 'getAllData']);
     Route::get('/konten_all', [App\Http\Controllers\Api\KontenController::class, 'getAllData']);
     // Rute untuk mendapatkan data kategori dropdown dari tabel berelasi
     Route::get('/kategori_id', [App\Http\Controllers\Api\KontenController::class, 'getKategori']);

@@ -5,18 +5,20 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Arsip;
+use App\Models\Arsip;;
 
 class ArsipController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth:api')->except("index", "show");
     }
 
+
     public function index(Request $request)
     {
-        // Parameters
+        // parameter
         $count = $request->has('count') ? $request->get('count') : false;
         $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
@@ -28,10 +30,10 @@ class ArsipController extends Controller
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-        // Query
+        // query
         $query = Arsip::where([['id', '>', '0']]);
 
-        // Cek token
+        // cek token
         if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
@@ -47,25 +49,25 @@ class ArsipController extends Controller
         }
 
         if ($search) {
-            $query = $query->where('label_slug', 'like', "%{$search}%");
+            $query = $query->whereAny(['name'], 'like', "%{$search}%");
         }
 
-        // Data
+        // data
         $data = [];
         $metadata = [];
 
-        // Metadata
+        // metadata
         $metadata['total_data'] = $query->count('id');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-        // Get count
+        // get count
         if ($count == true) {
             $query = $query->count('id');
             $data['count'] = $query;
         }
-        // Get data
+        // get data
         else {
             if ($per_page > 0) {
                 $query = $query
@@ -84,10 +86,10 @@ class ArsipController extends Controller
             foreach ($query as $qry) {
                 $temp = $qry;
                 array_push($data, $temp);
-            }
+            };
         }
 
-        // Result
+        // result
         if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
@@ -97,18 +99,18 @@ class ArsipController extends Controller
 
     public function show($id)
     {
-        // Query
+        // query
         $query = Arsip::where([['id', '>', '0']]);
 
-        // Cek token
+        // cek token
         if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
-        // Data
+        // data
         $data = $query->find($id);
 
-        // Result
+        // result
         if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
         } else {
@@ -116,10 +118,11 @@ class ArsipController extends Controller
         }
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
-            'label_slug' => 'required',
+            'name' => 'required',
         ]);
 
         $req = $request->post();
@@ -132,10 +135,11 @@ class ArsipController extends Controller
         }
     }
 
+
     public function update(Request $request, $id)
     {
         $request->validate([
-            'label_slug' => 'required|string',
+            'name' => 'required',
         ]);
 
         $req = $request->post();
@@ -150,6 +154,7 @@ class ArsipController extends Controller
             return new ApiResource(false, 400, 'Failed to update data', [], []);
         }
     }
+
 
     public function destroy($id)
     {

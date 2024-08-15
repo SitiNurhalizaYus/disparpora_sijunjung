@@ -48,7 +48,7 @@ class RoleController extends Controller
         }
 
         if($search){
-            $query = $query->whereAny(['role'], 'like', "%{$search}%");
+            $query = $query->whereAny(['name'], 'like', "%{$search}%");
         }
 
         // data
@@ -113,7 +113,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'role' => 'required',
+            'name' => 'required',
         ]);
 
         $req = $request->post();
@@ -129,7 +129,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'role' => 'required',
+            'name' => 'required',
         ]);
 
         $req = $request->post();

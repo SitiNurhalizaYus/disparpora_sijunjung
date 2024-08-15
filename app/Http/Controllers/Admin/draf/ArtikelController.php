@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProfilController extends Controller
+class ArtikelController extends Controller
 {
     public function __construct()
     {
@@ -18,10 +18,10 @@ class ProfilController extends Controller
         if($has_session) {
             $data = [];
             $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-            $data['menu'] = 'profils-list';
+            $data['menu'] = 'artikels-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-            return view('admin.profils.index', $data);
+            return view('admin.artikels.index', $data);
         } else {
             session()->flash('message', 'Session expired.');
             return redirect()->route('admin.login');
@@ -32,32 +32,32 @@ class ProfilController extends Controller
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'profils-show';
+        $data['menu'] = 'artikels-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         $data['id'] = $id;
-        return view('admin.profils.show', $data);
+        return view('admin.artikels.show', $data);
     }
 
     public function create()
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'profils-create';
+        $data['menu'] = 'artikels-create';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        return view('admin.profils.create', $data);
+        return view('admin.artikels.create', $data);
     }
 
     public function edit($id)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'profils-edit';
+        $data['menu'] = 'artikels-edit';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         $data['id'] = $id;
-        return view('admin.profils.edit', $data);
+        return view('admin.artikels.edit', $data);
     }
 
 }

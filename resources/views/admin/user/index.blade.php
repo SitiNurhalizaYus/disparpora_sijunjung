@@ -88,7 +88,7 @@
                     data: 'id'
                 },
                 {
-                    data: 'level_name',
+                    data: 'role_name',
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + data + '</span>';
                     }

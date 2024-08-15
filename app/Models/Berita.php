@@ -9,7 +9,7 @@ use App\Models\Kategori;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Konten extends Model
+class Berita extends Model
 {
     use HasFactory;
 
@@ -18,30 +18,20 @@ class Konten extends Model
 
     // Kolom yang bisa diisi secara massal  
     protected $fillable = [
-        'id',
-        'title',
+        'judul',
         'slug',
         'description_short',
         'description_long',
-        'type', // profil, berita, artikel
         'kategori_id',
-        'photo',
+        'gambar',
         'is_active',
         'created_by',
-        'updated_by',
-        'created_at'
+        'updated_by'
     ];
 
-    // Relasi dengan model Category
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
-    }
-
-    // Relasi dengan model Arsip
-    public function arsip()
-    {
-        return $this->belongsTo(Arsip::class);
     }
  
 }

@@ -11,16 +11,11 @@ class Role extends Model
 {
     use HasFactory;
     use BlameableTrait;
-    protected $fillable = [
-        'name',
-        'description',
-        'is_active',
-        'created_by',
-        'updated_by'
-    ];
+    protected $fillable = ['name', 'description', 'is_active'];
 
+    // Relasi ke pengguna
     public function users()
     {
-        return $this->hasMany(User::class, 'role_id');
+        return $this->hasMany(User::class);
     }
 }

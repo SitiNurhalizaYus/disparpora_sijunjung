@@ -19,21 +19,7 @@ class User extends Authenticatable implements JWTSubject
     use BlameableTrait;
 
     protected $fillable = [
-        'role_id',
-        'nik',
-        'name',
-        'gender',
-        'reg_date',
-        'email',
-        'last_login',
-        'email_verified_at',
-        'password',
-        'address',
-        'phone_number',
-        'photo',
-        'is_active',
-        'created_by',
-        'updated_by'
+        'role_id', 'username', 'password', 'name', 'email', 'picture', 'last_login', 'email_verified_at', 'remember_token', 'notes', 'is_active', 'created_by', 'updated_by'
     ];
 
     protected $hidden = [
@@ -67,18 +53,51 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
     
+    // Relasi ke Role
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
-    public function events()
+    // Relasi ke konten yang dibuat pengguna
+    public function contents()
     {
-        return $this->hasMany(Event::class, 'admin_id');
+        return $this->hasMany(Content::class, 'created_by');
     }
 
-    public function umpanBaliks()
+    // Relasi ke pengaturan yang dibuat pengguna
+    public function settings()
     {
-        return $this->hasMany(Comment::class, 'user_id');
+        return $this->hasMany(Setting::class, 'created_by');
+    }
+
+    // Relasi ke sliders yang dibuat pengguna
+    public function sliders()
+    {
+        return $this->hasMany(Slider::class, 'created_by');
+    }
+
+    // Relasi ke galeri yang dibuat pengguna
+    public function galleries()
+    {
+        return $this->hasMany(Gallery::class, 'created_by');
+    }
+
+    // Relasi ke agendas yang dibuat pengguna
+    public function agendas()
+    {
+        return $this->hasMany(Agenda::class, 'created_by');
+    }
+
+    // Relasi ke announcements yang dibuat pengguna
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'created_by');
+    }
+
+    // Relasi ke partners yang dibuat pengguna
+    public function partners()
+    {
+        return $this->hasMany(Partner::class, 'created_by');
     }
 }

@@ -11,20 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('arsips', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->integer('tahun');
-            $table->integer('bulan');
+            $table->string('title');
+            $table->string('file_path');
+            $table->text('description')->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('arsips');
+        Schema::dropIfExists('documents');
     }
 };

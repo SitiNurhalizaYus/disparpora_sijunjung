@@ -4,16 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
-class Partner extends Model
+class Gallery extends Model
 {
     use HasFactory;
-    use BlameableTrait;
+    protected $fillable = ['title', 'type', 'file_path', 'is_active', 'created_by'];
 
-    protected $fillable = ['name', 'image', 'link', 'notes', 'is_active', 'created_by'];
-
-    // Relasi ke pengguna yang membuat mitra
+    // Relasi ke pengguna yang membuat galeri
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

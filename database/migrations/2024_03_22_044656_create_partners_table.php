@@ -16,13 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('image')->nullable();
             $table->string('link')->nullable();
-            // default
             $table->text('notes')->nullable();
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
         });
+        
+
     }
 
     /**

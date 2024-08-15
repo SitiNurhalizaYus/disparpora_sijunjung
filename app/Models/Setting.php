@@ -12,7 +12,6 @@ class Setting extends Model
     use BlameableTrait;
 
     protected $fillable = [
-        'id',
         'type',
         'key',
         'value',

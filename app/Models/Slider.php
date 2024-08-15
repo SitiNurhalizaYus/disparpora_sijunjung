@@ -11,13 +11,11 @@ class Slider extends Model
     use HasFactory;
     use BlameableTrait;
 
-    protected $fillable = [
-        'id',
-        'name',
-        'description',
-        'image',
-        'link',
-        'notes',
-        'is_active'
-    ];
+    protected $fillable = ['name', 'description', 'image', 'link', 'notes', 'is_active', 'created_by'];
+
+    // Relasi ke pengguna yang membuat slider
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

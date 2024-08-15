@@ -12,7 +12,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except('getAllData');
     }
 
     public function index(Request $request)
@@ -30,7 +30,7 @@ class UserController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = User::select('users.*', 'roles.role as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
+        $query = User::select('users.*', 'roles.name as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
@@ -90,10 +90,88 @@ class UserController extends Controller
         }
     }
 
+    public function getAllData(Request $request)
+    {
+        // parameter
+        $count = $request->has('count') ? $request->get('count') : false;
+        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
+        $where = $request->has('where') ? $request->get('where') : '{}';
+        $search = $request->has('search') ? $request->get('search') : '';
+        $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
+        $page = $request->has('page') ? $request->get('page') : 1;
+
+        $sort = explode(':', $sort);
+        $where = str_replace("'", "\"", $where);
+        $where = json_decode($where, true);
+
+        // query
+        $query = User::select('users.*', 'roles.name as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
+
+        // check token
+        if (!auth()->guard('api')->user()) {
+            $query = $query->where('users.is_active', 1);
+        }
+
+        if ($where) {
+            foreach ($where as $key => $value) {
+                if (is_array($value)) {
+                    $query = $query->whereIn('users.' . $key, $value);
+                } else {
+                    $query = $query->where('users.' . $key, $value);
+                }
+            }
+        }
+
+        if ($search) {
+            $query = $query->whereAny(['users.name'], 'like', "%{$search}%");
+        }
+
+        // data
+        $data = [];
+        $metadata = [];
+
+        // metadata
+        $metadata['total_data'] = $query->count('users.id');
+
+        // get count
+        if ($count == true) {
+            $query = $query->count('id');
+            $data['count'] = $query;
+        }
+        // get data
+        else {
+            if ($per_page > 0) {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->limit($per_page)
+                    ->offset(($page - 1) * $per_page)
+                    ->get()
+                    ->toArray();
+            } else {
+                $query = $query
+                    ->orderBy($sort[0], $sort[1])
+                    ->get()
+                    ->toArray();
+            }
+
+            foreach ($query as $qry) {
+                $temp = $qry;
+                array_push($data, $temp);
+            };
+        }
+
+        // result
+        if ($data) {
+            return new ApiResource(true, 200, 'Get all data successfull', $data, $metadata);
+        } else {
+            return new ApiResource(false, 200, 'No data found', [], $metadata);
+        }
+    }
+
     public function show($id)
     {
         // query
-        $query = User::select('users.*', 'roles.role as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
+        $query = User::select('users.*', 'roles.name as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();

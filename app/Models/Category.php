@@ -1,14 +1,15 @@
 <?php
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Arsip extends Model
+class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tahun', 'bulan', 'is_active'];
+    protected $fillable = ['name', 'slug', 'is_active'];
 
     // Relasi ke konten
     public function contents()
