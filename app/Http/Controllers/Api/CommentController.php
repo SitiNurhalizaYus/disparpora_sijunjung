@@ -114,7 +114,7 @@ class CommentController extends Controller
 
         return $data
             ? new ApiResource(true, 201, 'Insert data successful', $data->toArray(), [])
-            : new ApiResource(false, 400, 'Failed to insert data', [], []);
+            : new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
     }
 
     public function update(Request $request, $id)
@@ -131,7 +131,7 @@ class CommentController extends Controller
 
         return $data
             ? new ApiResource(true, 200, 'Update data successful', $data->toArray(), [])
-            : new ApiResource(false, 400, 'Failed to update data', [], []);
+            : new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
     }
 
     public function destroy($id)
@@ -141,6 +141,6 @@ class CommentController extends Controller
 
         return $query
             ? new ApiResource(true, 200, 'Delete data successful', [], [])
-            : new ApiResource(false, 400, 'Failed to delete data', [], []);
+            : new ApiResource(false, 400, 'Data gagal dihapus', [], []);
     }
 }

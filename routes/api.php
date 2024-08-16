@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::apiResource('upload', App\Http\Controllers\Api\UploadController::class);
     Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
-    Route::apiResource('role', App\Http\Controllers\Api\RoleController::class);
+    Route::apiResource('user_level', App\Http\Controllers\Api\userLevelController::class);
     Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
 
     Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class);

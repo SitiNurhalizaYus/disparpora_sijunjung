@@ -35,20 +35,6 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
 
 });
 
-Route::group(['prefix' => 'client', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {
-    Route::get('/',[App\Http\Controllers\Client\UserAuthController::class, 'index']);
-
-    Route::get('login',[App\Http\Controllers\Client\UserAuthController::class, 'index']);
-    Route::get('auth',[App\Http\Controllers\Client\UserAuthController::class, 'index']);
-    Route::get('auth/login',[App\Http\Controllers\Client\UserAuthController::class, 'login'])->name('client.login');
-    Route::post('auth/action_login',[App\Http\Controllers\Client\UserAuthController::class, 'action_login']);
-    Route::get('auth/logout',[App\Http\Controllers\Client\UserAuthController::class, 'logout']);
-    Route::get('auth/forgot',[App\Http\Controllers\Client\UserAuthController::class, 'forgot']);
-    Route::get('auth/error',[App\Http\Controllers\Client\UserAuthController::class, 'error'])->name('client.error');
-
-    Route::get('akun',[App\Http\Controllers\Client\UserAuthController::class, 'index']);
-    Route::get('dashboard',[App\Http\Controllers\Client\UserAuthController::class, 'index'])->name('client.dashboard');
-});
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {
     Route::get('/',[App\Http\Controllers\Admin\AuthController::class, 'index']);
 
@@ -60,7 +46,7 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::get('auth/forgot',[App\Http\Controllers\Admin\AuthController::class, 'forgot']);
     Route::get('auth/error',[App\Http\Controllers\Admin\AuthController::class, 'error'])->name('admin.error');
 
-    Route::get('akun',[App\Http\Controllers\Admin\AkunController::class, 'index']);
+    Route::get('profile',[App\Http\Controllers\Admin\ProfileController::class, 'index']);
     Route::get('dashboard',[App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('slider', App\Http\Controllers\Admin\SliderController::class);
     Route::resource('bignumber', App\Http\Controllers\Admin\BigNumberController::class);

@@ -1,44 +1,38 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="conatiner-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+        <div class="card-header mb-2 px-3">
+            <div class="flex-wrap d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="header-title">
+                        <h2 class="card-title">User</h2>
+                        <p>List data</p>
+                    </div>
+                </div>
+                <div>
+                    <a href="{{ url('/admin/user/create') }}" class="btn btn-md 2 btn-primary">
+                        ADD+
+                    </a>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="flex-wrap d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="header-title">
-                                    <h2 class="card-title">User</h2>
-                                    <p>List data</p>
-                                </div>
-                            </div>
-                            <div>
-                                <a href="{{ url("/admin/user/create") }}" class="btn btn-md btn-success">
-                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12.0001 8.32739V15.6537" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M15.6668 11.9904H8.3335" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.6857 2H7.31429C4.04762 2 2 4.31208 2 7.58516V16.4148C2 19.6879 4.0381 22 7.31429 22H16.6857C19.9619 22 22 19.6879 22 16.4148V7.58516C22 4.31208 19.9619 2 16.6857 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                    Tambah Data
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="card-body">
                         <br>
                         <div class="table-responsive">
                             <table id="datatable" class="table table-striped" data-toggle="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Role</th>
-                                        <th>Email</th>
-                                        <th>Name</th>
-                                        <th>Photo</th>
-                                        <th>Created At</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th class="text-center">Level Name</th>
+                                        <th class="text-center">Username</th>
+                                        <th class="text-center">Email</th>
+                                        <th class="text-center">Created At</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -52,6 +46,20 @@
     </div>
 
     <script>
+        function convertStringToDate(str) {
+    var date = new Date(str);
+    let options = {
+        // weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        // hour: "numeric",
+        // minute: "numeric",
+        // second: "numeric"
+    };
+    var newdate = date.toLocaleDateString('id', options);
+    return newdate;
+}
         $('#datatable').DataTable( {
             order: [[ 0, 'asc' ]],
             lengthMenu: [[ 5, 15, 25, 100, -1 ], [ 5, 15, 25, 100, 'All' ]],
@@ -77,50 +85,41 @@
                 },
                 function(json) {
                     callback({
-                        recordsTotal: json.metadata.total_data,
-                        recordsFiltered: json.metadata.total_data,
-                        data: json.data
-                    });
+                            recordsTotal: json.metadata.total_data,
+                            recordsFiltered: json.metadata.total_data,
+                            data: json.data
+                        });
                 });
             },
             columns: [
                 {
-                    data: 'id'
+                    data: 'level_name',
+                    render: function (data, type, row, meta) {
+                        return '<span>' + data.substring(0, 50) + '...</span>';
+                    }
                 },
                 {
-                    data: 'role_name',
+                    data: 'username',
                     render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data + '</span>';
+                        return '<span>' + data.substring(0, 50) + '...</span>';
                     }
                 },
                 {
                     data: 'email',
                     render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data + '</span>';
-                    }
-                },
-                {
-                    data: 'name',
-                    render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data + '</span>';
-                    }
-                },
-                {
-                    data: 'photo',
-                    render: function (data, type, row, meta) {
-                        return type === 'display'
-                            ? '<img src="{{ asset("/") }}' + data.replace('/xxx/', '/100/') + '" style="max-width:100px; max-height:100px;">'
-                            : data;
+                        return '<span style="white-space: normal;">' + data.substring(0, 50) + '...</span>';
                     }
                 },
                 {
                     data: 'created_at',
+                    className: 'text-center',
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + convertStringToDate(data) + '</span>';
                     }
                 },
                 {
-                    data: 'is_active',
+                    data: 'active_status',
+                    className: 'text-center',
                     render: function (data, type, row, meta) {
                         if(data == '1') {
                             return '<span class="badge bg-success">Active</span>';
@@ -131,6 +130,7 @@
                 },
                 {
                     data: 'id',
+                    className: 'text-center',
                     render: function (data, type, row, meta) {
                         var btn_detail = `
                             <a href="{{ url("/admin/user/`+data+`") }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
@@ -160,18 +160,17 @@
                                     </svg>
                                 </span>
                             </button>`;
-                        return '<div style="display: flex;">'+btn_detail+'&nbsp;'+btn_edit+'&nbsp;'+btn_delete+'</div>';
+                        return '<div style="display: flex; align-items: center; justify-content: center;">'+btn_detail+'&nbsp;'+btn_edit+'&nbsp;'+btn_delete+'</div>';
                     }
                 }
             ],
             columnDefs: [
-                {targets: [0], width: "5%"},
-                {targets: [1], width: "25%"},
-                {targets: [2], width: "10%"},
-                {targets: [3], width: "30%"},
-                {targets: [4], width: "10%"},
-                {targets: [5], width: "10%"},
-                {targets: [6], width: "10%", orderable: false}
+                {targets: [0], width: "30%"},
+                {targets: [1], width: "30%"},
+                {targets: [2], width: "20%"},
+                {targets: [3], width: "20%"},
+                {targets: [4], width: "20%"},
+                {targets: [5], width: "20%", orderable: false}
             ],
         });
 

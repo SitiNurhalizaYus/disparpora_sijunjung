@@ -19,7 +19,15 @@ class User extends Authenticatable implements JWTSubject
     use BlameableTrait;
 
     protected $fillable = [
-        'role_id', 'username', 'password', 'name', 'email', 'picture', 'last_login', 'email_verified_at', 'remember_token', 'notes', 'is_active', 'created_by', 'updated_by'
+        'level_id',
+        'username',
+        'password',
+        'name',
+        'email',
+        'picture',
+        'notes',
+        'is_active',
+        'last_login',
     ];
 
     protected $hidden = [
@@ -53,11 +61,6 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
     
-    // Relasi ke Role
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
 
     // Relasi ke konten yang dibuat pengguna
     public function contents()

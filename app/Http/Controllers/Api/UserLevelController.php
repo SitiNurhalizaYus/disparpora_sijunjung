@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Konten;
-use App\Helpers\AppHelper;
-use Illuminate\Http\Request;
-use App\Http\Resources\ApiResource;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ApiResource;
+use Illuminate\Http\Request;
+use App\Models\UserLevel;
 
-class VisimisiController extends Controller
+class UserLevelController extends Controller
 {
 
     public function __construct()
@@ -16,11 +15,12 @@ class VisimisiController extends Controller
         $this->middleware('auth:api')->except("index", "show");
     }
 
+    
     public function index(Request $request)
     {
         // parameter
         $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'kontens.id:asc';
+        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
@@ -31,25 +31,25 @@ class VisimisiController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Konten::select('kontens.*', 'users.name as created_name')->join('users','kontens.created_by','=','users.id')->where([['kontens.id','>','0']]);
+        $query = UserLevel::where([['id','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
-            $query = $query->where('kontens.is_active', 1);
+            $query = $query->where('is_active', 1);
         }
 
         if($where){
             foreach($where as $key => $value) {
                 if (is_array($value)) {
-                    $query = $query->whereIn('kontens.'.$key, $value);
+                    $query = $query->whereIn($key, $value);
                 } else {
-                    $query = $query->where('kontens.'.$key, $value);
+                    $query = $query->where($key, $value);
                 }
             }
         }
 
         if($search){
-            $query = $query->whereAny(['kontens.name'], 'like', "%{$search}%");
+            $query = $query->whereAny(['name'], 'like', "%{$search}%");
         }
 
         // data
@@ -57,14 +57,14 @@ class VisimisiController extends Controller
         $metadata = [];
 
         // metadata
-        $metadata['total_data'] = $query->count('kontens.id');
+        $metadata['total_data'] = $query->count('id');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
         // get count
         if($count == true) {
-            $query = $query->count('kontens.id');
+            $query = $query->count('id');
             $data['count'] = $query;
         }
         // get data
@@ -74,12 +74,10 @@ class VisimisiController extends Controller
                 ->limit($per_page)
                 ->offset(($page-1) * $per_page)
                 ->get()
-                ->makeHidden(['description_long'])
                 ->toArray();
 
             foreach($query as $qry) {
                 $temp = $qry;
-                $temp['datetime_local'] = \App\Helpers\AppHelper::instance()->convertDateTimeIndo($temp['datetime']);
                 array_push($data, $temp);
             };
         }
@@ -92,40 +90,29 @@ class VisimisiController extends Controller
         }
     }
 
-   
+    
     public function show($id)
     {
         // query
-        $query = Konten::select('kontens.*', 'users.name as created_name')->join('users','kontens.created_by','=','users.id')->where([['kontens.id','>','0']]);
+        $query = UserLevel::where([['id','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
-            $query = $query->where('kontens.is_active', 1);
+            $query = $query->where('is_active', 1);
         }
 
         // data
-        if(is_numeric($id)) {
-            $data = $query->find($id);
-        } else {
-            $query = $query->where('kontens.slug', $id);
-            $data = $query->first();
-        }
+        $data = $query->find($id);
 
         // result
         if($data) {
-            if(is_numeric($id)) {
-                $data = $data->toArray();
-                $data['datetime_local'] =  \App\Helpers\AppHelper::instance()->convertDateTimeIndo($data['datetime']);
-                return new ApiResource(true, 200, 'Get data successfull', $data, []);
-            } else {
-                $data['datetime_local'] =  \App\Helpers\AppHelper::instance()->convertDateTimeIndo($data['datetime']);
-                return new ApiResource(true, 200, 'Get data successfull', $data, []);
-            }
+            return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
 
+   
     public function store(Request $request)
     {
         $request->validate([
@@ -133,15 +120,16 @@ class VisimisiController extends Controller
         ]);
 
         $req = $request->post();
-        $data = Konten::create($req);
+        $data = UserLevel::create($req);
 
         if($data) {
-            return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to insert data', [], []);
+            return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
         }
     }
 
+   
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -149,28 +137,28 @@ class VisimisiController extends Controller
         ]);
 
         $req = $request->post();
-        $query = Konten::findOrFail($id);
+        $query = UserLevel::findOrFail($id);
         $query->update($req);
 
-        $data = Konten::findOrFail($id);
+        $data = UserLevel::findOrFail($id);
 
         if($data) {
-            return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to update data', [], []);
+            return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
         }
     }
 
     
     public function destroy($id)
     {
-        $query = Konten::findOrFail($id);
+        $query = UserLevel::findOrFail($id);
         $query->delete();
 
         if($query) {
-            return new ApiResource(true, 201, 'Delete data successfull', [], []);
+            return new ApiResource(true, 201, 'Data berhasil dihapus', [], []);
         } else {
-            return new ApiResource(false, 400, 'Failed to delete data', [], []);
+            return new ApiResource(false, 400, 'Data gagal dihapus', [], []);
         }
     }
 }

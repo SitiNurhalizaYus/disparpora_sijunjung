@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Welcome To {{ $setting['name'] }}</title>
 
-    <!-- Favicon -->
+    <!-- logo-geopark -->
     <link rel="shortcut icon" href="{{ asset('/' . str_replace("/xxx/", "/100/", $setting["logo-geopark"])) }}">
 
     <!-- Library / Plugin Css Build -->
@@ -219,14 +219,14 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if (str_contains($menu, 'review')) {{'active'}} @endif" aria-current="page" href="{{ url('/admin/review') }}">
+                        <a class="nav-link @if (str_contains($menu, 'message')) {{'active'}} @endif" aria-current="page" href="{{ url('/admin/message') }}">
                             <i class="icon">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path opacity="0.4" d="M22 15.94C22 18.73 19.76 20.99 16.97 21H16.96H7.05C4.27 21 2 18.75 2 15.96V15.95C2 15.95 2.006 11.524 2.014 9.298C2.015 8.88 2.495 8.646 2.822 8.906C5.198 10.791 9.447 14.228 9.5 14.273C10.21 14.842 11.11 15.163 12.03 15.163C12.95 15.163 13.85 14.842 14.56 14.262C14.613 14.227 18.767 10.893 21.179 8.977C21.507 8.716 21.989 8.95 21.99 9.367C22 11.576 22 15.94 22 15.94Z" fill="currentColor"></path>
                                     <path d="M21.4759 5.67351C20.6099 4.04151 18.9059 2.99951 17.0299 2.99951H7.04988C5.17388 2.99951 3.46988 4.04151 2.60388 5.67351C2.40988 6.03851 2.50188 6.49351 2.82488 6.75151L10.2499 12.6905C10.7699 13.1105 11.3999 13.3195 12.0299 13.3195C12.0339 13.3195 12.0369 13.3195 12.0399 13.3195C12.0429 13.3195 12.0469 13.3195 12.0499 13.3195C12.6799 13.3195 13.3099 13.1105 13.8299 12.6905L21.2549 6.75151C21.5779 6.49351 21.6699 6.03851 21.4759 5.67351Z" fill="currentColor"></path>
                                 </svg>
                             </i>
-                            <span class="item-name">Review</span>
+                            <span class="item-name">Message</span>
                         </a>
                     </li>
                     <li>
@@ -243,7 +243,7 @@
                             <span class="item-name">Setting</span>
                         </a>
                     </li>
-                    @if ($session_data['user_role_id'] == 1)
+                    @if ($session_data['user_level_id'] == 1)
                         <li class="nav-item">
                             <a class="nav-link @if (str_contains($menu, 'user')) {{'active'}} @endif" aria-current="page" href="{{ url('/admin/user') }}">
                                 <i class="icon">
@@ -343,8 +343,8 @@
                                 <img src="{{ asset('/'. str_replace("/xxx/", "/100/", $setting["logo-geopark"])) }}">
                             </div>
                         </div>
-                        <!--logo End--> 
-                        <h5 class="logo-title">{{ $setting['name-short'] }}</h5>
+                        <!--logo End-->
+                        <h4 class="logo-title">{{ $setting['name-short'] }}</h4>
                     </a>
                     <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                         <i class="icon">
@@ -372,7 +372,8 @@
                                     <img src="{{ asset('/'. str_replace("/xxx/", "/100/", $session_data['user_picture'])) }}" class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
                                     <div class="caption ms-3 d-none d-md-block ">
                                         <h6 class="mb-0 caption-title">{{ $session_data['user_name'] }}</h6>
-                                        <p class="mb-0 caption-sub-title">{{ $session_data['user_role_name'] }}</p>
+                                        <p class="mb-0 caption-sub-title">{{ $session_data['user_level_name'] }}</p>
+                                        {{-- {{ dd($session_data) }} --}}
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

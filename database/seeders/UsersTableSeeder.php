@@ -16,21 +16,23 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'role_id' => 1,
+                'level_id' => 1,
                 'username' => 'admin',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('admin'),
                 'name' => 'Admin Dinas',
                 'email' => 'admin@dinas.com',
+                'picture' => 'uploads/xxx/profile.jpg',  
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'role_id' => 2,
-                'username' => 'editor1',
-                'password' => Hash::make('password'),
+                'level_id' => 2,
+                'username' => 'editor',
+                'password' => Hash::make('editor'),
                 'name' => 'Editor 1',
                 'email' => 'editor1@dinas.com',
+                'picture' => 'uploads/xxx/profile.jpg',
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

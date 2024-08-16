@@ -1,117 +1,107 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="conatiner-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+        <div class="card-header mb-2 px-3">
+            <div class="flex-wrap d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="header-title">
+                        <h3 class="card-title">
+                            <!-- Tombol Back -->
+                            <a href="{{ URL::previous() }}" style="text-decoration: none; color: inherit;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
+                                    class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
+                                    <path fill="black"
+                                        fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                                </svg>
+                                Mitra/Tambah
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+                <div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="flex-wrap d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="header-title">
-                                    <h2 class="card-title">User</h2>
-                                    <p>Create data</p>
-                                </div>
-                            </div>
-                            <div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="card-body">
-                        <form method="POST" class="needs-validation" id="form-data" name="form-data"
-                            enctype="multipart/form-data" novalidate>
+                        <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
                             {{-- @method('PUT') --}}
                             <div class="form-group">
-                                <label class="form-label" for="role_id">Role</label>
-                                <select class="form-control" id="role_id" name="role_id" required>
-                                    <option value="" disabled selected>Pilih role</option>
-                                    <option value="1">Administrator</option>
-                                    <option value="2">Pengelola Objek Wisata</option>
-                                    <option value="3">Pengelola Penginapan</option>
-                                    <option value="4">Pengelola Restoran</option>
+                                <label class="form-label" for="level_id">Level</label>
+                                <select class="form-control" id="level_id" name="level_id" required>
+                                    <option value="" disabled selected>Pilih Kategori</option>
+                                    <option value="2">User</option>
+                                    <option value="1">Super Admin</option>
                                 </select>
-                                <p class="text-danger" id="invalid-role_id" style="display: none;font-size: 0.75rem;">Silahkan Pilih Role</p>
+                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-level_id">Silahkan pilih</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="nik">NIK</label>
-                                <input class="form-control" type="text" id="nik" name="nik"
-                                    placeholder="Enter NIK" required>
-                                    <p class="text-danger" id="invalid-value-nik" style="display: none;font-size: 0.75rem;">Silahkan Input NIK dengan Angka Saja</p>
+                                <label class="form-label" for="username">Username </label>
+                                <input class="form-control"
+                                type="name" id="username" name="username" value=""
+                                    placeholder="Enter Username" required >
+                                    <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-value-username">Silahkan Input Username
+                                    </p>
+                                    <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-username">Maksimal 255 Karakter</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="name">Name</label>
-                                <input class="form-control" type="text" id="name" name="name"
-                                    placeholder="Enter Name" required>
-                                <p class="text-danger" id="invalid-value-name" style="display: none;font-size: 0.75rem;">Silahkan Input Name
+                                <label class="form-label" for="name">Input Nama </label>
+                                <input class="form-control" type="text" id="name" name="name" value=""
+                                    placeholder="Masukan Nama " required>
+                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-value-name">Silahkan Input Nama
                                 </p>
+                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-name">Maksimal 255 Karakter</p>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label" for="gender">Gender</label>
-                                <select class="form-control" id="gender" name="gender" required>
-                                    <option value="" disabled selected>Pilih Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
-                                <p class="text-danger" id="invalid-gender" style="display: none;font-size: 0.75rem;">Silahkan Pilih Gender</p>
+                                <label class="form-label" for="email">Email </label>
+                                <input class="form-control "
+                                type="email" id="email" name="email" value=""
+                                    placeholder="Enter Email" required >
+                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-value-email">Silahkan Input Email</p>
+                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-email">Maksimal 255 Karakter</p>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label" for="reg_date">Registration Date</label>
-                                <input class="form-control" type="date" id="reg_date" name="reg_date" required>
-                                <p class="text-danger" id="invalid-reg_date" style="display: none;font-size: 0.75rem;">Silahkan Input
-                                    Registration Date</p>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="email">Email</label>
-                                <input class="form-control" type="email" id="email" name="email"
-                                    placeholder="Enter Email" required>
-                                <p class="text-danger" id="invalid-value-email" style="display: none;font-size: 0.75rem;">Silahkan Input Email
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="password">Password</label>
-                                <input class="form-control" type="password" id="password" name="password"
+                                <label class="form-label" for="password">Password </label>
+                                <input class="form-control " type="password" id="password" name="password" value=""
                                     placeholder="Enter Password" required>
-                                <p class="text-danger" id="invalid-value-password" style="display: none;font-size: 0.75rem;">Silahkan Input
-                                    Password</p>
-                                <input type="checkbox" onclick="togglePasswordVisibility()"> Show Password
+                                    <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-value-password">Silahkan Input Password
+                                    </p>
+                                    <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-password">Maksimal 255 Karakter</p>
+
                             </div>
+
+
                             <div class="form-group">
-                                <label class="form-label" for="address">Address</label>
-                                <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter Address" required></textarea>
-                                <p class="text-danger" id="invalid-value-address" style="display: none;font-size: 0.75rem;">Silahkan Input
-                                    Address</p>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="phone_number">Phone Number</label>
-                                <input class="form-control" type="text" id="phone_number" name="phone_number"
-                                    placeholder="Enter Phone Number" required>
-                                <p class="text-danger" id="invalid-value-phone_number" style="display: none;font-size: 0.75rem;">Silahkan
-                                    Input Phone Number</p>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="photo">Upload Photo</label>
-                                <input class="form-control" accept="image/*" type="file" id="file"
-                                    name="file" required>
-                                <input class="form-control" type="hidden" id="photo" name="photo"
-                                    value="noimage.jpg" placeholder="photo">
+                                <label class="form-label" for="picture">Upload Gambar</label>
+                                <input class="form-control" accept="image/*" type="file" id="file" name="file"
+                                    required>
+                                <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg"
+                                    placeholder="picture">
                                 <label class="form-label" for="image" style="font-size: 10pt">*Format JPG, JPEG, dan
                                     PNG</label>
-                                <p class="text-danger" id="invalid-input-photo" style="display: none;font-size: 0.75rem;">Silahkan Input
-                                    Photo</p>
+                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-input-picture">Silahkan Input Gambar
+                                </p>
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
                                     width="300px" style="border-radius: 2%;">
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
-                                    <label class="form-check-label" for="is_active">Active Status</label>
+                                    <input class="form-check-input" type="checkbox" id="active_status" name="active_status">
+                                    <label class="form-check-label" for="active_status">Active Status</label>
                                 </div>
                             </div>
                             <br><br>
-                            <a href="{{ URL::previous() }}" class="btn btn-danger">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end"">
+                                <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
+                                <button type="submit" class="btn btn-success">Simpan</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -120,96 +110,24 @@
     </div>
 
     <script>
-        //handle show password
-        function togglePasswordVisibility() {
-            var passwordField = document.getElementById("password");
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-            } else {
-                passwordField.type = "password";
-            }
-        }
-
-        document.getElementById('form-data').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var valid = true;
-
-            if (!document.getElementById('role_id').value) {
-                document.getElementById('invalid-role_id').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-role_id').style.display = 'none';
-            }
-
-            if (!document.getElementById('nik').value || !/^\d+$/.test(document.getElementById('nik').value)) {
-                document.getElementById('invalid-value-nik').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-value-nik').style.display = 'none';
-            }
-
-            if (!document.getElementById('name').value) {
-                document.getElementById('invalid-value-name').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-value-name').style.display = 'none';
-            }
-
-            if (!document.getElementById('gender').value) {
-                document.getElementById('invalid-gender').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-gender').style.display = 'none';
-            }
-
-            if (!document.getElementById('reg_date').value) {
-                document.getElementById('invalid-reg_date').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-reg_date').style.display = 'none';
-            }
-
-            if (!document.getElementById('email').value) {
-                document.getElementById('invalid-value-email').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-value-email').style.display = 'none';
-            }
-
-            if (!document.getElementById('password').value) {
-                document.getElementById('invalid-value-password').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-value-password').style.display = 'none';
-            }
-
-            if (!document.getElementById('address').value) {
-                document.getElementById('invalid-value-address').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-value-address').style.display = 'none';
-            }
-
-            if (!document.getElementById('phone_number').value) {
-                document.getElementById('invalid-value-phone_number').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-value-phone_number').style.display = 'none';
-            }
-
-            if (!document.getElementById('file').files.length) {
-                document.getElementById('invalid-input-photo').style.display = 'block';
-                valid = false;
-            } else {
-                document.getElementById('invalid-input-photo').style.display = 'none';
-            }
-
-            if (valid) {
-                this.submit();
-            }
-        });
         // handle upload image
         $('#file').change(function() {
+            var fileInput = $(this);
+            var file = fileInput.prop('files')[0];
+            var validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+            if ($.inArray(file.type, validImageTypes) < 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Invalid File",
+                    text: "File harus berupa gambar dengan format JPG, JPEG, atau PNG.",
+                    confirmButtonColor: '#3A57E8',
+                });
+                fileInput.val(''); // Clear the input value
+                $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}'); // Reset the preview image
+                return;
+            }
+
             // preview
             $('#image-preview').attr('display', 'block');
             var oFReader = new FileReader();
@@ -237,30 +155,148 @@
                 contentType: false,
                 success: function(result) {
                     if (result['success'] == true) {
-                        $('#photo').val(result['data']['url'].replace('/xxx/', '/300/'));
+                        $('#picture').val(result['data']['url'].replace(/\\/g, '').replace('/xxx/',
+                            '/300/'));
                     }
                 }
             });
         });
 
+        // Validate name length and characters on input
+        $('#name, #username, #email, #password').on('input', function() {
+            let invalidName = $('#invalid-name');
+            let invalidUsername = $('#invalid-username');
+            let invalidPassword = $('#invalid-password');
+            let invalidEmail = $('#invalid-email');
+            let nameValue = $('#name').val();
+            let usernameValue = $('#username').val();
+            let emailValue = $('#email').val();
+            let passwordValue = $('#password').val();
+
+            if (nameValue.length >255) {
+                invalidName.show();
+            } else {
+                invalidName.hide();
+            }
+
+            if (usernameValue.length >255) {
+                invalidUsername.show();
+            } else {
+                invalidUsername.hide();
+            }
+
+            if (passwordValue.length >255) {
+                invalidPassword.show();
+            } else {
+                invalidPassword.hide();
+            }
+
+            if (emailValue.length >255) {
+                invalidEmail.show();
+            } else {
+                invalidEmail.hide();
+            }
+
+        });
+
         // handle post
         $('#form-data').submit(false);
-        $("#form-data").submit(function() {
+        $("#form-data").submit(function(event) {
+            event.preventDefault();
 
-            if ($(this).valid()) {
+            let valid = true;
+            let invalidLevelId = $('#invalid-level_id');
+            let invalidName = $('#invalid-name');
+            let invalidUsername = $('#invalid-username');
+            let invalidEmail = $('#invalid-email');
+            let invalidPassword = $('#invalid-password');
+            let invalidValueName = $('#invalid-value-name');
+            let invalidValueUsername = $('#invalid-value-username');
+            let invalidValueEmail = $('#invalid-value-email');
+            let invalidValuePassword = $('#invalid-value-password');
+            let invalidInputPicture = $('#invalid-input-picture ');
+
+            // Reset validation messages
+            invalidLevelId.text('');
+            invalidName.hide();
+            invalidUsername.hide();
+            invalidEmail.hide();
+            invalidPassword.hide();
+            invalidValueName.hide();
+            invalidValueUsername.hide();
+            invalidValuePassword.hide();
+            invalidValueEmail.hide();
+            invalidInputPicture.hide();
+
+            // Validate category
+            if (!$('#level_id').val()) {
+                invalidLevelId.text('Pilih kategori');
+                valid = false;
+            }
+
+            // Validate name length
+            let nameValue = $('#name').val();
+            if (nameValue.length > 255) {
+                invalidName.show();
+                valid = false;
+            }
+            // Validate name is not udefined
+            if (nameValue.trim() === '') {
+                invalidValueName.show();
+                valid = false;
+            }
+
+            let usernameValue = $('#email').val();
+            if (usernameValue.length > 255) {
+                invalidUsername.show();
+                valid = false;
+            }
+            if (usernameValue.trim() === ''){
+                invalidValueUsername.show();
+                valid = false;
+            }
+            let emailValue = $('#email').val();
+            if (emailValue.length > 255) {
+                invalidEmail.show();
+                valid = false;
+            }
+            if (emailValue.trim() === ''){
+                invalidValueEmail.show();
+                valid = false;
+            }
+            let passwordValue = $('#password').val();
+            if (passwordValue.length > 255) {
+                invalidPassword.show();
+                valid = false;
+            }
+            if (passwordValue.trim() === ''){
+                invalidValuePassword.show();
+                valid = false;
+            }
+
+
+
+            // Validate photo input
+            let pictureValue = $('#file').prop('files')[0];
+            if (!pictureValue) {
+                invalidInputPicture.show();
+                valid = false;
+            }
+
+            if (valid) {
                 var form = $("#form-data").serializeArray();
                 var formdata = {};
                 $.map(form, function(n, i) {
                     formdata[n['name']] = n['value'];
                 });
-                if ('is_active' in formdata) {
-                    if (formdata['is_active'] == 'on') {
-                        formdata['is_active'] = true;
+                if ('active_status' in formdata) {
+                    if (formdata['active_status'] == 'on') {
+                        formdata['active_status'] = true;
                     } else {
-                        formdata['is_active'] = false;
+                        formdata['active_status'] = false;
                     }
                 } else {
-                    formdata['is_active'] = false;
+                    formdata['active_status'] = false;
                 }
 
                 $.ajaxSetup({
@@ -299,11 +335,10 @@
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "You must complete the entire form.",
+                    text: "Please correct the errors in the form.",
                     confirmButtonColor: '#3A57E8',
                 });
             }
-            return false;
         });
     </script>
 @endsection

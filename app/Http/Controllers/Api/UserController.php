@@ -12,9 +12,76 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api')->except('getAllData');
+        $this->middleware('auth:api');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/user",
+     *     tags={"User"},
+     *     summary="",
+     *     description="Get all data",
+     *     operationId="user_index",
+     *     @OA\Parameter(
+     *          name="per_page",
+     *          description="per_page value is number. ex : ?per_page=10",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="number"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="page",
+     *          description="page value is number. ex : ?page=1",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="number"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="sort",
+     *          description="Sort value is string with rule column-name:order. ex : ?sort=id:asc",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="where",
+     *          description="Where value is object. ex : ?where={'name':['john','doe'], 'dob':'1990-12-31'}",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="count",
+     *          description="Count value is boolean. ex : ?count=true",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="boolean"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="OK",
+     *         @OA\MediaType(
+     *              mediaType="application/json",
+     *              example={
+     *                  "success"=true,
+     *                  "message"="Get Data Successfull",
+     *                  "data"={},
+     *                  "metadata"={"total_data":"", "per_page":"", "total_page":"", "page":""}
+     *              }
+     *         )
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         // parameter
@@ -30,11 +97,11 @@ class UserController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = User::select('users.*', 'roles.name as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
+        $query = User::select('users.*', 'user_levels.name as level_name')->join('user_levels','users.level_id','=','user_levels.id')->where([['users.id','>','0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['role_id'] != 1) {
+        if($jwt_payload['level_id'] != 1) {
             $query = $query->where('users.id', $jwt_payload['id']);
         }
 
@@ -49,7 +116,7 @@ class UserController extends Controller
         }
 
         if($search){
-            $query = $query->whereAny(['users.name','users.email'], 'like', "%{$search}%");
+            $query = $query->whereAny(['users.username', 'users.name','users.email'], 'like', "%{$search}%");
         }
 
         // data
@@ -90,92 +157,45 @@ class UserController extends Controller
         }
     }
 
-    public function getAllData(Request $request)
-    {
-        // parameter
-        $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
-        $where = $request->has('where') ? $request->get('where') : '{}';
-        $search = $request->has('search') ? $request->get('search') : '';
-        $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
-        $page = $request->has('page') ? $request->get('page') : 1;
-
-        $sort = explode(':', $sort);
-        $where = str_replace("'", "\"", $where);
-        $where = json_decode($where, true);
-
-        // query
-        $query = User::select('users.*', 'roles.name as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
-
-        // check token
-        if (!auth()->guard('api')->user()) {
-            $query = $query->where('users.is_active', 1);
-        }
-
-        if ($where) {
-            foreach ($where as $key => $value) {
-                if (is_array($value)) {
-                    $query = $query->whereIn('users.' . $key, $value);
-                } else {
-                    $query = $query->where('users.' . $key, $value);
-                }
-            }
-        }
-
-        if ($search) {
-            $query = $query->whereAny(['users.name'], 'like', "%{$search}%");
-        }
-
-        // data
-        $data = [];
-        $metadata = [];
-
-        // metadata
-        $metadata['total_data'] = $query->count('users.id');
-
-        // get count
-        if ($count == true) {
-            $query = $query->count('id');
-            $data['count'] = $query;
-        }
-        // get data
-        else {
-            if ($per_page > 0) {
-                $query = $query
-                    ->orderBy($sort[0], $sort[1])
-                    ->limit($per_page)
-                    ->offset(($page - 1) * $per_page)
-                    ->get()
-                    ->toArray();
-            } else {
-                $query = $query
-                    ->orderBy($sort[0], $sort[1])
-                    ->get()
-                    ->toArray();
-            }
-
-            foreach ($query as $qry) {
-                $temp = $qry;
-                array_push($data, $temp);
-            };
-        }
-
-        // result
-        if ($data) {
-            return new ApiResource(true, 200, 'Get all data successfull', $data, $metadata);
-        } else {
-            return new ApiResource(false, 200, 'No data found', [], $metadata);
-        }
-    }
-
+    /**
+     * @OA\Get(
+     *     path="/user/{id}",
+     *     tags={"User"},
+     *     summary="",
+     *     description="Get data by id",
+     *     operationId="user_show",
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="number"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="OK",
+     *         @OA\MediaType(
+     *              mediaType="application/json",
+     *              example={
+     *                  "success"=true,
+     *                  "message"="Get Data Successfull",
+     *                  "data"={},
+     *                  "metadata"={}
+     *              }
+     *         )
+     *     )
+     * )
+     */
     public function show($id)
     {
         // query
-        $query = User::select('users.*', 'roles.name as role_name')->join('roles','users.role_id','=','roles.id')->where([['users.id','>','0']]);
+        $query = User::select('users.*', 'user_levels.name as level_name')->join('user_levels','users.level_id','=','user_levels.id')->where([['users.id','>','0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['role_id'] != 1) {
+        if($jwt_payload['level_id'] != 1) {
             $query = $query->where('users.id', $jwt_payload['id']);
         }
 
@@ -190,18 +210,64 @@ class UserController extends Controller
         }
     }
 
-   
+    /**
+     * @OA\Post(
+     *     path="/user",
+     *     tags={"User"},
+     *     summary="",
+     *     description="Insert data",
+     *     operationId="user_store",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      property="username",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="password",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="email",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="name",
+     *                      type="string"
+     *                  )
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="OK",
+     *         @OA\MediaType(
+     *              mediaType="application/json",
+     *              example={
+     *                  "success"=true,
+     *                  "message"="Insert Data Successfull",
+     *                  "data"={},
+     *                  "metadata"={}
+     *              }
+     *         )
+     *     )
+     * )
+     */
     public function store(Request $request)
     {
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['role_id'] != 1) {
+        if($jwt_payload['level_id'] != 1) {
             return new ApiResource(false, 401, 'Does Not Have Access', [], []);
         }
 
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users',
+            'username' => 'required|unique:users',
             'password' => 'required',
         ]);
 
@@ -211,17 +277,72 @@ class UserController extends Controller
         $data = User::create($req);
 
         if($data) {
-            return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to insert data', [], []);
+            return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
         }
     }
 
+    /**
+     * @OA\Put(
+     *     path="/user/{id}",
+     *     tags={"User"},
+     *     summary="",
+     *     description="Update data",
+     *     operationId="user_update",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="number"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      property="username",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="password",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="email",
+     *                      type="string"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="name",
+     *                      type="string"
+     *                  )
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="OK",
+     *         @OA\MediaType(
+     *              mediaType="application/json",
+     *              example={
+     *                  "success"=true,
+     *                  "message"="Update Data Successfull",
+     *                  "data"={},
+     *                  "metadata"={}
+     *              }
+     *         )
+     *     )
+     * )
+     */
     public function update(Request $request, $id)
     {
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['role_id'] != 1) {
+        if($jwt_payload['level_id'] != 1) {
             if ($jwt_payload['id'] != $id) {
                 return new ApiResource(false, 401, 'Does Not Have Access', [], []);
             }
@@ -238,17 +359,49 @@ class UserController extends Controller
         $data = User::findOrFail($id);
 
         if($data) {
-            return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to update data', [], []);
+            return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/user/{id}",
+     *     tags={"User"},
+     *     summary="",
+     *     description="Delete data",
+     *     operationId="user_destroy",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="number"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="OK",
+     *         @OA\MediaType(
+     *              mediaType="application/json",
+     *              example={
+     *                  "success"=true,
+     *                  "message"="Delete Data Successfull",
+     *                  "data"={},
+     *                  "metadata"={}
+     *              }
+     *         )
+     *     )
+     * )
+     */
     public function destroy($id)
     {
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if($jwt_payload['role_id'] != 1) {
+        if($jwt_payload['level_id'] != 1) {
             return new ApiResource(false, 401, 'Does Not Have Access', [], []);
         }
 
@@ -256,9 +409,9 @@ class UserController extends Controller
         $query->delete();
 
         if($query) {
-            return new ApiResource(true, 201, 'Delete data successfull', [], []);
+            return new ApiResource(true, 201, 'Data berhasil dihapus', [], []);
         } else {
-            return new ApiResource(false, 400, 'Failed to delete data', [], []);
+            return new ApiResource(false, 400, 'Data gagal dihapus', [], []);
         }
     }
 }

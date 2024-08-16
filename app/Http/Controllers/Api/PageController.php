@@ -135,9 +135,9 @@ class PageController extends Controller
         $data = Page::create($req);
 
         if($data) {
-            return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to insert data', [], []);
+            return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
         }
     }
 
@@ -154,9 +154,9 @@ class PageController extends Controller
         $data = Page::findOrFail($id);
 
         if($data) {
-            return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to update data', [], []);
+            return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
         }
     }
 
@@ -166,9 +166,9 @@ class PageController extends Controller
         $query->delete();
 
         if($query) {
-            return new ApiResource(true, 201, 'Delete data successfull', [], []);
+            return new ApiResource(true, 201, 'Data berhasil dihapus', [], []);
         } else {
-            return new ApiResource(false, 400, 'Failed to delete data', [], []);
+            return new ApiResource(false, 400, 'Data gagal dihapus', [], []);
         }
     }
 }

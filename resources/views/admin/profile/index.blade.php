@@ -22,50 +22,23 @@
                             <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                                 {{ csrf_field() }}
                                 <div class="form-group">
-                                    <label class="form-label" for="role_id">Role</label>
-                                    <select class="form-control" id="role_id" name="role_id" required>
-                                        <option value="" disabled selected>Pilih role</option>
-                                        <option value="1">Administrator</option>
-                                        <option value="2">Pengelola Objek Wisata</option>
-                                        <option value="3">Pengelola Penginapan</option>
-                                        <option value="4">Pengelola Restoran</option>
+                                    <label class="form-label" for="name">Role </label>
+                                    <select class="form-select" id="role_id" name="role_id" required disabled >
+                                        <option value="2">User</option>
+                                        <option value="1">Admin</option>
                                     </select>
-                                    <p class="text-danger" id="invalid-role_id" style="display: none;font-size: 0.75rem;">Silahkan Pilih Role</p>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="nik">NIK</label>
-                                    <input class="form-control" type="text" id="nik" name="nik"
-                                        placeholder="Enter NIK" required>
-                                        <p class="text-danger" id="invalid-value-nik" style="display: none;font-size: 0.75rem;">Silahkan Input NIK dengan Angka Saja</p>
+                                    <label class="form-label" for="username">Username </label>
+                                    <input class="form-control" type="text" id="username" name="username" value="" placeholder="Enter Username" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="name">Name</label>
-                                    <input class="form-control" type="text" id="name" name="name"
-                                        placeholder="Enter Name" required>
-                                    <p class="text-danger" id="invalid-value-name" style="display: none;font-size: 0.75rem;">Silahkan Input Name
-                                    </p>
+                                    <label class="form-label" for="email">Email </label>
+                                    <input class="form-control" type="text" id="email" name="email" value="" placeholder="Enter Email" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="gender">Gender</label>
-                                    <select class="form-control" id="gender" name="gender" required>
-                                        <option value="" disabled selected>Pilih Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                    </select>
-                                    <p class="text-danger" id="invalid-gender" style="display: none;font-size: 0.75rem;">Silahkan Pilih Gender</p>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="reg_date">Registration Date</label>
-                                    <input class="form-control" type="date" id="reg_date" name="reg_date" required>
-                                    <p class="text-danger" id="invalid-reg_date" style="display: none;font-size: 0.75rem;">Silahkan Input
-                                        Registration Date</p>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="email">Email</label>
-                                    <input class="form-control" type="email" id="email" name="email"
-                                        placeholder="Enter Email" required>
-                                    <p class="text-danger" id="invalid-value-email" style="display: none;font-size: 0.75rem;">Silahkan Input Email
-                                    </p>
+                                    <label class="form-label" for="name">Name </label>
+                                    <input class="form-control" type="text" id="name" name="name" value="" placeholder="Enter Name" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="password">Password </label>
@@ -78,31 +51,11 @@
                                     <input class="form-control" type="password" id="password" name="password" value="" placeholder="Enter Password" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="address">Address</label>
-                                    <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter Address" required></textarea>
-                                    <p class="text-danger" id="invalid-value-address" style="display: none;font-size: 0.75rem;">Silahkan Input
-                                        Address</p>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="phone_number">Phone Number</label>
-                                    <input class="form-control" type="text" id="phone_number" name="phone_number"
-                                        placeholder="Enter Phone Number" required>
-                                    <p class="text-danger" id="invalid-value-phone_number" style="display: none;font-size: 0.75rem;">Silahkan
-                                        Input Phone Number</p>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="photo">Upload Photo</label>
-                                    <input class="form-control" accept="image/*" type="file" id="file"
-                                        name="file" required>
-                                    <input class="form-control" type="hidden" id="photo" name="photo"
-                                        value="noimage.jpg" placeholder="photo">
-                                    <label class="form-label" for="image" style="font-size: 10pt">*Format JPG, JPEG, dan
-                                        PNG</label>
-                                    <p class="text-danger" id="invalid-input-photo" style="display: none;font-size: 0.75rem;">Silahkan Input
-                                        Photo</p>
+                                    <label class="form-label" for="photo">Photo</label>
+                                    <input class="form-control" type="file" id="file" name="file">
+                                    <input class="form-control" type="hidden" id="photo" name="photo" value="noimage.jpg" placeholder="image">
                                     <br>
-                                    <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
-                                        width="300px" style="border-radius: 2%;">
+                                    <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview" width="300px" style="border-radius: 2%;">
                                 </div>
                                 <br><br>
                                 <button type="submit" class="btn btn-success">Submit</button>
@@ -133,7 +86,7 @@
             }
         });
         $.ajax({
-            url: "/api/user/{{$session_data['user_id']}}",
+            url: "/api/user/{{$session_data['role_id']}}",
             type: "GET",
             dataType: "json",
             processData: false,
@@ -146,8 +99,8 @@
                     $('#username').val(result['data']['username']);
                     $('#email').val(result['data']['email']);
                     $('#name').val(result['data']['name']);
-                    $("#picture").val(result['data']['picture']);
-                    $("#image-preview").attr("src", "{{ url('/') }}/" + result['data']['picture'].replace('/xxx/', '/300/'));
+                    $("#photo").val(result['data']['photo']);
+                    $("#image-preview").attr("src", "{{ url('/') }}/" + result['data']['photo'].replace('/xxx/', '/300/'));
 
                 } else {
                     $("#detail-data-success").hide();
@@ -193,7 +146,7 @@
                 contentType: false,
                 success: function (result) {
                     if(result['success'] == true) {
-                        $('#picture').val(result['data']['url'].replace('/xxx/', '/300/'));
+                        $('#photo').val(result['data']['url'].replace('/xxx/', '/300/'));
                     }
                 }
             });
@@ -225,7 +178,7 @@
                     }
                 });
                 $.ajax({
-                    url: "/api/user/{{$session_data['user_id']}}",
+                    url: "/api/user/{{$session_data['role_id']}}",
                     type: "PUT",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",

@@ -37,7 +37,7 @@ class UploadController extends Controller
 
         // cek token
         if(!auth()->guard('api')->user()) {
-            $query = $query->where('is_active', 1);
+            $query = $query->where('active_status', 1);
         }
 
         if($where){
@@ -100,7 +100,7 @@ class UploadController extends Controller
 
         // cek token
         if(!auth()->guard('api')->user()) {
-            $query = $query->where('is_active', 1);
+            $query = $query->where('active_status', 1);
         }
 
         // data
