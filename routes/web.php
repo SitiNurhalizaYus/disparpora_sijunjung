@@ -51,9 +51,10 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::get('dashboard',[App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('slider', App\Http\Controllers\Admin\SliderController::class);
     Route::resource('bignumber', App\Http\Controllers\Admin\BigNumberController::class);
+    Route::resource('content', App\Http\Controllers\Admin\ContentController::class);
     Route::resource('team', App\Http\Controllers\Admin\TeamController::class);
     Route::resource('partner', App\Http\Controllers\Admin\PartnerController::class);
-    Route::resource('faq', App\Http\Controllers\Admin\FaqController::class);
+    // Route::resource('faq', App\Http\Controllers\Admin\FaqController::class);
     Route::resource('setting', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('user', App\Http\Controllers\Admin\UserController::class);
 

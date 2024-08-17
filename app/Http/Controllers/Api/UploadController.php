@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -11,13 +12,11 @@ use Intervention\Image\ImageManager;
 
 class UploadController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api')->except("index", "show");
     }
 
-    
     public function index(Request $request)
     {
         // parameter
@@ -33,15 +32,15 @@ class UploadController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Upload::where([['id','>','0']]);
+        $query = Upload::where([['id', '>', '0']]);
 
         // cek token
-        if(!auth()->guard('api')->user()) {
-            $query = $query->where('active_status', 1);
+        if (!auth()->guard('api')->user()) {
+            $query = $query->where('is_active', 1);
         }
 
-        if($where){
-            foreach($where as $key => $value) {
+        if ($where) {
+            foreach ($where as $key => $value) {
                 if (is_array($value)) {
                     $query = $query->whereIn($key, $value);
                 } else {
@@ -50,98 +49,76 @@ class UploadController extends Controller
             }
         }
 
-        if($search){
-            $query = $query->whereAny(['name'], 'like', "%{$search}%");
+        if ($search) {
+            $query = $query->where('name', 'like', "%{$search}%");
         }
 
-        // data
-        $data = [];
-        $metadata = [];
-
-        // metadata
+        // data dan metadata
         $metadata['total_data'] = $query->count('id');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
         // get count
-        if($count == true) {
-            $query = $query->count('id');
-            $data['count'] = $query;
-        }
-        // get data
-        else {
-            $query = $query
+        if ($count == true) {
+            $data['count'] = $query->count('id');
+        } else {
+            $data = $query
                 ->orderBy($sort[0], $sort[1])
                 ->limit($per_page)
-                ->offset(($page-1) * $per_page)
+                ->offset(($page - 1) * $per_page)
                 ->get()
                 ->toArray();
-
-            foreach($query as $qry) {
-                $temp = $qry;
-                array_push($data, $temp);
-            };
         }
 
         // result
-        if($data) {
-            return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
+        if ($data) {
+            return new ApiResource(true, 200, 'Get data successful', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
 
-   
     public function show($id)
     {
         // query
-        $query = Upload::where([['id','>','0']]);
+        $query = Upload::where([['id', '>', '0']]);
 
         // cek token
-        if(!auth()->guard('api')->user()) {
-            $query = $query->where('active_status', 1);
+        if (!auth()->guard('api')->user()) {
+            $query = $query->where('is_active', 1);
         }
 
         // data
         $data = $query->first();
 
         // result
-        if($data) {
-            return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
+        if ($data) {
+            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
 
-
     public function store(Request $request)
     {
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
 
             $image = $request->file('image');
             $file = $image->getClientOriginalName();
             $filename = pathinfo($file, PATHINFO_FILENAME);
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $size = $request->file('image')->getSize();
+            $extension = $image->getClientOriginalExtension();
+            $size = $image->getSize();
 
             setlocale(LC_TIME, 'IND');
             $date_format = Carbon::now()->format('Ymd_His');
-            $filename_new = $date_format.'-'.str_replace(' ','_', $filename).'.'.$extension;
+            $filename_new = $date_format . '-' . str_replace(' ', '_', $filename) . '.' . $extension;
 
             $hd = $request->has('hd') ? $request->get('hd') == true : false;
 
-            if ($hd == true) {
-                $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' .$filename_new));
-                $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' .$filename_new));
-                $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' .$filename_new));
-                $image_resize_1000 = ImageManager::gd()->read($image->getRealPath())->resize(1000, 1000)->save(public_path('uploads/1000/' .$filename_new));
-            }else {
-                $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' .$filename_new));
-                $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' .$filename_new));
-                $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' .$filename_new));
-            }
-            
+            // Resize dan simpan gambar
+            $this->resizeAndSaveImage($image, $filename_new, $hd);
+
             $req = [
                 'name' => $filename,
                 'type' => $extension,
@@ -149,53 +126,102 @@ class UploadController extends Controller
                 'size' => $size,
                 'hd' => $hd,
                 'hash' => $filename_new,
-                'url' => 'uploads/xxx/' . $filename_new,
+                'url' => 'uploads/xxx/' . $filename_new
             ];
             $data = Upload::create($req);
 
-            if($data) {
-                return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), ['url'=>'change xxx to 100/300/500/1000']);
+            if ($data) {
+                return new ApiResource(true, 201, 'Insert data successful', $data->toArray(), ['url' => 'change xxx to 100/300/500/1000']);
             } else {
                 return new ApiResource(false, 400, 'Failed to insert data', [], []);
             }
-
         } else {
             return new ApiResource(false, 400, 'Image not found', [], []);
         }
-
     }
 
-    
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
+        $upload = Upload::findOrFail($id);
 
-        $req = $request->post();
-        $query = Upload::findOrFail($id);
-        
-        $req = $request->only(['name', 'type', 'ext', 'size', 'hd', 'hash', 'url']); // Sesuaikan dengan kolom yang ingin diperbarui
-        $query->update($req);
+        // Cek apakah ada file gambar baru yang diunggah
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $file = $image->getClientOriginalName();
+            $filename = pathinfo($file, PATHINFO_FILENAME);
+            $extension = $image->getClientOriginalExtension();
+            $size = $image->getSize();
 
-        $data = Upload::findOrFail($id);
+            // Format nama file baru
+            $date_format = Carbon::now()->format('Ymd_His');
+            $filename_new = $date_format . '-' . str_replace(' ', '_', $filename) . '.' . $extension;
 
-        if($data) {
-            return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
+            // Resize dan simpan gambar
+            $hd = $request->has('hd') ? $request->get('hd') == true : false;
+            $this->resizeAndSaveImage($image, $filename_new, $hd);
+
+            // Hapus gambar lama dari storage
+            $this->deleteOldImage($upload);
+
+            // Update informasi gambar di database
+            $upload->update([
+                'name' => $filename,
+                'type' => $extension,
+                'ext' => '.' . $extension,
+                'size' => $size,
+                'hd' => $hd,
+                'hash' => $filename_new,
+                'url' => 'uploads/xxx/' . $filename_new,
+            ]);
+
+            return new ApiResource(true, 200, 'Update data successful', $upload->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to update data', [], []);
+            return new ApiResource(false, 400, 'Image not found', [], []);
         }
     }
 
     public function destroy($id)
     {
-        $query = Upload::findOrFail($id);
-        $query->delete();
+        $upload = Upload::findOrFail($id);
 
-        if($query) {
-            return new ApiResource(true, 201, 'Delete data successfull', [], []);
+        // Hapus gambar dari storage
+        $this->deleteOldImage($upload);
+
+        // Hapus data dari tabel uploads
+        $upload->delete();
+
+        return new ApiResource(true, 201, 'Delete data successful', [], []);
+    }
+
+    private function resizeAndSaveImage($image, $filename_new, $hd)
+    {
+        if ($hd == true) {
+            $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' . $filename_new));
+            $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' . $filename_new));
+            $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' . $filename_new));
+            $image_resize_1000 = ImageManager::gd()->read($image->getRealPath())->resize(1000, 1000)->save(public_path('uploads/1000/' . $filename_new));
         } else {
-            return new ApiResource(false, 400, 'Failed to delete data', [], []);
+            $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' . $filename_new));
+            $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' . $filename_new));
+            $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' . $filename_new));
+        }
+    }
+
+    private function deleteOldImage($upload)
+    {
+        if ($upload) {
+            $paths = [
+                public_path('uploads/100/' . $upload->hash),
+                public_path('uploads/300/' . $upload->hash),
+                public_path('uploads/500/' . $upload->hash),
+                public_path('uploads/1000/' . $upload->hash),
+            ];
+
+            foreach ($paths as $path) {
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
         }
     }
 }

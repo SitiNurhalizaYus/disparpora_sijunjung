@@ -1,66 +1,103 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="conatiner-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="flex-wrap d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="header-title">
-                                    <h2 class="card-title">Blog</h2>
-                                    <p>Edit data</p>
-                                </div>
-                            </div>
-                            <div>
-                            </div>
-                        </div>
-                    </div>
+<div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="card-header mb-2 px-3">
+        <div class="flex-wrap d-flex justify-content-between align-items-center">
+            <div>
+                <div class="header-title">
+                    <h3 class="card-title">
+                        <!-- Tombol Back -->
+                        <a href="{{ URL::previous() }}" style="text-decoration: none; color: inherit;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
+                                class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
+                                <path fill="black"
+                                    fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                            </svg>
+                            Konten/Tambah
+                        </a>
+                    </h3>
+                </div>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
                     <div class="card-body">
                         <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label class="form-label" for="name">Title </label>
-                                <input class="form-control" type="text" id="name" name="name" value="" placeholder="Enter Title" required>
+                                <label class="form-label" for="title">Judul</label>
+                                <input class="form-control" type="text" id="title" name="title" value="" placeholder="Masukkan Judul" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="slug">Slug URL</label>
                                 <input class="form-control" type="text" id="slug" name="slug" value="" placeholder="this-is-slug" required readonly style="background-color: lightgray;">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="slug">Datetime</label>
-                                <input class="form-control" type="datetime-local" id="datetime" name="datetime" value="" placeholder="2024-01-31 12:12:12" required>
+                                <label class="form-label" for="type">Tipe Konten</label>
+                                <select class="form-control" id="type" name="type" required>
+                                    <option value="profil">Profil</option>
+                                    <option value="artikel">Artikel</option>
+                                    <option value="berita">Berita</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="image">Image</label>
-                                <input class="form-control" type="file" id="file" name="file">
-                                <input class="form-control" type="hidden" id="image" name="image" value="noimage.jpg" placeholder="image">
+                                <label class="form-label" for="category_id">Kategori</label>
+                                <select class="form-control" id="category_id" name="category_id">
+                                    <option value="">Pilih Kategori</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="arsip_id">Arsip</label>
+                                <select class="form-control" id="arsip_id" name="arsip_id">
+                                    <option value="">Pilih Arsip</option>
+                                    @foreach($arsips as $arsip)
+                                        <option value="{{ $arsip->id }}">{{ $arsip->bulan }}/{{ $arsip->tahun }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="datetime">Tanggal dan Waktu</label>
+                                <input class="form-control" type="datetime-local" id="datetime" name="datetime" value="" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="image">Gambar</label>
+                                <input class="form-control" type="file" id="file" name="file" required>
+                                <input class="form-control" type="hidden" id="image" name="image" value="noimage.jpg">
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview" width="300px" style="border-radius: 2%;">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="description_short">Short Content</label>
+                                <label class="form-label" for="description_short">Konten Singkat</label>
                                 <textarea class="form-control" id="description_short" name="description_short" rows="5" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="description_long">Long Content</label>
+                                <label class="form-label" for="description_long">Konten Panjang</label>
                                 <textarea class="form-control" id="description_long" name="description_long" rows="5" style="display: none"></textarea>
                                 <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="notes">Notes</label>
+                                <label class="form-label" for="notes">Catatan</label>
                                 <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
-                                    <label class="form-check-label" for="is_active">Active Status</label>
+                                    <label class="form-check-label" for="is_active">Status Aktif</label>
                                 </div>
                             </div>
                             <br><br>
-                            <button type="submit" class="btn btn-success">Submit</button>
-                            <a href="{{ URL::previous() }}" class="btn btn-danger">Cancel</a>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
+                                <button type="submit" class="btn btn-success">Simpan</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -69,53 +106,12 @@
     </div>
 
     <script>
-        // get data
-        $.ajaxSetup({
-            headers:{
-                'Authorization': "Bearer {{$session_token}}"
-            }
-        });
-        $.ajax({
-            url: '/api/blog/{{$id}}',
-            type: "GET",
-            dataType: "json",
-            processData: false,
-            success: function (result) {
-                if(result['success'] == true) {
-                    $("#detail-data-success").show();
-                    $("#detail-data-failed").hide();
-
-                    $('#name').val(result['data']['name']);
-                    $('#slug').val(result['data']['slug']);
-                    $('#datetime').val(result['data']['datetime']);
-                    $("#image").val(result['data']['image']);
-                    $("#image-preview").attr("src", "{{ url('/') }}/" + result['data']['image'].replace('/xxx/', '/300/'));
-                    $('#description_short').val(result['data']['description_short']);
-                    $('#description_long').val(result['data']['description_long']);
-                    $('#content').val(result['data']['description_long']);
-                    $('#notes').val(result['data']['notes']);
-                    $('#is_active').prop("checked", result['data']['is_active']);
-
-                } else {
-                    $("#detail-data-success").hide();
-                    $("#detail-data-failed").show();
-
-                    $('#message').html(result['message']);
-                }
-            },
-            fail: function () {
-                $("#detail-data-success").hide();
-                $("#detail-data-failed").show();
-
-                $('#message').html(result['message']);
-            }
-        });
 
         // handle slug
-        $('#name').keyup(string_to_slug);
+        $('#title').keyup(string_to_slug);
 
         function string_to_slug () {
-            var judul = $('#name').val();
+            var judul = $('#title').val();
             var str = judul;
 
             str = str.replace('<br>', ' '); // trim
@@ -148,9 +144,9 @@
             };
 
             // upload
-            formdata = new FormData();
+            var formdata = new FormData();
             if($(this).prop('files').length > 0) {
-                file =$(this).prop('files')[0];
+                var file = $(this).prop('files')[0];
                 formdata.append("image", file);
             }
             $.ajaxSetup({
@@ -211,8 +207,8 @@
                     }
                 });
                 $.ajax({
-                    url: '/api/blog/{{$id}}',
-                    type: "PUT",
+                    url: '/api/content',
+                    type: "POST",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -225,7 +221,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/blog') }}");
+                                window.location.replace("{{ url('/admin/content') }}");
                             });
                         } else {
                             Swal.fire({
@@ -247,6 +243,5 @@
             }
             return false;
         });
-
     </script>
 @endsection

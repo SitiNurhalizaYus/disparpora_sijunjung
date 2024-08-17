@@ -1,26 +1,26 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="conatiner-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
         <div class="card-header mb-2 px-3">
             <div class="flex-wrap d-flex justify-content-between align-items-center">
                 <div>
                     <div class="header-title">
                         <h3 class="card-title">
                             <!-- Tombol Back -->
-                            <a href="{{ url('/admin/slider/') }}" style="text-decoration: none; color: inherit;">
+                            <a href="{{ url('/admin/content/') }}" style="text-decoration: none; color: inherit;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                     class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                     <path fill="black"
                                         fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                                 </svg>
-                                Slider/Detail
+                                Konten/Detail
                             </a>
                         </h3>
                     </div>
                 </div>
                 <div style="display: flex;">
-                    <a href="{{ url('/admin/slider/' . $id . '/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end"
+                    <a href="{{ url('/admin/content/' . $id . '/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end"
                         data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                         <span class="btn-inner">
                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
@@ -65,34 +65,43 @@
                 <div class="card">
                     <div class="card-body" id="detail-data-success" style="display: none;">
                         <div class="mt-2">
-                            <h6 class="mb-1">Name</h6>
-                            <p id="name"></p>
+                            <h6 class="mb-1">Judul</h6>
+                            <p id="title"></p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Description</h6>
-                            <p id="description"></p>
+                            <h6 class="mb-1">Slug</h6>
+                            <p id="slug"></p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Link</h6>
-                            <p id="link"></p>
+                            <h6 class="mb-1">Tipe Konten</h6>
+                            <p id="type"></p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Image</h6>
+                            <h6 class="mb-1">Kategori</h6>
+                            <p id="category_name"></p>
+                        </div>
+                        <div class="mt-2">
+                            <h6 class="mb-1">Arsip</h6>
+                            <p id="arsip_name"></p>
+                        </div>
+                        <div class="mt-2">
+                            <h6 class="mb-1">Gambar</h6>
                             <img id="image" width="300px" style="border-radius: 2%;">
                         </div>
                         <div class="mt-2">
-                            <hr style="height: 2px">
+                            <h6 class="mb-1">Konten Singkat</h6>
+                            <p id="description_short"></p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Notes</h6>
-                            <p id="notes"></p>&nbsp;
+                            <h6 class="mb-1">Konten Panjang</h6>
+                            <p id="description_long"></p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Status Active</h6>
-                            <p id="is_active"> </p>
+                            <h6 class="mb-1">Status Aktif</h6>
+                            <p id="is_active"></p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Created At</h6>
+                            <h6 class="mb-1">Dibuat Pada</h6>
                             <p id="created_at"></p>
                         </div>
                     </div>
@@ -114,40 +123,35 @@
             }
         });
         $.ajax({
-            url: '/api/slider/{{ $id }}',
+            url: '/api/content/{{ $id }}',
             type: "GET",
             dataType: "json",
-            processData: false,
             success: function(result) {
-                if (result['success'] == true) {
+                if (result.success) {
                     $("#detail-data-success").show();
                     $("#detail-data-failed").hide();
 
-                    $('#name').html(result['data']['name']);
-                    $('#description').html(result['data']['description']);
-                    $('#link').html(result['data']['link']);
-                    $("#image").attr("src", "{{ url('/') }}/" + result['data']['image'].replace('/xxx/',
-                        '/300/'));
-                    $('#notes').html(result['data']['notes']);
-                    if (result['data']['is_active'] == 1) {
-                        $('#is_active').html('<span class="badge bg-success">Aktif</span>');
-                    } else {
-                        $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
-                    }
-                    $('#created_at').html(convertStringToDate(result['data']['created_at']));
+                    $('#title').html(result.data.title);
+                    $('#slug').html(result.data.slug);
+                    $('#type').html(result.data.type);
+                    $('#category_name').html(result.data.category ? result.data.category.name : '-');
+                    $('#arsip_name').html(result.data.arsip ? result.data.arsip.bulan + '/' + result.data.arsip.tahun : '-');
+                    $("#image").attr("src", "{{ url('/') }}/" + result.data.image.replace('/xxx/', '/300/'));
+                    $('#description_short').html(result.data.description_short);
+                    $('#description_long').html(result.data.description_long);
+                    $('#is_active').html(result.data.is_active ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-danger">Tidak Aktif</span>');
+                    $('#created_at').html(convertStringToDate(result.data.created_at));
 
                 } else {
                     $("#detail-data-success").hide();
                     $("#detail-data-failed").show();
-
-                    $('#message').html(result['message']);
+                    $('#message').html(result.message);
                 }
             },
-            fail: function() {
+            error: function() {
                 $("#detail-data-success").hide();
                 $("#detail-data-failed").show();
-
-                $('#message').html(result['message']);
+                $('#message').html('Terjadi kesalahan saat mengambil data.');
             }
         });
 
@@ -161,34 +165,31 @@
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
-
-                    // delete
                     $.ajaxSetup({
                         headers: {
                             'Authorization': "Bearer {{ $session_token }}"
                         }
                     });
                     $.ajax({
-                        url: '/api/slider/' + id,
+                        url: '/api/content/' + id,
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
-                        processData: false,
                         success: function(result) {
-                            if (result['success'] == true) {
+                            if (result.success) {
                                 Swal.fire({
                                     icon: "success",
-                                    title: "Success",
-                                    text: result['message'],
+                                    title: "Berhasil",
+                                    text: result.message,
                                     confirmButtonColor: '#3A57E8',
-                                }).then((result) => {
-                                    window.location.replace("{{ url('/admin/slider') }}");
+                                }).then(() => {
+                                    window.location.replace("{{ url('/admin/content') }}");
                                 });
                             } else {
                                 Swal.fire({
                                     icon: "error",
                                     title: "Oops...",
-                                    text: result['message'],
+                                    text: result.message,
                                     confirmButtonColor: '#3A57E8',
                                 });
                             }
