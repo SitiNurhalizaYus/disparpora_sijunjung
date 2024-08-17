@@ -97,9 +97,9 @@
                     $("#image").attr("src", "{{ url('/') }}/" + result['data']['image'].replace('/xxx/', '/300/'));
                     $('#notes').html(result['data']['notes']);
                     if(result['data']['is_active'] == 1) {
-                        $('#is_active').html('<span class="badge bg-success">Active</span>');
+                        $('#is_active').html('<span class="badge bg-success">Aktif</span>');
                     } else {
-                        $('#is_active').html('<span class="badge bg-danger">Not Active</span>');
+                        $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
                     }
                     $('#created_at').html(convertStringToDate(result['data']['created_at']));
 
@@ -120,7 +120,7 @@
 
         function removeData(id) {
             Swal.fire({
-                title: "Are you sure want to delete?",
+                title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
                 showCancelButton: false,
                 confirmButtonText: "Yes",

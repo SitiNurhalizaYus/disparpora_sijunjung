@@ -8,7 +8,7 @@
                     <div class="header-title">
                         <h3 class="card-title">
                             <!-- Tombol Back -->
-                            <a href="{{ URL::previous() }}" style="text-decoration: none; color: inherit;">
+                            <a href="{{ url('/admin/user/') }}" style="text-decoration: none; color: inherit;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                     class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                     <path fill="black"
@@ -65,7 +65,7 @@
                 <div class="card">
                     <div class="card-body" id="detail-data-success" style="display: none;">
                         <div class="mt-2">
-                            <h6 class="mb-1">Level</h6>
+                            <h6 class="mb-1">Peran</h6>
                             <p id="level_name"></p>
                         </div>
                         <div class="mt-2">
@@ -77,11 +77,11 @@
                             <p id="email"></p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Name</h6>
+                            <h6 class="mb-1">Nama</h6>
                             <p id="name"></p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Image</h6>
+                            <h6 class="mb-1">Foto</h6>
                             <img id="picture" width="300px" style="border-radius: 2%;">
                         </div>
                         <div class="mt-2">
@@ -89,11 +89,11 @@
                         </div>
 
                         <div class="mt-2">
-                            <h6 class="mb-1">Status Active</h6>
-                            <p id="active_status"> </p>
+                            <h6 class="mb-1">Status Aktif</h6>
+                            <p id="is_active"> </p>
                         </div>
                         <div class="mt-2">
-                            <h6 class="mb-1">Created At</h6>
+                            <h6 class="mb-1">Dibuat</h6>
                             <p id="created_at"></p>
                         </div>
                     </div>
@@ -133,10 +133,10 @@
 
                     $('#notes').html(result['data']['notes']);
 
-                    if (result['data']['active_status'] == 1) {
-                        $('#active_status').html('<span class="badge bg-success">Active</span>');
+                    if (result['data']['is_active'] == 1) {
+                        $('#is_active').html('<span class="badge bg-success">Aktif</span>');
                     } else {
-                        $('#active_status').html('<span class="badge bg-danger">Not Active</span>');
+                        $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
                     }
                     $('#created_at').html(convertStringToDate(result['data']['created_at']));
 
@@ -158,7 +158,7 @@
 
         function removeData(id) {
             Swal.fire({
-                title: "Are you sure want to delete?",
+                title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
                 showCancelButton: false,
                 confirmButtonText: "Yes",

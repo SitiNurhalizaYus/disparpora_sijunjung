@@ -14,7 +14,7 @@
                                     <path fill="black"
                                         fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                                 </svg>
-                                Mitra/Tambah
+                                User/Tambah
                             </a>
                         </h3>
                     </div>
@@ -31,30 +31,30 @@
                             {{ csrf_field() }}
                             {{-- @method('PUT') --}}
                             <div class="form-group">
-                                <label class="form-label" for="level_id">Level</label>
+                                <label class="form-label" for="level_id">Peran</label>
                                 <select class="form-control" id="level_id" name="level_id" required>
                                     <option value="" disabled selected>Pilih Kategori</option>
+                                    <option value="1">Admin</option>
                                     <option value="2">User</option>
-                                    <option value="1">Super Admin</option>
                                 </select>
-                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-level_id">Silahkan pilih</p>
+                                <p class="text-danger" id="invalid-level_id"></p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="username">Username </label>
                                 <input class="form-control"
                                 type="name" id="username" name="username" value=""
                                     placeholder="Enter Username" required >
-                                    <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-value-username">Silahkan Input Username
+                                    <p class="text-danger" style="display: none;" id="invalid-value-username">Silahkan Input Username
                                     </p>
-                                    <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-username">Maksimal 255 Karakter</p>
+                                    <p class="text-danger" style="display: none;" id="invalid-username">Maksimal 255 Karakter</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="name">Input Nama </label>
+                                <label class="form-label" for="name">Nama </label>
                                 <input class="form-control" type="text" id="name" name="name" value=""
                                     placeholder="Masukan Nama " required>
-                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-value-name">Silahkan Input Nama
+                                <p class="text-danger" style="display: none;" id="invalid-value-name">Silahkan Input Nama
                                 </p>
-                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-name">Maksimal 255 Karakter</p>
+                                <p class="text-danger" style="display: none;" id="invalid-name">Maksimal 255 Karakter</p>
                             </div>
 
                             <div class="form-group">
@@ -62,30 +62,29 @@
                                 <input class="form-control "
                                 type="email" id="email" name="email" value=""
                                     placeholder="Enter Email" required >
-                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-value-email">Silahkan Input Email</p>
-                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-email">Maksimal 255 Karakter</p>
+                                <p class="text-danger" style="display: none;" id="invalid-value-email">Silahkan Input Email</p>
+                                <p class="text-danger" style="display: none;" id="invalid-email">Maksimal 255 Karakter</p>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="password">Password </label>
                                 <input class="form-control " type="password" id="password" name="password" value=""
                                     placeholder="Enter Password" required>
-                                    <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-value-password">Silahkan Input Password
+                                    <p class="text-danger" style="display: none;" id="invalid-value-password">Silahkan Input Password
                                     </p>
-                                    <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-password">Maksimal 255 Karakter</p>
+                                    <p class="text-danger" style="display: none;" id="invalid-password">Maksimal 255 Karakter</p>
 
                             </div>
-
-
+                            
                             <div class="form-group">
-                                <label class="form-label" for="picture">Upload Gambar</label>
+                                <label class="form-label" for="picture">Upload Foto</label>
                                 <input class="form-control" accept="image/*" type="file" id="file" name="file"
                                     required>
                                 <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg"
                                     placeholder="picture">
                                 <label class="form-label" for="image" style="font-size: 10pt">*Format JPG, JPEG, dan
                                     PNG</label>
-                                <p class="text-danger" style="display: none;font-size: 0.75rem;" id="invalid-input-picture">Silahkan Input Gambar
+                                <p class="text-danger" style="display: none;" id="invalid-input-picture">Silahkan Input Gambar
                                 </p>
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
@@ -93,8 +92,8 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="active_status" name="active_status">
-                                    <label class="form-check-label" for="active_status">Active Status</label>
+                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
+                                    <label class="form-check-label" for="is_active">Active Status</label>
                                 </div>
                             </div>
                             <br><br>
@@ -289,14 +288,14 @@
                 $.map(form, function(n, i) {
                     formdata[n['name']] = n['value'];
                 });
-                if ('active_status' in formdata) {
-                    if (formdata['active_status'] == 'on') {
-                        formdata['active_status'] = true;
+                if ('is_active' in formdata) {
+                    if (formdata['is_active'] == 'on') {
+                        formdata['is_active'] = true;
                     } else {
-                        formdata['active_status'] = false;
+                        formdata['is_active'] = false;
                     }
                 } else {
-                    formdata['active_status'] = false;
+                    formdata['is_active'] = false;
                 }
 
                 $.ajaxSetup({

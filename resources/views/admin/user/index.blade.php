@@ -27,10 +27,11 @@
                             <table id="datatable" class="table table-striped" data-toggle="data-table">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Level Name</th>
+                                        <th class="text-center">Peran</th>
                                         <th class="text-center">Username</th>
                                         <th class="text-center">Email</th>
-                                        <th class="text-center">Created At</th>
+                                        <th class="text-center">Foto</th>
+                                        <th class="text-center">Dibuat</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -111,6 +112,19 @@
                     }
                 },
                 {
+                    data: 'picture',
+                    render: function(data, type, row, meta) {
+                        if (data) {
+                            // Manipulasi path seperti di show
+                            var imagePath = "{{ url('/') }}/" + data.replace('/xxx/', '/100/');
+                            return '<img src="' + imagePath +
+                                '" alt="User Picture" style="width: 50px; height: 50px; object-fit: cover;">';
+                        } else {
+                            return '<span>No Picture</span>';
+                        }
+                    }
+                },
+                {
                     data: 'created_at',
                     className: 'text-center',
                     render: function (data, type, row, meta) {
@@ -118,13 +132,13 @@
                     }
                 },
                 {
-                    data: 'active_status',
+                    data: 'is_active',
                     className: 'text-center',
                     render: function (data, type, row, meta) {
                         if(data == '1') {
-                            return '<span class="badge bg-success">Active</span>';
+                            return '<span class="badge bg-success">Aktif</span>';
                         } else {
-                            return '<span class="badge bg-danger">Not Active</span>';
+                            return '<span class="badge bg-danger">Tidak Aktif</span>';
                         }
                     }
                 },
@@ -170,13 +184,14 @@
                 {targets: [2], width: "20%"},
                 {targets: [3], width: "20%"},
                 {targets: [4], width: "20%"},
-                {targets: [5], width: "20%", orderable: false}
+                {targets: [5], width: "20%"},
+                {targets: [6], width: "20%", orderable: false}
             ],
         });
 
         function removeData(id) {
             Swal.fire({
-                title: "Are you sure want to delete?",
+                title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
                 showCancelButton: false,
                 confirmButtonText: "Yes",

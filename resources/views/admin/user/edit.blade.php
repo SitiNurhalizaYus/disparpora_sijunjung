@@ -31,70 +31,67 @@
                             {{ csrf_field() }}
                             {{-- @method('PUT') --}}
                             <div class="form-group">
-                                <label class="form-label" for="level_id">Level</label>
+                                <label class="form-label" for="level_id">Peran</label>
                                 <select class="form-control" id="level_id" name="level_id" required>
                                     <option value="" disabled selected>Pilih Kategori</option>
+                                    <option value="1">Admin</option>
                                     <option value="2">User</option>
-                                    <option value="1">Super Admin</option>
                                 </select>
                                 <p class="text-danger" id="invalid-level_id"></p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="username">Username </label>
-                                <input class="form-control"
-                                type="name" id="username" name="username" value=""
-                                    placeholder="Enter Username" required >
-                                    <p class="text-danger" style="display: none;" id="invalid-value-username">Silahkan Input Username
-                                    </p>
-                                    <p class="text-danger" style="display: none;" id="invalid-username">Maksimal 255 Karakter</p>
+                                <input class="form-control" type="name" id="username" name="username" value=""
+                                    placeholder="Enter Username" required>
+                                <p class="text-danger" style="display: none;" id="invalid-value-username">Silahkan Input
+                                    Username
+                                </p>
+                                <p class="text-danger" style="display: none;" id="invalid-username">Maksimal 255 Karakter
+                                </p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="name">Input Nama </label>
+                                <label class="form-label" for="name">Nama </label>
                                 <input class="form-control" type="text" id="name" name="name" value=""
                                     placeholder="Masukan Nama " required>
                                 <p class="text-danger" style="display: none;" id="invalid-value-name">Silahkan Input Nama
                                 </p>
                                 <p class="text-danger" style="display: none;" id="invalid-name">Maksimal 255 Karakter</p>
                             </div>
-
                             <div class="form-group">
                                 <label class="form-label" for="email">Email </label>
-                                <input class="form-control "
-                                type="email" id="email" name="email" value=""
-                                    placeholder="Enter Email" required >
-                                <p class="text-danger" style="display: none;" id="invalid-value-email">Silahkan Input Email</p>
+                                <input class="form-control " type="email" id="email" name="email" value=""
+                                    placeholder="Enter Email" required>
+                                <p class="text-danger" style="display: none;" id="invalid-value-email">Silahkan Input Email
+                                </p>
                                 <p class="text-danger" style="display: none;" id="invalid-email">Maksimal 255 Karakter</p>
                             </div>
-
                             <div class="form-group">
                                 <label class="form-label" for="password">Password </label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="is_password"
-                                        name="is_password" >
+                                        name="is_password">
                                     <label class="form-check-label" for="is_password">
                                         Change Password
                                     </label>
                                 </div>
                                 <input class="form-control " type="password" id="password" name="password" value=""
                                     placeholder="Enter Password" required>
-                                    <p class="text-danger" style="display: none;" id="invalid-value-password">Silahkan Input Password
-                                    </p>
-                                    <p class="text-danger" style="display: none;" id="invalid-password">Maksimal 255 Karakter</p>
-
+                                <p class="text-danger" style="display: none;" id="invalid-value-password">Silahkan Input
+                                    Password
+                                </p>
+                                <p class="text-danger" style="display: none;" id="invalid-password">Maksimal 255 Karakter
+                                </p>
                             </div>
-
-
-
-
                             <div class="form-group">
-                                <label class="form-label" for="picture">Upload Gambar</label>
-                                <input class="form-control" accept="image/*" type="file" id="file" name="file"
-                                    >
-                                <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg"
-                                    placeholder="picture">
+                                <label class="form-label" for="picture">Foto</label>
+                                <input class="form-control" accept="image/*" type="file" id="file"
+                                    name="file">
+                                <input class="form-control" type="hidden" id="picture" name="picture"
+                                    value="noimage.jpg" placeholder="picture">
                                 <label class="form-label" for="image" style="font-size: 10pt">*Format JPG, JPEG, dan
                                     PNG</label>
-                                <p class="text-danger" style="display: none;" id="invalid-input-picture">Silahkan Input Gambar
+                                <p class="text-danger" style="display: none;" id="invalid-input-picture">Silahkan Input
+                                    Gambar
                                 </p>
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
@@ -102,13 +99,15 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="active_status" name="active_status">
-                                    <label class="form-check-label" for="active_status">Active Status</label>
+                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
+                                    <label class="form-check-label" for="is_active">Status Aktif</label>
                                 </div>
                             </div>
                             <br><br>
-                            <a href="{{ URL::previous() }}" class="btn btn-danger">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end"">
+                                <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
+                                <button type="submit" class="btn btn-success">Simpan</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -117,10 +116,7 @@
     </div>
 
     <script>
-
-
-
-    $('#password').prop("disabled", true);
+        $('#password').prop("disabled", true);
         $('#is_password').change(function() {
             if ($('#is_password').is(":checked")) {
                 $('#password').prop("disabled", false);
@@ -157,7 +153,7 @@
                     $("#image-preview").attr("src", "{{ url('/') }}/" + result['data']['picture'].replace(
                         '/xxx/', '/300/'));
 
-                    $('#active_status').prop("checked", result['data']['active_status']);
+                    $('#is_active').prop("checked", result['data']['is_active']);
 
                 } else {
                     $("#detail-data-success").hide();
@@ -209,8 +205,8 @@
             });
         });
 
-             // input validate
-             function validateInput(inputId) {
+        // input validate
+        function validateInput(inputId) {
             var inputElement = document.getElementById(inputId);
             var length = inputElement.value.length;
             var errorElement = document.getElementById(inputId + '-error');
@@ -247,14 +243,14 @@
                 $.map(form, function(n, i) {
                     formdata[n['name']] = n['value'];
                 });
-                if ('active_status' in formdata) {
-                    if (formdata['active_status'] == 'on') {
-                        formdata['active_status'] = true;
+                if ('is_active' in formdata) {
+                    if (formdata['is_active'] == 'on') {
+                        formdata['is_active'] = true;
                     } else {
-                        formdata['active_status'] = false;
+                        formdata['is_active'] = false;
                     }
                 } else {
-                    formdata['active_status'] = false;
+                    formdata['is_active'] = false;
                 }
 
                 $.ajaxSetup({

@@ -116,9 +116,9 @@
                     data: 'is_active',
                     render: function (data, type, row, meta) {
                         if(data == '1') {
-                            return '<span class="badge bg-success">Active</span>';
+                            return '<span class="badge bg-success">Aktif</span>';
                         } else {
-                            return '<span class="badge bg-danger">Not Active</span>';
+                            return '<span class="badge bg-danger">Tidak Aktif</span>';
                         }
                     }
                 },
@@ -170,7 +170,7 @@
 
         function removeData(id) {
             Swal.fire({
-                title: "Are you sure want to delete?",
+                title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
                 showCancelButton: false,
                 confirmButtonText: "Yes",

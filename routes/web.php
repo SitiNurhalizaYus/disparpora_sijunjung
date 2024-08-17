@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\UploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/faq', [App\Http\Controllers\Client\FaqController::class, 'index']);
     Route::get('/contact', [App\Http\Controllers\Client\ContactController::class, 'index']);
     Route::post('/contact/submit', [App\Http\Controllers\Client\ContactController::class, 'submit']);
-    Route::get('/page/{id}', [App\Http\Controllers\Client\PageController::class, 'detail']);
+    // Route::get('/page/{id}', [App\Http\Controllers\Client\PageController::class, 'detail']);
 
     Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail'])->name('profil');
     Route::get('/berita', [App\Http\Controllers\Client\BeritaController::class, 'index'])->name('berita.index');
@@ -52,13 +53,8 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('bignumber', App\Http\Controllers\Admin\BigNumberController::class);
     Route::resource('team', App\Http\Controllers\Admin\TeamController::class);
     Route::resource('partner', App\Http\Controllers\Admin\PartnerController::class);
-    Route::resource('testimony', App\Http\Controllers\Admin\TestimonyController::class);
-    Route::resource('pages', App\Http\Controllers\Admin\PagesController::class);
-    Route::resource('feature', App\Http\Controllers\Admin\FeatureController::class);
-    Route::resource('pricing', App\Http\Controllers\Admin\PricingController::class);
-    Route::resource('blog', App\Http\Controllers\Admin\BlogController::class);
     Route::resource('faq', App\Http\Controllers\Admin\FaqController::class);
-    Route::resource('review', App\Http\Controllers\Admin\ReviewController::class);
     Route::resource('setting', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('user', App\Http\Controllers\Admin\UserController::class);
+
 });
