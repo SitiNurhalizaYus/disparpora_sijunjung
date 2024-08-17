@@ -17,8 +17,12 @@ return new class extends Migration
             $table->string('email');
             $table->string('subject');
             $table->text('message');
-            $table->boolean('is_active')->default(1);
+            // default
+            $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
         });
     }
 

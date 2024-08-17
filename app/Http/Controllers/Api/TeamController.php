@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -9,79 +8,11 @@ use App\Models\Team;
 
 class TeamController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api')->except("index", "show");
     }
 
-    /**
-     * @OA\Get(
-     *     path="/team",
-     *     tags={"Team"},
-     *     summary="",
-     *     description="Get all data",
-     *     operationId="team_index",
-     *     @OA\Parameter(
-     *          name="per_page",
-     *          description="per_page value is number. ex : ?per_page=10",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="page",
-     *          description="page value is number. ex : ?page=1",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="sort",
-     *          description="Sort value is string with rule column-name:order. ex : ?sort=id:asc",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="string"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="where",
-     *          description="Where value is object. ex : ?where={'name':['john','doe'], 'dob':'1990-12-31'}",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="string"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="count",
-     *          description="Count value is boolean. ex : ?count=true",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="boolean"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={"total_data":"", "per_page":"", "total_page":"", "page":""}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function index(Request $request)
     {
         // parameter
@@ -89,23 +20,34 @@ class TeamController extends Controller
         $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
-        $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
-        $page = $request->has('page') ? $request->get('page') : 1;
+        $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
+        $page = $request->has('page') ? intval($request->get('page')) : 1;
+
+        // Validasi per_page dan page agar tidak bernilai negatif atau nol
+        if ($per_page <= 0) {
+            $per_page = 10;
+        }
+        if ($page <= 0) {
+            $page = 1;
+        }
 
         $sort = explode(':', $sort);
+        if (count($sort) !== 2) {
+            $sort = ['id', 'asc']; // Default sorting jika tidak valid
+        }
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
         // query
-        $query = Team::where([['id','>','0']]);
+        $query = Team::where([['id', '>', '0']]);
 
         // cek token
-        if(!auth()->guard('api')->user()) {
+        if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
-        if($where){
-            foreach($where as $key => $value) {
+        if ($where) {
+            foreach ($where as $key => $value) {
                 if (is_array($value)) {
                     $query = $query->whereIn($key, $value);
                 } else {
@@ -114,86 +56,47 @@ class TeamController extends Controller
             }
         }
 
-        if($search){
-            $query = $query->whereAny(['name'], 'like', "%{$search}%");
+        if ($search) {
+            $query = $query->where('name', 'like', "%{$search}%");
         }
 
-        // data
-        $data = [];
+        // metadata dan data
         $metadata = [];
-
-        // metadata
-        $metadata['total_data'] = $query->count('id');
+        $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-        // get count
-        if($count == true) {
-            $query = $query->count('id');
-            $data['count'] = $query;
-        }
-        // get data
-        else {
-            $query = $query
-                ->orderBy($sort[0], $sort[1])
-                ->limit($per_page)
-                ->offset(($page-1) * $per_page)
-                ->get()
-                ->toArray();
-
-            foreach($query as $qry) {
-                $temp = $qry;
-                array_push($data, $temp);
-            };
+        // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'
+        if ($per_page == 0 || $per_page == 'all') {
+            $data = $query->orderBy($sort[0], $sort[1])->get()->toArray();
+            $metadata['total_data'] = count($data); // Update total data
+            $metadata['per_page'] = $metadata['total_data'];
+            $metadata['total_page'] = 1;
+            $metadata['page'] = 1;
+        } else {
+            $data = $query->orderBy($sort[0], $sort[1])
+                          ->limit($per_page)
+                          ->offset(($page - 1) * $per_page)
+                          ->get()
+                          ->toArray();
         }
 
         // result
-        if($data) {
-            return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
+        if ($data) {
+            return new ApiResource(true, 200, 'Get data successful', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/team/{id}",
-     *     tags={"Team"},
-     *     summary="",
-     *     description="Get data by id",
-     *     operationId="team_show",
-     *     @OA\Parameter(
-     *          name="id",
-     *          description="id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function show($id)
     {
         // query
-        $query = Team::where([['id','>','0']]);
+        $query = Team::where([['id', '>', '0']]);
 
         // cek token
-        if(!auth()->guard('api')->user()) {
+        if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
@@ -201,47 +104,13 @@ class TeamController extends Controller
         $data = $query->find($id);
 
         // result
-        if($data) {
-            return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
+        if ($data) {
+            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
 
-    /**
-     * @OA\Post(
-     *     path="/team",
-     *     tags={"Team"},
-     *     summary="",
-     *     description="Insert data",
-     *     operationId="team_store",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(
-     *                      property="name",
-     *                      type="string"
-     *                  )
-     *              )
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Insert Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -251,56 +120,13 @@ class TeamController extends Controller
         $req = $request->post();
         $data = Team::create($req);
 
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
         }
     }
 
-    /**
-     * @OA\Put(
-     *     path="/team/{id}",
-     *     tags={"Team"},
-     *     summary="",
-     *     description="Update data",
-     *     operationId="team_update",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *          name="id",
-     *          description="id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\RequestBody(
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(
-     *                      property="name",
-     *                      type="string"
-     *                  )
-     *              )
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Update Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -313,51 +139,19 @@ class TeamController extends Controller
 
         $data = Team::findOrFail($id);
 
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
         }
     }
 
-    /**
-     * @OA\Delete(
-     *     path="/team/{id}",
-     *     tags={"Team"},
-     *     summary="",
-     *     description="Delete data",
-     *     operationId="team_destroy",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *          name="id",
-     *          description="id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Delete Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function destroy($id)
     {
         $query = Team::findOrFail($id);
         $query->delete();
 
-        if($query) {
+        if ($query) {
             return new ApiResource(true, 201, 'Data berhasil dihapus', [], []);
         } else {
             return new ApiResource(false, 400, 'Data gagal dihapus', [], []);
