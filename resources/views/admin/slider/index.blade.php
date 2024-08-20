@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/slider/create') }}" class="btn btn-sm 2 btn-primary">
+                    <a href="{{ url('/admin/slider/create') }}" class="btn btn-md 2 btn-primary">
                         ADD+
                     </a>
                 </div>
@@ -26,13 +26,13 @@
                             <table id="datatable" class="table table-striped" data-toggle="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Image</th>
-                                        <th>Created At</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th class="text-center">Id</th>
+                                        <th class="text-center">Nama</th>
+                                        <th class="text-center">Deskripsi</th>
+                                        <th class="text-center">Gambar</th>
+                                        <th class="text-center">Dibuat</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -110,6 +110,7 @@
                 },
                 {
                     data: 'image',
+                    className: 'text-center', 
                     render: function(data, type, row, meta) {
                         if (data) {
                             // Manipulasi path seperti di show
@@ -123,6 +124,7 @@
                 },
                 {
                     data: 'created_at',
+                    className: 'text-center', 
                     render: function(data, type, row, meta) {
                         return '<span style="white-space: normal;">' + convertStringToDate(data) +
                             '</span>';
@@ -130,6 +132,7 @@
                 },
                 {
                     data: 'is_active',
+                    className: 'text-center', 
                     render: function(data, type, row, meta) {
                         if (data == '1') {
                             return '<span class="badge bg-success">Aktif</span>';

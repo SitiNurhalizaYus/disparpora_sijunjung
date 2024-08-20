@@ -7,11 +7,11 @@
                 <div class="header-title">
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/slider/') }}" style="text-decoration: none; color: inherit;">
+                        <a href="{{ url('/admin/slider/') }}" class="text-decoration-none text-dark">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
-                                class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
-                                <path fill="black"
-                                    fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                                class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                                <path fill="black" fill-rule="evenodd"
+                                    d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
                             </svg>
                             Slider/Detail
                         </a>
@@ -32,42 +32,43 @@
             <div class="col-sm-12">
                 <div class="card">
                     <!-- Spinner saat loading -->
-                    <div class="card-body" id="loading-spinner" style="text-align: center;">
+                    <div class="card-body text-center" id="loading-spinner">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
-                    
+
                     <!-- Konten data slider -->
                     <div class="card-body" id="detail-data-success" style="display: none;">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="card mb-3">
-                                    <div class="card-header bg-primary text-white">Slider Information</div>
+                                <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
+                                    <div class="card-header bg-primary text-white"><strong>Slider Information</strong></div>
                                     <div class="card-body">
-                                        <h5 class="card-title">Name: <span id="name"></span></h5>
-                                        <p class="card-text">Description: <span id="description"></span></p>
-                                        <p class="card-text">Link: <a href="#" id="link"></a></p>
+                                        <h5 class="card-title"><span id="name"></span></h5>
+                                        <p class="card-text">Deskripsi: <br><span id="description"></span></p>
+                                        <p class="card-text">Link: <br><a href="#" id="link"></a></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="card mb-3">
-                                    <div class="card-header bg-secondary text-white">Additional Details</div>
+                                <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
+                                    <div class="card-header bg-secondary text-white"><strong>Additional Details</strong></div>
                                     <div class="card-body">
-                                        <p class="card-text">Notes: <span id="notes"></span></p>
-                                        <p class="card-text">Status: <span id="is_active"></span></p>
-                                        <p class="card-text">Created At: <span id="created_at"></span></p>
+                                        <p class="card-text ">Catatan: <br><span id="notes"></span></p>
+                                        <p class="card-text">Status: <br><span id="is_active"></span></p>
+                                        <p class="card-text">Dibuat: <br><span id="created_at"></span></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="card mb-3">
-                                    <div class="card-header bg-dark text-white">Slider Image</div>
+                                <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
+                                    <div class="card-header bg-dark text-white text-center"><strong>Gambar</strong></div>
                                     <div class="card-body text-center">
-                                        <img id="image" class="img-fluid rounded" alt="Slider Image" style="max-width: 100%;">
+                                        <img id="image" class="img-fluid rounded" alt="Slider Image"
+                                            style="max-width: 100%;">
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +76,7 @@
                     </div>
 
                     <!-- Pesan error jika gagal memuat data -->
-                    <div class="card-body" id="detail-data-failed" style="display: none;">
+                    <div class="card-body text-center" id="detail-data-failed" style="display: none;">
                         <p id="message" class="text-danger"></p>
                     </div>
                 </div>
@@ -85,6 +86,7 @@
 
     <script>
         $(document).ready(function() {
+            // Tampilkan spinner saat loading data
             $("#loading-spinner").show();
             $("#detail-data-success").hide();
             $("#detail-data-failed").hide();
@@ -95,14 +97,18 @@
                 }
             });
 
+            // Request untuk mendapatkan data slider
             $.ajax({
                 url: '/api/slider/{{ $id }}',
                 type: "GET",
                 dataType: "json",
                 processData: false,
                 success: function(result) {
+                    // Sembunyikan spinner
                     $("#loading-spinner").hide();
-                    if (result['success'] == true) {
+
+                    if (result['success']) {
+                        // Tampilkan data jika berhasil memuat
                         $("#detail-data-success").show();
                         $("#detail-data-failed").hide();
 
@@ -111,19 +117,19 @@
                         $('#link').attr('href', result['data']['link']).text(result['data']['link']);
                         $("#image").attr("src", "{{ url('/') }}/" + result['data']['image'].replace('/xxx/', '/300/'));
                         $('#notes').text(result['data']['notes']);
-                        if (result['data']['is_active'] == 1) {
-                            $('#is_active').html('<span class="badge bg-success">Aktif</span>');
-                        } else {
-                            $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
-                        }
+                        $('#is_active').html(result['data']['is_active'] == 1 ?
+                            '<span class="badge bg-success">Aktif</span>' :
+                            '<span class="badge bg-danger">Tidak Aktif</span>');
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
                     } else {
+                        // Tampilkan pesan error jika gagal memuat data
                         $("#detail-data-success").hide();
                         $("#detail-data-failed").show();
                         $('#message').text(result['message']);
                     }
                 },
                 fail: function() {
+                    // Tampilkan pesan error jika terjadi kegagalan saat memuat data
                     $("#loading-spinner").hide();
                     $("#detail-data-success").hide();
                     $("#detail-data-failed").show();
@@ -132,6 +138,7 @@
             });
         });
 
+        // Fungsi untuk menghapus data
         function removeData(id) {
             Swal.fire({
                 title: "Kamu yakin ingin menghapus?",
@@ -141,6 +148,7 @@
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
+                    // Request untuk menghapus data slider
                     $.ajaxSetup({
                         headers: {
                             'Authorization': "Bearer {{ $session_token }}"
@@ -152,7 +160,7 @@
                         dataType: "json",
                         processData: false,
                         success: function(result) {
-                            if (result['success'] == true) {
+                            if (result['success']) {
                                 Swal.fire({
                                     icon: "success",
                                     title: "Deleted",
@@ -175,6 +183,7 @@
             });
         }
 
+        // Fungsi untuk mengonversi string tanggal menjadi format yang lebih ramah
         function convertStringToDate(dateString) {
             const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             return new Date(dateString).toLocaleDateString('id-ID', options);

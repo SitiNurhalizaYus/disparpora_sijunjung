@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="conatiner-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
         <div class="card-header mb-2 px-3">
             <div class="flex-wrap d-flex justify-content-between align-items-center">
                 <div>
@@ -30,27 +30,39 @@
                         <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label class="form-label" for="name">Peran </label>
+                                <label class="form-label" for="level_id">Peran </label>
                                 <select class="form-select" id="level_id" name="level_id" required>
                                     <option value="" disabled selected>Pilih Peran</option>
                                     <option value="1">Admin</option>
                                     <option value="2">Editor</option>
                                 </select>
+                                <div class="invalid-feedback" style="font-size: 0.75rem;">
+                                    Pilih peran yang valid.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="username">Username </label>
                                 <input class="form-control" type="text" id="username" name="username" value=""
                                     placeholder="Enter Username" required>
+                                <div class="invalid-feedback" style="font-size: 0.75rem;">
+                                    Username wajib diisi.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="email">Email </label>
-                                <input class="form-control" type="text" id="email" name="email" value=""
+                                <input class="form-control" type="email" id="email" name="email" value=""
                                     placeholder="Enter Email" required>
+                                <div class="invalid-feedback" style="font-size: 0.75rem;">
+                                    Masukkan email yang valid.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="name">Nama </label>
                                 <input class="form-control" type="text" id="name" name="name" value=""
                                     placeholder="Enter Name" required>
+                                <div class="invalid-feedback" style="font-size: 0.75rem;">
+                                    Nama wajib diisi.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="password">Password </label>
@@ -63,6 +75,9 @@
                                 </div>
                                 <input class="form-control" type="password" id="password" name="password" value=""
                                     placeholder="Enter Password" required>
+                                <div class="invalid-feedback" style="font-size: 0.75rem;">
+                                    Password wajib diisi jika mengganti.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="picture">Foto</label>
@@ -84,7 +99,7 @@
                                 </div>
                             </div>
                             <br><br>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end"">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </div>
@@ -96,6 +111,21 @@
     </div>
 
     <script>
+        // Enable form validation
+        (function() {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+
         $('#password').prop("disabled", true);
         $('#is_password').change(function() {
             if ($('#is_password').is(":checked")) {
@@ -103,7 +133,6 @@
             } else {
                 $('#password').prop("disabled", true);
             }
-
         });
 
         // get data
@@ -147,8 +176,8 @@
             }
         });
 
-        // handle upload image
-        $('#file').change(function() {
+       // handle upload image
+       $('#file').change(function() {
             // preview
             $('#image-preview').attr('display', 'block');
             var oFReader = new FileReader();
@@ -180,6 +209,19 @@
                     }
                 }
             });
+        });
+
+        // handle wysiwyg
+        tinymce.init({
+            selector: 'textarea#content',
+            plugins: 'code table lists',
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
+            promotion: false,
+            setup: function(ed) {
+                ed.on('change', function(e) {
+                    $('#description_long').val(ed.getContent());
+                });
+            }
         });
 
         // handle post

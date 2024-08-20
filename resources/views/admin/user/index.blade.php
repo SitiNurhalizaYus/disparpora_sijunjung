@@ -26,15 +26,14 @@
                             <table id="datatable" class="table table-striped" data-toggle="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Peran</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Nama</th>
-                                        <th>Foto</th>
-                                        <th>Dibuat</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th class="text-center">Id</th>
+                                        <th class="text-center">Peran</th>
+                                        <th class="text-center">Email</th>
+                                        <th class="text-center">Nama</th>
+                                        <th class="text-center">Foto</th>
+                                        <th class="text-center">Dibuat</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -90,25 +89,22 @@
                     }
                 },
                 {
-                    data: 'username',
-                    render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data + '</span>';
-                    }
-                },
-                {
                     data: 'email',
+                    className: 'text-center', 
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + data + '</span>';
                     }
                 },
                 {
                     data: 'name',
+                    className: 'text-center', 
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + data + '</span>';
                     }
                 },
                 {
                     data: 'picture',
+                    className: 'text-center', 
                     render: function(data, type, row, meta) {
                         if (data) {
                             // Manipulasi path seperti di show
@@ -122,17 +118,19 @@
                 },
                 {
                     data: 'created_at',
+                    className: 'text-center', 
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + convertStringToDate(data) + '</span>';
                     }
                 },
                 {
                     data: 'is_active',
+                    className: 'text-center', 
                     render: function (data, type, row, meta) {
                         if(data == '1') {
-                            return '<span class="badge bg-success">Active</span>';
+                            return '<span class="badge bg-success">Aktif</span>';
                         } else {
-                            return '<span class="badge bg-danger">Not Active</span>';
+                            return '<span class="badge bg-danger">Tidak Aktif</span>';
                         }
                     }
                 },
@@ -173,12 +171,11 @@
             ],
             columnDefs: [
                 {targets: [0], width: "5%"},
-                {targets: [1], width: "25%"},
-                {targets: [2], width: "10%"},
+                {targets: [1], width: "15%"},
+                {targets: [2], width: "25%"},
                 {targets: [3], width: "30%"},
-                {targets: [4], width: "10%"},
-                {targets: [5], width: "10%"},
-                {targets: [6], width: "10%", orderable: false}
+                {targets: [4], width: "20%"},
+                {targets: [5], width: "10%", orderable: false}
             ],
         });
 

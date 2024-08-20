@@ -26,161 +26,181 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                    <div class="card-body">
-                        <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
-                            {{ csrf_field() }}
-                            <div class="form-group">
-                                <label class="form-label" for="name">Peran </label>
-                                <select class="form-select" id="level_id" name="level_id" required>
-                                    <option value="" disabled selected>Pilih Peran</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Editor</option>
-                                </select>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <label class="form-label" for="name">Peran </label>
+                            <select class="form-select" id="level_id" name="level_id" required>
+                                <option value="" disabled selected>Pilih Peran</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Editor</option>
+                            </select>
+                            <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-level_id">Silakan pilih peran.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="username">Username </label>
+                            <input class="form-control" type="text" id="username" name="username" placeholder="Enter Username" required>
+                            <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-username">Silakan masukkan username.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email </label>
+                            <input class="form-control" type="email" id="email" name="email" placeholder="Enter Email" required>
+                            <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-email">Silakan masukkan email yang valid.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="name">Nama </label>
+                            <input class="form-control" type="text" id="name" name="name" placeholder="Enter Name" required>
+                            <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-name">Silakan masukkan nama.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password">Password </label>
+                            <input class="form-control" type="password" id="password" name="password" placeholder="Enter Password" required minlength="6">
+                            <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-password">Password harus minimal 6 karakter.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="picture">Foto</label>
+                            <input class="form-control" type="file" id="file" name="file" required>
+                            <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg" placeholder="image">
+                            <br>
+                            <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview" width="300px" style="border-radius: 2%;">
+                            <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-picture">Silakan unggah foto.</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="notes">Catatan</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
+                                <label class="form-check-label" for="is_active">Status Aktif</label>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label" for="username">Username </label>
-                                <input class="form-control" type="text" id="username" name="username" value="" placeholder="Enter Username" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="email">Email </label>
-                                <input class="form-control" type="text" id="email" name="email" value="" placeholder="Enter Email" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="name">Nama </label>
-                                <input class="form-control" type="text" id="name" name="name" value="" placeholder="Enter Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="password">Password </label>
-                                <input class="form-control" type="password" id="password" name="password" value="" placeholder="Enter Password" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="picture">Foto</label>
-                                <input class="form-control" type="file" id="file" name="file" required>
-                                <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg" placeholder="image">
-                                <br>
-                                <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview" width="300px" style="border-radius: 2%;">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="notes">Catatan</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
-                                    <label class="form-check-label" for="is_active">Status Aktif</label>
-                                </div>
-                            </div>
-                            <br><br>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end"">
-                                <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
-                                <button type="submit" class="btn btn-success">Simpan</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <br><br>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
+                            <button type="submit" class="btn btn-success">Simpan</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
+<script>
+    // Handle validation display
+    function validateInput(inputId, errorId, condition = true) {
+        if (condition && !$(`#${inputId}`).val()) {
+            $(`#${errorId}`).show();
+            return false;
+        } else {
+            $(`#${errorId}`).hide();
+            return true;
+        }
+    }
 
+    // Validate the entire form before submission
+    function validateForm() {
+        let isValid = true;
+        isValid = validateInput('level_id', 'invalid-level_id') && isValid;
+        isValid = validateInput('username', 'invalid-username') && isValid;
+        isValid = validateInput('email', 'invalid-email') && isValid;
+        isValid = validateInput('name', 'invalid-name') && isValid;
+        isValid = validateInput('password', 'invalid-password', $('#password').val().length >= 6) && isValid;
+        isValid = validateInput('file', 'invalid-picture', $('#file').prop('files').length > 0) && isValid;
+        return isValid;
+    }
 
-        // handle upload image
-        $('#file').change(function(){
-            // preview
-            $('#image-preview').attr('display', 'block');
-            var oFReader = new FileReader();
-            oFReader.readAsDataURL( $("#file")[0].files[0]);
-            oFReader.onload = function(oFREvent) {
-                $('#image-preview').attr('src', oFREvent.target.result);
-            };
+    // handle form submission
+    $("#form-data").submit(function (event) {
+        event.preventDefault();
 
-            // upload
-            formdata = new FormData();
-            if($(this).prop('files').length > 0) {
-                file =$(this).prop('files')[0];
-                formdata.append("image", file);
-            }
+        if (validateForm()) {
+            var form = $("#form-data").serializeArray();
+            var formdata = {};
+            $.map(form, function (n, i) {
+                formdata[n['name']] = n['value'];
+            });
+
+            formdata['is_active'] = $('#is_active').is(":checked") ? 1 : 0;
+
             $.ajaxSetup({
-                headers:{
+                headers: {
                     'Authorization': "Bearer {{$session_token}}"
                 }
             });
             $.ajax({
-                url: '/api/upload',
+                url: '/api/user',
                 type: "POST",
-                data: formdata,
+                data: JSON.stringify(formdata),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
                 processData: false,
-                contentType: false,
                 success: function (result) {
-                    if(result['success'] == true) {
-                        $('#picture').val(result['data']['url'].replace('/xxx/', '/300/'));
+                    if (result['success'] == true) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: result['message'],
+                            confirmButtonColor: '#3A57E8',
+                        }).then((result) => {
+                            window.location.replace("{{ url('/admin/user') }}");
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: result['message'],
+                            confirmButtonColor: '#3A57E8',
+                        });
                     }
                 }
             });
-        });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "You must complete the entire form correctly.",
+                confirmButtonColor: '#3A57E8',
+            });
+        }
+        return false;
+    });
 
-        // handle post
-        $('#form-data').submit(false);
-        $("#form-data").submit( function () {
+    // handle upload image
+    $('#file').change(function () {
+        // preview
+        $('#image-preview').attr('display', 'block');
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL($("#file")[0].files[0]);
+        oFReader.onload = function (oFREvent) {
+            $('#image-preview').attr('src', oFREvent.target.result);
+        };
 
-            if($(this).valid()) {
-                var form = $("#form-data").serializeArray();
-                var formdata = {};
-                $.map(form, function(n, i){
-                    formdata[n['name']] = n['value'];
-                });
-                if ('is_active' in formdata) {
-                    if (formdata['is_active'] == 'on') {
-                        formdata['is_active'] = true;
-                    } else {
-                        formdata['is_active'] = false;
-                    }
-                } else {
-                    formdata['is_active'] = false;
-                }
-
-                $.ajaxSetup({
-                    headers:{
-                        'Authorization': "Bearer {{$session_token}}"
-                    }
-                });
-                $.ajax({
-                    url: '/api/user',
-                    type: "POST",
-                    data: JSON.stringify(formdata),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    processData: false,
-                    success: function (result) {
-                        if(result['success'] == true) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Success",
-                                text: result['message'],
-                                confirmButtonColor: '#3A57E8',
-                            }).then((result) => {
-                                window.location.replace("{{ url('/admin/user') }}");
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: result['message'],
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
-                    }
-                });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "You must complete the entire form.",
-                    confirmButtonColor: '#3A57E8',
-                });
+        // upload
+        var formdata = new FormData();
+        if ($(this).prop('files').length > 0) {
+            var file = $(this).prop('files')[0];
+            formdata.append("image", file);
+        }
+        $.ajaxSetup({
+            headers: {
+                'Authorization': "Bearer {{$session_token}}"
             }
-            return false;
         });
-    </script>
+        $.ajax({
+            url: '/api/upload',
+            type: "POST",
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result['success'] == true) {
+                    $('#picture').val(result['data']['url'].replace('/xxx/', '/300/'));
+                }
+            }
+        });
+    });
+</script>
 @endsection

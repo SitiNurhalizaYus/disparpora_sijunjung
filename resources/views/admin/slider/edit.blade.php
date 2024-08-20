@@ -32,19 +32,19 @@
                             <div class="form-group">
                                 <label class="form-label" for="name">Nama </label>
                                 <input class="form-control" type="text" id="name" name="name" value=""
-                                    placeholder="Masukan Name" required>
+                                    placeholder="Masukan nama" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="description">Description</label>
+                                <label class="form-label" for="description">Deskripsi</label>
                                 <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="link">Link </label>
                                 <input class="form-control" type="url" id="link" name="link" value=""
-                                    placeholder="Masukan Link" required>
+                                    placeholder="Masukan link" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="image">Image</label>
+                                <label class="form-label" for="image">Gambar</label>
                                 <input class="form-control" type="file" id="file" name="file">
                                 <input class="form-control" type="hidden" id="image" name="image" value="noimage.jpg"
                                     placeholder="image">
@@ -53,13 +53,13 @@
                                     width="300px" style="border-radius: 2%;">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="notes">Notes</label>
+                                <label class="form-label" for="notes">Catatan</label>
                                 <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
-                                    <label class="form-check-label" for="is_active">Active Status</label>
+                                    <label class="form-check-label" for="is_active">Status Aktif</label>
                                 </div>
                             </div>
                             <br><br>

@@ -32,7 +32,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="name">Nama </label>
                                 <input class="form-control" type="text" id="name" name="name" value=""
-                                    placeholder="Masukan Name" required>
+                                    placeholder="Masukan nama" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="description">Deskripsi</label>
@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="link">Link </label>
                                 <input class="form-control" type="url" id="link" name="link" value=""
-                                    placeholder="Masukan Link" required>
+                                    placeholder="Masukan link" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
