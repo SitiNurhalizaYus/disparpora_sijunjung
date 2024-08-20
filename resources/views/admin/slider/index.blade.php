@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/slider/create') }}" class="btn btn-md 2 btn-primary">
+                    <a href="{{ url('/admin/slider/create') }}" class="btn btn-sm 2 btn-primary">
                         ADD+
                     </a>
                 </div>
@@ -111,10 +111,14 @@
                 {
                     data: 'image',
                     render: function(data, type, row, meta) {
-                        return type === 'display' ?
-                            '<img src="{{ asset('/') }}' + data.replace('/xxx/', '/100/') +
-                            '" style="max-width:100px; max-height:100px;">' :
-                            data;
+                        if (data) {
+                            // Manipulasi path seperti di show
+                            var imagePath = "{{ url('/') }}/" + data.replace('/xxx/', '/100/');
+                            return '<img src="' + imagePath +
+                                '" alt="User Picture" style="width: 50px; height: 50px; object-fit: cover;">';
+                        } else {
+                            return '<span>No Picture</span>';
+                        }
                     }
                 },
                 {

@@ -8,7 +8,7 @@
                     <div class="header-title">
                         <h3 class="card-title">
                             <!-- Tombol Back -->
-                            <a href="{{ Url('/admin/user/') }}" style="text-decoration: none; color: inherit;">
+                            <a href="{{ URL::previous() }}" style="text-decoration: none; color: inherit;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                     class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                     <path fill="black"
@@ -29,41 +29,28 @@
                     <div class="card-body">
                         <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
-                            {{-- @method('PUT') --}}
                             <div class="form-group">
-                                <label class="form-label" for="level_id">Peran</label>
-                                <select class="form-control" id="level_id" name="level_id" required>
-                                    <option value="" disabled selected>Pilih Kategori</option>
+                                <label class="form-label" for="name">Peran </label>
+                                <select class="form-select" id="level_id" name="level_id" required>
+                                    <option value="" disabled selected>Pilih Peran</option>
                                     <option value="1">Admin</option>
-                                    <option value="2">User</option>
+                                    <option value="2">Editor</option>
                                 </select>
-                                <p class="text-danger" id="invalid-level_id"></p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="username">Username </label>
-                                <input class="form-control" type="name" id="username" name="username" value=""
+                                <input class="form-control" type="text" id="username" name="username" value=""
                                     placeholder="Enter Username" required>
-                                <p class="text-danger" style="display: none;" id="invalid-value-username">Silahkan Input
-                                    Username
-                                </p>
-                                <p class="text-danger" style="display: none;" id="invalid-username">Maksimal 255 Karakter
-                                </p>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email </label>
+                                <input class="form-control" type="text" id="email" name="email" value=""
+                                    placeholder="Enter Email" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="name">Nama </label>
                                 <input class="form-control" type="text" id="name" name="name" value=""
-                                    placeholder="Masukan Nama " required>
-                                <p class="text-danger" style="display: none;" id="invalid-value-name">Silahkan Input Nama
-                                </p>
-                                <p class="text-danger" style="display: none;" id="invalid-name">Maksimal 255 Karakter</p>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="email">Email </label>
-                                <input class="form-control " type="email" id="email" name="email" value=""
-                                    placeholder="Enter Email" required>
-                                <p class="text-danger" style="display: none;" id="invalid-value-email">Silahkan Input Email
-                                </p>
-                                <p class="text-danger" style="display: none;" id="invalid-email">Maksimal 255 Karakter</p>
+                                    placeholder="Enter Name" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="password">Password </label>
@@ -71,31 +58,24 @@
                                     <input class="form-check-input" type="checkbox" value="" id="is_password"
                                         name="is_password">
                                     <label class="form-check-label" for="is_password">
-                                        Change Password
+                                        Ganti Password
                                     </label>
                                 </div>
-                                <input class="form-control " type="password" id="password" name="password" value=""
+                                <input class="form-control" type="password" id="password" name="password" value=""
                                     placeholder="Enter Password" required>
-                                <p class="text-danger" style="display: none;" id="invalid-value-password">Silahkan Input
-                                    Password
-                                </p>
-                                <p class="text-danger" style="display: none;" id="invalid-password">Maksimal 255 Karakter
-                                </p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="picture">Foto</label>
-                                <input class="form-control" accept="image/*" type="file" id="file"
-                                    name="file">
-                                <input class="form-control" type="hidden" id="picture" name="picture"
-                                    value="noimage.jpg" placeholder="picture">
-                                <label class="form-label" for="image" style="font-size: 10pt">*Format JPG, JPEG, dan
-                                    PNG</label>
-                                <p class="text-danger" style="display: none;" id="invalid-input-picture">Silahkan Input
-                                    Gambar
-                                </p>
+                                <input class="form-control" type="file" id="file" name="file">
+                                <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg"
+                                    placeholder="image">
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
                                     width="300px" style="border-radius: 2%;">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="notes">Catatan</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
@@ -126,8 +106,6 @@
 
         });
 
-
-
         // get data
         $.ajaxSetup({
             headers: {
@@ -147,12 +125,11 @@
                     $('#level_id').val(result['data']['level_id']);
                     $('#username').val(result['data']['username']);
                     $('#email').val(result['data']['email']);
-                    $('#password').val(result['data']['password']);
                     $('#name').val(result['data']['name']);
                     $("#picture").val(result['data']['picture']);
                     $("#image-preview").attr("src", "{{ url('/') }}/" + result['data']['picture'].replace(
                         '/xxx/', '/300/'));
-
+                    $('#notes').val(result['data']['notes']);
                     $('#is_active').prop("checked", result['data']['is_active']);
 
                 } else {
@@ -202,34 +179,6 @@
                         $('#picture').val(result['data']['url'].replace('/xxx/', '/300/'));
                     }
                 }
-            });
-        });
-
-        // input validate
-        function validateInput(inputId) {
-            var inputElement = document.getElementById(inputId);
-            var length = inputElement.value.length;
-            var errorElement = document.getElementById(inputId + '-error');
-
-            if (length > 100) {
-                errorElement.style.display = 'block';
-                inputElement.setCustomValidity('Maksimal 100 karakter');
-            } else {
-                errorElement.style.display = 'none';
-                inputElement.setCustomValidity('');
-            }
-        }
-
-        var inputsToValidate = [
-            'username',
-            'password',
-            'name',
-            'email'
-        ];
-
-        inputsToValidate.forEach(function(inputId) {
-            document.getElementById(inputId).addEventListener('input', function() {
-                validateInput(inputId);
             });
         });
 

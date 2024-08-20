@@ -8,7 +8,7 @@
                     <div class="header-title">
                         <h3 class="card-title">
                             <!-- Tombol Back -->
-                            <a href="{{ Url('/admin/slider/') }}" style="text-decoration: none; color: inherit;">
+                            <a href="{{ URL::previous() }}" style="text-decoration: none; color: inherit;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                     class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                     <path fill="black"
@@ -32,7 +32,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="name">Nama </label>
                                 <input class="form-control" type="text" id="name" name="name" value=""
-                                    placeholder="Enter Name" required>
+                                    placeholder="Masukan Name" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="description">Description</label>
@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="link">Link </label>
                                 <input class="form-control" type="url" id="link" name="link" value=""
-                                    placeholder="Enter Link" required>
+                                    placeholder="Masukan Link" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Image</label>

@@ -1,39 +1,40 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
-        <div class="card-header mb-2 px-3">
-            <div class="flex-wrap d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="header-title">
-                        <h2 class="card-title">User</h2>
-                        <p>List data</p>
-                    </div>
-                </div>
-                <div>
-                    <a href="{{ url('/admin/user/create') }}" class="btn btn-md 2 btn-primary">
-                        ADD+
-                    </a>
+<div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="card-header mb-2 px-3">
+        <div class="flex-wrap d-flex justify-content-between align-items-center">
+            <div>
+                <div class="header-title">
+                    <h2 class="card-title">User</h2>
+                    <p>List data</p>
                 </div>
             </div>
+            <div>
+                <a href="{{ url('/admin/user/create') }}" class="btn btn-md 2 btn-primary">
+                    ADD+
+                </a>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
                     <div class="card-body">
                         <br>
                         <div class="table-responsive">
                             <table id="datatable" class="table table-striped" data-toggle="data-table">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Peran</th>
-                                        <th class="text-center">Username</th>
-                                        <th class="text-center">Email</th>
-                                        <th class="text-center">Foto</th>
-                                        <th class="text-center">Dibuat</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Action</th>
+                                        <th>Id</th>
+                                        <th>Peran</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Nama</th>
+                                        <th>Foto</th>
+                                        <th>Dibuat</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -47,20 +48,6 @@
     </div>
 
     <script>
-        function convertStringToDate(str) {
-    var date = new Date(str);
-    let options = {
-        // weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        // hour: "numeric",
-        // minute: "numeric",
-        // second: "numeric"
-    };
-    var newdate = date.toLocaleDateString('id', options);
-    return newdate;
-}
         $('#datatable').DataTable( {
             order: [[ 0, 'asc' ]],
             lengthMenu: [[ 5, 15, 25, 100, -1 ], [ 5, 15, 25, 100, 'All' ]],
@@ -86,29 +73,38 @@
                 },
                 function(json) {
                     callback({
-                            recordsTotal: json.metadata.total_data,
-                            recordsFiltered: json.metadata.total_data,
-                            data: json.data
-                        });
+                        recordsTotal: json.metadata.total_data,
+                        recordsFiltered: json.metadata.total_data,
+                        data: json.data
+                    });
                 });
             },
             columns: [
                 {
+                    data: 'id'
+                },
+                {
                     data: 'level_name',
                     render: function (data, type, row, meta) {
-                        return '<span>' + data.substring(0, 50) + '...</span>';
+                        return '<span style="white-space: normal;">' + data + '</span>';
                     }
                 },
                 {
                     data: 'username',
                     render: function (data, type, row, meta) {
-                        return '<span>' + data.substring(0, 50) + '...</span>';
+                        return '<span style="white-space: normal;">' + data + '</span>';
                     }
                 },
                 {
                     data: 'email',
                     render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data.substring(0, 50) + '...</span>';
+                        return '<span style="white-space: normal;">' + data + '</span>';
+                    }
+                },
+                {
+                    data: 'name',
+                    render: function (data, type, row, meta) {
+                        return '<span style="white-space: normal;">' + data + '</span>';
                     }
                 },
                 {
@@ -118,7 +114,7 @@
                             // Manipulasi path seperti di show
                             var imagePath = "{{ url('/') }}/" + data.replace('/xxx/', '/100/');
                             return '<img src="' + imagePath +
-                                '" alt="User Picture" style="width: 50px; height: 50px; object-fit: cover;">';
+                                '" alt="image-preview" style="width: 50px; height: 50px; object-fit: cover;">';
                         } else {
                             return '<span>No Picture</span>';
                         }
@@ -126,25 +122,22 @@
                 },
                 {
                     data: 'created_at',
-                    className: 'text-center',
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + convertStringToDate(data) + '</span>';
                     }
                 },
                 {
                     data: 'is_active',
-                    className: 'text-center',
                     render: function (data, type, row, meta) {
                         if(data == '1') {
-                            return '<span class="badge bg-success">Aktif</span>';
+                            return '<span class="badge bg-success">Active</span>';
                         } else {
-                            return '<span class="badge bg-danger">Tidak Aktif</span>';
+                            return '<span class="badge bg-danger">Not Active</span>';
                         }
                     }
                 },
                 {
                     data: 'id',
-                    className: 'text-center',
                     render: function (data, type, row, meta) {
                         var btn_detail = `
                             <a href="{{ url("/admin/user/`+data+`") }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
@@ -174,24 +167,24 @@
                                     </svg>
                                 </span>
                             </button>`;
-                        return '<div style="display: flex; align-items: center; justify-content: center;">'+btn_detail+'&nbsp;'+btn_edit+'&nbsp;'+btn_delete+'</div>';
+                        return '<div style="display: flex;">'+btn_detail+'&nbsp;'+btn_edit+'&nbsp;'+btn_delete+'</div>';
                     }
                 }
             ],
             columnDefs: [
-                {targets: [0], width: "30%"},
-                {targets: [1], width: "30%"},
-                {targets: [2], width: "20%"},
-                {targets: [3], width: "20%"},
-                {targets: [4], width: "20%"},
-                {targets: [5], width: "20%"},
-                {targets: [6], width: "20%", orderable: false}
+                {targets: [0], width: "5%"},
+                {targets: [1], width: "25%"},
+                {targets: [2], width: "10%"},
+                {targets: [3], width: "30%"},
+                {targets: [4], width: "10%"},
+                {targets: [5], width: "10%"},
+                {targets: [6], width: "10%", orderable: false}
             ],
         });
 
         function removeData(id) {
             Swal.fire({
-                title: "Kamu yakin ingin menghapus?",
+                title: "Are you sure want to delete?",
                 showDenyButton: true,
                 showCancelButton: false,
                 confirmButtonText: "Yes",
