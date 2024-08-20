@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ApiResource;
-use Illuminate\Http\Request;
 use App\Models\Log;
+use App\Helpers\AppHelper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\ApiResource;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -16,27 +17,27 @@ class DashboardController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function topPage(Request $request)
+     public function topPage(Request $request)
     {
         // query
         $query = Log::groupBy('path')->selectRaw('path, count(*) as total')->orderBy('total', 'desc')->get()->toArray();
 
         $data = [];
         $metadata = [];
-        foreach ($query as $qry) {
+        foreach($query as $qry) {
             $temp = $qry;
             array_push($data, $temp);
         };
 
         // result
-        if ($data) {
+        if($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
 
-    public function topDevice(Request $request)
+     public function topDevice(Request $request)
     {
         // query
         $queryDesktop = Log::selectRaw('count(*) as total')->where('is_desktop', '1')->get();
@@ -65,7 +66,7 @@ class DashboardController extends Controller
         array_push($data, $queryTablet);
 
         // result
-        if ($data) {
+        if($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
@@ -79,33 +80,33 @@ class DashboardController extends Controller
 
         $data = [];
         $metadata = [];
-        foreach ($query as $qry) {
+        foreach($query as $qry) {
             $temp = $qry;
             array_push($data, $temp);
         };
 
         // result
-        if ($data) {
+        if($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
 
-    public function topBrowser(Request $request)
+     public function topBrowser(Request $request)
     {
         // query
         $query = Log::groupBy('browser')->selectRaw('browser, count(*) as total')->orderBy('total', 'desc')->get()->toArray();
 
         $data = [];
         $metadata = [];
-        foreach ($query as $qry) {
+        foreach($query as $qry) {
             $temp = $qry;
             array_push($data, $temp);
         };
 
         // result
-        if ($data) {
+        if($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
@@ -119,19 +120,20 @@ class DashboardController extends Controller
 
         $data = [];
         $metadata = [];
-        foreach ($query as $qry) {
+        foreach($query as $qry) {
             $temp = $qry;
             array_push($data, $temp);
         };
 
         // result
-        if ($data) {
+        if($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
 
+   
     public function topCity(Request $request)
     {
         // query
@@ -139,20 +141,20 @@ class DashboardController extends Controller
 
         $data = [];
         $metadata = [];
-        foreach ($query as $qry) {
+        foreach($query as $qry) {
             $temp = $qry;
             array_push($data, $temp);
         };
 
         // result
-        if ($data) {
+        if($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
 
-    public function accessDaily(Request $request)
+       public function accessDaily(Request $request)
     {
         // query
         $query = DB::select("
@@ -164,21 +166,21 @@ class DashboardController extends Controller
 
         $data = [];
         $metadata = [];
-        foreach ($query as $qry) {
+        foreach($query as $qry) {
             $temp = $qry;
             $temp->dates_indo = \App\Helpers\AppHelper::instance()->convertDateIndo($temp->dates);
             array_push($data, $temp);
         };
 
         // result
-        if ($data) {
+        if($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
 
-    public function accessMonthly(Request $request)
+      public function accessMonthly(Request $request)
     {
         // query
         $query = DB::select("
@@ -190,17 +192,18 @@ class DashboardController extends Controller
 
         $data = [];
         $metadata = [];
-        foreach ($query as $qry) {
+        foreach($query as $qry) {
             $temp = $qry;
             $temp->months_indo = \App\Helpers\AppHelper::instance()->convertMonthIndo($temp->months);
             array_push($data, $temp);
         };
 
         // result
-        if ($data) {
+        if($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
+
 }

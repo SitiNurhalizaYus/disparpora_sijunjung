@@ -101,22 +101,25 @@
                     <a href="{{ url('/beranda') }}"
                         class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
                     <div class="nav-item dropdown me-3">
-                        <a href="#" class="nav-link dropdown-toggle"
-                            data-bs-toggle="dropdown">Profil</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ route('profil', ['slug' => 'struktur-organisasi-dinas']) }}" class="dropdown-item">Struktur
+                            <a href="{{ route('profil', ['slug' => 'struktur-organisasi-dinas']) }}"
+                                class="dropdown-item">Struktur
                                 Organisasi Dinas</a>
-                            <a href="{{ route('profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan Misi</a>
-                            <a href="{{ route('profil', ['slug' => 'tujuan-strategis']) }}" class="dropdown-item">Tujuan Strategis</a>
-                            <a href="{{ route('profil', ['slug' => 'sasaran-strategis']) }}" class="dropdown-item">Sasaran
+                            <a href="{{ route('profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan
+                                Misi</a>
+                            <a href="{{ route('profil', ['slug' => 'tujuan-strategis']) }}"
+                                class="dropdown-item">Tujuan Strategis</a>
+                            <a href="{{ route('profil', ['slug' => 'sasaran-strategis']) }}"
+                                class="dropdown-item">Sasaran
                                 Strategis</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
-                        <a href="#" class="nav-link dropdown-toggle"
-                            data-bs-toggle="dropdown">Publikasi</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Publikasi</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ route('berita.index',['kategori_id' =>2]) }}" class="dropdown-item">Berita</a>
+                            <a href="{{ route('berita.index', ['kategori_id' => 2]) }}"
+                                class="dropdown-item">Berita</a>
                             {{-- <a href="{{ route('produkhukum.index') }}" class="dropdown-item">Produk Hukum</a> --}}
                             <a href="{{ url('/artikel') }}" class="dropdown-item">Artikel</a>
                             <a href="{{ url('/dokumen') }}" class="dropdown-item">Dokumen Publik</a>
@@ -143,14 +146,12 @@
                             <a href="{{ url('/lokawisata/buatan') }}" class="dropdown-item">Wisata Buatan</a>
                         </div>
                     </div>
-                    <a href="{{ url('/hubungikami') }}" class="nav-item nav-link me-3">Hubungi Kami</a>
                     <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
                         data-bs-target="#searchModal">
                         <i class="fa fa-search"></i>
                     </button>
-                    <a href="{{ url('/akun') }}" class="btn btn-primary py-2 px-4 ms-3"><i
-                            class="bi bi-person-fill"></i>
-                        Akun</a>
+                    <a href="{{ url('/hubungikami') }}" class="btn btn-primary py-2 px-4 ms-3">
+                        Hubungi Kami</a>
                 </div>
             </div>
         </nav>
