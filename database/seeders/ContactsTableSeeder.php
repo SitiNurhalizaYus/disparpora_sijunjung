@@ -19,6 +19,7 @@ class ContactsTableSeeder extends Seeder
                 'email' => 'john.doe@example.com',
                 'subject' => 'Pertanyaan tentang Festival',
                 'message' => 'Kapan festival dimulai?',
+                'file_path' => 'path/to/file.pdf',
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

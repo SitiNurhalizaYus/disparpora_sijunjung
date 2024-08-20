@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('arsip_id')->nullable();
             $table->boolean('is_active')->default(1);
             $table->foreignId('created_by');
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

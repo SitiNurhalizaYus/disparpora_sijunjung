@@ -9,7 +9,7 @@ class Content extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'slug', 'content', 'description_short', 'image', 'type', 'category_id', 'arsip_id', 'is_active', 'created_by'
+        'title', 'slug', 'content', 'description_short', 'image', 'type', 'category_id', 'arsip_id', 'is_active', 'created_by','updated_by'
     ];
 
     // Relasi ke kategori

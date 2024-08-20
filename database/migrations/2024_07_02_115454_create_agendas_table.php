@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('organizer');
             $table->string('file_path')->nullable();
             $table->boolean('is_active')->default(1);
-            $table->foreignId('created_by');
+            $table->foreignId('created_by');            
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

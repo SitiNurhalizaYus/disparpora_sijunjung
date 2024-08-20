@@ -9,7 +9,7 @@ class Announcement extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'is_active', 'created_by'];
+    protected $fillable = ['title', 'content', 'is_active','announcement_date','created_by'];
 
     // Relasi ke pengguna yang membuat pengumuman
     public function createdBy()

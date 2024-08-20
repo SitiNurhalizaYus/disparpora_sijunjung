@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             PartnersTableSeeder::class,
             SlidersTableSeeder::class,
             SettingsTableSeeder::class,
+            DocumentCategorySeeder::class,
         ]);
 
         // User::factory()->create([

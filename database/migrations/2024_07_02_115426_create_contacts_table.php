@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('subject');
             $table->text('message');
+            $table->string('file_path')->nullable();
             // default
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(0);

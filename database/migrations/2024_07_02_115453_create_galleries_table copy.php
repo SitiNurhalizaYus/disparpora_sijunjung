@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->foreignId('created_by');
+            $table->integer('updated_by')->nullable();
         });
     }
 
