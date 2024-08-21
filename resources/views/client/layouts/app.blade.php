@@ -75,12 +75,16 @@
                             class="fab fa-facebook-f fw-normal"></i></a>
                     <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
                             class="fab fa-instagram fw-normal"></i></a>
-                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle" href=""><i
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
                             class="fab fa-youtube fw-normal"></i></a>
+                    <!-- Icon Pengaturan untuk login admin-->
+                    <a class="btn btn-md rounded-circle"
+                        href="{{ url('/admin/login') }}"><i class="bi bi-gear"></i></a>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Topbar End -->
 
 
