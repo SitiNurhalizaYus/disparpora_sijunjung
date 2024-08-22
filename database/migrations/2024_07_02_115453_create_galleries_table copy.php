@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('title');
             $table->enum('type', ['gambar', 'video']);
             $table->string('file_path');
-            $table->boolean('is_active')->default(1);
+            // default
+            $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
-            $table->foreignId('created_by');
+            $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
         });
     }

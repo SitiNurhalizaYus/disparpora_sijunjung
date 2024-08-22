@@ -18,10 +18,12 @@ return new class extends Migration
             $table->date('event_date');
             $table->string('organizer');
             $table->string('file_path')->nullable();
-            $table->boolean('is_active')->default(1);
-            $table->foreignId('created_by');            
-            $table->integer('updated_by')->nullable();
+            // default
+            $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
         });
     }
 

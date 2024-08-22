@@ -45,9 +45,9 @@
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                                     <div class="card-header bg-primary text-white"><strong>Slider Information</strong></div>
                                     <div class="card-body">
-                                        <h5 class="card-title"><span id="name"></span></h5>
-                                        <p class="card-text">Deskripsi: <br><span id="description"></span></p>
-                                        <p class="card-text">Link: <br><a href="#" id="link"></a></p>
+                                        <h4 class="card-title"><span id="name"></span></h4>
+                                        <p class="card-text"><h6>Deskripsi: </h6><span id="description"></span></p>
+                                        <p class="card-text"><h6>Link: </h6><a href="#" id="link"></a></p>
                                     </div>
                                 </div>
                             </div>
@@ -55,9 +55,9 @@
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                                     <div class="card-header bg-secondary text-white"><strong>Additional Details</strong></div>
                                     <div class="card-body">
-                                        <p class="card-text ">Catatan: <br><span id="notes"></span></p>
-                                        <p class="card-text">Status: <br><span id="is_active"></span></p>
-                                        <p class="card-text">Dibuat: <br><span id="created_at"></span></p>
+                                        <p class="card-text"><h6>Catatan: </h6><span id="notes"></span></p>
+                                        <p class="card-text"><h6>Status: </h6><span id="is_active"></span></p>
+                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_at"></span></p>
                                     </div>
                                 </div>
                             </div>

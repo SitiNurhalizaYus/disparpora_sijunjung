@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->boolean('is_active')->default(1);
             $table->date('announcement_date')->nullable();
-            $table->foreignId('created_by');
-            $table->integer('updated_by')->nullable();
+            // default
+            $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
         });
     }
 

@@ -1,30 +1,25 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="conatiner-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="flex-wrap d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="header-title">
-                                    <h2 class="card-title">Partner</h2>
-                                    <p>List data</p>
-                                </div>
-                            </div>
-                            <div>
-                                <a href="{{ url("/admin/partner/create") }}" class="btn btn-md btn-success">
-                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12.0001 8.32739V15.6537" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M15.6668 11.9904H8.3335" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.6857 2H7.31429C4.04762 2 2 4.31208 2 7.58516V16.4148C2 19.6879 4.0381 22 7.31429 22H16.6857C19.9619 22 22 19.6879 22 16.4148V7.58516C22 4.31208 19.9619 2 16.6857 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                    Tambah Data
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+<div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="card-header mb-2 px-3">
+        <div class="flex-wrap d-flex justify-content-between align-items-center">
+            <div>
+                <div class="header-title">
+                    <h2 class="card-title">Mitra</h2>
+                    <p>List data</p>
+                </div>
+            </div>
+            <div>
+                <a href="{{ url('/admin/partner/create') }}" class="btn btn-md 2 btn-primary">
+                    ADD+
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
                     <div class="card-body">
                         <br>
                         <div class="table-responsive">
@@ -32,10 +27,10 @@
                                 <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Name</th>
+                                        <th>Nama</th>
                                         <th>Link</th>
-                                        <th>Image</th>
-                                        <th>Created At</th>
+                                        <th>Gambar</th>
+                                        <th>Dibuat</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>

@@ -16,7 +16,12 @@ return new class extends Migration
         Schema::create('document_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            // default
+            $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
         });
     }
 
