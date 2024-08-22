@@ -104,7 +104,7 @@
                         <hr class="hr-horizontal" style="background-color: white">
                     </li>
 
-                    {{-- kelola konten --}}
+                    {{-- Kelola Konten --}}
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#kelola-konten-menu" role="button"
                             aria-expanded="false" aria-controls="kelola-konten-menu">
@@ -134,57 +134,67 @@
                                 str_contains($menu, 'berita') ||
                                 str_contains($menu, 'artikel')) show @endif"
                             id="kelola-konten-menu" data-bs-parent="#sidebar-menu">
+
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'slider')) active @endif"
                                     aria-current="page" href="{{ url('/admin/slider') }}">
                                     <i class="icon">
-                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="4" cy="4" r="4" fill="currentColor"/>
-                                          </svg>
+                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="4" cy="4" r="4" fill="currentColor" />
+                                        </svg>
                                     </i>
                                     <span class="item-name">Slider</span>
                                 </a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'partner')) active @endif"
                                     href="{{ url('/admin/partner') }}">
                                     <i class="icon">
-                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="4" cy="4" r="4" fill="currentColor"/>
-                                          </svg>
+                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="4" cy="4" r="4" fill="currentColor" />
+                                        </svg>
                                     </i>
                                     <span class="item-name">Partner</span>
                                 </a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'profil')) active @endif"
-                                    href="{{ url('/admin/profil') }}">
+                                    href="{{ route('admin.content.index', ['type' => 'profil']) }}">
                                     <i class="icon">
-                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="4" cy="4" r="4" fill="currentColor"/>
-                                          </svg>
+                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="4" cy="4" r="4" fill="currentColor" />
+                                        </svg>
                                     </i>
                                     <span class="item-name">Profil</span>
                                 </a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'berita')) active @endif"
-                                    href="{{ url('/admin/berita') }}">
+                                    href="{{ route('admin.content.index', ['type' => 'berita']) }}">
                                     <i class="icon">
-                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="4" cy="4" r="4" fill="currentColor"/>
-                                          </svg>
+                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="4" cy="4" r="4" fill="currentColor" />
+                                        </svg>
                                     </i>
                                     <span class="item-name">Berita</span>
                                 </a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'artikel')) active @endif"
-                                    href="{{ url('/admin/artikel') }}">
+                                    href="{{ route('admin.content.index', ['type' => 'artikel']) }}">
                                     <i class="icon">
-                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="4" cy="4" r="4" fill="currentColor"/>
-                                          </svg>
+                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
+                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="4" cy="4" r="4" fill="currentColor" />
+                                        </svg>
                                     </i>
                                     <span class="item-name">Artikel</span>
                                 </a>

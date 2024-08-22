@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::apiResource('big_number', App\Http\Controllers\Api\BigNumberController::class);
     Route::apiResource('content', App\Http\Controllers\Api\ContentController::class);//api untuk konten
+    Route::apiResource('admin', App\Http\Controllers\Api\ContentController::class);//api untuk admin
     // Route::apiResource('faq', App\Http\Controllers\Api\FaqController::class);
 
     // Route::apiResource('category', App\Http\Controllers\Api\Conten::class);//api untuk kategori

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -7,106 +8,86 @@ use App\Models\Content;
 
 class ContentController extends Controller
 {
-    public function index()
+    public function __construct()
+    {
+    }
+
+    public function index($type)
     {
         $has_session = \App\Helpers\AppHelper::instance()->checkSession();
 
-        if ($has_session) {
+        if($has_session) {
             $data = [];
-            $data['profil'] = Content::where('type', 'profil')->get();
-            $data['artikel'] = Content::with(['category', 'arsip'])->where('type', 'artikel')->get();
-            $data['berita'] = Content::with(['category', 'arsip'])->where('type', 'berita')->get();
             $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-            $data['menu'] = 'content-list';
+            $data['menu'] = $type . '-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-            return view('admin.content.index', $data);
+            $data['contents'] = Content::where('type', $type)->paginate(10);
+            $data['type'] = $type;
+
+            return view('admin.contents.index', $data);
         } else {
             session()->flash('message', 'Session expired.');
             return redirect()->route('admin.login');
         }
     }
 
-    public function show($id)
+    public function show($type, $id)
     {
-        $content = Content::with(['category', 'arsip'])->findOrFail($id);
+        $has_session = \App\Helpers\AppHelper::instance()->checkSession();
 
-        if ($content->type === 'profil') {
-            $content->load([]);
+        if($has_session) {
+            $data = [];
+            $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+            $data['menu'] = $type . '-show';
+            $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
+            $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+            $data['content'] = Content::findOrFail($id);
+            $data['type'] = $type;
+
+            return view('admin.contents.show', $data);
+        } else {
+            session()->flash('message', 'Session expired.');
+            return redirect()->route('admin.login');
         }
-
-        $data = [];
-        $data['content'] = $content;
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'content-show';
-        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        return view('admin.content.show', $data);
     }
 
-    public function create()
+    public function create($type)
     {
-        $data = [];
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'content-create';
-        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        return view('admin.content.create', $data);
-    }
+        $has_session = \App\Helpers\AppHelper::instance()->checkSession();
 
-    public function edit($id)
-    {
-        $content = Content::with(['category', 'arsip'])->findOrFail($id);
+        if($has_session) {
+            $data = [];
+            $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+            $data['menu'] = $type . '-create';
+            $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
+            $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+            $data['type'] = $type;
 
-        if ($content->type === 'profil') {
-            $content->load([]);
+            return view('admin.contents.create', $data);
+        } else {
+            session()->flash('message', 'Session expired.');
+            return redirect()->route('admin.login');
         }
-
-        $data = [];
-        $data['content'] = $content;
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'content-edit';
-        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        return view('admin.content.edit', $data);
     }
 
-    public function store(Request $request)
+    public function edit($type, $id)
     {
-        $request->validate([
-            'title' => 'required',
-            'slug' => 'required|unique:contents',
-            'content' => 'required',
-            'type' => 'required|in:berita,artikel,profil',
-            'is_active' => 'boolean',
-        ]);
+        $has_session = \App\Helpers\AppHelper::instance()->checkSession();
 
-        $content = Content::create($request->all());
+        if($has_session) {
+            $data = [];
+            $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+            $data['menu'] = $type . '-edit';
+            $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
+            $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+            $data['content'] = Content::findOrFail($id);
+            $data['type'] = $type;
 
-        return redirect()->route('admin.content.index')->with('success', 'Konten berhasil ditambahkan.');
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required',
-            'slug' => 'required|unique:contents,slug,' . $id,
-            'content' => 'required',
-            'type' => 'required|in:berita,artikel,profil',
-            'is_active' => 'boolean',
-        ]);
-
-        $content = Content::findOrFail($id);
-        $content->update($request->all());
-
-        return redirect()->route('admin.content.index')->with('success', 'Konten berhasil diperbarui.');
-    }
-
-    public function destroy($id)
-    {
-        $content = Content::findOrFail($id);
-        $content->delete();
-
-        return redirect()->route('admin.content.index')->with('success', 'Konten berhasil dihapus.');
+            return view('admin.contents.edit', $data);
+        } else {
+            session()->flash('message', 'Session expired.');
+            return redirect()->route('admin.login');
+        }
     }
 }
