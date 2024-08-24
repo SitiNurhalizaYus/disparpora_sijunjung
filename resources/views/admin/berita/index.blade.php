@@ -6,14 +6,12 @@
             <div class="flex-wrap d-flex justify-content-between align-items-center">
                 <div>
                     <div class="header-title">
-                        <h2 class="card-title">{{ ucfirst($type) }} List</h2>
-                        <p>List data {{ ucfirst($type) }}</p>
+                        <h2 class="card-title">Berita List</h2>
+                        <p>List data berita</p>
                     </div>
                 </div>
                 <div>
-                    <a href="{{ route('admin.content.create', ['type' => $type]) }}" class="btn btn-md btn-primary">
-                        ADD+
-                    </a>
+                    <a href="{{ url('/admin/profil/create')}} class="btn btn-md btn-primary">ADD+</a>
                 </div>
             </div>
         </div>
@@ -28,6 +26,8 @@
                                     <tr>
                                         <th class="text-center">Id</th>
                                         <th class="text-center">Judul</th>
+                                        <th class="text-center">Kategori</th>
+                                        <th class="text-center">Arsip</th>
                                         <th class="text-center">Deskripsi Singkat</th>
                                         <th class="text-center">Gambar</th>
                                         <th class="text-center">Dibuat</th>
@@ -75,7 +75,7 @@
                             page: (data.start / data.length) + 1,
                             sort: sort_col_name + ':' + sort_col_order,
                             search: data.search.value,
-                            type: '{{ $type }}'
+                            type: 'berita' // Tipe konten berita
                         },
                         function(json) {
                             callback({
@@ -83,15 +83,15 @@
                                 recordsFiltered: json.metadata.total_data,
                                 data: json.data
                             });
-                        }).fail(function(xhr, status, error) {
-                        console.log(xhr.responseText); // Debugging response
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Terjadi kesalahan saat memuat data.",
-                            confirmButtonColor: '#3A57E8',
+                        })
+                        .fail(function() {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Terjadi kesalahan saat memuat data.",
+                                confirmButtonColor: '#3A57E8',
+                            });
                         });
-                    });
                 },
                 columns: [{
                         data: 'id',
@@ -101,6 +101,20 @@
                         data: 'title',
                         render: function(data) {
                             return '<span style="white-space: normal;">' + data + '</span>';
+                        }
+                    },
+                    {
+                        data: 'category.name',
+                        className: 'text-center',
+                        render: function(data) {
+                            return data ? data : 'Tidak Ada Kategori';
+                        }
+                    },
+                    {
+                        data: 'arsip.name',
+                        className: 'text-center',
+                        render: function(data) {
+                            return data ? data : 'Tidak Ada Arsip';
                         }
                     },
                     {
@@ -144,15 +158,16 @@
                         data: 'id',
                         render: function(data, type, row, meta) {
                             var btn_detail = `
-                            <a href="{{ url('/admin/content/`+data+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
+                            <a href="{{ url('/admin/berita/` + data + `') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>                                    <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
+                                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
                             </a>`;
                             var btn_edit = `
-                            <a href="{{ url('/admin/content/`+data+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
+                            <a href="{{ url('/admin/berita/` + data + `') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -172,8 +187,7 @@
                                 </span>
                             </button>`;
                             return '<div style="display: flex;">' + btn_detail + '&nbsp;' +
-                                btn_edit +
-                                '&nbsp;' + btn_delete + '</div>';
+                                btn_edit + '&nbsp;' + btn_delete + '</div>';
                         }
                     }
                 ],
@@ -183,11 +197,11 @@
                     },
                     {
                         targets: [1],
-                        width: "25%"
+                        width: "20%"
                     },
                     {
                         targets: [2],
-                        width: "30%"
+                        width: "10%"
                     },
                     {
                         targets: [3],
@@ -195,7 +209,7 @@
                     },
                     {
                         targets: [4],
-                        width: "10%"
+                        width: "20%"
                     },
                     {
                         targets: [5],
@@ -203,6 +217,10 @@
                     },
                     {
                         targets: [6],
+                        width: "10%"
+                    },
+                    {
+                        targets: [7],
                         width: "10%",
                         orderable: false
                     }
@@ -226,7 +244,7 @@
                         }
                     });
                     $.ajax({
-                        url: '{{ url('/api/content') }}/' + id + '?type={{ $type }}',
+                        url: '{{ url('/api/content') }}/' + id + '?type=berita',
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",

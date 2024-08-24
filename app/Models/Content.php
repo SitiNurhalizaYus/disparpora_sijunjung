@@ -12,6 +12,12 @@ class Content extends Model
         'title', 'slug', 'content', 'description_short', 'image', 'type', 'category_id', 'arsip_id', 'is_active', 'created_by','updated_by'
     ];
 
+    // Definisi atribut enum untuk konten
+    const TYPE_PROFIL = 'profil';
+    const TYPE_BERITA = 'berita';
+    const TYPE_ARTIKEL = 'artikel';
+
+    // Relasi ke kategori
     // Relasi ke kategori
     public function category()
     {

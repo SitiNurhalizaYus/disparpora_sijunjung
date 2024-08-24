@@ -56,28 +56,10 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('bignumber', App\Http\Controllers\Admin\BigNumberController::class);
     Route::resource('team', App\Http\Controllers\Admin\TeamController::class);
     Route::resource('partner', App\Http\Controllers\Admin\PartnerController::class);
+    Route::resource('profil', App\Http\Controllers\Admin\ProfilController::class);
+    Route::resource('berita', App\Http\Controllers\Admin\BeritaController::class);
+    Route::resource('artikel', App\Http\Controllers\Admin\ArtikelController::class);
     Route::resource('setting', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('user', App\Http\Controllers\Admin\UserController::class);
-
-    // Rute untuk menampilkan daftar konten berdasarkan tipe (profil, berita, artikel)
-    Route::get('/content/{type}', [App\Http\Controllers\Admin\ContentController::class, 'index'])->name('admin.content.index');
-
-    // Rute untuk menampilkan form tambah konten berdasarkan tipe
-    Route::get('/content/{type}/create', [App\Http\Controllers\Admin\ContentController::class, 'create'])->name('admin.content.create');
-
-    // Rute untuk menyimpan konten baru berdasarkan tipe
-    Route::post('/content/{type}', [App\Http\Controllers\Admin\ContentController::class, 'store'])->name('admin.content.store');
-
-    // Rute untuk menampilkan detail konten berdasarkan tipe dan id
-    Route::get('/content/{type}/{id}', [App\Http\Controllers\Admin\ContentController::class, 'show'])->name('admin.content.show');
-
-    // Rute untuk menampilkan form edit konten berdasarkan tipe dan id
-    Route::get('/content/{type}/{id}/edit', [App\Http\Controllers\Admin\ContentController::class, 'edit'])->name('admin.content.edit');
-
-    // Rute untuk memperbarui konten berdasarkan tipe dan id
-    Route::put('/content/{type}/{id}', [App\Http\Controllers\Admin\ContentController::class, 'update'])->name('admin.content.update');
-
-    // Rute untuk menghapus konten berdasarkan tipe dan id
-    Route::delete('/content/{type}/{id}', [App\Http\Controllers\Admin\ContentController::class, 'destroy'])->name('admin.content.destroy');
 
 });

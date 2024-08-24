@@ -163,7 +163,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'profil')) active @endif"
-                                    href="{{ route('admin.content.index', ['type' => 'profil']) }}">
+                                    aria-current="page" href="{{ url('/admin/profil') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -176,7 +176,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'berita')) active @endif"
-                                    href="{{ route('admin.content.index', ['type' => 'berita']) }}">
+                                    href="{{ url('/admin/berita') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -189,7 +189,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'artikel')) active @endif"
-                                    href="{{ route('admin.content.index', ['type' => 'artikel']) }}">
+                                    href="{{ url('/admin/artikel') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -199,6 +199,7 @@
                                     <span class="item-name">Artikel</span>
                                 </a>
                             </li>
+
                         </ul>
                     </li>
 

@@ -208,7 +208,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/api/content',
+                    url: '/api/content?type=profil',  // Perbaikan URL untuk memastikan bahwa data tersimpan sebagai tipe profil
                     type: "POST",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",

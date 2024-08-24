@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Models\Content;
 
 class BeritaController extends Controller
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function index()
     {
@@ -20,17 +22,7 @@ class BeritaController extends Controller
             $data['menu'] = 'berita-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-
-            // Mengambil data berita dari API
-            $response = Http::withToken($data['session_token'])->get(url('/api/content?type=berita'));
-
-            if ($response->successful()) {
-                $data['contents'] = $response->json()['data']; // Data berita dari API
-            } else {
-                $data['contents'] = [];
-                session()->flash('message', 'Gagal mengambil data.');
-            }
-
+            $data['contents'] = Content::where('type', Content::TYPE_BERITA)->paginate(10); // Fetching berita content
             return view('admin.berita.index', $data);
         } else {
             session()->flash('message', 'Session expired.');
@@ -38,93 +30,35 @@ class BeritaController extends Controller
         }
     }
 
-    public function show($id)
-    {
-        $data = [];
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-
-        $response = Http::withToken($data['session_token'])->get(url("/api/content/{$id}"));
-
-        if ($response->successful()) {
-            $data['content'] = $response->json()['data'];
-            return view('admin.berita.show', $data);
-        } else {
-            session()->flash('error', 'Data tidak ditemukan.');
-            return redirect()->route('admin.berita.index');
-        }
-    }
-
     public function create()
     {
         $data = [];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['menu'] = 'berita-create';
+        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         return view('admin.berita.create', $data);
-    }
-
-    public function store(Request $request)
-    {
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-
-        $response = Http::withToken($data['session_token'])->post(url('/api/content'), [
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'type' => 'berita',
-            'description_short' => $request->input('description_short'),
-            'image' => $request->input('image'),
-            'category_id' => $request->input('category_id'),
-            'arsip_id' => $request->input('arsip_id'),
-            'is_active' => $request->input('is_active'),
-        ]);
-
-        if ($response->successful()) {
-            session()->flash('success', 'Data berhasil ditambahkan');
-            return redirect()->route('admin.berita.index');
-        } else {
-            session()->flash('error', 'Gagal menambahkan data.');
-            return redirect()->route('admin.berita.create');
-        }
     }
 
     public function edit($id)
     {
         $data = [];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['menu'] = 'berita-edit';
+        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-
-        $response = Http::withToken($data['session_token'])->get(url("/api/content/{$id}"));
-
-        if ($response->successful()) {
-            $data['content'] = $response->json()['data'];
-            return view('admin.berita.edit', $data);
-        } else {
-            session()->flash('error', 'Data tidak ditemukan.');
-            return redirect()->route('admin.berita.index');
-        }
+        $data['content'] = Content::where('type', Content::TYPE_BERITA)->findOrFail($id); // Fetching berita content by id
+        return view('admin.berita.edit', $data);
     }
 
-    public function update(Request $request, $id)
+    public function show($id)
     {
+        $data = [];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['menu'] = 'berita-show';
+        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-
-        $response = Http::withToken($data['session_token'])->put(url("/api/content/{$id}"), [
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'type' => 'berita',
-            'description_short' => $request->input('description_short'),
-            'image' => $request->input('image'),
-            'category_id' => $request->input('category_id'),
-            'arsip_id' => $request->input('arsip_id'),
-            'is_active' => $request->input('is_active'),
-        ]);
-
-        if ($response->successful()) {
-            session()->flash('success', 'Data berhasil diperbarui');
-            return redirect()->route('admin.berita.index');
-        } else {
-            session()->flash('error', 'Gagal memperbarui data.');
-            return redirect()->route('admin.berita.edit', $id);
-        }
+        $data['content'] = Content::where('type', Content::TYPE_BERITA)->findOrFail($id); // Fetching berita content by id
+        return view('admin.berita.show', $data);
     }
-
-
-    // Tambahkan metode lainnya seperti create, show, edit yang juga akan memanggil API dengan type=berita
 }

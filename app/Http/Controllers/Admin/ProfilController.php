@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use App\Models\Content;
 
 class ProfilController extends Controller
 {
-    public function __construct() {}
+    public function __construct()
+    {
+        
+    }
 
     public function index()
     {
@@ -21,17 +23,7 @@ class ProfilController extends Controller
             $data['menu'] = 'profil-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-
-            // Mengambil data dari API
-            $response = Http::withToken($data['session_token'])->get(url('/api/content?type=profil'));
-
-            if ($response->successful()) {
-                $data['contents'] = $response->json()['data']; // Data profil dari API
-            } else {
-                $data['contents'] = [];
-                session()->flash('message', 'Gagal mengambil data.');
-            }
-
+            $data['contents'] = Content::where('type', Content::TYPE_PROFIL)->paginate(10); // Hanya mengambil konten dengan tipe 'profil'
             return view('admin.profil.index', $data);
         } else {
             session()->flash('message', 'Session expired.');
@@ -39,91 +31,82 @@ class ProfilController extends Controller
         }
     }
 
-    // Show untuk menampilkan detail data profil dari API
-    public function show($id)
-    {
-        $data = [];
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-
-        $response = Http::withToken($data['session_token'])->get(url("/api/content/{$id}"));
-
-        if ($response->successful()) {
-            $data['content'] = $response->json()['data'];
-            return view('admin.profil.show', $data);
-        } else {
-            session()->flash('error', 'Data tidak ditemukan.');
-            return redirect()->route('admin.profil.index');
-        }
-    }
-
-    // Create untuk menampilkan form tambah data profil
     public function create()
     {
         $data = [];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['menu'] = 'profil-create';
+        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         return view('admin.profil.create', $data);
     }
 
-    // Store untuk menambahkan data baru ke API
     public function store(Request $request)
     {
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-
-        $response = Http::withToken($data['session_token'])->post(url('/api/content'), [
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'type' => 'profil',
-            'description_short' => $request->input('description_short'),
-            'image' => $request->input('image'),
-            'is_active' => $request->input('is_active'),
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required',
+            'slug' => 'required|unique:contents,slug',
+            'is_active' => 'boolean',
         ]);
 
-        if ($response->successful()) {
-            session()->flash('success', 'Data berhasil ditambahkan');
-            return redirect()->route('admin.profil.index');
-        } else {
-            session()->flash('error', 'Gagal menambahkan data.');
-            return redirect()->route('admin.profil.create');
-        }
+        $data = $request->all();
+        $data['type'] = 'profil'; // Mengatur tipe sebagai profil
+
+        Content::create($data);
+
+        session()->flash('message', 'Profil berhasil ditambahkan.');
+        return redirect()->route('admin.profil.index');
     }
 
-    // Edit untuk menampilkan form edit data profil
     public function edit($id)
     {
         $data = [];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['menu'] = 'profil-edit';
+        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+        $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id);
 
-        $response = Http::withToken($data['session_token'])->get(url("/api/content/{$id}"));
-
-        if ($response->successful()) {
-            $data['content'] = $response->json()['data'];
-            return view('admin.profil.edit', $data);
-        } else {
-            session()->flash('error', 'Data tidak ditemukan.');
-            return redirect()->route('admin.profil.index');
-        }
+        return view('admin.profil.edit', $data);
     }
 
-    // Update untuk menyimpan perubahan data profil ke API
     public function update(Request $request, $id)
     {
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+        $content = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id);
 
-        $response = Http::withToken($data['session_token'])->put(url("/api/content/{$id}"), [
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'type' => 'profil',
-            'description_short' => $request->input('description_short'),
-            'image' => $request->input('image'),
-            'is_active' => $request->input('is_active'),
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required',
+            'slug' => 'required|unique:contents,slug,' . $content->id,
+            'is_active' => 'boolean',
         ]);
 
-        if ($response->successful()) {
-            session()->flash('success', 'Data berhasil diperbarui');
-            return redirect()->route('admin.profil.index');
-        } else {
-            session()->flash('error', 'Gagal memperbarui data.');
-            return redirect()->route('admin.profil.edit', $id);
-        }
+        $data = $request->all();
+        $content->update($data);
+
+        session()->flash('message', 'Profil berhasil diperbarui.');
+        return redirect()->route('admin.profil.index');
+    }
+
+    public function show($id)
+    {
+        $data = [];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['menu'] = 'profil-show';
+        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
+        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+        $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id);
+
+        return view('admin.profil.show', $data);
+    }
+
+    public function destroy($id)
+    {
+        $content = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id);
+        $content->delete();
+
+        session()->flash('message', 'Profil berhasil dihapus.');
+        return redirect()->route('admin.profil.index');
     }
 }

@@ -17,38 +17,42 @@ use Illuminate\Support\Facades\Route;
 
 
 // Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function () {
-    Route::post('login', App\Http\Controllers\Api\LoginController::class);
+Route::post('login', App\Http\Controllers\Api\LoginController::class);
 
-    Route::apiResource('big_number', App\Http\Controllers\Api\BigNumberController::class);
-    Route::apiResource('content', App\Http\Controllers\Api\ContentController::class);//api untuk konten
-    Route::apiResource('admin', App\Http\Controllers\Api\ContentController::class);//api untuk admin
-    // Route::apiResource('faq', App\Http\Controllers\Api\FaqController::class);
+Route::apiResource('big_number', App\Http\Controllers\Api\BigNumberController::class); 
+Route::apiResource('content', App\Http\Controllers\Api\ContentController::class);
+// Profil
+Route::apiResource('profil', App\Http\Controllers\Api\ProfilController::class);
+// Berita
+Route::apiResource('berita', App\Http\Controllers\Api\BeritaController::class);
+// Artikel
+Route::apiResource('artikel', App\Http\Controllers\Api\ArtikelController::class);
+// Route::apiResource('faq', App\Http\Controllers\Api\FaqController::class);
 
-    // Route::apiResource('category', App\Http\Controllers\Api\Conten::class);//api untuk kategori
-    Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class);//api untuk arsip
-    Route::apiResource('event', App\Http\Controllers\Api\EventController::class);//api untuk event
-    // Route::apiResource('pesan', App\Http\Controllers\Api\PesanController::class);//api untuk pesan
-    
-    Route::apiResource('agent', App\Http\Controllers\Api\AgentController::class);//api untuk agent
-    // Route::apiResource('info_tempat', App\Http\Controllers\Api\TempatController::class);//api untuk tempat
+// Route::apiResource('category', App\Http\Controllers\Api\Conten::class);//api untuk kategori
+Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class); //api untuk arsip
+Route::apiResource('event', App\Http\Controllers\Api\EventController::class); //api untuk event
+// Route::apiResource('pesan', App\Http\Controllers\Api\PesanController::class);//api untuk pesan
 
-    Route::apiResource('upload', App\Http\Controllers\Api\UploadController::class);
-    Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
-    Route::apiResource('user_level', App\Http\Controllers\Api\userLevelController::class);
-    Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
+Route::apiResource('agent', App\Http\Controllers\Api\AgentController::class); //api untuk agent
+// Route::apiResource('info_tempat', App\Http\Controllers\Api\TempatController::class);//api untuk tempat
 
-    Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class);
-    Route::apiResource('slider', App\Http\Controllers\Api\SliderController::class);
-    Route::apiResource('team', App\Http\Controllers\Api\TeamController::class);
-    Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
+Route::apiResource('upload', App\Http\Controllers\Api\UploadController::class);
+Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
+Route::apiResource('user_level', App\Http\Controllers\Api\userLevelController::class);
+Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
 
-    Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
-    Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);
-    Route::get('dashboard/top-os', [App\Http\Controllers\Api\DashboardController::class, 'topOs']);
-    Route::get('dashboard/top-browser', [App\Http\Controllers\Api\DashboardController::class, 'topBrowser']);
-    Route::get('dashboard/top-country', [App\Http\Controllers\Api\DashboardController::class, 'topCountry']);
-    Route::get('dashboard/top-city', [App\Http\Controllers\Api\DashboardController::class, 'topCity']);
-    Route::get('dashboard/access-daily', [App\Http\Controllers\Api\DashboardController::class, 'accessDaily']);
-    Route::get('dashboard/access-monthly', [App\Http\Controllers\Api\DashboardController::class, 'accessMonthly']);
+Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class);
+Route::apiResource('slider', App\Http\Controllers\Api\SliderController::class);
+Route::apiResource('team', App\Http\Controllers\Api\TeamController::class);
+Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
+
+Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
+Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);
+Route::get('dashboard/top-os', [App\Http\Controllers\Api\DashboardController::class, 'topOs']);
+Route::get('dashboard/top-browser', [App\Http\Controllers\Api\DashboardController::class, 'topBrowser']);
+Route::get('dashboard/top-country', [App\Http\Controllers\Api\DashboardController::class, 'topCountry']);
+Route::get('dashboard/top-city', [App\Http\Controllers\Api\DashboardController::class, 'topCity']);
+Route::get('dashboard/access-daily', [App\Http\Controllers\Api\DashboardController::class, 'accessDaily']);
+Route::get('dashboard/access-monthly', [App\Http\Controllers\Api\DashboardController::class, 'accessMonthly']);
 // });
-
