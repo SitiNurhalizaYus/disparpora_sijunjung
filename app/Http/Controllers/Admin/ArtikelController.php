@@ -40,25 +40,25 @@ class ArtikelController extends Controller
         return view('admin.artikel.create', $data);
     }
 
-    public function edit($id)
+    public function edit($id_content)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'artikel-edit';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['content'] = Content::where('type', Content::TYPE_ARTIKEL)->findOrFail($id); // Fetching artikel content by id
+        $data['content'] = Content::where('type', Content::TYPE_ARTIKEL)->findOrFail($id_content); // Fetching artikel content by id_content
         return view('admin.artikel.edit', $data);
     }
 
-    public function show($id)
+    public function show($id_content)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'artikel-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['content'] = Content::where('type', Content::TYPE_ARTIKEL)->findOrFail($id); // Fetching artikel content by id
+        $data['content'] = Content::where('type', Content::TYPE_ARTIKEL)->findOrFail($id_content); // Fetching artikel content by id_content
         return view('admin.artikel.show', $data);
     }
 }

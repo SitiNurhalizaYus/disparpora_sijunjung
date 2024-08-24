@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Content extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'id_content';
     protected $fillable = [
         'title', 'slug', 'content', 'description_short', 'image', 'type', 'category_id', 'arsip_id', 'is_active', 'created_by','updated_by'
     ];
@@ -34,5 +35,9 @@ class Content extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

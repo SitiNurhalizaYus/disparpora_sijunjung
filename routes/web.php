@@ -30,10 +30,6 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail'])->name('profil');
     Route::get('/berita', [App\Http\Controllers\Client\BeritaController::class, 'index'])->name('berita.index');
     Route::get('/berita/{slug}', [App\Http\Controllers\Client\BeritaController::class, 'detail'])->name('berita.detail');
-    Route::get('/berita/label/{kategoriId}/{labelId}', [\App\Http\Controllers\Client\BeritaController::class, 'showByLabel'])->name('berita.label');
-    Route::get('/berita/arsip/{year}/{month}', [\App\Http\Controllers\Client\BeritaController::class, 'showByArsip'])->name('berita.arsip');
-
-
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {

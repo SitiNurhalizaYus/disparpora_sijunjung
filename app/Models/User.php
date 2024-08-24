@@ -61,11 +61,16 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
     
-
-    // Relasi ke konten yang dibuat pengguna
-    public function contents()
+    // Relasi ke Konten yang dibuat oleh user
+    public function createdContents()
     {
         return $this->hasMany(Content::class, 'created_by');
+    }
+
+    // Relasi ke Konten yang diperbarui oleh user
+    public function updatedContents()
+    {
+        return $this->hasMany(Content::class, 'updated_by');
     }
 
     // Relasi ke pengaturan yang dibuat pengguna

@@ -59,26 +59,26 @@ class ProfilController extends Controller
         return redirect()->route('admin.profil.index');
     }
 
-    public function edit($id)
+    public function edit($id_content)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'profil-edit';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id);
+        $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
 
         return view('admin.profil.edit', $data);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_content)
     {
-        $content = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id);
+        $content = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
 
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
-            'slug' => 'required|unique:contents,slug,' . $content->id,
+            'slug' => 'required|unique:contents,slug,' . $content->id_content,
             'is_active' => 'boolean',
         ]);
 
@@ -89,21 +89,21 @@ class ProfilController extends Controller
         return redirect()->route('admin.profil.index');
     }
 
-    public function show($id)
+    public function show($id_content)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'profil-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id);
+        $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
 
         return view('admin.profil.show', $data);
     }
 
-    public function destroy($id)
+    public function destroy($id_content)
     {
-        $content = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id);
+        $content = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
         $content->delete();
 
         session()->flash('message', 'Profil berhasil dihapus.');

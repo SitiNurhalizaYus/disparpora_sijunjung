@@ -32,7 +32,7 @@ class ContentController extends Controller
         }
     }
 
-    public function show($type, $id)
+    public function show($type, $id_content)
     {
         $has_session = \App\Helpers\AppHelper::instance()->checkSession();
 
@@ -42,7 +42,7 @@ class ContentController extends Controller
             $data['menu'] = $type . '-show';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-            $data['content'] = Content::findOrFail($id);
+            $data['content'] = Content::findOrFail($id_content);
             $data['type'] = $type;
 
             return view('admin.contents.show', $data);
@@ -71,7 +71,7 @@ class ContentController extends Controller
         }
     }
 
-    public function edit($type, $id)
+    public function edit($type, $id_content)
     {
         $has_session = \App\Helpers\AppHelper::instance()->checkSession();
 
@@ -81,7 +81,7 @@ class ContentController extends Controller
             $data['menu'] = $type . '-edit';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-            $data['content'] = Content::findOrFail($id);
+            $data['content'] = Content::findOrFail($id_content);
             $data['type'] = $type;
 
             return view('admin.contents.edit', $data);

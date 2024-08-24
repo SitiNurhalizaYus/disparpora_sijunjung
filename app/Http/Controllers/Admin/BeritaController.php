@@ -40,25 +40,25 @@ class BeritaController extends Controller
         return view('admin.berita.create', $data);
     }
 
-    public function edit($id)
+    public function edit($id_content)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'berita-edit';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['content'] = Content::where('type', Content::TYPE_BERITA)->findOrFail($id); // Fetching berita content by id
+        $data['content'] = Content::where('type', Content::TYPE_BERITA)->findOrFail($id_content); // Fetching berita content by id_content
         return view('admin.berita.edit', $data);
     }
 
-    public function show($id)
+    public function show($id_content)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'berita-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['content'] = Content::where('type', Content::TYPE_BERITA)->findOrFail($id); // Fetching berita content by id
+        $data['content'] = Content::where('type', Content::TYPE_BERITA)->findOrFail($id_content); // Fetching berita content by id_content
         return view('admin.berita.show', $data);
     }
 }

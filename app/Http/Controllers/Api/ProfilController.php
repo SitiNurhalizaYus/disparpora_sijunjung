@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ApiResource;
+use App\Http\Resources\ContentResource;
 use Illuminate\Http\Request;
 use App\Models\Content;
 
@@ -11,20 +11,20 @@ class ProfilController extends Controller
 {
     public function __construct()
     {
+        // Middleware untuk memastikan pengguna terautentikasi, kecuali untuk index dan show
         $this->middleware('auth:api')->except("index", "show");
     }
 
     public function index(Request $request)
     {
-        // parameter
-        $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
-        $where = $request->has('where') ? $request->get('where') : '{}';
-        $search = $request->has('search') ? $request->get('search') : '';
-        $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
-        $page = $request->has('page') ? intval($request->get('page')) : 1;
+        // Mengambil parameter dari request
+        $sort = $request->get('sort', 'id_content:asc');
+        $per_page = intval($request->get('per_page', 10));
+        $page = intval($request->get('page', 1));
+        $search = $request->get('search', '');
+        $where = json_decode($request->get('where', '{}'), true);
 
-        // Validasi per_page dan page agar tidak bernilai negatif atau nol
+        // Memastikan nilai per_page dan page tidak negatif atau nol
         if ($per_page <= 0) {
             $per_page = 10;
         }
@@ -32,21 +32,21 @@ class ProfilController extends Controller
             $page = 1;
         }
 
+        // Mengatur sorting
         $sort = explode(':', $sort);
         if (count($sort) !== 2) {
-            $sort = ['id', 'asc']; // Default sorting jika tidak valid
+            $sort = ['id_content', 'asc']; // Default sorting jika format tidak valid
         }
-        $where = str_replace("'", "\"", $where);
-        $where = json_decode($where, true);
 
-        // query
+        // Membuat query untuk mengambil data tipe 'profil'
         $query = Content::where('type', 'profil');
 
-        // Cek token dan filter konten aktif jika tidak ada autentikasi
+        // Jika pengguna tidak terautentikasi, hanya menampilkan konten yang aktif
         if (!auth()->guard('api')->user()) {
             $query->where('is_active', 1);
         }
 
+        // Menambahkan filter berdasarkan kondisi `where` jika ada
         if ($where) {
             foreach ($where as $key => $value) {
                 if (is_array($value)) {
@@ -57,113 +57,111 @@ class ProfilController extends Controller
             }
         }
 
+        // Menambahkan filter pencarian berdasarkan judul jika ada
         if ($search) {
             $query->where('title', 'like', "%{$search}%");
         }
 
-        // metadata
+        // Metadata untuk pagination
         $metadata = [];
         $metadata['total_data'] = $query->count();
         $metadata['per_page'] = $per_page;
-        $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
+        $metadata['total_page'] = ceil($metadata['total_data'] / $per_page);
         $metadata['page'] = $page;
 
+        // Mengambil data dengan pagination
         if ($per_page == 0 || $per_page == 'all') {
-            $data = $query->orderBy($sort[0], $sort[1])->get()->toArray();
-            $metadata['total_data'] = count($data);
-            $metadata['per_page'] = $metadata['total_data'];
-            $metadata['total_page'] = 1;
-            $metadata['page'] = 1;
+            $data = $query->orderBy($sort[0], $sort[1])->get();
         } else {
             $data = $query->orderBy($sort[0], $sort[1])
-                          ->limit($per_page)
-                          ->offset(($page - 1) * $per_page)
-                          ->get()
-                          ->toArray();
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page)
+                ->get();
         }
 
-        if ($data) {
-            return new ApiResource(true, 200, 'Get data successful', $data, $metadata);
-        } else {
-            return new ApiResource(false, 200, 'No data found', [], $metadata);
-        }
+        // Mengirimkan response dengan ContentResource
+        return ContentResource::collection($data)
+            ->additional(['message' => 'Get data successful', 'metadata' => $metadata]);
     }
 
-    public function show($id)
+    public function show($id_content)
     {
-        // query
+        // Membuat query untuk mengambil data tipe 'profil'
         $query = Content::where('type', 'profil');
 
-        // cek token
+        // Jika pengguna tidak terautentikasi, hanya menampilkan konten yang aktif
         if (!auth()->guard('api')->user()) {
             $query->where('is_active', 1);
         }
 
-        // data
-        if (is_numeric($id)) {
-            $data = $query->find($id);
-        } else {
-            $query = $query->where('slug', $id);
-            $data = $query->first();
-        }
+        // Mengambil data berdasarkan ID atau slug
+        $data = is_numeric($id_content) ? $query->find($id_content) : $query->where('slug', $id_content)->first();
 
-        // result
+        // Mengirimkan response dengan ContentResource
         if ($data) {
-            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
+            return (new ContentResource($data))
+                ->additional(['message' => 'Get data successful']);
         } else {
-            return new ApiResource(false, 200, 'No data found', [], []);
+            return response()->json(['success' => false, 'message' => 'No data found'], 200);
         }
     }
 
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
             'title' => 'required',
             'slug' => 'required|unique:contents,slug',
             'content' => 'required',
         ]);
 
-        $req = $request->all();
-        $req['type'] = 'profil'; // Mengatur tipe sebagai 'profil'
-        $data = Content::create($req);
+        // Menambahkan tipe sebagai 'profil'
+        $data = Content::create(array_merge($request->all(), ['type' => 'profil']));
 
+        // Mengirimkan response dengan ContentResource
         if ($data) {
-            return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
+            return (new ContentResource($data))
+                ->additional(['message' => 'Data telah berhasil ditambahkan']);
         } else {
-            return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
+            return response()->json(['success' => false, 'message' => 'Data gagal ditambahkan'], 400);
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_content)
     {
+        // Validasi input
         $request->validate([
             'title' => 'required',
-            'slug' => 'required|unique:contents,slug,' . $id,
+            'slug' => 'required|unique:contents,slug,' . $id_content,
             'content' => 'required',
         ]);
 
-        $query = Content::where('type', 'profil')->findOrFail($id);
-        $req = $request->all();
-        $query->update($req);
+        // Mengupdate data yang ada
+        $query = Content::where('type', 'profil')->findOrFail($id_content);
+        $query->update($request->all());
 
-        $data = Content::where('type', 'profil')->findOrFail($id);
+        $data = Content::where('type', 'profil')->findOrFail($id_content);
 
+        // Mengirimkan response dengan ContentResource
         if ($data) {
-            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
+            return (new ContentResource($data))
+                ->additional(['message' => 'Data berhasil diperbarui']);
         } else {
-            return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
+            return response()->json(['success' => false, 'message' => 'Data gagal diperbarui'], 400);
         }
     }
 
-    public function destroy($id)
+    public function destroy($id_content)
     {
-        $query = Content::where('type', 'profil')->findOrFail($id);
+        // Menghapus data berdasarkan ID
+        $query = Content::where('type', 'profil')->findOrFail($id_content);
         $query->delete();
 
+        // Mengirimkan response
         if ($query) {
-            return new ApiResource(true, 201, 'Data berhasil dihapus', [], []);
+            return response()->json(['success' => true, 'message' => 'Data berhasil dihapus'], 200);
         } else {
-            return new ApiResource(false, 400, 'Data gagal dihapus', [], []);
+            return response()->json(['success' => false, 'message' => 'Data gagal dihapus'], 400);
         }
     }
 }
