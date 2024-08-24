@@ -24,12 +24,12 @@
                             <table id="datatable" class="table table-striped" data-toggle="data-table">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Id</th>
+                                        <th class="text-center">No</th>
                                         <th class="text-center">Judul</th>
                                         <th class="text-center">Kategori</th>
                                         <th class="text-center">Arsip</th>
-                                        <th class="text-center">Deskripsi Singkat</th>
                                         <th class="text-center">Gambar</th>
+                                        <th class="text-center">Dibuat Oleh</th>
                                         <th class="text-center">Dibuat</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Action</th>
@@ -71,19 +71,19 @@
                     });
 
                     $.get('{{ url('/api/content') }}', {
-                            per_page: data.length,
-                            page: (data.start / data.length) + 1,
-                            sort: sort_col_name + ':' + sort_col_order,
-                            search: data.search.value,
-                            type: 'artikel' // Tipe konten artikel
-                        },
-                        function(json) {
-                            callback({
-                                recordsTotal: json.metadata.total_data,
-                                recordsFiltered: json.metadata.total_data,
-                                data: json.data
-                            });
-                        })
+                                per_page: data.length,
+                                page: (data.start / data.length) + 1,
+                                sort: sort_col_name + ':' + sort_col_order,
+                                search: data.search.value,
+                                type: 'artikel' // Tipe konten artikel
+                            },
+                            function(json) {
+                                callback({
+                                    recordsTotal: json.metadata.total_data,
+                                    recordsFiltered: json.metadata.total_data,
+                                    data: json.data
+                                });
+                            })
                         .fail(function() {
                             Swal.fire({
                                 icon: "error",
@@ -94,8 +94,13 @@
                         });
                 },
                 columns: [{
-                        data: 'id_content',
-                        className: 'text-center'
+                        data: null, // Nomor urut
+                        className: 'text-center',
+                        orderable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart +
+                                1; // Menghasilkan nomor urut
+                        }
                     },
                     {
                         data: 'title',
@@ -104,24 +109,17 @@
                         }
                     },
                     {
-                        data: 'category.name', // Menampilkan nama kategori
+                        data: 'category.name',
                         className: 'text-center',
                         render: function(data) {
-                            return data ? data : 'Tidak Ada Kategori';
+                            return data ? data : '<span>Unknown</span>';
                         }
                     },
                     {
-                        data: 'arsip.bulan_tahun', // Menampilkan arsip (bulan dan tahun)
+                        data: 'arsip',
                         className: 'text-center',
                         render: function(data) {
-                            return data ? data : 'Tidak Ada Arsip';
-                        }
-                    },
-                    {
-                        data: 'description_short',
-                        render: function(data) {
-                            return '<span style="white-space: normal;">' + data.substring(0, 50) +
-                                '...</span>';
+                            return data ? data.tahun + '-' + data.bulan : '<span>Unknown</span>';
                         }
                     },
                     {
@@ -136,6 +134,13 @@
                             } else {
                                 return '<span>No Image</span>';
                             }
+                        }
+                    },
+                    {
+                        data: 'created_by',
+                        className: 'text-center',
+                        render: function(data) {
+                            return data ? data : '<span>Unknown</span>';
                         }
                     },
                     {
@@ -197,7 +202,7 @@
                     },
                     {
                         targets: [1],
-                        width: "25%"
+                        width: "20%"
                     },
                     {
                         targets: [2],
@@ -205,11 +210,11 @@
                     },
                     {
                         targets: [3],
-                        width: "15%"
+                        width: "10%"
                     },
                     {
                         targets: [4],
-                        width: "15%"
+                        width: "10%"
                     },
                     {
                         targets: [5],
@@ -221,13 +226,14 @@
                     },
                     {
                         targets: [7],
-                        width: "10%"
+                        width: "10%",
                     },
                     {
                         targets: [8],
                         width: "10%",
                         orderable: false
                     }
+
                 ]
             });
         });

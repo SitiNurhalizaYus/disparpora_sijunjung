@@ -26,8 +26,8 @@ class ContentResource extends JsonResource
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'created_by' => $this->createdBy ? $this->createdBy->name : null,
-            'updated_by' => $this->updatedBy ? $this->updatedBy->name : null,
+            'created_by' => $this->createdBy ? $this->createdBy->name : 'Unknown',
+            'updated_by' => $this->updatedBy ? $this->updatedBy->name : 'Unknown',
         ];
 
         // Menambahkan data relasi arsip jika ada dan tipe bukan 'profil'

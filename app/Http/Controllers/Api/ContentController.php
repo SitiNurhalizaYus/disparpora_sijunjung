@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ContentResource;
 use Illuminate\Http\Request;
 use App\Models\Content;
+use Illuminate\Support\Facades\Schema;
 
 class ContentController extends Controller
 {
@@ -16,6 +17,7 @@ class ContentController extends Controller
     }
 
     // Metode index untuk menampilkan daftar konten dengan filter, pencarian, dan paginasi
+
     public function index(Request $request)
     {
         // Mengambil parameter dari request
@@ -31,7 +33,7 @@ class ContentController extends Controller
 
         // Menentukan kolom dan arah sorting (default 'id_content:asc')
         $sort = explode(':', $sort);
-        if (count($sort) !== 2) {
+        if (count($sort) !== 2 || !Schema::hasColumn('contents', $sort[0])) {
             $sort = ['id_content', 'asc']; // Sorting default jika tidak valid
         }
 
@@ -93,16 +95,18 @@ class ContentController extends Controller
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-        // Menampilkan semua data jika per_page adalah 0 atau 'all'
-        if ($per_page == 0 || $per_page == 'all') {
-            $data = $query->orderBy($sort[0], $sort[1])->get();
-        } else {
-            // Mengambil data dengan paginasi
+        if ($per_page > 0) {
+            // Pastikan menggunakan limit jika offset digunakan
             $data = $query->orderBy($sort[0], $sort[1])
-                ->limit($per_page)
-                ->offset(($page - 1) * $per_page)
-                ->get();
+                          ->limit($per_page)
+                          ->offset(($page - 1) * $per_page)
+                          ->get();
+        } else {
+            // Jika per_page adalah 0 atau 'all', ambil semua data tanpa limit dan offset
+            $data = $query->orderBy($sort[0], $sort[1])->get();
         }
+        
+        
 
         // Mengembalikan hasil data dalam format ContentResource dengan metadata tambahan
         return ContentResource::collection($data)->additional([
@@ -111,6 +115,7 @@ class ContentController extends Controller
             'metadata' => $metadata
         ]);
     }
+
 
     // Metode untuk menampilkan detail satu data berdasarkan id_content atau slug
     public function show($id_content)
