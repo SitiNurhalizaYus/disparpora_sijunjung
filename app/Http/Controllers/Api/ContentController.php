@@ -98,15 +98,15 @@ class ContentController extends Controller
         if ($per_page > 0) {
             // Pastikan menggunakan limit jika offset digunakan
             $data = $query->orderBy($sort[0], $sort[1])
-                          ->limit($per_page)
-                          ->offset(($page - 1) * $per_page)
-                          ->get();
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page)
+                ->get();
         } else {
             // Jika per_page adalah 0 atau 'all', ambil semua data tanpa limit dan offset
             $data = $query->orderBy($sort[0], $sort[1])->get();
         }
-        
-        
+
+
 
         // Mengembalikan hasil data dalam format ContentResource dengan metadata tambahan
         return ContentResource::collection($data)->additional([
@@ -161,6 +161,7 @@ class ContentController extends Controller
 
         // Menyimpan data baru dengan tipe 'profil'
         $req = $request->all();
+        $req['created_by'] = auth()->id(); // Mengisi field created_by dengan ID pengguna yang sedang login
         $req['type'] = 'profil'; // Mengatur tipe sebagai 'profil'
         $data = Content::create($req);
 
@@ -190,6 +191,7 @@ class ContentController extends Controller
 
         // Mengambil data yang akan diperbarui
         $query = Content::findOrFail($id_content);
+        $req['updated_by'] = auth()->id(); // Mengisi field created_by dengan ID pengguna yang sedang login
         $req = $request->all();
         $query->update($req);
 

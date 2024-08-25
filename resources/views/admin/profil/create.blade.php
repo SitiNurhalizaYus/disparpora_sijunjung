@@ -37,6 +37,11 @@
                                     harus diisi dan tidak boleh ada simbol.</p>
                             </div>
                             <div class="form-group">
+                                <label class="form-label" for="slug">Slug</label>
+                                <input class="form-control" type="text" id="slug" name="slug" value=""
+                                    placeholder="Otomatis terisi" required pattern="[A-Za-z0-9\-]+$">
+                            </div>
+                            <div class="form-group">
                                 <label class="form-label" for="description_short">Deskripsi Singkat</label>
                                 <textarea class="form-control" id="description_short" name="description_short" rows="4"
                                     placeholder="Masukkan Deskripsi Singkat" required></textarea>
@@ -44,11 +49,11 @@
                                     id="invalid-description_short">Deskripsi harus diisi.</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="description_long">Deskripsi Panjang</label>
-                                <textarea class="form-control" id="description_long" name="description_long" rows="6"
-                                    placeholder="Masukkan Deskripsi Panjang" required></textarea>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;"
-                                    id="invalid-description_long">Deskripsi Panjang harus diisi.</p>
+                                <label class="form-label" for="content">Konten Profil</label>
+                                <textarea class="form-control" type="text" id="content" name="content" value="" placeholder="Masukan konten"
+                                    style="display: none" required></textarea>
+                                <textarea class="form-control" id="description_long" name="description_long" value=""
+                                    placeholder="Masukkan konten" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
@@ -60,8 +65,15 @@
                                     width="300px" style="border-radius: 2%;">
                                 <label class="form-label" for="photo" style="font-size: 10pt">*Format JPG,JPEG, dan
                                     PNG</label>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">Silakan
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">
+                                    Silakan
                                     unggah gambar.</p>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
+                                    <label class="form-check-label" for="is_active">Status Aktif</label>
+                                </div>
                             </div>
                             <br><br>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -76,7 +88,7 @@
     </div>
 
     <script>
-        // Custom validation functions
+        // Handle validation display
         function validateInput(inputId, errorId, condition = true) {
             if (condition && !$(`#${inputId}`).val()) {
                 $(`#${errorId}`).show();
@@ -87,19 +99,45 @@
             }
         }
 
-        function validateName() {
-            const nameInput = $('#title');
-            const nameValue = nameInput.val();
-            const namePattern = /^[A-Za-z0-9\s]+$/;
-            if (!namePattern.test(nameValue)) {
+        // Custom validation for title field (only letters and numbers)
+        function validateTitle() {
+            const titleInput = $('#title');
+            const titleValue = titleInput.val();
+            const titlePattern = /^[A-Za-z0-9\s]+$/;
+            if (!titlePattern.test(titleValue)) {
                 $('#invalid-title').show();
                 return false;
             } else {
                 $('#invalid-title').hide();
+                generateSlug(titleValue); // Generate slug automatically
                 return true;
             }
         }
 
+        // Custom validation for slug field
+        function validateSlug() {
+            const slugInput = $('#slug');
+            const slugValue = slugInput.val();
+            const slugPattern = /^[A-Za-z0-9\-]+$/;
+            if (!slugPattern.test(slugValue)) {
+                $('#invalid-slug').show();
+                return false;
+            } else {
+                $('#invalid-slug').hide();
+                return true;
+            }
+        }
+
+        // Generate slug from title
+        function generateSlug(title) {
+            const slug = title.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            $('#slug').val(slug);
+
+            // Validate slug whenever it is auto-generated
+            validateSlug();
+        }
+
+        // Validate file upload
         function validateFile() {
             if ($('#image').val() === 'noimage.jpg') {
                 $('#invalid-file').show();
@@ -110,8 +148,13 @@
             }
         }
 
+        // Attach real-time validation to inputs
         $('#title').on('input', function() {
-            validateName();
+            validateTitle();
+        });
+
+        $('#slug').on('input', function() {
+            validateSlug();
         });
 
         $('#description_short').on('input', function() {
@@ -121,7 +164,6 @@
         $('#description_long').on('input', function() {
             validateInput('description_long', 'invalid-description_long');
         });
-
 
         $('#file').on('change', function() {
             var file = $(this).prop('files')[0];
@@ -162,6 +204,7 @@
                     success: function(result) {
                         if (result['success'] == true) {
                             $('#image').val(result['data']['url'].replace('/xxx/', '/300/'));
+                            $('#invalid-file').hide(); // Menghilangkan pesan error jika upload berhasil
                         } else {
                             Swal.fire({
                                 icon: "error",
@@ -183,23 +226,54 @@
             }
         });
 
+
+        // Validate the entire form before submission
         function validateForm() {
             let isValid = true;
-            isValid = validateName() && isValid;
+            isValid = validateTitle() && isValid;
+            isValid = validateSlug() && isValid;
             isValid = validateInput('description_short', 'invalid-description_short') && isValid;
             isValid = validateInput('description_long', 'invalid-description_long') && isValid;
             isValid = validateFile() && isValid;
             return isValid;
         }
 
+        // handle wysiwyg
+        tinymce.init({
+            selector: 'textarea#description_long',
+            plugins: 'code table lists',
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
+            promotion: false,
+            setup: function(ed) {
+                ed.on('change', function(e) {
+                    $('#content').val(ed.getContent());
+                });
+            }
+        });
+
+        document.getElementById('title').addEventListener('input', function() {
+            var words = this.value.trim().split(/\s+/).length;
+            if (words > 100) {
+                document.getElementById('title-error').style.display = 'block';
+                this.setCustomValidity('Maksimal 100 kata');
+            } else {
+                document.getElementById('title-error').style.display = 'none';
+                this.setCustomValidity('');
+            }
+        });
+
+        //handle post
         $("#form-data").submit(function(event) {
             event.preventDefault();
+
             if (validateForm()) {
                 var form = $("#form-data").serializeArray();
                 var formdata = {};
                 $.map(form, function(n, i) {
                     formdata[n['name']] = n['value'];
                 });
+
+                // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 formdata['is_active'] = $('#is_active').is(":checked") ? 1 : 0;
 
                 $.ajaxSetup({
@@ -208,7 +282,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/api/content?type=profil',  // Perbaikan URL untuk memastikan bahwa data tersimpan sebagai tipe profil
+                    url: '/api/content?type=profil',
                     type: "POST",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",
@@ -222,7 +296,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/content/profil') }}");
+                                window.location.replace("{{ url('/admin/profil') }}");
                             });
                         } else {
                             Swal.fire({
