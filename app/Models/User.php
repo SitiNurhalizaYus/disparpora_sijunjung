@@ -18,6 +18,8 @@ class User extends Authenticatable implements JWTSubject
     use HasApiTokens, HasFactory, Notifiable;
     use BlameableTrait;
     protected $table = 'users'; // Nama tabel
+
+    protected $primaryKey = 'id_user';
     protected $fillable = [
         'level_id',
         'username',

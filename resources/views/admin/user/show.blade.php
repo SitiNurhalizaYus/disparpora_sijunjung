@@ -18,10 +18,10 @@
                     </h3>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/user/' . $id . '/edit') }}" class="btn btn-warning btn-sm">
+                    <a href="{{ url('/admin/user/' . $id_user . '/edit') }}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> Edit
                     </a>
-                    <button onclick="removeData({{ $id }})" class="btn btn-danger btn-sm">
+                    <button onclick="removeData({{ $id_user }})" class="btn btn-danger btn-sm">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                 </div>
@@ -86,7 +86,7 @@
             }
         });
         $.ajax({
-            url: '/api/user/{{ $id }}',
+            url: '/api/user/{{ $id_user }}',
             type: "GET",
             dataType: "json",
             processData: false,
@@ -124,7 +124,7 @@
             }
         });
 
-        function removeData(id) {
+        function removeData(id_user) {
             Swal.fire({
                 title: "Are you sure want to delete?",
                 showDenyButton: true,
@@ -142,7 +142,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/api/user/' + id,
+                        url: '/api/user/' + id_user,
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",

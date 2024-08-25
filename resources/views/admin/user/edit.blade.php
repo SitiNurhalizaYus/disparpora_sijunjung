@@ -142,7 +142,7 @@
             }
         });
         $.ajax({
-            url: '/api/user/{{ $id }}',
+            url: '/api/user/{{ $id_user }}',
             type: "GET",
             dataType: "json",
             processData: false,
@@ -250,7 +250,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/api/user/{{ $id }}',
+                    url: '/api/user/{{ $id_user }}',
                     type: "PUT",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",

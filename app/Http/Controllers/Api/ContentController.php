@@ -17,7 +17,6 @@ class ContentController extends Controller
     }
 
     // Metode index untuk menampilkan daftar konten dengan filter, pencarian, dan paginasi
-
     public function index(Request $request)
     {
         // Mengambil parameter dari request
@@ -106,8 +105,6 @@ class ContentController extends Controller
             $data = $query->orderBy($sort[0], $sort[1])->get();
         }
 
-
-
         // Mengembalikan hasil data dalam format ContentResource dengan metadata tambahan
         return ContentResource::collection($data)->additional([
             'success' => true,
@@ -115,7 +112,6 @@ class ContentController extends Controller
             'metadata' => $metadata
         ]);
     }
-
 
     // Metode untuk menampilkan detail satu data berdasarkan id_content atau slug
     public function show($id_content)
@@ -156,7 +152,6 @@ class ContentController extends Controller
         $request->validate([
             'title' => 'required',
             'slug' => 'required|unique:contents,slug',
-            'content' => 'required',
         ]);
 
         // Menyimpan data baru dengan tipe 'profil'
@@ -185,14 +180,13 @@ class ContentController extends Controller
         // Validasi input
         $request->validate([
             'title' => 'required',
-            'slug' => 'required|unique:contents,slug,' . $id_content,
-            'content' => 'required',
+            'slug' => 'required|unique:contents,slug,' . $id_content . ',id_content', // Menggunakan id_content sebagai primary key
         ]);
 
         // Mengambil data yang akan diperbarui
         $query = Content::findOrFail($id_content);
-        $req['updated_by'] = auth()->id(); // Mengisi field created_by dengan ID pengguna yang sedang login
         $req = $request->all();
+        $req['updated_by'] = auth()->id(); // Mengisi field updated_by dengan ID pengguna yang sedang login
         $query->update($req);
 
         // Mengembalikan hasil pembaruan dalam format ContentResource

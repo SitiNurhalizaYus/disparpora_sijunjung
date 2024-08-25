@@ -26,7 +26,7 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
+                        <form method="POST" class="needs-validation" id="form-data" name="form-data" enctype="multipart/form-data" novalidate>
                             {{ csrf_field() }}
                             <input type="hidden" name="type" value="profil">
                             <div class="form-group">
@@ -139,7 +139,8 @@
 
         // Validate file upload
         function validateFile() {
-            if ($('#image').val() === 'noimage.jpg') {
+            var fileInput = $('#file').prop('files')[0];
+            if (!fileInput) {
                 $('#invalid-file').show();
                 return false;
             } else {
@@ -160,9 +161,17 @@
         $('#description_short').on('input', function() {
             validateInput('description_short', 'invalid-description_short');
         });
-
-        $('#description_long').on('input', function() {
-            validateInput('description_long', 'invalid-description_long');
+        // handle wysiwyg
+        tinymce.init({
+            selector: 'textarea#description_long',
+            plugins: 'code table lists',
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
+            promotion: false,
+            setup: function(ed) {
+                ed.on('change', function(e) {
+                    $('#content').val(ed.getContent());
+                });
+            }
         });
 
         $('#file').on('change', function() {
@@ -233,48 +242,19 @@
             isValid = validateTitle() && isValid;
             isValid = validateSlug() && isValid;
             isValid = validateInput('description_short', 'invalid-description_short') && isValid;
-            isValid = validateInput('description_long', 'invalid-description_long') && isValid;
             isValid = validateFile() && isValid;
             return isValid;
         }
-
-        // handle wysiwyg
-        tinymce.init({
-            selector: 'textarea#description_long',
-            plugins: 'code table lists',
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
-            promotion: false,
-            setup: function(ed) {
-                ed.on('change', function(e) {
-                    $('#content').val(ed.getContent());
-                });
-            }
-        });
-
-        document.getElementById('title').addEventListener('input', function() {
-            var words = this.value.trim().split(/\s+/).length;
-            if (words > 100) {
-                document.getElementById('title-error').style.display = 'block';
-                this.setCustomValidity('Maksimal 100 kata');
-            } else {
-                document.getElementById('title-error').style.display = 'none';
-                this.setCustomValidity('');
-            }
-        });
 
         //handle post
         $("#form-data").submit(function(event) {
             event.preventDefault();
 
             if (validateForm()) {
-                var form = $("#form-data").serializeArray();
-                var formdata = {};
-                $.map(form, function(n, i) {
-                    formdata[n['name']] = n['value'];
-                });
+                var form = new FormData(document.getElementById("form-data"));
 
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
-                formdata['is_active'] = $('#is_active').is(":checked") ? 1 : 0;
+                form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
 
                 $.ajaxSetup({
                     headers: {
@@ -284,10 +264,9 @@
                 $.ajax({
                     url: '/api/content?type=profil',
                     type: "POST",
-                    data: JSON.stringify(formdata),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    processData: false,
+                    data: form,
+                    contentType: false,  // Supaya FormData bisa bekerja dengan benar
+                    processData: false,  // Supaya FormData bisa bekerja dengan benar
                     success: function(result) {
                         if (result['success'] == true) {
                             Swal.fire({
@@ -306,9 +285,19 @@
                                 confirmButtonColor: '#3A57E8',
                             });
                         }
+                    },
+                    error: function(xhr) {
+                        // Menangani kesalahan dari server
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat menyimpan data.",
+                            confirmButtonColor: '#3A57E8',
+                        });
                     }
                 });
             } else {
+                // Jika validasi gagal, tampilkan pesan kesalahan dan jangan kirim form
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -316,7 +305,7 @@
                     confirmButtonColor: '#3A57E8',
                 });
             }
-            return false;
+            return false; // Menghentikan submit jika validasi gagal
         });
     </script>
 @endsection

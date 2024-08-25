@@ -33,7 +33,7 @@ class ContentResource extends JsonResource
         // Menambahkan data relasi arsip jika ada dan tipe bukan 'profil'
         if ($this->type !== 'profil' && $this->arsip) {
             $data['arsip'] = [
-                // 'id_arsip' => $this->arsip->id,
+                // 'id_arsip' => $this->arsip->id_arsip,
                 'tahun' => $this->arsip->tahun,
                 'bulan' => $this->arsip->bulan,
             ];
@@ -42,7 +42,7 @@ class ContentResource extends JsonResource
         // Menambahkan data relasi kategori jika ada dan tipe bukan 'profil'
         if ($this->type !== 'profil' && $this->category) {
             $data['category'] = [
-                // 'id_category' => $this->category->id,
+                // 'id_category' => $this->category->id_category,
                 'name' => $this->category->name,
             ];
         }

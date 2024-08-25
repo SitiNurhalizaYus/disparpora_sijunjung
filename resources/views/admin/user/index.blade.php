@@ -80,7 +80,7 @@
             },
             columns: [
                 {
-                    data: 'id'
+                    data: 'id_user'
                 },
                 {
                     data: 'level_name',
@@ -135,7 +135,7 @@
                     }
                 },
                 {
-                    data: 'id',
+                    data: 'id_user',
                     render: function (data, type, row, meta) {
                         var btn_detail = `
                             <a href="{{ url("/admin/user/`+data+`") }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
@@ -179,7 +179,7 @@
             ],
         });
 
-        function removeData(id) {
+        function removeData(id_user) {
             Swal.fire({
                 title: "Are you sure want to delete?",
                 showDenyButton: true,
@@ -197,7 +197,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/api/user/'+id,
+                        url: '/api/user/'+id_user,
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",

@@ -28,7 +28,7 @@ class LoginController extends Controller
             if($token) {
                 // update last_login
                 $req = ['last_login' =>  date('Y-m-d H:i:s')];
-                $query = User::findOrFail(auth()->guard('api')->user()['id']);
+                $query = User::findOrFail(auth()->guard('api')->user()['id_user']);
                 $query->update($req);
 
                 // data

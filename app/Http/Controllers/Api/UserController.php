@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         // parameter
         $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'users.id:asc';
+        $sort = $request->has('sort') ? $request->get('sort') : 'users.id_user:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
@@ -35,19 +35,19 @@ class UserController extends Controller
 
         $sort = explode(':', $sort);
         if (count($sort) !== 2) {
-            $sort = ['id', 'asc']; // Default sorting jika tidak valid
+            $sort = ['id_user', 'asc']; // Default sorting jika tidak valid
         }
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
 
         // query
-        $query = User::select('users.*', 'user_levels.name as level_name')->join('user_levels', 'users.level_id', '=', 'user_levels.id')->where([['users.id', '>', '0']]);
+        $query = User::select('users.*', 'user_levels.name as level_name')->join('user_levels', 'users.level_id', '=', 'user_levels.id_user')->where([['users.id_user', '>', '0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
         if ($jwt_payload['level_id'] != 1) {
-            $query = $query->where('users.id', $jwt_payload['id']);
+            $query = $query->where('users.id_user', $jwt_payload['id_user']);
         }
 
         if ($where) {
@@ -69,14 +69,14 @@ class UserController extends Controller
         $metadata = [];
 
         // metadata
-        $metadata['total_data'] = $query->count('users.id');
+        $metadata['total_data'] = $query->count('users.id_user');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
         // get count
         if ($count == true) {
-            $query = $query->count('users.id');
+            $query = $query->count('users.id_user');
             $data['count'] = $query;
         }
         // get data
@@ -102,19 +102,19 @@ class UserController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($id_user)
     {
         // query
-        $query = User::select('users.*', 'user_levels.name as level_name')->join('user_levels', 'users.level_id', '=', 'user_levels.id')->where([['users.id', '>', '0']]);
+        $query = User::select('users.*', 'user_levels.name as level_name')->join('user_levels', 'users.level_id', '=', 'user_levels.id_level')->where([['users.id_user', '>', '0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
         if ($jwt_payload['level_id'] != 1) {
-            $query = $query->where('users.id', $jwt_payload['id']);
+            $query = $query->where('users.id_user', $jwt_payload['id_user']);
         }
 
         // data
-        $data = $query->find($id);
+        $data = $query->find($id_user);
 
         // result
         if ($data) {
@@ -151,12 +151,12 @@ class UserController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_user)
     {
         // cek token
         $jwt_payload = auth()->guard('api')->user();
         if ($jwt_payload['level_id'] != 1) {
-            if ($jwt_payload['id'] != $id) {
+            if ($jwt_payload['id_user'] != $id_user) {
                 return new ApiResource(false, 401, 'Does Not Have Access', [], []);
             }
         }
@@ -166,10 +166,10 @@ class UserController extends Controller
             $req['password'] = bcrypt($req['password']);
         }
 
-        $query = User::findOrFail($id);
+        $query = User::findOrFail($id_user);
         $query->update($req);
 
-        $data = User::findOrFail($id);
+        $data = User::findOrFail($id_user);
 
         if ($data) {
             return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
@@ -178,7 +178,7 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($id_user)
     {
         // cek token
         $jwt_payload = auth()->guard('api')->user();
@@ -186,7 +186,7 @@ class UserController extends Controller
             return new ApiResource(false, 401, 'Does Not Have Access', [], []);
         }
 
-        $query = User::findOrFail($id);
+        $query = User::findOrFail($id_user);
         $query->delete();
 
         if ($query) {

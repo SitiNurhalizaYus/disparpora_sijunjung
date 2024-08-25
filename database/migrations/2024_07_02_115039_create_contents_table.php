@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('id_content');
             $table->string('title');
             $table->string('slug')->unique();
-            $table->text('content');
-            $table->text('description_short')->nullable();
+            $table->text('content')->nullable();
+            $table->text('description_short');
             $table->string('image')->nullable();
             $table->enum('type', ['berita', 'artikel', 'profil']);
             $table->foreignId('category_id')->nullable();

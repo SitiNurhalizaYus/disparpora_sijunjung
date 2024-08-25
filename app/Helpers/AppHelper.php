@@ -19,7 +19,7 @@ class AppHelper
 
     function setSession($user, $token) {
         session([
-            'user_id' => $user['id'],
+            'user_id' => $user['id_user'],
             'user_level_id' => $user['level_id'],
             'user_level_name' => $user['level_name'],
             'user_name' => $user['name'],

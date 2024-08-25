@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_levels', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_level');
             $table->string('name');
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(0);
