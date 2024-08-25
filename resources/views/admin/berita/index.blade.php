@@ -71,19 +71,19 @@
                     });
 
                     $.get('{{ url('/api/content') }}', {
-                            per_page: data.length,
-                            page: (data.start / data.length) + 1,
-                            sort: sort_col_name + ':' + sort_col_order,
-                            search: data.search.value,
-                            type: 'berita' // Tipe konten berita
-                        },
-                        function(json) {
-                            callback({
-                                recordsTotal: json.metadata.total_data,
-                                recordsFiltered: json.metadata.total_data,
-                                data: json.data
-                            });
-                        })
+                                per_page: data.length,
+                                page: (data.start / data.length) + 1,
+                                sort: sort_col_name + ':' + sort_col_order,
+                                search: data.search.value,
+                                type: 'berita' // Tipe konten berita
+                            },
+                            function(json) {
+                                callback({
+                                    recordsTotal: json.metadata.total_data,
+                                    recordsFiltered: json.metadata.total_data,
+                                    data: json.data
+                                });
+                            })
                         .fail(function() {
                             Swal.fire({
                                 icon: "error",
@@ -99,7 +99,7 @@
                         orderable: false,
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart +
-                            1; // Menghasilkan nomor urut
+                                1; // Menghasilkan nomor urut
                         }
                     },
                     {
@@ -125,12 +125,14 @@
                     {
                         data: 'image',
                         className: 'text-center',
-                        render: function(data) {
-                            if (data) {
-                                var imagePath = "{{ url('/') }}/" + data.replace('/xxx/', '/100/');
-                                return '<img src="' + imagePath + '" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">';
+                        render: function(data, type, row, meta) {
+                            if (data && data !== null) { // Pastikan data tidak null
+                                var imagePath = "{{ asset('/') }}" + data.replace('/xxx/',
+                                    '/100/');
+                                return '<img src="' + imagePath +
+                                    '" style="max-width:100px; max-height:100px;">';
                             } else {
-                                return '<span>No Image</span>';
+                                return '<span>No Image</span>'; // Tampilkan pesan jika tidak ada gambar
                             }
                         }
                     },
@@ -145,14 +147,16 @@
                         data: 'created_at',
                         className: 'text-center',
                         render: function(data) {
-                            return '<span style="white-space: normal;">' + convertStringToDate(data) + '</span>';
+                            return '<span style="white-space: normal;">' + convertStringToDate(
+                                data) + '</span>';
                         }
                     },
                     {
                         data: 'is_active',
                         className: 'text-center',
                         render: function(data) {
-                            return data == '1' ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-danger">Tidak Aktif</span>';
+                            return data == '1' ? '<span class="badge bg-success">Aktif</span>' :
+                                '<span class="badge bg-danger">Tidak Aktif</span>';
                         }
                     },
                     {
@@ -187,7 +191,8 @@
                                     </svg>
                                 </span>
                             </button>`;
-                            return '<div style="display: flex;">' + btn_detail + '&nbsp;' + btn_edit + '&nbsp;' + btn_delete + '</div>';
+                            return '<div style="display: flex;">' + btn_detail + '&nbsp;' +
+                                btn_edit + '&nbsp;' + btn_delete + '</div>';
                         }
                     }
                 ],
@@ -228,7 +233,7 @@
                         width: "10%",
                         orderable: false
                     }
-                    
+
                 ]
             });
         });

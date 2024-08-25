@@ -9,7 +9,6 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -35,14 +34,15 @@ class UserController extends Controller
 
         $sort = explode(':', $sort);
         if (count($sort) !== 2) {
-            $sort = ['id_user', 'asc']; // Default sorting jika tidak valid
+            $sort = ['users.id_user', 'asc']; // Default sorting jika tidak valid
         }
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-
-        // query
-        $query = User::select('users.*', 'user_levels.name as level_name')->join('user_levels', 'users.level_id', '=', 'user_levels.id_user')->where([['users.id_user', '>', '0']]);
+        // query: joining users and user_levels tables
+        $query = User::select('users.*', 'user_levels.name as level_name')
+            ->join('user_levels', 'users.level_id', '=', 'user_levels.id_level')
+            ->where([['users.id_user', '>', '0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
@@ -50,6 +50,7 @@ class UserController extends Controller
             $query = $query->where('users.id_user', $jwt_payload['id_user']);
         }
 
+        // Filtering berdasarkan kondisi
         if ($where) {
             foreach ($where as $key => $value) {
                 if (is_array($value)) {
@@ -60,27 +61,29 @@ class UserController extends Controller
             }
         }
 
+        // Filtering berdasarkan pencarian
         if ($search) {
-            $query = $query->whereAny(['users.username', 'users.name', 'users.email'], 'like', "%{$search}%");
+            $query = $query->where(function ($query) use ($search) {
+                $query->where('users.username', 'like', "%{$search}%")
+                    ->orWhere('users.name', 'like', "%{$search}%")
+                    ->orWhere('users.email', 'like', "%{$search}%");
+            });
         }
 
-        // data
+        // data dan metadata
         $data = [];
         $metadata = [];
 
-        // metadata
+        // Hitung total data
         $metadata['total_data'] = $query->count('users.id_user');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-        // get count
+        // Dapatkan data
         if ($count == true) {
-            $query = $query->count('users.id_user');
-            $data['count'] = $query;
-        }
-        // get data
-        else {
+            $data['count'] = $query->count('users.id_user');
+        } else {
             $query = $query
                 ->orderBy($sort[0], $sort[1])
                 ->limit($per_page)
@@ -91,10 +94,10 @@ class UserController extends Controller
             foreach ($query as $qry) {
                 $temp = $qry;
                 array_push($data, $temp);
-            };
+            }
         }
 
-        // result
+        // Kembalikan hasil
         if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
@@ -102,10 +105,13 @@ class UserController extends Controller
         }
     }
 
+
     public function show($id_user)
     {
-        // query
-        $query = User::select('users.*', 'user_levels.name as level_name')->join('user_levels', 'users.level_id', '=', 'user_levels.id_level')->where([['users.id_user', '>', '0']]);
+        // query: joining users and user_levels tables
+        $query = User::select('users.*', 'user_levels.name as level_name')
+            ->join('user_levels', 'users.level_id', '=', 'user_levels.id_level')
+            ->where([['users.id_user', '>', '0']]);
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
@@ -118,7 +124,7 @@ class UserController extends Controller
 
         // result
         if ($data) {
-            return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
+            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
@@ -139,13 +145,13 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
-        $req = $request->post();
+        $req = $request->all();
         $req['password'] = bcrypt($req['password']);
 
         $data = User::create($req);
 
         if ($data) {
-            return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Insert data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Failed to insert data', [], []);
         }
@@ -161,9 +167,18 @@ class UserController extends Controller
             }
         }
 
-        $req = $request->post();
-        if (isset($req['password'])) {
+        $request->validate([
+            'name' => 'sometimes|required',
+            'email' => 'sometimes|required|unique:users,email,' . $id_user . ',id_user',
+            'username' => 'sometimes|required|unique:users,username,' . $id_user . ',id_user',
+            'password' => 'sometimes|required',
+        ]);
+
+        $req = $request->all();
+        if ($request->filled('password')) {
             $req['password'] = bcrypt($req['password']);
+        } else {
+            unset($req['password']);
         }
 
         $query = User::findOrFail($id_user);
@@ -172,7 +187,7 @@ class UserController extends Controller
         $data = User::findOrFail($id_user);
 
         if ($data) {
-            return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Update data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Failed to update data', [], []);
         }
@@ -190,7 +205,7 @@ class UserController extends Controller
         $query->delete();
 
         if ($query) {
-            return new ApiResource(true, 201, 'Delete data successfull', [], []);
+            return new ApiResource(true, 201, 'Delete data successful', [], []);
         } else {
             return new ApiResource(false, 400, 'Failed to delete data', [], []);
         }

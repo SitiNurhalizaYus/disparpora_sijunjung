@@ -45,6 +45,8 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
 
     // Admin dashboard and profile
     Route::get('profile', [App\Http\Controllers\Admin\ProfileController::class, 'index']);
+     // Route untuk mengupdate profil
+    Route::post('/admin/profile/{id}', [App\Http\Controllers\Admin\ProfileController::class, 'updateProfile'])->name('admin.profile.update');
     Route::get('dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Resource routes

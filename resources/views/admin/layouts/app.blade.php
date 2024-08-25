@@ -314,6 +314,7 @@
                         <hr class="hr-horizontal" style="background-color: white">
                     </li>
 
+                    @if ($session_data['user_level_id'] == 1)
                     {{-- pengguna --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'user')) {{ 'active' }} @endif"
@@ -335,7 +336,9 @@
                             <span class="item-name">Pengguna</span>
                         </a>
                     </li>
+                    @endif
 
+                    @if ($session_data['user_level_id'] == 1)
                     {{-- setting --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'setting')) {{ 'active' }} @endif"
@@ -354,6 +357,8 @@
                             <span class="item-name">Pengaturan</span>
                         </a>
                     </li>
+                    @endif
+
                 </ul>
 
                 <!-- Sidebar Menu End -->
@@ -401,16 +406,15 @@
                             <li class="nav-item dropdown">
                                 <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown"
                                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('/' . str_replace('/xxx/', '/100/', $session_data['user_picture'])) }}"
+                                    <img src="{{ asset('/' . str_replace('/xxx/', '/100/', $session_data['user_picture'])) . '?' . time() }}"
                                         class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
                                     <div class="caption ms-3 d-none d-md-block ">
                                         <h6 class="mb-0 caption-title">{{ $session_data['user_name'] }}</h6>
                                         <p class="mb-0 caption-sub-title">{{ $session_data['user_level_name'] }}</p>
-                                        {{-- {{ dd($session_data) }} --}}
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ url('/admin/profile') }}"">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{{ url('/admin/profile') }}">Profile</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>

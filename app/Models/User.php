@@ -43,25 +43,17 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
+    // Method untuk JWTSubject
     public function getJWTIdentifier()
     {
-        return $this->getKey();
+        return $this->getKey();  // Ini akan menggunakan primary key 'id_user'
     }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
     public function getJWTCustomClaims()
     {
         return [];
     }
+
     
     // Relasi ke Konten yang dibuat oleh user
     public function createdContents()
@@ -110,4 +102,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Partner::class, 'created_by');
     }
+
+    // public function userLevel() {
+    //     return $this->belongsTo(UserLevel::class, 'level_id', 'id_level');
+    // }
+    
 }

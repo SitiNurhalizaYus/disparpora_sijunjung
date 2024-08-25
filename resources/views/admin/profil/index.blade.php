@@ -100,7 +100,7 @@
                         orderable: false,
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart +
-                            1; // Menghasilkan nomor urut
+                                1; // Menghasilkan nomor urut
                         }
                     },
                     {
@@ -119,14 +119,14 @@
                     {
                         data: 'image',
                         className: 'text-center',
-                        render: function(data) {
-                            if (data) {
-                                var imagePath = "{{ url('/') }}/" + data.replace('/xxx/',
+                        render: function(data, type, row, meta) {
+                            if (data && data !== null) { // Pastikan data tidak null
+                                var imagePath = "{{ asset('/') }}" + data.replace('/xxx/',
                                     '/100/');
                                 return '<img src="' + imagePath +
-                                    '" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">';
+                                    '" style="max-width:100px; max-height:100px;">';
                             } else {
-                                return '<span>No Image</span>';
+                                return '<span>No Image</span>'; // Tampilkan pesan jika tidak ada gambar
                             }
                         }
                     },
