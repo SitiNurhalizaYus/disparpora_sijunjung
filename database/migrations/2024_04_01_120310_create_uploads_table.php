@@ -16,15 +16,16 @@ return new class extends Migration
             $table->string('name');
             $table->string('type')->nullable();
             $table->string('ext')->nullable();
-            $table->string('size')->nullable();
+            $table->string('size')->nullable();            
+            $table->boolean('hd')->default(0);
             $table->string('hash')->nullable();
-            $table->string('url')->nullable();
+            $table->text('url')->nullable();
             // default
             $table->text('notes')->nullable();
-            $table->boolean('is_active')->default(0);
-            $table->timestamps();
+            $table->boolean('active_status')->default(0);
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
+            $table->timestamps();
         });
     }
 

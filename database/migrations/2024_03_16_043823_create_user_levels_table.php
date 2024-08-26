@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_levels', function (Blueprint $table) {
-            $table->id();
-            $table->string('role');
-            $table->text('description')->nullable();
-            $table->boolean('is_active')->default(1);
+            $table->id('id_level');
+            $table->string('name');
+            $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

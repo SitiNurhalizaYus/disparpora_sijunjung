@@ -18,7 +18,7 @@ class ProfileController extends Controller
         if($has_session) {
             $data = [];
             $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-            $data['menu'] = 'pricing-list';
+            $data['menu'] = 'profile-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
             return view('admin.profile.index', $data);

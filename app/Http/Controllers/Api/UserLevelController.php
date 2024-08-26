@@ -15,11 +15,12 @@ class UserLevelController extends Controller
         $this->middleware('auth:api')->except("index", "show");
     }
 
+    
     public function index(Request $request)
     {
         // parameter
         $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
+        $sort = $request->has('sort') ? $request->get('sort') : 'id_level:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
@@ -30,7 +31,7 @@ class UserLevelController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = UserLevel::where([['id','>','0']]);
+        $query = UserLevel::where([['id_level','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
@@ -48,7 +49,7 @@ class UserLevelController extends Controller
         }
 
         if($search){
-            $query = $query->whereAny(['role'], 'like', "%{$search}%");
+            $query = $query->whereAny(['name'], 'like', "%{$search}%");
         }
 
         // data
@@ -56,14 +57,14 @@ class UserLevelController extends Controller
         $metadata = [];
 
         // metadata
-        $metadata['total_data'] = $query->count('id');
+        $metadata['total_data'] = $query->count('id_level');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
         // get count
         if($count == true) {
-            $query = $query->count('id');
+            $query = $query->count('id_level');
             $data['count'] = $query;
         }
         // get data
@@ -89,10 +90,11 @@ class UserLevelController extends Controller
         }
     }
 
-    public function show($id)
+    
+    public function show($id_level)
     {
         // query
-        $query = UserLevel::where([['id','>','0']]);
+        $query = UserLevel::where([['id_level','>','0']]);
 
         // cek token
         if(!auth()->guard('api')->user()) {
@@ -100,7 +102,7 @@ class UserLevelController extends Controller
         }
 
         // data
-        $data = $query->find($id);
+        $data = $query->find($id_level);
 
         // result
         if($data) {
@@ -110,50 +112,53 @@ class UserLevelController extends Controller
         }
     }
 
+   
     public function store(Request $request)
     {
         $request->validate([
-            'role' => 'required',
+            'name' => 'required',
         ]);
 
         $req = $request->post();
         $data = UserLevel::create($req);
 
         if($data) {
-            return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to insert data', [], []);
+            return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
         }
     }
 
-    public function update(Request $request, $id)
+   
+    public function update(Request $request, $id_level)
     {
         $request->validate([
-            'role' => 'required',
+            'name' => 'required',
         ]);
 
         $req = $request->post();
-        $query = UserLevel::findOrFail($id);
+        $query = UserLevel::findOrFail($id_level);
         $query->update($req);
 
-        $data = UserLevel::findOrFail($id);
+        $data = UserLevel::findOrFail($id_level);
 
         if($data) {
-            return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to update data', [], []);
+            return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
         }
     }
 
-    public function destroy($id)
+    
+    public function destroy($id_level)
     {
-        $query = UserLevel::findOrFail($id);
+        $query = UserLevel::findOrFail($id_level);
         $query->delete();
 
         if($query) {
-            return new ApiResource(true, 201, 'Delete data successfull', [], []);
+            return new ApiResource(true, 201, 'Data berhasil dihapus', [], []);
         } else {
-            return new ApiResource(false, 400, 'Failed to delete data', [], []);
+            return new ApiResource(false, 400, 'Data gagal dihapus', [], []);
         }
     }
 }

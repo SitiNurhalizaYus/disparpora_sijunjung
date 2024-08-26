@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ApiResource;
-use Illuminate\Http\Request;
 use App\Models\Log;
+use App\Helpers\AppHelper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\ApiResource;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -16,30 +17,7 @@ class DashboardController extends Controller
         $this->middleware('auth:api');
     }
 
-    /**
-     * @OA\Get(
-     *     path="/dashboard/top-page",
-     *     tags={"Dashboard"},
-     *     summary="",
-     *     description="Get top page",
-     *     operationId="dashboard_top_page",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
-    public function topPage(Request $request)
+     public function topPage(Request $request)
     {
         // query
         $query = Log::groupBy('path')->selectRaw('path, count(*) as total')->orderBy('total', 'desc')->get()->toArray();
@@ -59,30 +37,7 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/dashboard/top-device",
-     *     tags={"Dashboard"},
-     *     summary="",
-     *     description="Get top device",
-     *     operationId="dashboard_top_device",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
-    public function topDevice(Request $request)
+     public function topDevice(Request $request)
     {
         // query
         $queryDesktop = Log::selectRaw('count(*) as total')->where('is_desktop', '1')->get();
@@ -118,29 +73,6 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/dashboard/top-os",
-     *     tags={"Dashboard"},
-     *     summary="",
-     *     description="Get top os",
-     *     operationId="dashboard_top_os",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function topOs(Request $request)
     {
         // query
@@ -161,30 +93,7 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/dashboard/top-browser",
-     *     tags={"Dashboard"},
-     *     summary="",
-     *     description="Get top browser",
-     *     operationId="dashboard_top_browser",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
-    public function topBrowser(Request $request)
+     public function topBrowser(Request $request)
     {
         // query
         $query = Log::groupBy('browser')->selectRaw('browser, count(*) as total')->orderBy('total', 'desc')->get()->toArray();
@@ -204,29 +113,6 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/dashboard/top-country",
-     *     tags={"Dashboard"},
-     *     summary="",
-     *     description="Get top country",
-     *     operationId="dashboard_top_country",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function topCountry(Request $request)
     {
         // query
@@ -247,29 +133,7 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/dashboard/top-city",
-     *     tags={"Dashboard"},
-     *     summary="",
-     *     description="Get top city",
-     *     operationId="dashboard_top_city",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
+   
     public function topCity(Request $request)
     {
         // query
@@ -290,30 +154,7 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/dashboard/access-daily",
-     *     tags={"Dashboard"},
-     *     summary="",
-     *     description="Get access daily",
-     *     operationId="dashboard_access_daily",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
-    public function accessDaily(Request $request)
+       public function accessDaily(Request $request)
     {
         // query
         $query = DB::select("
@@ -339,30 +180,7 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/dashboard/top-monthly",
-     *     tags={"Dashboard"},
-     *     summary="",
-     *     description="Get top monthly",
-     *     operationId="dashboard_top_monthly",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
-    public function accessMonthly(Request $request)
+      public function accessMonthly(Request $request)
     {
         // query
         $query = DB::select("

@@ -1,335 +1,357 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="ltr" class="landing-pages">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{ $og['title'] . ' - ' .$setting['name'] }}</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>{{ $og['title'] . ' - ' . $setting['name'] }}</title>
 
-    <!-- logo-geopark -->
-    <link rel="shortcut icon" href="{{ asset('/'.str_replace('/xxx/', '/100/', $setting['logo-geopark'])) }}">
-    <link rel="apple-touch-icon" href="{{ asset('/'.str_replace('/xxx/', '/100/', $setting['logo-geopark'])) }}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/'.str_replace('/xxx/', '/100/', $setting['logo-geopark'])) }}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('/'.str_replace('/xxx/', '/100/', $setting['logo-geopark'])) }}">
-
-    <!-- SEO -->
-    <meta name="description" content="{{ $setting['seo-description'] }}">
-    <meta name="keywords" content="{{ $setting['seo-keywords'] }}">
-    <meta name="author" content="{{ $setting['seo-author'] }}">
-    <meta name="keyphrases" content="{{ $setting['seo-keyphrases'] }}">
-    <meta name="mytopic" content="{{ $setting['seo-mytopic'] }}">
-    <meta name="classification" content="{{ $setting['seo-classification'] }}">
-    <meta name="robots" content="{{ $setting['seo-robots'] }}>">
+    <!-- logo-parpora -->
+    <link rel="shortcut icon" href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
+    <link rel="apple-touch-icon" href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
+    <link rel="apple-touch-icon" sizes="72x72"
+        href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
+    <link rel="apple-touch-icon" sizes="114x114"
+        href="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
 
     <!-- social media shared -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ $og['url'] }}">
     <meta property="og:title" content="{{ $og['title'] }}">
     <meta property="og:description" content="{{ $og['description'] }}">
-    @if(isset($og['image']))
-        <meta property="og:image" content="{{ asset('/'.$og['image']) }}">
+    @if (isset($og['image']))
+        <meta property="og:image" content="{{ asset('/' . $og['image']) }}">
     @else
-        <meta property="og:image" content="{{ asset('/'.str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
+        <meta property="og:image" content="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-parpora'])) }}">
     @endif
 
-    <!-- Library / Plugin Css Build -->
-    <link rel="stylesheet" href="{{ asset('assets/css/core/libs.min.css') }}">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    <!-- Hope Ui Design System Css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/hope-ui.min.css?v=4.0.0') }}">
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Custom Css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.min.css?v=4.0.0') }}">
+    <!-- Libraries Stylesheet -->
+    <link href="{{ asset('landingpage/assets/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('landingpage/assets/lib/animate/animate.min.css') }}" rel="stylesheet">
 
-    <!-- Dark Css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/dark.min.css') }}">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{{ asset('landingpage/assets/css/bootstrap.min.css') }}" rel="stylesheet">
 
-    <!-- Customizer Css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/customizer.min.css') }}">
-
-    <!-- RTL Css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/rtl.min.css') }}">
-
-    <!-- SwiperSlider css -->
-    <link rel="stylesheet" href="{{ asset('assets/vendor/swiperSlider/swiper-bundle.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('landing-pages/assets/css/landing-pages.min.css') }}">
+    <!-- Template Stylesheet -->
+    <link href="{{ asset('landingpage/assets/css/style.css') }}" rel="stylesheet">
 </head>
 
-<body class=" body-bg landing-pages">
-    <span class="screen-darken"></span>
-    <!-- loader-Start -->
-    {{-- <div id="loading">
-        <div class="loader simple-loader">
-            <div class="loader-body"></div>
-        </div>
-    </div> --}}
-    <div class="loader"></div>
-    <!-- loader-END -->
-    <!-- Wrapper-start -->
-    <main class="main-content">
-
-        <div class="position-relative">
-            <!-- Nav-Start -->
-            <nav class="nav navbar navbar-expand-xl navbar-light iq-navbar header-hover-menu">
-                <div class="container-fluid navbar-inner">
-                    <div class="d-flex align-items-center justify-content-between w-100 landing-header">
-                        <a href="{{url('/home')}}" class="navbar-brand m-0 d-xl-flex d-none">
-                            <!--Logo start-->
-                            <img src="{{ asset('/'.str_replace("/xxx/", "/300/", $setting['logo-geopark'])) }}">
-                            <!--logo End-->
-                            <h5 class="logo-title">{{ $setting['name'] }}</h5>
-                        </a>
-                        <div class="d-flex align-items-center d-xl-none">
-                            <button data-trigger="navbar_main" class="d-xl-none btn btn-primary rounded-pill p-1 pt-0"
-                                type="button">
-                                <svg width="20px" class="icon-20" viewbox="0 0 24 24">
-                                    <path fill="currentColor"
-                                        d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
-                                </svg>
-                            </button>
-
-                            <a href="{{url('/home')}}" class="navbar-brand ms-3  d-xl-none">
-                                <!--Logo start-->
-                                <img src="{{ asset('/'.str_replace("/xxx/", "/300/", $setting['logo-geopark'])) }}">
-                                <!--logo End-->
-                                <h5 class="logo-title">{{ $setting['name-short'] }}</h5>
-                            </a>
-                        </div>
-                        <ul class="d-block d-xl-none list-unstyled m-0">
-                            <li class="nav-item dropdown iq-responsive-menu ">
-                                <div class="btn btn-sm bg-body" id="navbarDropdown-search-11" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <svg class="icon-20" width="20" viewbox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor"
-                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
-                                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </div>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown-search-11"
-                                    style="width: 18rem;">
-                                    <li class="px-3 py-0">
-                                        <div class="form-group input-group mb-0">
-                                            <input type="text" class="form-control" placeholder="Search...">
-                                            <span class="input-group-text">
-                                                <svg class="icon-20" width="20" height="20" viewbox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    </circle>
-                                                    <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    </path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                        <!-- Horizontal Menu Start -->
-                        <nav id="navbar_main" class="mobile-offcanvas nav navbar navbar-expand-xl hover-nav horizontal-nav">
-                            <div class="container-fluid p-lg-0">
-                                <div class="offcanvas-header px-0">
-                                    <a href="{{url('/home')}}" class="navbar-brand ms-3  d-xl-none">
-                                        <!--Logo start-->
-                                        <img src="{{ asset('/'.str_replace("/xxx/", "/300/", $setting['logo-geopark'])) }}">
-                                        <!--logo End-->
-                                        <h5 class="logo-title">{{ $setting['name'] }}</h5>
-                                    </a>
-                                    <button class="btn-close float-end px-3"></button>
-                                </div>
-                                <ul class="navbar-nav iq-nav-menu  list-unstyled" id="header-menu">
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="{{url('/home')}}">Home
-                                        </a>
-                                    </li>
-                                    <li class="nav-item ">
-                                        <a class="nav-link menu-arrow justify-content-start" data-bs-toggle="collapse" href="#pageData" role="button" aria-expanded="false" aria-controls="pageData">
-                                          <span class="item-name">Pages</span>
-                                          <svg fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-18" width="18" height="18" viewBox="0 0 24 24"><path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                                        </a>
-                                        <ul class="iq-header-sub-menu list-unstyled collapse" id="pageData">
-                                            @foreach ($pages as $page)
-                                                <li class="nav-item"><a class="nav-link" href="{{url('/page/'.$page['slug'])}}" style="font-size: medium;">{{ $page['name'] }}</a></li>
-                                            @endforeach
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="{{url('/about')}}">About Us</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="{{url('/feature')}}">Features</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="{{url('/pricing')}}">Pricing</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="{{url('/blog')}}">Blog</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="{{url('/faq')}}">Faq</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="{{url('/contact')}}">Contact Us</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- container-fluid.// -->
-                        </nav>
-                        <!-- Sidebar Menu End -->
-                    </div>
-                </div>
-            </nav>
-            <!--Nav-End-->
-        </div>
-
-        @yield('content')
-
-    </main>
-    <!-- Wrapper-End -->
-    <!-- Footer-start -->
-    <footer>
-        <div class="bg-secondary inner-box ">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <a href="{{url('/home')}}" class="navbar-brand  d-flex align-items-center">
-                            <img src="{{ asset('/'.str_replace("/xxx/", "/300/", $setting['logo-geopark'])) }}">
-                            <h4 class="logo-title ms-3 text-white">{{ $setting['name'] }}</h4>
-                        </a>
-                        <p class="text-white my-4">
-                            {{ $setting['footer-about'] }}
-                        </p>
-                        <div class="d-flex align-items-center mb-4">
-                            <svg width="24" height="24" viewbox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 6V22L8 18L16 22L23 18V2L16 6L8 2L1 6Z" stroke="white" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M16 6V22" stroke="white" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M8 2V18" stroke="white" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                            <p class="ms-4 mb-0 text-white">{{ $setting['address'] }}</p>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <svg width="22" height="22" viewbox="0 0 22 22" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M21 15.9201V18.9201C21.0011 19.1986 20.9441 19.4743 20.8325 19.7294C20.7209 19.9846 20.5573 20.2137 20.3521 20.402C20.1468 20.5902 19.9046 20.7336 19.6407 20.8228C19.3769 20.912 19.0974 20.9452 18.82 20.9201C15.7428 20.5857 12.787 19.5342 10.19 17.8501C7.77382 16.3148 5.72533 14.2663 4.18999 11.8501C2.49997 9.2413 1.44824 6.27109 1.11999 3.1801C1.095 2.90356 1.12787 2.62486 1.21649 2.36172C1.30512 2.09859 1.44756 1.85679 1.63476 1.65172C1.82196 1.44665 2.0498 1.28281 2.30379 1.17062C2.55777 1.05843 2.83233 1.00036 3.10999 1.0001H6.10999C6.5953 0.995321 7.06579 1.16718 7.43376 1.48363C7.80173 1.80008 8.04207 2.23954 8.10999 2.7201C8.23662 3.68016 8.47144 4.62282 8.80999 5.5301C8.94454 5.88802 8.97366 6.27701 8.8939 6.65098C8.81415 7.02494 8.62886 7.36821 8.35999 7.6401L7.08999 8.9101C8.51355 11.4136 10.5864 13.4865 13.09 14.9101L14.36 13.6401C14.6319 13.3712 14.9751 13.1859 15.3491 13.1062C15.7231 13.0264 16.1121 13.0556 16.47 13.1901C17.3773 13.5286 18.3199 13.7635 19.28 13.8901C19.7658 13.9586 20.2094 14.2033 20.5265 14.5776C20.8437 14.9519 21.0122 15.4297 21 15.9201Z"
-                                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <p class="ms-4 mb-0 text-white">{{ $setting['phone'] }}</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 mt-md-0 mt-4">
-                        <h5 class="mb-4 text-white">Links</h5>
-                        <ul class="m-0 p-0 list-unstyled text-white">
-                            <li class="mb-3"><a href="{{ url('/about') }}" style="color: lightgray;">About us</a></li>
-                            <li class="mb-3"><a href="{{ url('/feature') }}" style="color: lightgray;">Features</a></li>
-                            <li class="mb-3"><a href="{{ url('/pricing') }}" style="color: lightgray;">Pricing</a></li>
-                            <li><a href="{{ url('/blog') }}" style="color: lightgray;">Blog</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-2 mt-md-0 mt-4">
-                        <h5 class="mb-4 text-white">Help</h5>
-                        <ul class="m-0 p-0 list-unstyled text-white">
-                            <li class="mb-3"><a href="{{ url('/faq') }}" style="color: lightgray;">FAQ</a></li>
-                            <li><a href="{{ url('/contact') }}" style="color: lightgray;">Contact Us</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4 mt-md-0 mt-4">
-                        <h5 class="mb-4 text-white">Follow Us </h5>
-                        <ul class="list-unstyled p-0 m-0 d-flex mt-4">
-                            <li>
-                                <a href="{{ $setting['socmed-facebook'] }}" target="_blank">
-                                    <img src="{{ asset('assets/images/brands/08.png') }}" alt="fb" loading="lazy" class="rounded-pill">
-                                </a>
-                            </li>
-                            <li class="ps-3">
-                                <a href="{{ $setting['socmed-twitter'] }}" target="_blank">
-                                    <img src="{{ asset('assets/images/brands/09.png') }}" alt="gm" loading="lazy" class="rounded-pill">
-                                </a>
-                            </li>
-                            <li class="ps-3">
-                                <a href="{{ $setting['socmed-instagram'] }}" target="_blank">
-                                    <img src="{{ asset('assets/images/brands/10.png') }}" alt="im" loading="lazy" class="rounded-pill">
-                                </a>
-                            </li>
-                            <li class="ps-3">
-                                <a href="{{ $setting['socmed-linkedin'] }}" target="_blank">
-                                    <img src="{{ asset('assets/images/brands/13.png') }}" alt="li" loading="lazy" class="rounded-pill">
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <hr>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom bg-secondary ">
-            <div class="container border-top  py-4 border-primary">
-                <div class="row">
-                    <div class="col-md-12 text-center text-white">
-                        <p class="mb-0">©
-                            {{ $setting['copyright'] }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer-end -->
-    <div id="back-to-top" style="display: none;">
-        <a class="p-0 btn btn-primary btn-sm position-fixed top" id="top" href="#top">
-            <svg class="icon-30" width="30" viewbox="0 0 24 24" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 15.5L12 8.5L19 15.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                    stroke-linejoin="round"></path>
-            </svg>
-        </a>
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner"></div>
     </div>
-    <a class="btn btn-fixed-end btn-primary btn-icon btn-landing" href="{{url('/admin')}}" style="width: 145px;">
-        Admin
-    </a>
+    <!-- Spinner End -->
 
-    <!-- offcanvas start -->
-    <!-- Library Bundle Script -->
-    <script src="{{ asset('assets/js/core/libs.min.js') }}"></script>
 
-    <!-- External Library Bundle Script -->
-    <script src="{{ asset('assets/js/core/external.min.js') }}"></script>
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-dark px-5 d-none d-lg-block">
+        <div class="row gx-0">
+            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+                <div class="d-inline-flex align-items-center" style="height: 50px;">
+                    <small class="me-3 text-light"><i
+                            class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
+                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="d-inline-flex align-items-center" style="height: 50px;">
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                            class="fab fa-twitter fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                            class="fab fa-facebook-f fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                            class="fab fa-instagram fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                            class="fab fa-youtube fw-normal"></i></a>
+                    <!-- Icon Pengaturan untuk login admin-->
+                    <a class="btn btn-md rounded-circle"
+                        href="{{ url('/admin/login') }}"><i class="bi bi-gear"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Widgetchart Script -->
-    <script src="{{ asset('assets/js/charts/widgetcharts.js') }}"></script>
+    <!-- Topbar End -->
 
-    <!-- mapchart Script -->
-    <script src="{{ asset('assets/js/charts/vectore-chart.js') }}"></script>
-    <script src="{{ asset('assets/js/charts/dashboard.js') }}"></script>
 
-    <!-- fslightbox Script -->
-    <script src="{{ asset('assets/js/plugins/fslightbox.js') }}"></script>
+    <!-- Navbar Start -->
+    <div class="container-fluid position-relative p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+            <a href="/beranda" class="navbar-brand p-0">
+                <h2 class="m-0">
+                    <img src="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
+                    {{ $setting['name-short'] }}
+                </h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav mx-auto py-0">
+                    <a href="{{ url('/beranda') }}"
+                        class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
+                    <div class="nav-item dropdown me-3">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{{ route('profil', ['slug' => 'struktur-organisasi-dinas']) }}"
+                                class="dropdown-item">Struktur
+                                Organisasi Dinas</a>
+                            <a href="{{ route('profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan
+                                Misi</a>
+                            <a href="{{ route('profil', ['slug' => 'tujuan-strategis']) }}"
+                                class="dropdown-item">Tujuan Strategis</a>
+                            <a href="{{ route('profil', ['slug' => 'sasaran-strategis']) }}"
+                                class="dropdown-item">Sasaran
+                                Strategis</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown me-3">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Publikasi</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{{ route('berita.index', ['kategori_id' => 2]) }}"
+                                class="dropdown-item">Berita</a>
+                            {{-- <a href="{{ route('produkhukum.index') }}" class="dropdown-item">Produk Hukum</a> --}}
+                            <a href="{{ url('/artikel') }}" class="dropdown-item">Artikel</a>
+                            <a href="{{ url('/dokumen') }}" class="dropdown-item">Dokumen Publik</a>
+                            <a href="{{ url('/galeri') }}" class="dropdown-item">Galeri</a>
+                            <a href="{{ url('/pengumuman') }}" class="dropdown-item">Pengumuman</a>
+                            <a href="{{ url('/event') }}" class="dropdown-item">Agenda</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown me-3">
+                        <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle"
+                            data-bs-toggle="dropdown">PPID</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{{ url('/ppid/laporan') }}" class="dropdown-item">Laporan Layanan Informasi
+                                Publik</a>
+                            <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi
+                                Publik</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown me-3">
+                        <a href="{{ url('/lokawisata') }}" class="nav-link dropdown-toggle"
+                            data-bs-toggle="dropdown">Lokawisata</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{{ url('/lokawisata/alam') }}" class="dropdown-item">Wisata Alam</a>
+                            <a href="{{ url('/lokawisata/buatan') }}" class="dropdown-item">Wisata Buatan</a>
+                        </div>
+                    </div>
+                    <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
+                        data-bs-target="#searchModal">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <a href="{{ url('/hubungikami') }}" class="btn btn-primary py-2 px-4 ms-3">
+                        Hubungi Kami</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
 
-    <!-- Settings Script -->
-    <script src="{{ asset('assets/js/plugins/setting.js') }}"></script>
 
-    <!-- Slider-tab Script -->
-    <script src="{{ asset('assets/js/plugins/slider-tabs.js') }}"></script>
+    @yield('content')
 
-    <!-- Form Wizard Script -->
-    <script src="{{ asset('assets/js/plugins/form-wizard.js') }}"></script>
 
-    <!-- AOS Animation Plugin-->
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light mt-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="row gx-5">
+                <div class="col-lg-4 col-md-6 footer-about">
+                    <div
+                        class="d-flex flex-column align-items-center justify-content-center text-center h-100 bg-primary p-4">
+                        <a href="index.html" class="navbar-brand">
+                            <h1 class="m-0 text-white"><img
+                                    src="{{ asset('/' . str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
+                                Disparpora</h1>
+                        </a>
+                        <p class="mt-3 mb-4">{{ $setting['address'] }}</p>
+                        <form action="">
+                            <div class="input-group">
+                                <input type="text" class="form-control border-white p-3" placeholder="Your Email">
+                                <button class="btn btn-dark">Sign Up</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-6">
+                    <div class="row gx-5">
+                        <div class="col-lg-4 col-md-12 pt-5 mb-5">
+                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
+                                <h3 class="text-light mb-0">Get In Touch</h3>
+                            </div>
+                            <div class="d-flex mb-2">
+                                <i class="bi bi-geo-alt text-primary me-2"></i>
+                                <p class="mb-0">maps..</p>
+                            </div>
+                            <div class="d-flex mb-2">
+                                <i class="bi bi-envelope-open text-primary me-2"></i>
+                                <p class="mb-0">{{ $setting['email'] }}</p>
+                            </div>
+                            <div class="d-flex mb-2">
+                                <i class="bi bi-telephone text-primary me-2"></i>
+                                <p class="mb-0">{{ $setting['phone'] }}</p>
+                            </div>
+                            <div class="d-flex mt-4">
+                                <a class="btn btn-primary btn-square me-2" href="#"><i
+                                        class="fab fa-twitter fw-normal"></i></a>
+                                <a class="btn btn-primary btn-square me-2" href="#"><i
+                                        class="fab fa-facebook-f fw-normal"></i></a>
+                                <a class="btn btn-primary btn-square me-2" href="#"><i
+                                        class="fab fa-linkedin-in fw-normal"></i></a>
+                                <a class="btn btn-primary btn-square" href="#"><i
+                                        class="fab fa-instagram fw-normal"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
+                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
+                                <h3 class="text-light mb-0">Quick Links</h3>
+                            </div>
+                            <div class="link-animated d-flex flex-column justify-content-start">
+                                <a class="text-light mb-2" href="{{ url('/beranda') }}"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Beranda</a>
+                                <a class="text-light mb-2" href="{{ url('/profildinas') }}"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Profil</a>
+                                <a class="text-light mb-2" href="{{ url('/service') }}"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
+                                <a class="text-light mb-2" href="#"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
+                                <a class="text-light mb-2" href="#"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
+                                <a class="text-light" href="#"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
+                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
+                                <h3 class="text-light mb-0">Popular Links</h3>
+                            </div>
+                            <div class="link-animated d-flex flex-column justify-content-start">
+                                <a class="text-light mb-2" href="/beranda"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Beranda</a>
+                                <a class="text-light mb-2" href="/profildinas"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Profil</a>
+                                <a class="text-light mb-2" href="#"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
+                                <a class="text-light mb-2" href="#"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
+                                <a class="text-light mb-2" href="#"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
+                                <a class="text-light" href="#"><i
+                                        class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid text-white" style="background: #000f0b;">
+        <div class="container text-center">
+            <div class="row justify-content-end">
+                <div class="col-lg-8 col-md-6">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
+                        <p class="mb-0">copyright &copy; 2024 - <a class="text-white border-bottom"
+                                href="#">{{ $setting['name-long'] }}</a>.
 
-    <!-- App Script -->
-    <script src="{{ asset('assets/js/hope-ui.js') }}" defer="defer"></script>
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            <a class="text-white border-bottom" href="https://htmlcodex.com"></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
 
-    <!-- SwiperSlider Script -->
-    <script src="{{ asset('assets/vendor/swiperSlider/swiper-bundle.min.js') }}"></script>
-    <script src="{{ asset('landing-pages/assets/js/app-landing.js') }}" defer="defer"></script>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top"><i
+            class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('landingpage/assets/lib/wow/wow.min.js') }}"></script>
+    <script src="{{ asset('landingpage/assets/lib/easing/easing.min.js') }}"></script>
+    <script src="{{ asset('landingpage/assets/lib/waypoints/waypoints.min.js') }}"></script>
+    <script src="{{ asset('landingpage/assets/lib/counterup/counterup.min.js') }}"></script>
+    <script src="{{ asset('landingpage/assets/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{{ asset('landingpage/assets/js/main.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mendapatkan elemen dropdown-toggle untuk sub-menu
+            var dropdownToggles = document.querySelectorAll('.dropdown-item.dropdown-toggle');
+
+            // Menambahkan event listener untuk hover dan click pada setiap dropdown-toggle
+            dropdownToggles.forEach(function(toggle) {
+                var submenu = toggle.nextElementSibling;
+
+                // Event listener untuk hover
+                toggle.addEventListener('mouseenter', function() {
+                    submenu.classList.add('show');
+                });
+
+                // Event listener untuk hover keluar
+                toggle.addEventListener('mouseleave', function() {
+                    submenu.classList.remove('show');
+                });
+
+                // Event listener untuk klik
+                toggle.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation(); // Mencegah event bubbling
+
+                    var isOpen = submenu.classList.contains('show');
+
+                    // Tutup semua sub-menu terlebih dahulu
+                    document.querySelectorAll('.dropdown-menu .dropdown-menu.show').forEach(
+                        function(openMenu) {
+                            openMenu.classList.remove('show');
+                        });
+
+                    // Toggle sub-menu saat ini
+                    if (!isOpen) {
+                        submenu.classList.add('show');
+                    }
+                });
+
+                // Event listener untuk hover keluar dari submenu
+                submenu.addEventListener('mouseleave', function() {
+                    submenu.classList.remove('show');
+                });
+
+                submenu.addEventListener('mouseenter', function() {
+                    submenu.classList.add('show');
+                });
+            });
+
+            // Menambahkan event listener untuk klik di luar dropdown
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.dropdown-menu')) {
+                    document.querySelectorAll('.dropdown-menu .dropdown-menu.show').forEach(function(
+                        openMenu) {
+                        openMenu.classList.remove('show');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

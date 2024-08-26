@@ -11,12 +11,5 @@ class Partner extends Model
     use HasFactory;
     use BlameableTrait;
 
-    protected $fillable = [
-        'id',
-        'name',
-        'image',
-        'link',
-        'notes',
-        'is_active'
-    ];
+    protected $fillable = ['name', 'image', 'link', 'notes', 'is_active'];
 }

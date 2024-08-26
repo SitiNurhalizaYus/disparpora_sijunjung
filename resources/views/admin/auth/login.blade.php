@@ -21,9 +21,9 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label for="email" class="form-label">Email</label>
-                                                    <input type="text" class="form-control" id="email" name="email"
-                                                        aria-describedby="email" placeholder=" ">
+                                                    <label for="username" class="form-label">Username</label>
+                                                    <input type="text" class="form-control" id="username" name="username"
+                                                        aria-describedby="username" placeholder=" ">
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">

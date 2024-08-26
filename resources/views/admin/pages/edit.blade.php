@@ -62,8 +62,10 @@
                                 </div>
                             </div>
                             <br><br>
-                            <button type="submit" class="btn btn-success">Submit</button>
-                            <a href="{{ URL::previous() }}" class="btn btn-danger">Cancel</a>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end"">
+                                <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
+                                <button type="submit" class="btn btn-success">Simpan</button>
+                            </div>
                         </form>
                     </div>
                 </div>

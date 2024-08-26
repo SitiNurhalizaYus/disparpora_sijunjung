@@ -11,23 +11,24 @@ use App\Models\UserLevel;
 
 class LoginController extends Controller
 {
+    
     public function __invoke(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'email'  => 'required',
+                'username'     => 'required',
                 'password'  => 'required'
             ]);
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 422);
             }
-            $credentials = $request->only('email', 'password');
+            $credentials = $request->only('username', 'password');
             $token = auth()->guard('api')->attempt($credentials);
             // check
             if($token) {
                 // update last_login
                 $req = ['last_login' =>  date('Y-m-d H:i:s')];
-                $query = User::findOrFail(auth()->guard('api')->user()['id']);
+                $query = User::findOrFail(auth()->guard('api')->user()['id_user']);
                 $query->update($req);
 
                 // data
@@ -36,12 +37,12 @@ class LoginController extends Controller
                     'token'   => $token
                 ];
                 $data['user']['last_login'] = date('Y-m-d H:i:s');
-                $data['user']['level_name'] = UserLevel::find($data['user']['level_id'])['role'];
+                $data['user']['level_name'] = UserLevel::find($data['user']['level_id'])['name'];
 
                 return new ApiResource(true, 200, 'Login successfull.', $data, []);
             } else {
                 $data = [];
-                return new ApiResource(false, 403, 'Login failed, incorrect email or password.', $data, []);
+                return new ApiResource(false, 403, 'Login failed, incorrect username or password.', $data, []);
             }
         } catch (\Exception $error) {
             return new ApiResource(false, 400, 'Internal server error, '.$error->getMessage(), [], []);

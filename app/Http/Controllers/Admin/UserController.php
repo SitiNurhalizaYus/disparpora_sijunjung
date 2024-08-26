@@ -34,7 +34,7 @@ class UserController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($id_user)
     {
         $has_session = \App\Helpers\AppHelper::instance()->checkSession();
         $session = \App\Helpers\AppHelper::instance()->getSessionData();
@@ -46,7 +46,7 @@ class UserController extends Controller
                 $data['menu'] = 'user-show';
                 $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
                 $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-                $data['id'] = $id;
+                $data['id_user'] = $id_user;
                 return view('admin.user.show', $data);
             } else {
                 session()->flash('message', 'Forbidden access.');
@@ -81,7 +81,7 @@ class UserController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit($id_user)
     {
         $has_session = \App\Helpers\AppHelper::instance()->checkSession();
         $session = \App\Helpers\AppHelper::instance()->getSessionData();
@@ -93,7 +93,7 @@ class UserController extends Controller
                 $data['menu'] = 'user-edit';
                 $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
                 $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-                $data['id'] = $id;
+                $data['id_user'] = $id_user;
                 return view('admin.user.edit', $data);
             } else {
                 session()->flash('message', 'Forbidden access.');

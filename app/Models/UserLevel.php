@@ -11,12 +11,11 @@ class UserLevel extends Model
     use HasFactory;
     use BlameableTrait;
 
+    protected $primaryKey = 'id_level';
+
     protected $fillable = [
-        'id',
-        'role',
-        'description',
-        'is_active',
-        'created_by',
-        'updated_by',
+        'name',
+        'notes',
+        'is_active'
     ];
 }

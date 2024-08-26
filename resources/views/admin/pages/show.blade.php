@@ -111,9 +111,9 @@
                     $('#description_long').html(result['data']['description_long']);
                     $('#notes').html(result['data']['notes']);
                     if(result['data']['is_active'] == 1) {
-                        $('#is_active').html('<span class="badge bg-success">Active</span>');
+                        $('#is_active').html('<span class="badge bg-success">Aktif</span>');
                     } else {
-                        $('#is_active').html('<span class="badge bg-danger">Not Active</span>');
+                        $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
                     }
                     $('#created_at').html(convertStringToDate(result['data']['created_at']));
                     $('#created_by').html(result['data']['created_name']);
@@ -135,7 +135,7 @@
 
         function removeData(id) {
             Swal.fire({
-                title: "Are you sure want to delete?",
+                title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
                 showCancelButton: false,
                 confirmButtonText: "Yes",
