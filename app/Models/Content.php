@@ -21,15 +21,16 @@ class Content extends Model
 
     // Relasi dengan model Category
     public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
+{
+    return $this->belongsTo(Category::class, 'kategori_id', 'id_category');
+}
 
-    // Relasi dengan model Arsip
-    public function arsip()
-    {
-        return $this->belongsTo(Arsip::class, 'arsip_id');
-    }
+ // Relasi dengan model arsip
+public function arsip()
+{
+    return $this->belongsTo(Arsip::class, 'arsip_id', 'id_arsip');
+}
+
 
     // Relasi dengan model User sebagai created_by
     public function createdBy()

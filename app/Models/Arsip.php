@@ -8,6 +8,8 @@ class Arsip extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_arsip';
+
     protected $fillable = ['tahun', 'bulan', 'is_active'];
 
     // Relasi ke konten

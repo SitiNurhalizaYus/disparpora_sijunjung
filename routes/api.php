@@ -31,6 +31,7 @@ Route::apiResource('artikel', App\Http\Controllers\Api\ArtikelController::class)
 
 // Route::apiResource('category', App\Http\Controllers\Api\Conten::class);//api untuk kategori
 Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class); //api untuk arsip
+Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class); //api untuk arsip
 Route::apiResource('event', App\Http\Controllers\Api\EventController::class); //api untuk event
 // Route::apiResource('pesan', App\Http\Controllers\Api\PesanController::class);//api untuk pesan
 

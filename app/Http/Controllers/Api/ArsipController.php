@@ -20,7 +20,7 @@ class ArsipController extends Controller
     {
         // parameter
         $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
+        $sort = $request->has('sort') ? $request->get('sort') : 'id_arsip:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
@@ -31,7 +31,7 @@ class ArsipController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Arsip::where([['id', '>', '0']]);
+        $query = Arsip::where([['id_arsip', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -57,14 +57,14 @@ class ArsipController extends Controller
         $metadata = [];
 
         // metadata
-        $metadata['total_data'] = $query->count('id');
+        $metadata['total_data'] = $query->count('id_arsip');
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
         // get count
         if ($count == true) {
-            $query = $query->count('id');
+            $query = $query->count('id_arsip');
             $data['count'] = $query;
         }
         // get data
@@ -97,10 +97,10 @@ class ArsipController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($id_arsip)
     {
         // query
-        $query = Arsip::where([['id', '>', '0']]);
+        $query = Arsip::where([['id_arsip', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -108,7 +108,7 @@ class ArsipController extends Controller
         }
 
         // data
-        $data = $query->find($id);
+        $data = $query->find($id_arsip);
 
         // result
         if ($data) {
@@ -136,17 +136,17 @@ class ArsipController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_arsip)
     {
         $request->validate([
             'name' => 'required',
         ]);
 
         $req = $request->post();
-        $query = Arsip::findOrFail($id);
+        $query = Arsip::findOrFail($id_arsip);
         $query->update($req);
 
-        $data = Arsip::findOrFail($id);
+        $data = Arsip::findOrFail($id_arsip);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
@@ -156,9 +156,9 @@ class ArsipController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy($id_arsip)
     {
-        $query = Arsip::findOrFail($id);
+        $query = Arsip::findOrFail($id_arsip);
         $query->delete();
 
         if ($query) {

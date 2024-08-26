@@ -152,13 +152,13 @@ class ContentController extends Controller
         $request->validate([
             'title' => 'required',
             'slug' => 'required|unique:contents,slug',
+            'type' => 'required|in:berita,profil,artikel', // Validasi tipe konten harus salah satu dari yang diizinkan
         ]);
 
-        // Menyimpan data baru dengan tipe 'profil'
+        // Menyimpan data baru berdasarkan input dari form
         $req = $request->all();
         $req['created_by'] = auth()->id(); // Mengisi field created_by dengan ID pengguna yang sedang login
-        $req['type'] = 'profil'; // Mengatur tipe sebagai 'profil'
-        $data = Content::create($req);
+        $data = Content::create($req); // Menyimpan data dengan tipe yang dikirim dari form
 
         // Mengembalikan hasil penyimpanan dalam format ContentResource
         if ($data) {
@@ -174,36 +174,34 @@ class ContentController extends Controller
         }
     }
 
+
     // Metode untuk memperbarui data
     public function update(Request $request, $id_content)
     {
         // Validasi input
         $request->validate([
             'title' => 'required',
-            'slug' => 'required|unique:contents,slug,' . $id_content . ',id_content', // Menggunakan id_content sebagai primary key
+            'slug' => 'required|unique:contents,slug,' . $id_content . ',id_content',
+            'type' => 'required|in:berita,profil,artikel', // Validasi bahwa tipe konten harus salah satu dari yang diizinkan
         ]);
 
         // Mengambil data yang akan diperbarui
-        $query = Content::findOrFail($id_content);
+        $content = Content::findOrFail($id_content);
+
+        // Mengambil semua input dari request termasuk type
         $req = $request->all();
         $req['updated_by'] = auth()->id(); // Mengisi field updated_by dengan ID pengguna yang sedang login
-        $query->update($req);
+
+        // Memperbarui data berdasarkan input dari form
+        $content->update($req);
 
         // Mengembalikan hasil pembaruan dalam format ContentResource
-        $data = Content::findOrFail($id_content);
-
-        if ($data) {
-            return (new ContentResource($data))->additional([
-                'success' => true,
-                'message' => 'Data berhasil diperbarui'
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data gagal diperbarui'
-            ], 400);
-        }
+        return (new ContentResource($content))->additional([
+            'success' => true,
+            'message' => 'Data berhasil diperbarui'
+        ]);
     }
+
 
     // Metode untuk menghapus data
     public function destroy($id_content)

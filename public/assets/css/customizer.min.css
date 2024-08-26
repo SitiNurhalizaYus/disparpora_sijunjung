@@ -36,6 +36,7 @@ body {
 :root {
     --bs-heading-color: #0c112e;
     --bs-primary: #017454;
+    --bs-primaryy: #0d6efd;
     --bs-primary-shade-80: #0c112e;
     --bs-primary-shade-60: #17235d;
     --bs-primary-shade-40: #23348b;
@@ -981,6 +982,10 @@ body {
 
 .bg-primary {
     background-color: var(--bs-primary) !important
+}
+
+.bg-primaryy {
+    background-color: var(--bs-primaryy) !important
 }
 
 .bg-soft-primary {

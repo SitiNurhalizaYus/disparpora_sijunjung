@@ -90,15 +90,26 @@ class ProfilController extends Controller
     }
 
     public function show($id_content)
-    {
+    {   
+        // Ambil data profil dari model berdasarkan id_content
+        $content = Content::find($id_content);
+
+        // Jika data tidak ditemukan, redirect dengan pesan error
+        if (!$content) {
+            return redirect()->route('admin.profil.index')->with('error', 'Profil tidak ditemukan');
+        }
+
+        // Kirim variabel $id_content ke view
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'profil-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
-
+        $data['id_content'] = $id_content;
+        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+        
         return view('admin.profil.show', $data);
+    
     }
 
     public function destroy($id_content)

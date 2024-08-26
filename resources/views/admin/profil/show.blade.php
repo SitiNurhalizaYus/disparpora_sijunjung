@@ -7,7 +7,7 @@
                 <div class="header-title">
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/partner/') }}" class="text-decoration-none text-dark">
+                        <a href="{{ url('/admin/profil/') }}" class="text-decoration-none text-dark">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                                 <path fill="black" fill-rule="evenodd"
@@ -18,7 +18,7 @@
                     </h3>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/partner/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
+                    <a href="{{ url('/admin/profil/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> Edit
                     </a>
                     <button onclick="removeData({{ $id_content }})" class="btn btn-danger btn-sm">
@@ -38,40 +38,56 @@
                         </div>
                     </div>
 
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="form-label" for="title">Judul Profil:</label>
-                            <p id="title"></p>
+                    <!-- Konten data profil -->
+                    <div class="card-body" id="detail-data-success" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
+                                    <div class="card-header bg-info text-white"><strong>Profil Information</strong></div>
+                                    <div class="card-body">
+                                        <h4 class="card-title"><span id="title"></span></h4>
+                                        <p class="card-text"><h6>Deskripsi Singkat: </h6><span id="description_short"></span></p>
+                                        <p class="card-text"><h6>Slug: </h6><span id="slug"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
+                                    <div class="card-header bg-secondary text-white"><strong>Additional Details</strong></div>
+                                    <div class="card-body">
+                                        <p class="card-text"><h6>Status: </h6><span id="is_active"></span></p>
+                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_at"></span></p>
+                                        <p class="card-text"><h6>Diperbarui: </h6><span id="updated_at"></span></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="slug">Slug:</label>
-                            <p id="slug"></p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
+                                    <div class="card-header bg-dark text-white text-center"><strong>Gambar</strong></div>
+                                    <div class="card-body text-center">
+                                        <img id="image" class="img-fluid rounded" alt="Profil Image"
+                                            style="max-width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="description_short">Deskripsi Singkat:</label>
-                            <p id="description_short"></p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
+                                    <div class="card-header bg-gray text-white text-center"><strong>Konten Profil</strong></div>
+                                    <div class="card-body">
+                                        <div id="description_long" style="color: black;"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="description_long">Konten Profil:</label>
-                            <div id="description_long"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="image">Gambar:</label>
-                            <img id="image" src="{{ asset('/uploads/noimage.jpg') }}" alt="Profil Image"
-                                style="max-width:300px;">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="is_active">Status Aktif:</label>
-                            <p id="is_active"></p>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="created_at">Dibuat Pada:</label>
-                            <p id="created_at"></p>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="updated_at">Diperbarui Pada:</label>
-                            <p id="updated_at"></p>
-                        </div>
+                    </div>
+
+                    <!-- Pesan error jika gagal memuat data -->
+                    <div class="card-body text-center" id="detail-data-failed" style="display: none;">
+                        <p id="message" class="text-danger"></p>
                     </div>
                 </div>
             </div>
@@ -80,71 +96,86 @@
 
     <script>
         $(document).ready(function() {
-            // Konfigurasi AJAX
+            // Tampilkan spinner saat loading data
+            $("#loading-spinner").show();
+            $("#detail-data-success").hide();
+            $("#detail-data-failed").hide();
+
             $.ajaxSetup({
                 headers: {
                     'Authorization': "Bearer {{ $session_token }}"
                 }
             });
 
-            // Mendapatkan data profil dengan AJAX
+            // Request untuk mendapatkan data profil
             $.ajax({
                 url: '/api/content/{{ $id_content }}?type=profil',
-                type: 'GET',
-                dataType: 'json',
+                type: "GET",
+                dataType: "json",
+                processData: false,
                 success: function(result) {
-                    if (result.success) {
-                        const data = result.data;
-                        $('#title').text(data.title);
-                        $('#slug').text(data.slug);
-                        $('#description_short').text(data.description_short);
-                        $('#description_long').html(data.content);
-                        $('#image').attr('src', "{{ asset('/') }}" + data.image.replace('/xxx/', '/300/'));
-                        $('#is_active').text(data.is_active ? 'Aktif' : 'Tidak Aktif');
-                        $('#created_at').text(convertStringToDate(data.created_at));
-                        $('#updated_at').text(convertStringToDate(data.updated_at));
-                        $('#editButton').attr('href', '/admin/profil/' + data.id_content + '/edit');
+                    // Sembunyikan spinner
+                    $("#loading-spinner").hide();
+
+                    if (result['success']) {
+                        // Tampilkan data jika berhasil memuat
+                        $("#detail-data-success").show();
+                        $("#detail-data-failed").hide();
+
+                        $('#title').text(result['data']['title']);
+                        $('#description_short').text(result['data']['description_short']);
+                        $('#slug').text(result['data']['slug']);
+                        $("#image").attr("src", "{{ url('/') }}/" + result['data']['image'].replace('/xxx/', '/500/'));
+                        $('#description_long').html(result['data']['content']);
+                        $('#is_active').html(result['data']['is_active'] == 1 ?
+                            '<span class="badge bg-success">Aktif</span>' :
+                            '<span class="badge bg-danger">Tidak Aktif</span>');
+                        $('#created_at').text(convertStringToDate(result['data']['created_at']));
+                        $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
                     } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: result.message,
-                            confirmButtonColor: '#3A57E8',
-                        });
+                        // Tampilkan pesan error jika gagal memuat data
+                        $("#detail-data-success").hide();
+                        $("#detail-data-failed").show();
+                        $('#message').text(result['message']);
                     }
                 },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Terjadi kesalahan saat memuat data profil.",
-                        confirmButtonColor: '#3A57E8',
-                    });
+                fail: function() {
+                    // Tampilkan pesan error jika terjadi kegagalan saat memuat data
+                    $("#loading-spinner").hide();
+                    $("#detail-data-success").hide();
+                    $("#detail-data-failed").show();
+                    $('#message').text("Failed to load data.");
                 }
             });
         });
 
-        // Fungsi untuk menghapus data profil
+        // Fungsi untuk menghapus data
         function removeData(id_content) {
             Swal.fire({
-                title: "Kamu yakin ingin menghapus data ini?",
+                title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: "Ya, hapus!",
-                denyButtonText: "Tidak",
+                confirmButtonText: "Yes",
+                denyButtonText: "No",
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
+                    // Request untuk menghapus data profil
+                    $.ajaxSetup({
+                        headers: {
+                            'Authorization': "Bearer {{ $session_token }}"
+                        }
+                    });
                     $.ajax({
                         url: '/api/content/' + id_content + '?type=profil',
-                        type: 'DELETE',
-                        dataType: 'json',
+                        type: "DELETE",
+                        dataType: "json",
+                        processData: false,
                         success: function(result) {
-                            if (result.success) {
+                            if (result['success']) {
                                 Swal.fire({
                                     icon: "success",
-                                    title: "Success",
-                                    text: result.message,
+                                    title: "Deleted",
+                                    text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then(() => {
                                     window.location.replace("{{ url('/admin/profil') }}");
@@ -153,27 +184,20 @@
                                 Swal.fire({
                                     icon: "error",
                                     title: "Oops...",
-                                    text: result.message,
+                                    text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 });
                             }
-                        },
-                        error: function(xhr) {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Terjadi kesalahan saat menghapus data.",
-                                confirmButtonColor: '#3A57E8',
-                            });
                         }
                     });
                 }
             });
         }
 
+        // Fungsi untuk mengonversi string tanggal menjadi format yang lebih ramah
         function convertStringToDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
         }
     </script>
 @endsection
