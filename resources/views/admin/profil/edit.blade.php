@@ -57,7 +57,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
-                                <input class="form-control" type="file" id="file" name="file">
+                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg">
                                 <input class="form-control" type="hidden" id="image" name="image" value="">
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"

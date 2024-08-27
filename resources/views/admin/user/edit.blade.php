@@ -81,7 +81,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="picture">Foto</label>
-                                <input class="form-control" type="file" id="file" name="file">
+                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg">
                                 <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg"
                                     placeholder="image">
                                 <br>

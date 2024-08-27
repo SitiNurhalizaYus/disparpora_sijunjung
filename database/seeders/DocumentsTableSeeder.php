@@ -17,7 +17,8 @@ class DocumentsTableSeeder extends Seeder
             [
                 'title' => 'Dokumen Festival Pariwisata',
                 'file_path' => 'path/to/document1.pdf',
-                'description' => 'Dokumen panduan untuk peserta festival pariwisata.',
+                'notes' => 'Dokumen panduan untuk peserta festival pariwisata.',
+                'category' => 'Laporan',
                 'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -28,7 +28,6 @@ class ContentController extends Controller
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));
         $type = $request->get('type', null);
-        $arsip_id = $request->get('arsip_id', null);
         $category_id = $request->get('category_id', null);
 
         // Menentukan kolom dan arah sorting (default 'id_content:asc')
@@ -42,16 +41,11 @@ class ContentController extends Controller
         $where = json_decode($where, true);
 
         // Membuat query dasar untuk tabel Content dengan relasi arsip dan kategori
-        $query = Content::with(['arsip', 'category', 'createdBy', 'updatedBy']);
+        $query = Content::with(['category', 'createdBy', 'updatedBy']);
 
         // Menambahkan filter berdasarkan tipe konten jika ada
         if ($type) {
             $query->where('type', $type);
-        }
-
-        // Menambahkan filter berdasarkan arsip_id jika ada
-        if ($arsip_id) {
-            $query->where('arsip_id', $arsip_id);
         }
 
         // Menambahkan filter berdasarkan category_id jika ada

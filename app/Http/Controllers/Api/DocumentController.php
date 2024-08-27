@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\Document;
 
-class CategoryController extends Controller
+class DocumentController extends Controller
 {
     public function __construct()
     {
@@ -18,7 +17,7 @@ class CategoryController extends Controller
     {
         // parameter
         $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'id_category:asc';
+        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
@@ -34,13 +33,13 @@ class CategoryController extends Controller
 
         $sort = explode(':', $sort);
         if (count($sort) !== 2) {
-            $sort = ['id_category', 'asc']; // Default sorting jika tidak valid
+            $sort = ['id', 'asc']; // Default sorting jika tidak valid
         }
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
         // query
-        $query = Category::where([['id_category', '>', '0']]);
+        $query = Document::where([['id', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -58,10 +57,10 @@ class CategoryController extends Controller
         }
 
         if ($search) {
-            $query = $query->where('name', 'like', "%{$search}%");
+            $query = $query->where('title', 'like', "%{$search}%");
         }
 
-        // metadata
+        // metadata dan data
         $metadata = [];
         $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
@@ -91,10 +90,10 @@ class CategoryController extends Controller
         }
     }
 
-    public function show($id_category)
+    public function show($id)
     {
         // query
-        $query = Category::where([['id_category', '>', '0']]);
+        $query = Document::where([['id', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -102,7 +101,7 @@ class CategoryController extends Controller
         }
 
         // data
-        $data = $query->find($id_category);
+        $data = $query->find($id);
 
         // result
         if ($data) {
@@ -115,11 +114,11 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'title' => 'required',
         ]);
 
         $req = $request->post();
-        $data = Category::create($req);
+        $data = Document::create($req);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
@@ -128,17 +127,17 @@ class CategoryController extends Controller
         }
     }
 
-    public function update(Request $request, $id_category)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
+            'title' => 'required',
         ]);
 
         $req = $request->post();
-        $query = Category::findOrFail($id_category);
+        $query = Document::findOrFail($id);
         $query->update($req);
 
-        $data = Category::findOrFail($id_category);
+        $data = Document::findOrFail($id);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
@@ -147,9 +146,9 @@ class CategoryController extends Controller
         }
     }
 
-    public function destroy($id_category)
+    public function destroy($id)
     {
-        $query = Category::findOrFail($id_category);
+        $query = Document::findOrFail($id);
         $query->delete();
 
         if ($query) {

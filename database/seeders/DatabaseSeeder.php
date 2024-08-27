@@ -21,9 +21,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             UserLevelsTableSeeder::class,
             ContentsTableSeeder::class,
-            ArsipsTableSeeder::class,
             CategoriesTableSeeder::class,
-            AnnouncementsTableSeeder::class,
             AgendasTableSeeder::class,
             GalleriesTableSeeder::class,
             DocumentsTableSeeder::class,
@@ -31,7 +29,6 @@ class DatabaseSeeder extends Seeder
             PartnersTableSeeder::class,
             SlidersTableSeeder::class,
             SettingsTableSeeder::class,
-            DocumentCategorySeeder::class,
         ]);
 
         // User::factory()->create([

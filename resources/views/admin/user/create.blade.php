@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="picture">Foto</label>
-                            <input class="form-control" type="file" id="file" name="file" required>
+                            <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg" required>
                             <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg" placeholder="image">
                             <br>
                             <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview" width="300px" style="border-radius: 2%;">

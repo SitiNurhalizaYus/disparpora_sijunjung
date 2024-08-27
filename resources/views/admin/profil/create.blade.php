@@ -57,7 +57,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
-                                <input class="form-control" type="file" id="file" name="file" required>
+                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg" required>
                                 <input class="form-control" type="hidden" id="image" name="image" value="noimage.jpg"
                                     placeholder="image">
                                 <br>

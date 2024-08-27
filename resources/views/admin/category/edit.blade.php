@@ -2,21 +2,24 @@
 
 @section('content')
     <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
-        <div class="card-header mb-3">
+        <div class="card-header mb-2 px-3">
             <div class="flex-wrap d-flex justify-content-between align-items-center">
-                <div class="header-title">
-                    <h3 class="card-title">
-                        <!-- Tombol Back -->
-                        <a href="{{ URL::previous() }}" style="text-decoration: none; color: inherit;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
-                                class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
-                                <path fill="black"
-                                    fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
-                            </svg>
-                            Portofolio/Kategori - Edit
-                        </a>
-                    </h3>
+                <div>
+                    <div class="header-title">
+                        <h3 class="card-title">
+                            <!-- Tombol Back -->
+                            <a href="{{ URL::previous() }}" style="text-decoration: none; color: inherit;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
+                                    class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
+                                    <path fill="black"
+                                        fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                                </svg>
+                                Kategori/Edit
+                            </a>
+                        </h3>
+                    </div>
                 </div>
+                <div></div>
             </div>
         </div>
         <div class="row">
@@ -25,26 +28,34 @@
                     <div class="card-body">
                         <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
-                            {{-- @method('PUT') --}}
                             <div class="form-group">
-                                <label class="form-label" for="name">Kategori Layanan </label>
-                                <input class="form-control @error('name') is-invalid @enderror" type="text" id="name" name="name" value=""
-                                    placeholder="Masukan Kategori Layanan" required>
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @else
-                                    <div class="invalid-feedback">Silahkan masukan kategori, maksimal 100 karakter</div>
-                                @enderror
+                                <label class="form-label" for="name">Nama Kategori</label>
+                                <input class="form-control" type="text" id="name" name="name" value=""
+                                    placeholder="Masukkan Nama" required>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-name">Nama
+                                    hanya boleh berisi huruf, angka, dan spasi.</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="slug">Slug</label>
+                                <input class="form-control" type="text" id="slug" name="slug"
+                                    value="" placeholder="Otomatis terisi" required
+                                    pattern="[A-Za-z0-9\-]+$">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="notes">Catatan</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="active_status" name="active_status">
-                                    <label class="form-check-label" for="active_status">Status Aktif</label>
+                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
+                                    <label class="form-check-label" for="is_active">Status Aktif</label>
                                 </div>
                             </div>
                             <br><br>
-                            <a href="{{ URL::previous() }}" class="btn btn-danger">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
+                                <button type="submit" class="btn btn-success">Simpan</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -53,20 +64,70 @@
     </div>
 
     <script>
-        // function convertStringToDate(str) {
-        //     var date = new Date(str);
-        //     let options = {
-        //         // weekday: "long",
-        //         year: "numeric",
-        //         month: "long",
-        //         day: "numeric",
-        //         // hour: "numeric",
-        //         // minute: "numeric",
-        //         // second: "numeric"
-        //     };
-        //     var newdate = date.toLocaleDateString('id', options);
-        //     return newdate;
-        // }
+        // validasi name
+        function validateName() {
+            const nameInput = $('#name');
+            const nameValue = nameInput.val();
+            const namePattern = /^[A-Za-z0-9\s]+$/;
+            if (!namePattern.test(nameValue)) {
+                $('#invalid-name').show();
+                return false;
+            } else {
+                $('#invalid-name').hide();
+                generateSlug(nameValue); // Generate slug automatically
+                return true;
+            }
+        }
+
+        // validasi slug
+        function validateSlug() {
+            const slugInput = $('#slug');
+            const slugValue = slugInput.val();
+            const slugPattern = /^[A-Za-z0-9\-]+$/;
+            if (!slugPattern.test(slugValue)) {
+                $('#invalid-slug').show();
+                return false;
+            } else {
+                $('#invalid-slug').hide();
+                return true;
+            }
+        }
+
+        // Generate slug from name
+        function generateSlug(name) {
+            const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            $('#slug').val(slug);
+            validateSlug(); // Validate slug whenever it is auto-generated
+        }
+
+        // Handle validation display
+       function validateInput(inputId, errorId, condition = true) {
+            if (condition && !$(`#${inputId}`).val()) {
+                $(`#${errorId}`).show();
+                return false;
+            } else {
+                $(`#${errorId}`).hide();
+                return true;
+            }
+        }
+
+        // Attach real-time validation to inputs
+        $('#name').on('input', function() {
+            validateName();
+        });
+
+        $('#slug').on('input', function() {
+            validateSlug();
+        });
+        
+
+        // Validate the entire form before submission
+        function validateForm() {
+            let isValid = true;
+            isValid = validateName() && isValid;
+            isValid = validateSlug() && isValid;
+            return isValid;
+        }
 
         // get data
         $.ajaxSetup({
@@ -75,124 +136,61 @@
             }
         });
         $.ajax({
-            url: '/api/project_category/{{ $id }}',
+            url: '/api/category/{{ $id_category }}',
             type: "GET",
             dataType: "json",
             processData: false,
             success: function(result) {
                 if (result['success'] == true) {
-                    $("#detail-data-success").show();
-                    $("#detail-data-failed").hide();
-
                     $('#name').val(result['data']['name']);
-                    $('#active_status').prop("checked", result['data']['active_status']);
-
+                    $('#slug').val(result['data']['slug']);                    
+                    $('#notes').val(result['data']['notes']);                    
+                    $('#is_active').prop("checked", result['data']['is_active']);
                 } else {
-                    $("#detail-data-success").hide();
-                    $("#detail-data-failed").show();
-
-                    $('#message').html(result['message']);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: result['message'],
+                        confirmButtonColor: '#3A57E8',
+                    });
                 }
             },
-            fail: function() {
-                $("#detail-data-success").hide();
-                $("#detail-data-failed").show();
-
-                $('#message').html(result['message']);
+            error: function(xhr) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to load data.",
+                    confirmButtonColor: '#3A57E8',
+                });
             }
         });
 
-        document.getElementById('name').addEventListener('input', function() {
-            var words = this.value.trim().split(/\s+/).length;
-            if (words > 100) {
-                document.getElementById('name-error').style.display = 'block';
-                this.setCustomValidity('');
-            } else {
-                document.getElementById('name-error').style.display = 'none';
-                this.setCustomValidity('');
-            }
-        });
+        // Handle form submission
+        $("#form-data").submit(function(event) {
+            event.preventDefault();
 
-        // handle upload image
-        // $('#file').change(function() {
-        //     // preview
-        //     $('#image-preview').attr('display', 'block');
-        //     var oFReader = new FileReader();
-        //     oFReader.readAsDataURL($("#file")[0].files[0]);
-        //     oFReader.onload = function(oFREvent) {
-        //         $('#image-preview').attr('src', oFREvent.target.result);
-        //     };
-
-        //     // upload
-        //     formdata = new FormData();
-        //     if ($(this).prop('files').length > 0) {
-        //         file = $(this).prop('files')[0];
-        //         formdata.append("image", file);
-        //     }
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'Authorization': "Bearer {{ $session_token }}"
-        //         }
-        //     });
-        //     $.ajax({
-        //         url: '/api/upload',
-        //         type: "POST",
-        //         data: formdata,
-        //         processData: false,
-        //         contentType: false,
-        //         success: function(result) {
-        //             if (result['success'] == true) {
-        //                 $('#photo').val(result['data']['url'].replace('/xxx/', '/300/'));
-        //             }
-        //         }
-        //     });
-        // });
-
-        // // handle wysiwyg
-        // tinymce.init({
-        //     selector: 'textarea#description_long',
-        //     plugins: 'code table lists',
-        //     toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
-        //     promotion: false,
-        //     setup: function(ed) {
-        //         ed.on('change', function(e) {
-        //             $('#content').val(ed.getContent());
-        //         });
-        //     }
-        // });
-
-        // handle post
-        $('#form-data').submit(false);
-        $("#form-data").submit(function() {
-
-            if ($(this).valid()) {
+            if (validateForm()) {
                 var form = $("#form-data").serializeArray();
                 var formdata = {};
                 $.map(form, function(n, i) {
                     formdata[n['name']] = n['value'];
                 });
-                if ('active_status' in formdata) {
-                    if (formdata['active_status'] == 'on') {
-                        formdata['active_status'] = true;
-                    } else {
-                        formdata['active_status'] = false;
-                    }
-                } else {
-                    formdata['active_status'] = false;
-                }
+
+                // Mengatur nilai `is_active` menjadi 1 atau 0 berdasarkan status checkbox
+                formdata['is_active'] = $('#is_active').is(":checked") ? 1 : 0;
 
                 $.ajaxSetup({
                     headers: {
                         'Authorization': "Bearer {{ $session_token }}"
                     }
                 });
+
                 $.ajax({
-                    url: '/api/project_category/{{ $id }}',
+                    url: '/api/category/{{ $id_category }}',
                     type: "PUT",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    processData: false,
                     success: function(result) {
                         if (result['success'] == true) {
                             Swal.fire({
@@ -201,7 +199,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/projectcategory') }}");
+                                window.location.replace("{{ url('/admin/category') }}");
                             });
                         } else {
                             Swal.fire({
@@ -211,13 +209,36 @@
                                 confirmButtonColor: '#3A57E8',
                             });
                         }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            let errorMessage = '';
+                            Object.keys(errors).forEach(function(key) {
+                                errorMessage += errors[key][0] + '\n';
+                            });
+                            Swal.fire({
+                                icon: "error",
+                                title: "Validation Failed",
+                                text: errorMessage,
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "An error occurred while saving data.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        }
                     }
                 });
             } else {
+                // Jika validasi gagal, tampilkan pesan kesalahan
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "You must complete the entire form.",
+                    text: "You must complete the entire form correctly.",
                     confirmButtonColor: '#3A57E8',
                 });
             }

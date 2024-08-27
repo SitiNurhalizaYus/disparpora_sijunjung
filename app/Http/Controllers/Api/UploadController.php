@@ -102,43 +102,53 @@ class UploadController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('file')) {
 
-            $image = $request->file('image');
-            $file = $image->getClientOriginalName();
-            $filename = pathinfo($file, PATHINFO_FILENAME);
-            $extension = $image->getClientOriginalExtension();
-            $size = $image->getSize();
+            $file = $request->file('file');
+            $fileNameOriginal = $file->getClientOriginalName();
+            $fileName = pathinfo($fileNameOriginal, PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $size = $file->getSize();
 
             setlocale(LC_TIME, 'IND');
             $date_format = Carbon::now()->format('Ymd_His');
-            $filename_new = $date_format . '-' . str_replace(' ', '_', $filename) . '.' . $extension;
+            $filename_new = $date_format . '-' . str_replace(' ', '_', $fileName) . '.' . $extension;
 
-            $hd = $request->has('hd') ? $request->get('hd') == true : false;
+            $filePath = 'uploads/xxx/' . $filename_new;
 
-            // Resize dan simpan gambar
-            $this->resizeAndSaveImage($image, $filename_new, $hd);
+            // Periksa apakah file adalah gambar atau PDF
+            if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                $hd = $request->has('hd') ? $request->get('hd') == true : false;
+                $this->resizeAndSaveImage($file, $filename_new, $hd);
+            } elseif ($extension === 'pdf') {
+                // Simpan file PDF
+                $file->move(public_path('uploads/pdf/'), $filename_new);
+                $filePath = 'uploads/pdf/' . $filename_new;
+            } else {
+                return new ApiResource(false, 400, 'Unsupported file type', [], []);
+            }
 
             $req = [
-                'name' => $filename,
+                'name' => $fileName,
                 'type' => $extension,
                 'ext' => '.' . $extension,
                 'size' => $size,
-                'hd' => $hd,
                 'hash' => $filename_new,
-                'url' => 'uploads/xxx/' . $filename_new
+                'url' => $filePath
             ];
+
             $data = Upload::create($req);
 
             if ($data) {
-                return new ApiResource(true, 201, 'Insert data successful', $data->toArray(), ['url' => 'change xxx to 100/300/500/1000']);
+                return new ApiResource(true, 201, 'Insert data successful', $data->toArray(), ['url' => $filePath]);
             } else {
                 return new ApiResource(false, 400, 'Failed to insert data', [], []);
             }
         } else {
-            return new ApiResource(false, 400, 'Image not found', [], []);
+            return new ApiResource(false, 400, 'File not found', [], []);
         }
     }
+
 
     public function update(Request $request, $id)
     {

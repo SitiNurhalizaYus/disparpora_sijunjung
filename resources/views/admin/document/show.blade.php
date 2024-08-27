@@ -1,24 +1,24 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="conatiner-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
         <div class="card-header mb-3 px-3">
             <div class="flex-wrap d-flex justify-content-between align-items-center">
                 <div>
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/category/') }}" style="text-decoration: none; color: inherit;">
+                        <a href="{{ url('/admin/document/') }}" style="text-decoration: none; color: inherit;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                 <path fill="black"
                                     fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                             </svg>
-                           Kategori/Detail
+                            Dokumen/Detail
                         </a>
                     </h3>
                 </div>
                 <div style="display: flex;">
-                    <a href="{{ url('/admin/category/' . $id_category . '/edit') }}"
+                    <a href="{{ url('/admin/document/' . $document->id . '/edit') }}"
                         class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit"
                         data-bs-original-title="Edit">
                         <span class="btn-inner">
@@ -38,7 +38,7 @@
                         </span>
                     </a>
                     &nbsp;
-                    <button onclick="removeData({{ $id_category }})" class="btn btn-sm btn-icon btn-danger flex-end"
+                    <button onclick="removeData({{ $document->id }})" class="btn btn-sm btn-icon btn-danger flex-end"
                         data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
                         <span class="btn-inner">
                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
@@ -63,25 +63,44 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body" id="detail-data-success" style="display: none;">
-                        <div class="mt-2">
-                            <h6 class="mb-1">Kategori</h6>
-                            <p id="name"></p>
+                        <div class="mt-2 row">
+                            <div class="md-6 col">
+                                <h6 class="mb-1">Judul Dokumen</h6>
+                                <p id="title"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="mb-1">Status</h6>
+                                <p id="is_active"></p>
+                            </div>
                         </div>
-                        <div class="mt-2">
-                            <h6 class="mb-1">Catatan </h6>
-                            <p id="notes"> </p>
+                        <div class="mt-2 row">
+                            <div class="md-6 col">
+                                <h6 class="mb-1">Kategori</h6>
+                                <p id="category"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="mb-1">Dibuat</h6>
+                                <p id="created_at"></p>
+                            </div>
                         </div>
-                        <div class="mt-2">
+                        <div class="mt-4">
                             <hr style="height: 2px">
                         </div>
-                        <div class="mt-2">
-                            <h6 class="mb-1">Status </h6>
-                            <p id="is_active"> </p>
+                        <div class="mt-4">
+                            <h6 class="mb-1">Catatan</h6>
+                            <p id="notes"></p>
                         </div>
-                        <div class="mt-2">
-                            <h6 class="mb-1">Dibuat</h6>
-                            <p id="created_at"></p>
-                        </div>
+                        @if ($document->file_path)
+                            <div class="mt-4">
+                                <h6 class="mb-1">Dokumen</h6>
+                                <embed src="{{ asset($document->file_path) }}" type="application/pdf" width="100%"
+                                    height="600px" />
+                                <button class="btn btn-gray btn-sm mt-3"><a href="{{ asset($document->file_path) }}" target="_blank" style="color: white; text-decoration: none;">Lihat Dokumen
+                                        PDF</a></button>
+                            </div>
+                        @else
+                            <p>Tidak ada file yang diunggah.</p>
+                        @endif
                     </div>
                     <div class="card-body" id="detail-data-failed" style="display: none;">
                         <p id="message"></p>
@@ -96,25 +115,25 @@
         $("#detail-data-failed").hide();
 
         $.ajaxSetup({
-            headers:{
-                'Authorization': "Bearer {{$session_token}}"
+            headers: {
+                'Authorization': "Bearer {{ $session_token }}"
             }
         });
         $.ajax({
-            url: '/api/category/{{$id_category}}',
+            url: '/api/document/{{ $document->id }}',
             type: "GET",
             dataType: "json",
             processData: false,
-            success: function (result) {
-                if(result['success'] == true) {
+            success: function(result) {
+                if (result['success'] == true) {
                     $("#detail-data-success").show();
                     $("#detail-data-failed").hide();
 
-                    $('#name').html(result['data']['name']);
-                    $('#slug').html(result['data']['slug']);
+                    $('#title').html(result['data']['title']);
+                    $('#category').html(result['data']['category']);
                     $('#notes').html(result['data']['notes']);
 
-                    if(result['data']['is_active'] == 1) {
+                    if (result['data']['is_active'] == 1) {
                         $('#is_active').html('<span class="badge bg-success">Aktif</span>');
                     } else {
                         $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
@@ -128,7 +147,7 @@
                     $('#message').html(result['message']);
                 }
             },
-            fail: function () {
+            fail: function() {
                 $("#detail-data-success").hide();
                 $("#detail-data-failed").show();
 
@@ -136,7 +155,7 @@
             }
         });
 
-        function removeData(id_category) {
+        function removeData(id_document) {
             Swal.fire({
                 title: "Are you sure want to delete?",
                 showDenyButton: true,
@@ -149,25 +168,25 @@
 
                     // delete
                     $.ajaxSetup({
-                        headers:{
-                            'Authorization': "Bearer {{$session_token}}"
+                        headers: {
+                            'Authorization': "Bearer {{ $session_token }}"
                         }
                     });
                     $.ajax({
-                        url: '/api/category/'+id_category,
+                        url: '/api/document/' + id_document,
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         processData: false,
-                        success: function (result) {
-                            if(result['success'] == true) {
+                        success: function(result) {
+                            if (result['success'] == true) {
                                 Swal.fire({
                                     icon: "success",
                                     title: "Success",
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then((result) => {
-                                    window.location.replace("{{ url('/admin/category') }}");
+                                    window.location.replace("{{ url('/admin/document') }}");
                                 });
                             } else {
                                 Swal.fire({
@@ -181,6 +200,17 @@
                     });
                 }
             });
+        }
+
+        function convertStringToDate(dateString) {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
         }
     </script>
 @endsection

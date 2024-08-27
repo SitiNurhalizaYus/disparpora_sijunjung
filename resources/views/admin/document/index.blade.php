@@ -6,12 +6,12 @@
             <div class="flex-wrap d-flex justify-content-between align-items-center">
                 <div class="header-title">
                     <h2 class="card-title">
-                        Kategori
+                        Dokumen
                     </h2>
                     <p>List data</p>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/category/create') }}" class="btn btn-md btn-primary">
+                    <a href="{{ url('/admin/document/create') }}" class="btn btn-md btn-primary">
                         ADD+
                     </a>
                 </div>
@@ -27,6 +27,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
+                                        <th class="text-center">Judul</th>
                                         <th class="text-center">Kategori</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Dibuat</th>
@@ -64,7 +65,7 @@
 
                 // Pastikan sort_col_name valid
                 if (!sort_col_name || sort_col_name === null) {
-                    sort_col_name = 'id_category'; // Set kolom default untuk pengurutan jika tidak valid
+                    sort_col_name = 'id'; // Set kolom default untuk pengurutan jika tidak valid
                 }
 
                 $.ajaxSetup({
@@ -73,7 +74,7 @@
                     }
                 });
 
-                $.get('/api/category', {
+                $.get('/api/document', {
                         per_page: data.length,
                         page: (data.start / data.length) + 1,
                         sort: sort_col_name + ':' + sort_col_order,
@@ -103,7 +104,14 @@
                     }
                 },
                 {
-                    data: 'name',
+                    data: 'title',
+                    render: function(data, type, row, meta) {
+                        return '<span style="white-space: normal;">' + data + '</span>';
+                    }
+                },
+                {
+                    data: 'category',
+                    className: 'text-center',
                     render: function(data, type, row, meta) {
                         return '<span style="white-space: normal;">' + data + '</span>';
                     }
@@ -128,11 +136,11 @@
                     }
                 },
                 {
-                    data: 'id_category',
+                    data: 'id',
                     className: 'text-center',
                     render: function(data, type, row, meta) {
                         var btn_detail = `
-            <a href="{{ url('/admin/category/`+ data +`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
+            <a href="{{ url('/admin/document/`+ data +`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
                 <span class="btn-inner">
                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
@@ -141,7 +149,7 @@
                 </span>
             </a>`;
                         var btn_edit = `
-            <a href="{{ url('/admin/category/`+ data +`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
+            <a href="{{ url('/admin/document/`+ data +`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                 <span class="btn-inner">
                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -170,22 +178,25 @@
                 width: "5%"
             }, {
                 targets: [1],
-                width: "15%"
+                width: "25%"
             }, {
                 targets: [2],
-                width: "10%"
-            }, {
-                targets: [3],
                 width: "15%"
             }, {
+                targets: [3],
+                width: "10%"
+            }, {
+            }, {
                 targets: [4],
+                width: "20%"
+            }, {
+                targets: [5],
                 width: "5%",
                 orderable: false
             }],
-
         });
 
-        function removeData(id_category) {
+        function removeData(id) {
             Swal.fire({
                 title: "Are you sure want to delete?",
                 showDenyButton: true,
@@ -195,7 +206,6 @@
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     // delete
                     $.ajaxSetup({
                         headers: {
@@ -203,7 +213,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/api/category/' + id_category,
+                        url: '/api/document/' + id,
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
@@ -217,7 +227,7 @@
                                     confirmButtonColor: '#3A57E8',
                                 }).then((result) => {
                                     window.location.replace(
-                                        "{{ url('/admin/category') }}");
+                                        "{{ url('/admin/document') }}");
                                 });
                             } else {
                                 Swal.fire({

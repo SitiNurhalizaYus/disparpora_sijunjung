@@ -14,7 +14,7 @@
                                     <path fill="black"
                                         fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                                 </svg>
-                                Kategori/Tambah
+                                Dokumen/Tambah
                             </a>
                         </h3>
                     </div>
@@ -30,15 +30,22 @@
                         <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label class="form-label" for="name">Nama Kategori</label>
-                                <input class="form-control" type="text" id="name" name="name" value=""
-                                    placeholder="Masukkan Nama Kategori" required pattern="[A-Za-z0-9\s]+$">
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-name">Nama category harus diisi dan tidak boleh ada simbol.</p>
+                                <label class="form-label" for="title">Judul Dokumen</label>
+                                <input class="form-control" type="text" id="title" name="title" value=""
+                                    placeholder="Masukkan Judul Dokumen" required>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul dokumen harus diisi.</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="slug">Slug</label>
-                                <input class="form-control" type="text" id="slug" name="slug"
-                                    placeholder="Otomatis terisi" required pattern="[A-Za-z0-9\-]+$">
+                                <label class="form-label" for="category">Kategori</label>
+                                <input class="form-control" type="text" id="category" name="category" value=""
+                                    placeholder="Masukkan Kategori" required>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-category">Kategori harus diisi.</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="file">Unggah Dokumen (PDF)</label>
+                                <input class="form-control" type="file" id="file" name="file" accept="application/pdf" required>
+                                <input class="form-control" type="hidden" id="file_path" name="file_path" value="">
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">Silakan unggah file PDF.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="notes">Catatan</label>
@@ -63,67 +70,94 @@
     </div>
 
     <script>
-        // Handle validation display
-        function validateInput(inputId, errorId, condition = true) {
-            if (condition && !$(`#${inputId}`).val()) {
-                $(`#${errorId}`).show();
+        // Validate file upload
+        function validateFile() {
+            if ($('#file_path').val() === '') {
+                $('#invalid-file').show();
                 return false;
             } else {
-                $(`#${errorId}`).hide();
+                $('#invalid-file').hide();
                 return true;
             }
         }
 
-        // Custom validation for name field (only letters and numbers)
-        function validateName() {
-            const nameInput = $('#name');
-            const nameValue = nameInput.val();
-            const namePattern = /^[A-Za-z0-9\s]+$/;
-            if (!namePattern.test(nameValue)) {
-                $('#invalid-name').show();
-                return false;
+        // Handle file upload
+        $('#file').on('change', function() {
+            var file = $(this).prop('files')[0];
+            if (file.type !== 'application/pdf') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "File yang diunggah bukan PDF. Silakan unggah file dalam format PDF.",
+                    confirmButtonColor: '#3A57E8',
+                });
+                // Hapus file dari input jika tidak valid
+                $(this).val('');
+                $('#invalid-file').show();
             } else {
-                $('#invalid-name').hide();
-                generateSlug(nameValue); // Generate slug automatically
-                return true;
-            }
-        }
+                // Jika file valid, hapus pesan error dan lakukan unggah file
+                $('#invalid-file').hide();
 
-        // Custom validation for slug field
-        function validateSlug() {
-            const slugInput = $('#slug');
-            const slugValue = slugInput.val();
-            const slugPattern = /^[A-Za-z0-9\-]+$/;
-            if (!slugPattern.test(slugValue)) {
-                $('#invalid-slug').show();
-                return false;
-            } else {
-                $('#invalid-slug').hide();
-                return true;
-            }
-        }
+                // Unggah file ke server
+                var formdata = new FormData();
+                formdata.append("file", file);
 
-        // Generate slug from name
-        function generateSlug(name) {
-            const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-            $('#slug').val(slug);
-            validateSlug(); // Validate slug whenever it is auto-generated
-        }
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Bearer {{ $session_token }}"
+                    }
+                });
+                $.ajax({
+                    url: '/api/upload',
+                    type: "POST",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        if (result['success'] == true) {
+                            // Simpan URL file ke input hidden
+                            $('#file_path').val(result['data']['url']);
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Gagal mengunggah file.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat mengunggah file.",
+                            confirmButtonColor: '#3A57E8',
+                        });
+                    }
+                });
+            }
+        });
 
         // Attach real-time validation to inputs
-        $('#name').on('input', function() {
-            validateName();
+        $('#title').on('input', function() {
+            validateInput();
+        });
+        
+        $('#category').on('input', function() {
+            validateInput();
         });
 
-        $('#slug').on('input', function() {
-            validateSlug();
+        $('#file_path').on('input', function() {
+            validateFile();
         });
+
 
         // Validate the entire form before submission
         function validateForm() {
             let isValid = true;
-            isValid = validateName() && isValid;
-            isValid = validateSlug() && isValid;
+            isValid = validateInput('title', 'invalid-title') && isValid;
+            isValid = validateInput('category', 'invalid-category') && isValid;
+            isValid = validateFile() && isValid;
             return isValid;
         }
 
@@ -146,7 +180,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/api/category',
+                    url: '/api/document',
                     type: "POST",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",
@@ -160,7 +194,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/category') }}");
+                                window.location.replace("{{ url('/admin/document') }}");
                             });
                         } else {
                             Swal.fire({
@@ -182,5 +216,16 @@
             }
             return false;
         });
+
+        // Helper for input validation
+        function validateInput(inputId, errorId) {
+            if (!$(`#${inputId}`).val()) {
+                $(`#${errorId}`).show();
+                return false;
+            } else {
+                $(`#${errorId}`).hide();
+                return true;
+            }
+        }
     </script>
 @endsection

@@ -31,7 +31,7 @@
                                     <th class="text-center">Penulis</th>
                                     <th class="text-center">Dibuat</th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-center">Aksi</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

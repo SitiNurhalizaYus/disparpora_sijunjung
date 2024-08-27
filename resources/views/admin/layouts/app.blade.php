@@ -496,7 +496,7 @@
     <script src="{{ asset('assets/js/plugins/setting.js') }}"></script>
 
     <!-- Poster-tab Script -->
-    <script src="{{ asset('assets/js/plugins/poster-tabs.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/slider-tabs.js') }}"></script>
 
     <!-- Form Wizard Script -->
     <script src="{{ asset('assets/js/plugins/form-wizard.js') }}"></script>

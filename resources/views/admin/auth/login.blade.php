@@ -11,11 +11,11 @@
                             <div class="card card-transparent shadow-none d-flex justify-content-center mb-0 auth-card">
                                 <div class="card-body">
 
-                                    <h2 class="mb-2 text-center">Sign In</h2>
-                                    <p class="text-center">Login to stay connected.</p>
+                                    <h2 class="mb-2 text-center">Akses Administrator</h2>
+                                    <p class="text-center">Kelola situs dengan masuk menggunakan akun admin Anda.</p>
                                     @if ($message)
                                         {{-- <span class="alert alert-danger mt-3 mb-3 p-2 d-flex">{{$message}}</span> --}}
-                                        <span class="alert alert-danger mt-3 mb-3 p-2 d-flex">Silahkan hubungi Admin jika lupa akun.</span>
+                                        <span class="alert alert-danger mt-3 mb-3 p-2 d-flex" style="font-size: 0.85rem;">Silahkan hubungi Admin jika lupa akun.</span>
                                     @endif
                                     <form action="{{ url('/admin/auth/action_login') }}" method="post">
                                         {{ csrf_field() }}

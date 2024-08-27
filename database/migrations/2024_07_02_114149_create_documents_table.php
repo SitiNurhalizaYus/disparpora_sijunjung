@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('file_path');
-            $table->text('description')->nullable();
+            $table->string('category');
             // default
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(0);

@@ -25,9 +25,9 @@ Route::apiResource('content', App\Http\Controllers\Api\ContentController::class)
 Route::apiResource('profil', App\Http\Controllers\Api\ProfilController::class);
 Route::apiResource('berita', App\Http\Controllers\Api\BeritaController::class);
 Route::apiResource('artikel', App\Http\Controllers\Api\ArtikelController::class);
+Route::apiResource('document', App\Http\Controllers\Api\DocumentController::class); 
 
 Route::apiResource('category', App\Http\Controllers\Api\CategoryController::class); 
-Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class); 
 
 Route::apiResource('event', App\Http\Controllers\Api\EventController::class); 
 // Route::apiResource('pesan', App\Http\Controllers\Api\PesanController::class);//api untuk pesan
