@@ -14,7 +14,8 @@
                                     <h2 class="mb-2 text-center">Sign In</h2>
                                     <p class="text-center">Login to stay connected.</p>
                                     @if ($message)
-                                        <span class="alert alert-danger mt-3 mb-3 p-2 d-flex">{{$message}}</span>
+                                        {{-- <span class="alert alert-danger mt-3 mb-3 p-2 d-flex">{{$message}}</span> --}}
+                                        <span class="alert alert-danger mt-3 mb-3 p-2 d-flex">Silahkan hubungi Admin jika lupa akun.</span>
                                     @endif
                                     <form action="{{ url('/admin/auth/action_login') }}" method="post">
                                         {{ csrf_field() }}
@@ -33,13 +34,13 @@
                                                         aria-describedby="password" placeholder=" ">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12 d-flex justify-content-between">
+                                            {{-- <div class="col-lg-12 d-flex justify-content-between">
                                                 <div class="form-check mb-3">
                                                     <input type="checkbox" class="form-check-input" id="customCheck1">
                                                     <label class="form-check-label" for="customCheck1">Remember Me</label>
                                                 </div>
-                                                {{-- <a href="{{ url('/admin/auth/forgot') }}">Forgot Password?</a> --}}
-                                            </div>
+                                                <a href="{{ url('/admin/auth/forgot') }}">Forgot Password?</a>
+                                            </div> --}}
                                         </div>
                                         <div class="d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary">Sign In</button>

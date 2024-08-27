@@ -13,7 +13,7 @@
                                 <path fill="black" fill-rule="evenodd"
                                     d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
                             </svg>
-                            Profil/Detail
+                            Berita/Detail
                         </a>
                     </h3>
                 </div>
@@ -43,17 +43,17 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-info text-white"><strong>Profil Information</strong></div>
+                                    <div class="card-header bg-info text-white"><strong>Informasi Berita</strong></div>
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="title"></span></h4>
                                         <p class="card-text"><h6>Deskripsi Singkat: </h6><span id="description_short"></span></p>
-                                        <p class="card-text"><h6>Slug: </h6><span id="slug"></span></p>
+                                        <p class="card-text"><h6>Slug: </h6><span id="slug"></span></p> 
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-secondary text-white"><strong>Additional Details</strong></div>
+                                    <div class="card-header bg-secondary text-white"><strong>Detail Tambahan</strong></div>
                                     <div class="card-body">
                                         <p class="card-text"><h6>Status: </h6><span id="is_active"></span></p>
                                         <p class="card-text"><h6>Dibuat: </h6><span id="created_at"></span></p>
@@ -67,7 +67,7 @@
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                                     <div class="card-header bg-dark text-white text-center"><strong>Gambar</strong></div>
                                     <div class="card-body text-center">
-                                        <img id="image" class="img-fluid rounded" alt="Profil Image"
+                                        <img id="image" class="img-fluid rounded" alt="Berita Image"
                                             style="max-width: 100%;">
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-gray text-white text-center"><strong>Konten Profil</strong></div>
+                                    <div class="card-header bg-gray text-white text-center"><strong>Konten Berita</strong></div>
                                     <div class="card-body">
                                         <div id="description_long" style="color: black;"></div>
                                     </div>

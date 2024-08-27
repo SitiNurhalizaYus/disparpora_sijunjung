@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class SliderController extends Controller
+class PosterController extends Controller
 {
     public function __construct()
     {
@@ -18,10 +18,10 @@ class SliderController extends Controller
         if($has_session) {
             $data = [];
             $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-            $data['menu'] = 'slider-list';
+            $data['menu'] = 'poster-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-            return view('admin.slider.index', $data);
+            return view('admin.poster.index', $data);
         } else {
             session()->flash('message', 'Session expired.');
             return redirect()->route('admin.login');
@@ -32,32 +32,32 @@ class SliderController extends Controller
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'slider-show';
+        $data['menu'] = 'poster-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         $data['id'] = $id;
-        return view('admin.slider.show', $data);
+        return view('admin.poster.show', $data);
     }
 
     public function create()
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'slider-create';
+        $data['menu'] = 'poster-create';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        return view('admin.slider.create', $data);
+        return view('admin.poster.create', $data);
     }
 
     public function edit($id)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'slider-edit';
+        $data['menu'] = 'poster-edit';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         $data['id'] = $id;
-        return view('admin.slider.edit', $data);
+        return view('admin.poster.edit', $data);
     }
 
 }

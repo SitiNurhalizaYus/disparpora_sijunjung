@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Content;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ProfilController extends Controller
 {
-    public function __construct()
-    {
-        
-    }
+    public function __construct() {}
 
     public function index()
     {
@@ -23,12 +21,28 @@ class ProfilController extends Controller
             $data['menu'] = 'profil-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-            $data['contents'] = Content::where('type', Content::TYPE_PROFIL)->paginate(10); // Hanya mengambil konten dengan tipe 'profil'
+            $data['contents'] = Content::where('type', Content::TYPE_BERITA)->paginate(10); // Hanya mengambil konten dengan tipe 'profil'
             return view('admin.profil.index', $data);
         } else {
             session()->flash('message', 'Session expired.');
             return redirect()->route('admin.login');
         }
+    }
+
+    public function show($id_content)
+    {
+        $data = [];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['menu'] = 'profil-show';
+        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
+        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+        $data['id_content'] = $id_content;
+
+        $content = Content::findOrFail($id_content);
+
+        $data['content'] = $content;
+
+        return view('admin.profil.show', $data);
     }
 
     public function create()
@@ -38,25 +52,8 @@ class ProfilController extends Controller
         $data['menu'] = 'profil-create';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+
         return view('admin.profil.create', $data);
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'slug' => 'required|unique:contents,slug',
-            'is_active' => 'boolean',
-        ]);
-
-        $data = $request->all();
-        $data['type'] = 'profil'; // Mengatur tipe sebagai profil
-
-        Content::create($data);
-
-        session()->flash('message', 'Profil berhasil ditambahkan.');
-        return redirect()->route('admin.profil.index');
     }
 
     public function edit($id_content)
@@ -66,58 +63,14 @@ class ProfilController extends Controller
         $data['menu'] = 'profil-edit';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
+        $data['id_content'] = $id_content;
+
+        $content = Content::findOrFail($id_content);
+        
+        $data['content'] = $content;
 
         return view('admin.profil.edit', $data);
     }
 
-    public function update(Request $request, $id_content)
-    {
-        $content = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
-
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'slug' => 'required|unique:contents,slug,' . $content->id_content,
-            'is_active' => 'boolean',
-        ]);
-
-        $data = $request->all();
-        $content->update($data);
-
-        session()->flash('message', 'Profil berhasil diperbarui.');
-        return redirect()->route('admin.profil.index');
-    }
-
-    public function show($id_content)
-    {   
-        // Ambil data profil dari model berdasarkan id_content
-        $content = Content::find($id_content);
-
-        // Jika data tidak ditemukan, redirect dengan pesan error
-        if (!$content) {
-            return redirect()->route('admin.profil.index')->with('error', 'Profil tidak ditemukan');
-        }
-
-        // Kirim variabel $id_content ke view
-        $data = [];
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'profil-show';
-        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
-        $data['content'] = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
-        $data['id_content'] = $id_content;
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        
-        return view('admin.profil.show', $data);
     
-    }
-
-    public function destroy($id_content)
-    {
-        $content = Content::where('type', Content::TYPE_PROFIL)->findOrFail($id_content);
-        $content->delete();
-
-        session()->flash('message', 'Profil berhasil dihapus.');
-        return redirect()->route('admin.profil.index');
-    }
 }

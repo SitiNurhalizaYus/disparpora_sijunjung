@@ -5,16 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Category;;
+use App\Models\Poster;
 
 class CategoryController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api')->except("index", "show");
     }
-
 
     public function index(Request $request)
     {
@@ -23,15 +21,26 @@ class CategoryController extends Controller
         $sort = $request->has('sort') ? $request->get('sort') : 'id_category:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
-        $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
-        $page = $request->has('page') ? $request->get('page') : 1;
+        $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
+        $page = $request->has('page') ? intval($request->get('page')) : 1;
+
+        // Validasi per_page dan page agar tidak bernilai negatif atau nol
+        if ($per_page <= 0) {
+            $per_page = 10;
+        }
+        if ($page <= 0) {
+            $page = 1;
+        }
 
         $sort = explode(':', $sort);
+        if (count($sort) !== 2) {
+            $sort = ['id_category', 'asc']; // Default sorting jika tidak valid
+        }
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
         // query
-        $query = Category::where([['id_category', '>', '0']]);
+        $query = Poster::where([['id_category', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -49,49 +58,34 @@ class CategoryController extends Controller
         }
 
         if ($search) {
-            $query = $query->whereAny(['name'], 'like', "%{$search}%");
+            $query = $query->where('name', 'like', "%{$search}%");
         }
 
-        // data
-        $data = [];
-        $metadata = [];
-
         // metadata
-        $metadata['total_data'] = $query->count('id_category');
+        $metadata = [];
+        $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-        // get count
-        if ($count == true) {
-            $query = $query->count('id_category');
-            $data['count'] = $query;
-        }
-        // get data
-        else {
-            if ($per_page > 0) {
-                $query = $query
-                    ->orderBy($sort[0], $sort[1])
-                    ->limit($per_page)
-                    ->offset(($page - 1) * $per_page)
-                    ->get()
-                    ->toArray();
-            } else {
-                $query = $query
-                    ->orderBy($sort[0], $sort[1])
-                    ->get()
-                    ->toArray();
-            }
-
-            foreach ($query as $qry) {
-                $temp = $qry;
-                array_push($data, $temp);
-            };
+        // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'
+        if ($per_page == 0 || $per_page == 'all') {
+            $data = $query->orderBy($sort[0], $sort[1])->get()->toArray();
+            $metadata['total_data'] = count($data); // Update total data
+            $metadata['per_page'] = $metadata['total_data'];
+            $metadata['total_page'] = 1;
+            $metadata['page'] = 1;
+        } else {
+            $data = $query->orderBy($sort[0], $sort[1])
+                          ->limit($per_page)
+                          ->offset(($page - 1) * $per_page)
+                          ->get()
+                          ->toArray();
         }
 
         // result
         if ($data) {
-            return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
+            return new ApiResource(true, 200, 'Get data successful', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
@@ -100,7 +94,7 @@ class CategoryController extends Controller
     public function show($id_category)
     {
         // query
-        $query = Category::where([['id_category', '>', '0']]);
+        $query = Poster::where([['id_category', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -112,12 +106,11 @@ class CategoryController extends Controller
 
         // result
         if ($data) {
-            return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
+            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
-
 
     public function store(Request $request)
     {
@@ -126,15 +119,14 @@ class CategoryController extends Controller
         ]);
 
         $req = $request->post();
-        $data = Category::create($req);
+        $data = Poster::create($req);
 
         if ($data) {
-            return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to insert data', [], []);
+            return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
         }
     }
-
 
     public function update(Request $request, $id_category)
     {
@@ -143,28 +135,27 @@ class CategoryController extends Controller
         ]);
 
         $req = $request->post();
-        $query = Category::findOrFail($id_category);
+        $query = Poster::findOrFail($id_category);
         $query->update($req);
 
-        $data = Category::findOrFail($id_category);
+        $data = Poster::findOrFail($id_category);
 
         if ($data) {
-            return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Failed to update data', [], []);
+            return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
         }
     }
 
-
     public function destroy($id_category)
     {
-        $query = Category::findOrFail($id_category);
+        $query = Poster::findOrFail($id_category);
         $query->delete();
 
         if ($query) {
-            return new ApiResource(true, 201, 'Delete data successfull', [], []);
+            return new ApiResource(true, 201, 'Data berhasil dihapus', [], []);
         } else {
-            return new ApiResource(false, 400, 'Failed to delete data', [], []);
+            return new ApiResource(false, 400, 'Data gagal dihapus', [], []);
         }
     }
 }

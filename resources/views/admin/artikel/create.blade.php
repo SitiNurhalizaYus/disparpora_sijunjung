@@ -50,16 +50,16 @@
                                     id="invalid-description_short">Deskripsi harus diisi.</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="category_id">Pilih Kategori</label>
-                                <select class="form-control" id="category_id" name="category_id" required>
+                                <label class="form-label" for="category_id">Kategori</label>
+                                <select class="form-select" id="category_id" name="category_id" required>
                                     <option value="" disabled selected>Pilih Kategori</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id_category }}">{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
-                                <div class="invalid-feedback">Silahkan pilih kategori</div>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-category">
+                                    Silahkan pilih category</p>
                             </div>
-                            
-                            <!-- Arsip ID jika diperlukan -->
-                            <input type="hidden" id="arsip_id" name="arsip_id" value="{{ $arsip_id ?? '' }}">
-                            
                             <div class="form-group">
                                 <label class="form-label" for="content">Konten Artikel</label>
                                 <textarea class="form-control" type="text" id="content" name="content" style="display: none" required></textarea>
@@ -73,7 +73,7 @@
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
                                     width="300px" style="border-radius: 2%;">
-                                <label class="form-label" for="photo" style="font-size: 10pt">*Format JPG,JPEG, dan
+                                <label class="form-label" for="image" style="font-size: 10pt">*Format JPG,JPEG, dan
                                     PNG</label>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">
                                     Silakan unggah gambar.</p>
@@ -96,6 +96,41 @@
         </div>
     </div>
     <script>
+         // Handle fetching categories via AJAX
+         $(document).ready(function() {
+            $.ajax({
+                url: '/api/category', // API endpoint untuk mengambil kategori
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    let categories = response.data || response; // Cek apakah data ada di dalam properti data atau langsung di response
+                    let categoryDropdown = $('#category_id');
+                    categoryDropdown.empty(); // Kosongkan dropdown sebelum mengisi ulang
+                    categoryDropdown.append('<option value="" disabled selected>Pilih Kategori</option>');
+
+                    // Loop melalui hasil dan tambahkan opsi ke dropdown
+                    $.each(categories, function(index, category) {
+                        categoryDropdown.append('<option value="' + category.id_category + '">' + category.name + '</option>');
+                    });
+
+                    // Jika ada validasi yang gagal sebelumnya dan nilai lama ada, set kembali nilai dropdown
+                    let oldCategoryId = "{{ old('category_id') }}";
+                    if (oldCategoryId) {
+                        categoryDropdown.val(oldCategoryId);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching categories:', error, xhr.responseText);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Gagal memuat kategori. Silakan coba lagi.",
+                        confirmButtonColor: '#3A57E8',
+                    });
+                }
+            });
+        });
+
         // Handle validation display
         function validateInput(inputId, errorId, condition = true) {
             if (condition && !$(`#${inputId}`).val()) {
@@ -145,7 +180,7 @@
 
         // Validate category
         function validateKategori() {
-            const category = $('#kategori_id');
+            const category = $('#category_id');
             if (!category.val()) {
                 $('#invalid-category').show();
                 return false;
@@ -156,7 +191,7 @@
         }
 
         // Attach event listener for category
-        $('#kategori_id').on('change', function() {
+        $('#category_id').on('change', function() {
             validateKategori(); // Call the validation function when a category is selected
         });
 

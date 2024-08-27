@@ -128,8 +128,8 @@
                                 </svg>
                             </i>
                         </a>
-                        <ul class="sub-nav collapse @if (str_contains($menu, 'slider') ||
-                                str_contains($menu, 'partner') ||
+                        <ul class="sub-nav collapse @if (str_contains($menu, 'poster') ||
+                                str_contains($menu, 'mitra') ||
                                 str_contains($menu, 'profil') ||
                                 str_contains($menu, 'berita') ||
                                 str_contains($menu, 'artikel') ||
@@ -138,28 +138,28 @@
                             id="kelola-konten-menu" data-bs-parent="#sidebar-menu">
 
                             <li class="nav-item">
-                                <a class="nav-link @if (str_contains($menu, 'slider')) active @endif"
-                                    aria-current="page" href="{{ url('/admin/slider') }}">
+                                <a class="nav-link @if (str_contains($menu, 'poster')) active @endif"
+                                    aria-current="page" href="{{ url('/admin/poster') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="4" cy="4" r="4" fill="currentColor" />
                                         </svg>
                                     </i>
-                                    <span class="item-name">Slider</span>
+                                    <span class="item-name">Poster</span>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link @if (str_contains($menu, 'partner')) active @endif"
-                                    href="{{ url('/admin/partner') }}">
+                                <a class="nav-link @if (str_contains($menu, 'mitra')) active @endif"
+                                    href="{{ url('/admin/mitra') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="4" cy="4" r="4" fill="currentColor" />
                                         </svg>
                                     </i>
-                                    <span class="item-name">Partner</span>
+                                    <span class="item-name">Mitra</span>
                                 </a>
                                 <hr class="hr-horizontal" style="background-color: white">
                             </li>
@@ -495,8 +495,8 @@
     <!-- Settings Script -->
     <script src="{{ asset('assets/js/plugins/setting.js') }}"></script>
 
-    <!-- Slider-tab Script -->
-    <script src="{{ asset('assets/js/plugins/slider-tabs.js') }}"></script>
+    <!-- Poster-tab Script -->
+    <script src="{{ asset('assets/js/plugins/poster-tabs.js') }}"></script>
 
     <!-- Form Wizard Script -->
     <script src="{{ asset('assets/js/plugins/form-wizard.js') }}"></script>

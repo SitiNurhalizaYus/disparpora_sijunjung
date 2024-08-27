@@ -19,13 +19,11 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function () {
 Route::post('login', App\Http\Controllers\Api\LoginController::class);
 
+Route::get('login', App\Http\Controllers\Api\LoginController::class); 
 Route::apiResource('big_number', App\Http\Controllers\Api\BigNumberController::class); 
 Route::apiResource('content', App\Http\Controllers\Api\ContentController::class);
-// Profil
 Route::apiResource('profil', App\Http\Controllers\Api\ProfilController::class);
-// Berita
 Route::apiResource('berita', App\Http\Controllers\Api\BeritaController::class);
-// Artikel
 Route::apiResource('artikel', App\Http\Controllers\Api\ArtikelController::class);
 
 Route::apiResource('category', App\Http\Controllers\Api\CategoryController::class); 
@@ -42,8 +40,8 @@ Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
 Route::apiResource('user_level', App\Http\Controllers\Api\userLevelController::class);
 Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
 
-Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class);
-Route::apiResource('slider', App\Http\Controllers\Api\SliderController::class);
+Route::apiResource('mitra', App\Http\Controllers\Api\MitraController::class);
+Route::apiResource('poster', App\Http\Controllers\Api\PosterController::class);
 Route::apiResource('team', App\Http\Controllers\Api\TeamController::class);
 Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
 

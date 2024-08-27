@@ -24,10 +24,10 @@ class BerandaController extends Controller
         $data['og']['description'] = 'beranda';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting(); 
         $data['kontens'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/konten');
-        $data['sliders'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/slider');
+        $data['sliders'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/poster');
         $data['big_numbers'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/big_number');
         $data['teams'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/team');
-        $data['partners'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/partner');
+        $data['partners'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/mitra');
         $data['testimonies'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/testimony');
         return view('client.beranda.index', $data);
     }

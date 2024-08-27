@@ -13,7 +13,7 @@ class PartnersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('partners')->insert([
+        DB::table('mitras')->insert([
             [
                 'name' => 'PT Wisata Nusantara',
                 'image' => 'path/to/image.jpg',

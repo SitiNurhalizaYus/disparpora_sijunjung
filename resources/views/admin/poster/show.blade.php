@@ -7,18 +7,18 @@
                 <div class="header-title">
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/slider/') }}" class="text-decoration-none text-dark">
+                        <a href="{{ url('/admin/poster/') }}" class="text-decoration-none text-dark">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                                 <path fill="black" fill-rule="evenodd"
                                     d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
                             </svg>
-                            Slider/Detail
+                            Poster/Detail
                         </a>
                     </h3>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/slider/' . $id . '/edit') }}" class="btn btn-warning btn-sm">
+                    <a href="{{ url('/admin/poster/' . $id . '/edit') }}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> Edit
                     </a>
                     <button onclick="removeData({{ $id }})" class="btn btn-danger btn-sm">
@@ -38,12 +38,12 @@
                         </div>
                     </div>
 
-                    <!-- Konten data slider -->
+                    <!-- Konten data poster -->
                     <div class="card-body" id="detail-data-success" style="display: none;">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-primary text-white"><strong>Slider Information</strong></div>
+                                    <div class="card-header bg-info text-white"><strong>Informasi Poster</strong></div>
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="name"></span></h4>
                                         <p class="card-text"><h6>Deskripsi: </h6><span id="description"></span></p>
@@ -53,7 +53,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-secondary text-white"><strong>Additional Details</strong></div>
+                                    <div class="card-header bg-secondary text-white"><strong> Detail Tambahan</strong></div>
                                     <div class="card-body">
                                         <p class="card-text"><h6>Catatan: </h6><span id="notes"></span></p>
                                         <p class="card-text"><h6>Status: </h6><span id="is_active"></span></p>
@@ -67,7 +67,7 @@
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                                     <div class="card-header bg-dark text-white text-center"><strong>Gambar</strong></div>
                                     <div class="card-body text-center">
-                                        <img id="image" class="img-fluid rounded" alt="Slider Image"
+                                        <img id="image" class="img-fluid rounded" alt="Poster Image"
                                             style="max-width: 100%;">
                                     </div>
                                 </div>
@@ -97,9 +97,9 @@
                 }
             });
 
-            // Request untuk mendapatkan data slider
+            // Request untuk mendapatkan data poster
             $.ajax({
-                url: '/api/slider/{{ $id }}',
+                url: '/api/poster/{{ $id }}',
                 type: "GET",
                 dataType: "json",
                 processData: false,
@@ -148,14 +148,14 @@
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Request untuk menghapus data slider
+                    // Request untuk menghapus data poster
                     $.ajaxSetup({
                         headers: {
                             'Authorization': "Bearer {{ $session_token }}"
                         }
                     });
                     $.ajax({
-                        url: '/api/slider/' + id,
+                        url: '/api/poster/' + id,
                         type: "DELETE",
                         dataType: "json",
                         processData: false,
@@ -167,7 +167,7 @@
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then(() => {
-                                    window.location.replace("{{ url('/admin/slider') }}");
+                                    window.location.replace("{{ url('/admin/poster') }}");
                                 });
                             } else {
                                 Swal.fire({

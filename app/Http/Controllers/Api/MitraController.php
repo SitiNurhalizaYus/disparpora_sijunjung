@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Slider;
+use App\Models\Mitra;
 
-class SliderController extends Controller
+class MitraController extends Controller
 {
     public function __construct()
     {
@@ -40,7 +39,7 @@ class SliderController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Slider::where([['id', '>', '0']]);
+        $query = Mitra::where([['id', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -61,7 +60,7 @@ class SliderController extends Controller
             $query = $query->where('name', 'like', "%{$search}%");
         }
 
-        // metadata
+        // metadata dan data
         $metadata = [];
         $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
@@ -94,7 +93,7 @@ class SliderController extends Controller
     public function show($id)
     {
         // query
-        $query = Slider::where([['id', '>', '0']]);
+        $query = Mitra::where([['id', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -119,7 +118,7 @@ class SliderController extends Controller
         ]);
 
         $req = $request->post();
-        $data = Slider::create($req);
+        $data = Mitra::create($req);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
@@ -135,10 +134,10 @@ class SliderController extends Controller
         ]);
 
         $req = $request->post();
-        $query = Slider::findOrFail($id);
+        $query = Mitra::findOrFail($id);
         $query->update($req);
 
-        $data = Slider::findOrFail($id);
+        $data = Mitra::findOrFail($id);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
@@ -149,7 +148,7 @@ class SliderController extends Controller
 
     public function destroy($id)
     {
-        $query = Slider::findOrFail($id);
+        $query = Mitra::findOrFail($id);
         $query->delete();
 
         if ($query) {

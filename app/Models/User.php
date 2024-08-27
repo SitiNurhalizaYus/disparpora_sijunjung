@@ -76,7 +76,7 @@ class User extends Authenticatable implements JWTSubject
     // Relasi ke sliders yang dibuat pengguna
     public function sliders()
     {
-        return $this->hasMany(Slider::class, 'created_by');
+        return $this->hasMany(Poster::class, 'created_by');
     }
 
     // Relasi ke galeri yang dibuat pengguna
@@ -100,7 +100,7 @@ class User extends Authenticatable implements JWTSubject
     // Relasi ke partners yang dibuat pengguna
     public function partners()
     {
-        return $this->hasMany(Partner::class, 'created_by');
+        return $this->hasMany(Mitra::class, 'created_by');
     }
 
     // public function userLevel() {

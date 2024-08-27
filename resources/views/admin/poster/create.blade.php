@@ -14,12 +14,13 @@
                                     <path fill="black"
                                         fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                                 </svg>
-                                Slider/Edit
+                                Poster/Tambah
                             </a>
                         </h3>
                     </div>
                 </div>
-                <div></div>
+                <div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -29,35 +30,31 @@
                         <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label class="form-label" for="name">Nama </label>
+                                <label class="form-label" for="name">Nama Poster</label>
                                 <input class="form-control" type="text" id="name" name="name" value=""
-                                    placeholder="Masukkan Nama" required>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-name">Nama
-                                    hanya boleh berisi huruf, angka, dan spasi.</p>
+                                    placeholder="Masukkan Nama Poster" required pattern="[A-Za-z0-9\s]+$">
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-name">Nama poster harus diisi dan tidak boleh ada simbol.</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="description">Deskripsi </label>
-                                <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-description">
-                                    Deskripsi harus diisi.</p>
+                                <label class="form-label" for="description">Deskripsi</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Masukkan Deskripsi" required></textarea>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-description">Deskripsi harus diisi.</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="link">Link </label>
+                                <label class="form-label" for="link">Link</label>
                                 <input class="form-control" type="url" id="link" name="link" value=""
-                                    placeholder="Masukkan Link" required>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-link">Link
-                                    harus diisi dengan format yang benar.</p>
+                                    placeholder="Masukkan Link" required pattern="https?://.+">
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-link">Link harus diisi dengan format yang benar, contoh: https://example.com.</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="file">Gambar</label>
-                                <input class="form-control" type="file" id="file" name="file">
-                                <input class="form-control" type="hidden" id="image" name="image" value="noimage.jpg"
-                                    placeholder="image">
+                                <label class="form-label" for="image">Gambar</label>
+                                <input class="form-control" type="file" id="file" name="file" required>
+                                <input class="form-control" type="hidden" id="image" name="image" value="noimage.jpg" placeholder="image">
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
                                     width="300px" style="border-radius: 2%;">
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">File
-                                    yang diunggah harus berupa gambar (.jpg, .jpeg, .png).</p>
+                                <label class="form-label" for="photo" style="font-size: 10pt">*Format JPG,JPEG, dan PNG</label>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">Silakan unggah gambar.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="notes">Catatan</label>
@@ -82,18 +79,9 @@
     </div>
 
     <script>
-        // Validasi input dengan real-time check
+        // Handle validation display
         function validateInput(inputId, errorId, condition = true) {
-            const namePattern = /^[a-zA-Z0-9 ]+$/;
-            const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
-
             if (condition && !$(`#${inputId}`).val()) {
-                $(`#${errorId}`).show();
-                return false;
-            } else if (!namePattern.test($(`#${inputId}`).val()) && inputId === 'name') {
-                $(`#${errorId}`).show();
-                return false;
-            } else if (!urlPattern.test($(`#${inputId}`).val()) && inputId === 'link') {
                 $(`#${errorId}`).show();
                 return false;
             } else {
@@ -102,23 +90,38 @@
             }
         }
 
-        // Validasi file gambar yang diunggah
+        // Custom validation for name field (only letters and numbers)
+        function validateName() {
+            const nameInput = $('#name');
+            const nameValue = nameInput.val();
+            const namePattern = /^[A-Za-z0-9\s]+$/;
+            if (!namePattern.test(nameValue)) {
+                $('#invalid-name').show();
+                return false;
+            } else {
+                $('#invalid-name').hide();
+                return true;
+            }
+        }
+
+        // Custom validation for link field
+        function validateLink() {
+            const linkInput = $('#link');
+            const linkValue = linkInput.val();
+            const urlPattern = /^(https?:\/\/).+/;
+            if (!urlPattern.test(linkValue)) {
+                $('#invalid-link').show();
+                return false;
+            } else {
+                $('#invalid-link').hide();
+                return true;
+            }
+        }
+
+        // Validate file upload
         function validateFile() {
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            const file = $('#file')[0].files[0];
-
-            if (file && !allowedTypes.includes(file.type)) {
+            if ($('#image').val() === 'noimage.jpg') {
                 $('#invalid-file').show();
-                $('#file').val(''); // Kosongkan input file jika tidak valid
-
-                // Tampilkan pemberitahuan menggunakan Swal
-                Swal.fire({
-                    icon: 'error',
-                    title: 'File tidak valid',
-                    text: 'File yang diunggah harus berupa gambar (.jpg, .jpeg, .png).',
-                    confirmButtonColor: '#3A57E8',
-                });
-
                 return false;
             } else {
                 $('#invalid-file').hide();
@@ -126,13 +129,13 @@
             }
         }
 
-        // Menghilangkan pesan error saat pengguna mengisi input yang benar
+        // Attach real-time validation to inputs
         $('#name').on('input', function() {
-            validateInput('name', 'invalid-name');
+            validateName();
         });
 
         $('#link').on('input', function() {
-            validateInput('link', 'invalid-link');
+            validateLink();
         });
 
         $('#description').on('input', function() {
@@ -140,76 +143,33 @@
         });
 
         $('#file').on('change', function() {
-            validateFile();
-        });
-
-        // Validate form sebelum submit
-        function validateForm() {
-            let isValid = true;
-            isValid = validateInput('name', 'invalid-name') && isValid;
-            isValid = validateInput('link', 'invalid-link') && isValid;
-            isValid = validateInput('description', 'invalid-description') && isValid;
-            isValid = validateFile() && isValid;
-            return isValid;
-        }
-
-        // get data
-        $.ajaxSetup({
-            headers: {
-                'Authorization': "Bearer {{ $session_token }}"
-            }
-        });
-        $.ajax({
-            url: '/api/slider/{{ $id }}',
-            type: "GET",
-            dataType: "json",
-            processData: false,
-            success: function(result) {
-                if (result['success'] == true) {
-                    $('#name').val(result['data']['name']);
-                    $('#description').val(result['data']['description']);
-                    $('#link').val(result['data']['link']);
-                    $("#image").val(result['data']['image']);
-                    $("#image-preview").attr("src", "{{ url('/') }}/" + result['data']['image'].replace(
-                        '/xxx/', '/300/'));
-                    $('#notes').val(result['data']['notes']);
-                    $('#is_active').prop("checked", result['data']['is_active']);
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: result['message'],
-                        confirmButtonColor: '#3A57E8',
-                    });
-                }
-            },
-            error: function(xhr) {
+            var file = $(this).prop('files')[0];
+            if (!file.type.match('image.*')) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "Failed to load data.",
+                    text: "File yang diunggah bukan gambar yang valid. Silakan unggah file dalam format JPG, JPEG, atau PNG.",
                     confirmButtonColor: '#3A57E8',
                 });
-            }
-        });
+                // Hapus file dari input jika tidak valid
+                $(this).val('');
+                $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                $('#invalid-file').show();
+            } else {
+                // Jika file valid, hapus pesan error dan lakukan unggah gambar
+                $('#invalid-file').hide();
 
-        // Handle upload image
-        $('#file').change(function() {
-            if (validateFile()) {
                 // Preview image
-                $('#image-preview').attr('display', 'block');
                 var oFReader = new FileReader();
-                oFReader.readAsDataURL($("#file")[0].files[0]);
+                oFReader.readAsDataURL(file);
                 oFReader.onload = function(oFREvent) {
                     $('#image-preview').attr('src', oFREvent.target.result);
                 };
 
-                // Upload image
+                // Unggah file gambar ke server
                 var formdata = new FormData();
-                if ($(this).prop('files').length > 0) {
-                    var file = $(this).prop('files')[0];
-                    formdata.append("image", file);
-                }
+                formdata.append("image", file);
+
                 $.ajaxSetup({
                     headers: {
                         'Authorization': "Bearer {{ $session_token }}"
@@ -223,14 +183,22 @@
                     contentType: false,
                     success: function(result) {
                         if (result['success'] == true) {
+                            // Simpan URL gambar ke input hidden
                             $('#image').val(result['data']['url'].replace('/xxx/', '/300/'));
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Gagal mengunggah gambar.",
+                                confirmButtonColor: '#3A57E8',
+                            });
                         }
                     },
-                    error: function(xhr) {
+                    error: function() {
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Failed to upload image.",
+                            text: "Terjadi kesalahan saat mengunggah gambar.",
                             confirmButtonColor: '#3A57E8',
                         });
                     }
@@ -238,7 +206,17 @@
             }
         });
 
-        // Handle form submission
+        // Validate the entire form before submission
+        function validateForm() {
+            let isValid = true;
+            isValid = validateName() && isValid;
+            isValid = validateLink() && isValid;
+            isValid = validateInput('description', 'invalid-description') && isValid;
+            isValid = validateFile() && isValid;
+            return isValid;
+        }
+
+        // handle form submission
         $("#form-data").submit(function(event) {
             event.preventDefault();
 
@@ -249,7 +227,6 @@
                     formdata[n['name']] = n['value'];
                 });
 
-                // Mengatur nilai `is_active` menjadi 1 atau 0 berdasarkan status checkbox
                 formdata['is_active'] = $('#is_active').is(":checked") ? 1 : 0;
 
                 $.ajaxSetup({
@@ -257,13 +234,13 @@
                         'Authorization': "Bearer {{ $session_token }}"
                     }
                 });
-
                 $.ajax({
-                    url: '/api/slider/{{ $id }}',
-                    type: "PUT",
+                    url: '/api/poster',
+                    type: "POST",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+                    processData: false,
                     success: function(result) {
                         if (result['success'] == true) {
                             Swal.fire({
@@ -272,7 +249,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/slider') }}");
+                                window.location.replace("{{ url('/admin/poster') }}");
                             });
                         } else {
                             Swal.fire({
@@ -282,36 +259,13 @@
                                 confirmButtonColor: '#3A57E8',
                             });
                         }
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            let errorMessage = '';
-                            Object.keys(errors).forEach(function(key) {
-                                errorMessage += errors[key][0] + '\n';
-                            });
-                            Swal.fire({
-                                icon: "error",
-                                title: "Validation Failed",
-                                text: errorMessage,
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "An error occurred while saving data.",
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
                     }
                 });
             } else {
-                // Jika validasi gagal, tampilkan pesan kesalahan
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "You must complete the entire form correctly.",
+                    text: "Anda harus melengkapi seluruh form dengan benar.",
                     confirmButtonColor: '#3A57E8',
                 });
             }

@@ -14,7 +14,7 @@
                                     <path fill="black"
                                         fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                                 </svg>
-                                Partner/Edit
+                                Mitra/Edit
                             </a>
                         </h3>
                     </div>
@@ -149,7 +149,7 @@
             }
         });
         $.ajax({
-            url: '/api/partner/{{ $id }}',
+            url: '/api/mitra/{{ $id }}',
             type: "GET",
             dataType: "json",
             processData: false,
@@ -247,7 +247,7 @@
                 });
 
                 $.ajax({
-                    url: '/api/partner/{{ $id }}',
+                    url: '/api/mitra/{{ $id }}',
                     type: "PUT",
                     data: JSON.stringify(formdata),
                     contentType: "application/json; charset=utf-8",
@@ -260,7 +260,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/partner') }}");
+                                window.location.replace("{{ url('/admin/mitra') }}");
                             });
                         } else {
                             Swal.fire({

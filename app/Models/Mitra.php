@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
 
-class Partner extends Model
+class Mitra extends Model
 {
     use HasFactory;
     use BlameableTrait;

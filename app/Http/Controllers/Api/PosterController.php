@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use Illuminate\Http\Request;
-use App\Models\Partner;
+use App\Models\Poster;
 
-class PartnerController extends Controller
+class PosterController extends Controller
 {
     public function __construct()
     {
@@ -39,7 +40,7 @@ class PartnerController extends Controller
         $where = json_decode($where, true);
 
         // query
-        $query = Partner::where([['id', '>', '0']]);
+        $query = Poster::where([['id', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -60,7 +61,7 @@ class PartnerController extends Controller
             $query = $query->where('name', 'like', "%{$search}%");
         }
 
-        // metadata dan data
+        // metadata
         $metadata = [];
         $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
@@ -93,7 +94,7 @@ class PartnerController extends Controller
     public function show($id)
     {
         // query
-        $query = Partner::where([['id', '>', '0']]);
+        $query = Poster::where([['id', '>', '0']]);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -118,7 +119,7 @@ class PartnerController extends Controller
         ]);
 
         $req = $request->post();
-        $data = Partner::create($req);
+        $data = Poster::create($req);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
@@ -134,10 +135,10 @@ class PartnerController extends Controller
         ]);
 
         $req = $request->post();
-        $query = Partner::findOrFail($id);
+        $query = Poster::findOrFail($id);
         $query->update($req);
 
-        $data = Partner::findOrFail($id);
+        $data = Poster::findOrFail($id);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
@@ -148,7 +149,7 @@ class PartnerController extends Controller
 
     public function destroy($id)
     {
-        $query = Partner::findOrFail($id);
+        $query = Poster::findOrFail($id);
         $query->delete();
 
         if ($query) {

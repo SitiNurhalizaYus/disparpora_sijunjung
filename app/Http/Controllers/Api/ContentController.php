@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ContentResource;
-use Illuminate\Http\Request;
 use App\Models\Content;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Resources\ContentResource;
 
 class ContentController extends Controller
 {
@@ -153,9 +154,11 @@ class ContentController extends Controller
 
         $request->validate([
             'title' => 'required',
-            'content' => 'required',
         ]);
 
+        // Membuat slug yang unik
+        $slug = $this->generateUniqueSlug($request->input('title'));
+        $data = $request->$slug;
         // Ambil semua input form dan set category_id jika bukan tipe 'profil'
         $data = $request->all();
 
@@ -179,22 +182,26 @@ class ContentController extends Controller
     // Metode untuk memperbarui data
     public function update(Request $request, $id_content)
     {
-        // Validasi input
-        $request->validate([
-            'title' => 'required',
-            'slug' => 'required|unique:contents,slug,' . $id_content . ',id_content',
-            'type' => 'required|in:berita,profil,artikel', // Validasi bahwa tipe konten harus salah satu dari yang diizinkan
-        ]);
-
-        // Mengambil semua input dari request termasuk type
-        $req = $request->all();
-        // Mengambil data yang akan diperbarui
         $content = Content::findOrFail($id_content);
 
-        $req['updated_by'] = auth()->id(); // Mengisi field updated_by dengan ID pengguna yang sedang login
+        // Ambil tipe konten dari request, default 'berita'
+        $type = $request->input('type', 'berita');
 
-        // Memperbarui data berdasarkan input dari form
-        $content->update($req);
+        $request->validate([
+            'title' => 'required',
+        ]);
+
+        // Membuat slug yang unik
+        $slug = $this->generateUniqueSlug($request->input('title'));
+        $data = $request->$slug;
+
+        if ($type !== 'profil') {
+            $data['category_id'] = $request->category_id; // Set category_id sesuai dengan input kategori
+        }
+        
+        $data['updated_by'] = auth()->id();
+        $data = $request->all();
+        $content->update($data);
 
         // Mengembalikan hasil pembaruan dalam format ContentResource
         return (new ContentResource($content))->additional([
@@ -202,6 +209,7 @@ class ContentController extends Controller
             'message' => 'Data berhasil diperbarui'
         ]);
     }
+
 
     // Metode untuk menghapus data
     public function destroy($id_content)
@@ -215,5 +223,19 @@ class ContentController extends Controller
             'success' => true,
             'message' => 'Data berhasil dihapus'
         ], 201);
+    }
+
+    private function generateUniqueSlug($title)
+    {
+        $slug = Str::slug($title);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (Content::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
     }
 }
