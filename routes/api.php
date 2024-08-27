@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +49,7 @@ Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class)
 Route::apiResource('slider', App\Http\Controllers\Api\SliderController::class);
 Route::apiResource('team', App\Http\Controllers\Api\TeamController::class);
 Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
+
 
 Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
 Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);
