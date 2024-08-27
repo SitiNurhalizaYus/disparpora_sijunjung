@@ -17,7 +17,7 @@ class GalleriesTableSeeder extends Seeder
             [
                 'title' => 'Galeri Pembukaan Festival Pariwisata',
                 'type' => 'gambar',
-                'file_path' => 'path/to/image1.jpg',
+                'file_path' => 'upload/300/image1.jpg',
                 'is_active' => true,
                 'created_by' => 1,
                 'created_at' => now(),

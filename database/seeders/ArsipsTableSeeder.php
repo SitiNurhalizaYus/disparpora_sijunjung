@@ -14,8 +14,8 @@ class ArsipsTableSeeder extends Seeder
     public function run()
     {
         DB::table('arsips')->insert([
-            ['tahun' => 2023, 'bulan' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['tahun' => 2023, 'bulan' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['tahun' => 2024, 'bulan' => 7, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['tahun' => 2024, 'bulan' => 8, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
             // Tambahkan 4 arsip lainnya dengan data terkait
         ]);
     }

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('arsips', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_arsip');
             $table->integer('tahun');
             $table->integer('bulan');
             // default

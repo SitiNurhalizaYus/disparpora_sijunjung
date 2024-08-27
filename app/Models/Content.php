@@ -11,7 +11,7 @@ class Content extends Model
     protected $table = 'contents'; // Nama tabel
     protected $primaryKey = 'id_content';
     protected $fillable = [
-        'title', 'slug', 'content', 'description_short', 'image', 'type', 'category_id', 'arsip_id', 'is_active', 'created_by','updated_by'
+        'title', 'slug', 'content', 'description_short', 'image', 'type', 'category_id', 'is_active', 'created_by','updated_by'
     ];
 
     // Definisi atribut enum untuk konten
@@ -22,7 +22,7 @@ class Content extends Model
     // Relasi dengan model Category
     public function category()
 {
-    return $this->belongsTo(Category::class, 'kategori_id', 'id_category');
+    return $this->belongsTo(Category::class, 'category_id', 'id_category');
 }
 
  // Relasi dengan model arsip

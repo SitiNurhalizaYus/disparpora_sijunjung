@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->enum('type', ['berita', 'artikel', 'profil']);
             $table->foreignId('category_id')->nullable();
-            $table->foreignId('arsip_id')->nullable();
+            // $table->foreignId('arsip_id')->nullable();
             // default
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(0);

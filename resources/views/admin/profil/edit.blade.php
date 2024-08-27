@@ -165,10 +165,23 @@
             }
         }
 
+        // Validasi file gambar yang diunggah
         function validateFile() {
-            var fileInput = $('#file').prop('files')[0];
-            if (!fileInput) {
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            const file = $('#file')[0].files[0];
+
+            if (file && !allowedTypes.includes(file.type)) {
                 $('#invalid-file').show();
+                $('#file').val(''); // Kosongkan input file jika tidak valid
+
+                // Tampilkan pemberitahuan menggunakan Swal
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File tidak valid',
+                    text: 'File yang diunggah harus berupa gambar (.jpg, .jpeg, .png).',
+                    confirmButtonColor: '#3A57E8',
+                });
+
                 return false;
             } else {
                 $('#invalid-file').hide();
@@ -211,31 +224,28 @@
             }
         });
 
-        $('#file').on('change', function() {
-            var file = $(this).prop('files')[0];
-            if (!file || !file.type.match('image.*')) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "File yang diunggah bukan gambar yang valid. Silakan unggah file dalam format JPG, JPEG, atau PNG.",
-                    confirmButtonColor: '#3A57E8',
-                });
-                $(this).val('');
-                $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
-                $('#image').val('noimage.jpg');
-                $('#invalid-picture').show();
-            } else {
-                $('#invalid-picture').hide();
-
+        // Handle upload image
+        $('#file').change(function() {
+            if (validateFile()) {
+                // Preview image
+                $('#image-preview').attr('display', 'block');
                 var oFReader = new FileReader();
-                oFReader.readAsDataURL(file);
+                oFReader.readAsDataURL($("#file")[0].files[0]);
                 oFReader.onload = function(oFREvent) {
                     $('#image-preview').attr('src', oFREvent.target.result);
                 };
 
+                // Upload image
                 var formdata = new FormData();
-                formdata.append("image", file);
-
+                if ($(this).prop('files').length > 0) {
+                    var file = $(this).prop('files')[0];
+                    formdata.append("image", file);
+                }
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Bearer {{ $session_token }}"
+                    }
+                });
                 $.ajax({
                     url: '/api/upload',
                     type: "POST",
@@ -245,21 +255,13 @@
                     success: function(result) {
                         if (result['success'] == true) {
                             $('#image').val(result['data']['url'].replace('/xxx/', '/300/'));
-                            $('#invalid-file').hide(); // Menghilangkan pesan error jika upload berhasil
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Gagal mengunggah gambar.",
-                                confirmButtonColor: '#3A57E8',
-                            });
                         }
                     },
-                    error: function() {
+                    error: function(xhr) {
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Terjadi kesalahan saat mengunggah gambar.",
+                            text: "Failed to upload image.",
                             confirmButtonColor: '#3A57E8',
                         });
                     }
@@ -273,6 +275,7 @@
             isValid = validateTitle() && isValid;
             isValid = validateSlug() && isValid;
             isValid = validateInput('description_short', 'invalid-description_short') && isValid;
+            isValid = validateFile() && isValid;
             return isValid;
         }
 

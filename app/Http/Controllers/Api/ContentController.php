@@ -148,30 +148,31 @@ class ContentController extends Controller
     // Metode untuk menyimpan data baru
     public function store(Request $request)
     {
-        // Validasi input
+        // Ambil tipe konten dari request, default 'berita'
+        $type = $request->input('type', 'berita');
+
         $request->validate([
             'title' => 'required',
-            'slug' => 'required|unique:contents,slug',
-            'type' => 'required|in:berita,profil,artikel', // Validasi tipe konten harus salah satu dari yang diizinkan
+            'content' => 'required',
         ]);
 
-        // Menyimpan data baru berdasarkan input dari form
-        $req = $request->all();
-        $req['created_by'] = auth()->id(); // Mengisi field created_by dengan ID pengguna yang sedang login
-        $data = Content::create($req); // Menyimpan data dengan tipe yang dikirim dari form
+        // Ambil semua input form dan set category_id jika bukan tipe 'profil'
+        $data = $request->all();
 
-        // Mengembalikan hasil penyimpanan dalam format ContentResource
-        if ($data) {
-            return (new ContentResource($data))->additional([
-                'success' => true,
-                'message' => 'Data telah berhasil ditambahkan'
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data gagal ditambahkan'
-            ], 400);
+        if ($type !== 'profil') {
+            $data['category_id'] = $request->category_id; // Set category_id sesuai dengan input kategori
         }
+
+        $data['type'] = $type; // Set tipe konten
+        $data['created_by'] = auth()->id();
+        // Memperbarui data berdasarkan input dari form dan menyimpan konten baru
+        $content = Content::create($data); // Mengembalikan objek Content, bukan array
+
+        // Mengembalikan hasil pembaruan dalam format ContentResource
+        return (new ContentResource($content))->additional([
+            'success' => true,
+            'message' => 'Data berhasil disimpan'
+        ]);
     }
 
 
@@ -185,11 +186,11 @@ class ContentController extends Controller
             'type' => 'required|in:berita,profil,artikel', // Validasi bahwa tipe konten harus salah satu dari yang diizinkan
         ]);
 
+        // Mengambil semua input dari request termasuk type
+        $req = $request->all();
         // Mengambil data yang akan diperbarui
         $content = Content::findOrFail($id_content);
 
-        // Mengambil semua input dari request termasuk type
-        $req = $request->all();
         $req['updated_by'] = auth()->id(); // Mengisi field updated_by dengan ID pengguna yang sedang login
 
         // Memperbarui data berdasarkan input dari form
@@ -202,25 +203,17 @@ class ContentController extends Controller
         ]);
     }
 
-
     // Metode untuk menghapus data
     public function destroy($id_content)
     {
         // Mengambil dan menghapus data berdasarkan id_content
-        $query = Content::findOrFail($id_content);
-        $query->delete();
+        $content = Content::findOrFail($id_content);
+        $content->delete();
 
-        // Mengembalikan hasil penghapusan dalam format ApiResource
-        if ($query) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Data berhasil dihapus'
-            ], 201);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data gagal dihapus'
-            ], 400);
-        }
+        // Mengembalikan hasil penghapusan dalam format JSON
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil dihapus'
+        ], 201);
     }
 }

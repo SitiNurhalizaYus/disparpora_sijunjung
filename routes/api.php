@@ -27,12 +27,11 @@ Route::apiResource('profil', App\Http\Controllers\Api\ProfilController::class);
 Route::apiResource('berita', App\Http\Controllers\Api\BeritaController::class);
 // Artikel
 Route::apiResource('artikel', App\Http\Controllers\Api\ArtikelController::class);
-// Route::apiResource('faq', App\Http\Controllers\Api\FaqController::class);
 
-// Route::apiResource('category', App\Http\Controllers\Api\Conten::class);//api untuk kategori
-Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class); //api untuk arsip
-Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class); //api untuk arsip
-Route::apiResource('event', App\Http\Controllers\Api\EventController::class); //api untuk event
+Route::apiResource('category', App\Http\Controllers\Api\CategoryController::class); 
+Route::apiResource('arsip', App\Http\Controllers\Api\ArsipController::class); 
+
+Route::apiResource('event', App\Http\Controllers\Api\EventController::class); 
 // Route::apiResource('pesan', App\Http\Controllers\Api\PesanController::class);//api untuk pesan
 
 Route::apiResource('agent', App\Http\Controllers\Api\AgentController::class); //api untuk agent
@@ -47,6 +46,8 @@ Route::apiResource('partner', App\Http\Controllers\Api\PartnerController::class)
 Route::apiResource('slider', App\Http\Controllers\Api\SliderController::class);
 Route::apiResource('team', App\Http\Controllers\Api\TeamController::class);
 Route::apiResource('testimony', App\Http\Controllers\Api\TestimonyController::class);
+
+// Route::get('/categori_id', [App\Http\Controllers\Api\ContentController::class, 'getCategories']);
 
 Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
 Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);

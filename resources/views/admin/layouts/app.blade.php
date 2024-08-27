@@ -133,7 +133,7 @@
                                 str_contains($menu, 'profil') ||
                                 str_contains($menu, 'berita') ||
                                 str_contains($menu, 'artikel') ||
-                                str_contains($menu, 'kategori') ||
+                                str_contains($menu, 'category') ||
                                 str_contains($menu, 'arsip')) show @endif"
                             id="kelola-konten-menu" data-bs-parent="#sidebar-menu">
 
@@ -205,8 +205,8 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link @if (str_contains($menu, 'kategori')) active @endif"
-                                    href="{{ url('/admin/kategori') }}">
+                                <a class="nav-link @if (str_contains($menu, 'category')) active @endif"
+                                    href="{{ url('/admin/category') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -215,9 +215,10 @@
                                     </i>
                                     <span class="item-name">Kategori</span>
                                 </a>
+                                <hr class="hr-horizontal" style="background-color: white">
                             </li>
 
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'arsip')) active @endif"
                                     href="{{ url('/admin/arsip') }}">
                                     <i class="icon">
@@ -228,8 +229,7 @@
                                     </i>
                                     <span class="item-name">Arsip</span>
                                 </a>
-                                <hr class="hr-horizontal" style="background-color: white">
-                            </li>
+                            </li> --}}
 
                         </ul>
                     </li>

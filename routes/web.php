@@ -57,6 +57,8 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('profil', App\Http\Controllers\Admin\ProfilController::class);
     Route::resource('berita', App\Http\Controllers\Admin\BeritaController::class);
     Route::resource('artikel', App\Http\Controllers\Admin\ArtikelController::class);
+    Route::resource('category', App\Http\Controllers\Admin\CategoryController::class);
+    Route::resource('arsip', App\Http\Controllers\Admin\ArsipController::class);
     Route::resource('setting', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('user', App\Http\Controllers\Admin\UserController::class);
 
