@@ -34,7 +34,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="title">Judul Berita</label>
                                 <input class="form-control" type="text" id="title" name="title"
-                                    value="{{ old('title', $content->title) }}" placeholder="Masukkan Judul Berita" required
+                                    value="" placeholder="Masukkan Judul Berita" required
                                     pattern="[A-Za-z0-9\s]+$">
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul
                                     harus diisi dan tidak boleh ada simbol.</p>
@@ -42,13 +42,13 @@
                             <div class="form-group">
                                 <label class="form-label" for="slug">Slug</label>
                                 <input class="form-control" type="text" id="slug" name="slug"
-                                    value="{{ old('slug', $content->slug) }}" placeholder="Otomatis terisi" required
+                                    value="" placeholder="Otomatis terisi" required
                                     pattern="[A-Za-z0-9\-]+$">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="description_short">Deskripsi Singkat</label>
                                 <textarea class="form-control" id="description_short" name="description_short" rows="4"
-                                    placeholder="Masukkan Deskripsi Singkat" required>{{ old('description_short', $content->description_short) }}</textarea>
+                                    placeholder="Masukkan Deskripsi Singkat" required></textarea>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;"
                                     id="invalid-description_short">Deskripsi harus diisi.</p>
                             </div>
@@ -68,8 +68,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="content">Konten Berita</label>
-                                <textarea class="form-control" type="text" id="content" name="content" style="display: none" required>{{ old('content', $content->content) }}</textarea>
-                                <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required>{{ old('description_long', $content->content) }}</textarea>
+                                <textarea class="form-control" type="text" id="content" name="content" style="display: none" required></textarea>
+                                <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
@@ -86,8 +86,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active"
-                                        {{ old('is_active', $content->is_active) ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
                                     <label class="form-check-label" for="is_active">Status Aktif</label>
                                 </div>
                             </div>
