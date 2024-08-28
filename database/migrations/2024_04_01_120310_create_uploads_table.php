@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('type')->nullable();
             $table->string('ext')->nullable();
-            $table->string('size')->nullable();            
-            $table->boolean('hd')->default(0);
+            $table->string('size')->nullable(); 
             $table->string('hash')->nullable();
             $table->text('url')->nullable();
             // default
