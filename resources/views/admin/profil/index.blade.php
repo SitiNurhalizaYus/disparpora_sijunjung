@@ -121,8 +121,7 @@
                         className: 'text-center',
                         render: function(data, type, row, meta) {
                             if (data && data !== null) { // Pastikan data tidak null
-                                var imagePath = "{{ asset('/') }}" + data.replace('/xxx/',
-                                    '/100/');
+                                var imagePath = "{{ asset('/') }}" + data;
                                 return '<img src="' + imagePath +
                                     '" style="max-width:100px; max-height:100px;">';
                             } else {

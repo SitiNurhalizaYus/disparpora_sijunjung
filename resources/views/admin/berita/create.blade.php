@@ -233,6 +233,7 @@
             }
         });
 
+        //handle upload
         $('#file').on('change', function() {
             var file = $(this).prop('files')[0];
             if (!file || !file.type.match('image.*')) {
@@ -255,7 +256,7 @@
                 };
 
                 var formdata = new FormData();
-                formdata.append("image", file);
+                formdata.append("file", file);
 
                 $.ajaxSetup({
                     headers: {
@@ -270,7 +271,7 @@
                     contentType: false,
                     success: function(result) {
                         if (result['success'] == true) {
-                            $('#image').val(result['data']['url'].replace('/xxx/', '/300/'));
+                            $('#image').val(result['data']['url'].replace('/xxx/', '/500/'));
                         } else {
                             Swal.fire({
                                 icon: "error",

@@ -207,7 +207,7 @@ class UploadController extends Controller
         $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' . $filename_new));
         $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' . $filename_new));
         $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' . $filename_new));
-        $image_asli = ImageManager::gd()->read($image->getRealPath())->save(public_path('uploads/' . $filename_new));
+        $image_landscape = ImageManager::gd()->read($image->getRealPath())->resize(1024, 550)->save(public_path('uploads/' . $filename_new));
     }
 
     private function deleteOldImage($upload)

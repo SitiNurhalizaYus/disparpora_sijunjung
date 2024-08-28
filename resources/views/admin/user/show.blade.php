@@ -99,8 +99,7 @@
                     $('#username').html(result['data']['username']);
                     $('#email').html(result['data']['email']);
                     $('#name').html(result['data']['name']);
-                    $("#picture").attr("src", "{{ url('/') }}/" + result['data']['picture'].replace(
-                        '/xxx/', '/300/'));
+                    $("#picture").attr("src", "{{ url('/') }}/" + result['data']['picture']);
                     $('#notes').html(result['data']['notes']);
                     if (result['data']['is_active'] == 1) {
                         $('#is_active').html('<span class="badge bg-success">Aktif</span>');

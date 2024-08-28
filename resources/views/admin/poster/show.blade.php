@@ -115,7 +115,7 @@
                         $('#name').text(result['data']['name']);
                         $('#description').text(result['data']['description']);
                         $('#link').attr('href', result['data']['link']).text(result['data']['link']);
-                        $("#image").attr("src", "{{ url('/') }}/" + result['data']['image'].replace('/xxx/', '/300/'));
+                        $("#image").attr("src", "{{ url('/') }}/" + result['data']['image']);
                         $('#notes').text(result['data']['notes']);
                         $('#is_active').html(result['data']['is_active'] == 1 ?
                             '<span class="badge bg-success">Aktif</span>' :

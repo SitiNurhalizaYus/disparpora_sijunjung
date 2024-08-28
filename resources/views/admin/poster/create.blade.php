@@ -168,7 +168,7 @@
 
                 // Unggah file gambar ke server
                 var formdata = new FormData();
-                formdata.append("image", file);
+                formdata.append("file", file);
 
                 $.ajaxSetup({
                     headers: {
@@ -184,7 +184,7 @@
                     success: function(result) {
                         if (result['success'] == true) {
                             // Simpan URL gambar ke input hidden
-                            $('#image').val(result['data']['url'].replace('/xxx/', '/300/'));
+                            $('#image').val(result['data']['url'].replace('/xxx/', '/500/'));
                         } else {
                             Swal.fire({
                                 icon: "error",

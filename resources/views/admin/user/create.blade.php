@@ -184,7 +184,7 @@
             };
 
             var formdata = new FormData();
-            formdata.append("image", file);
+            formdata.append("file", file);
 
             $.ajaxSetup({
                 headers: {
@@ -199,7 +199,7 @@
                 contentType: false,
                 success: function(result) {
                     if (result['success'] == true) {
-                        $('#picture').val(result['data']['url'].replace('/xxx/', '/300/'));
+                        $('#picture').val(result['data']['url']);
                     } else {
                         Swal.fire({
                             icon: "error",

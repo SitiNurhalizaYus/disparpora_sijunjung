@@ -196,7 +196,7 @@
                 var formdata = new FormData();
                 if ($(this).prop('files').length > 0) {
                     var file = $(this).prop('files')[0];
-                    formdata.append("image", file);
+                    formdata.append("file", file);
                 }
                 $.ajaxSetup({
                     headers: {
@@ -211,7 +211,7 @@
                     contentType: false,
                     success: function(result) {
                         if (result['success'] == true) {
-                            $('#image').val(result['data']['url'].replace('/xxx/', '/300/'));
+                            $('#image').val(result['data']['url'].replace('/xxx/', '/100/'));
                         }
                     },
                     error: function(xhr) {
