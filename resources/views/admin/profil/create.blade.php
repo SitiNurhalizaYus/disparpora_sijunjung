@@ -4,7 +4,7 @@
     <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
         <div class="card-header mb-2 px-3">
             <div class="flex-wrap d-flex justify-content-between align-items-center">
-                <div class="mb-3">
+                <div>
                     <div class="header-title">
                         <h3 class="card-title">
                             <!-- Tombol Back -->
@@ -19,6 +19,7 @@
                         </h3>
                     </div>
                 </div>
+                <div></div>
             </div>
         </div>
         <div class="row">
@@ -31,14 +32,14 @@
                             <input type="hidden" name="type" value="profil">
                             <div class="form-group">
                                 <label class="form-label" for="title">Judul Profil</label>
-                                <input class="form-control" type="text" id="title" name="title" value=""
+                                <input class="form-control" type="text" id="title" name="title"
                                     placeholder="Masukkan Judul Profil" required pattern="[A-Za-z0-9\s]+$">
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul
                                     harus diisi dan tidak boleh ada simbol.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="slug">Slug</label>
-                                <input class="form-control" type="text" id="slug" name="slug" value=""
+                                <input class="form-control" type="text" id="slug" name="slug"
                                     placeholder="Otomatis terisi" required pattern="[A-Za-z0-9\-]+$">
                             </div>
                             <div class="form-group">
@@ -50,25 +51,21 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="content">Konten Profil</label>
-                                <textarea class="form-control" type="text" id="content" name="content" value="" placeholder="Masukan konten"
-                                    style="display: none" required></textarea>
-                                <textarea class="form-control" id="description_long" name="description_long" value=""
-                                    placeholder="Masukkan konten" required></textarea>
+                                <textarea class="form-control" type="text" id="content" name="content" style="display: none" required></textarea>
+                                <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
-                                <input class="form-control" type="file" id="file" name="file"
-                                    accept="image/jpeg,image/png,image/jpg" required>
-                                <input class="form-control" type="hidden" id="image" name="image" value="noimage.jpg"
-                                    placeholder="image">
+                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg" required>
+                                <input class="form-control" type="hidden" id="image" name="image"
+                                    value="noimage.jpg">
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
                                     width="300px" style="border-radius: 2%;">
-                                <label class="form-label" for="photo" style="font-size: 10pt">*Format JPG,JPEG, dan
+                                <label class="form-label" for="image" style="font-size: 10pt">*Format JPG,JPEG, dan
                                     PNG</label>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">
-                                    Silakan
-                                    unggah gambar.</p>
+                                    Silakan unggah gambar.</p>
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
@@ -87,7 +84,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // Handle validation display
         function validateInput(inputId, errorId, condition = true) {
@@ -100,6 +96,7 @@
             }
         }
 
+        // Custom validation for title field (only letters and numbers)
         function validateTitle() {
             const titleInput = $('#title');
             const titleValue = titleInput.val();
@@ -114,6 +111,7 @@
             }
         }
 
+        // Custom validation for slug field
         function validateSlug() {
             const slugInput = $('#slug');
             const slugValue = slugInput.val();
@@ -127,14 +125,16 @@
             }
         }
 
+        // Generate slug from title
         function generateSlug(title) {
             const slug = title.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
             $('#slug').val(slug);
-            validateSlug();
+            validateSlug(); // Validate slug whenever it is auto-generated
         }
 
+        // Validate file upload
         function validateFile() {
-            var fileInput = $('#file').prop('files')[0];
+            const fileInput = $('#file').prop('files')[0];
             if (!fileInput) {
                 $('#invalid-file').show();
                 return false;
@@ -144,6 +144,7 @@
             }
         }
 
+        // Attach real-time validation to inputs
         $('#title').on('input', function() {
             validateTitle();
         });
@@ -156,6 +157,7 @@
             validateInput('description_short', 'invalid-description_short');
         });
 
+        // Handle wysiwyg
         tinymce.init({
             selector: 'textarea#description_long',
             plugins: 'code table lists',
@@ -206,12 +208,7 @@
                     contentType: false,
                     success: function(result) {
                         if (result['success'] == true) {
-                            // Simpan URL gambar ori
                             $('#image').val(result['data']['url']);
-
-                            // Tampilkan gambar ori di pratinjau
-                            var imagePathOri = result['data']['url'];
-                            $('#image-preview').attr('src', imagePathOri);
                         } else {
                             Swal.fire({
                                 icon: "error",
@@ -233,7 +230,7 @@
             }
         });
 
-
+        // Validate the entire form before submission
         function validateForm() {
             let isValid = true;
             isValid = validateTitle() && isValid;
@@ -243,25 +240,37 @@
             return isValid;
         }
 
+        //handle post
         $("#form-data").submit(function(event) {
             event.preventDefault();
 
             if (validateForm()) {
                 var form = new FormData(document.getElementById("form-data"));
+
+                // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+
+                // Debugging: Tampilkan semua data form ke console
+                for (var pair of form.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
 
                 $.ajaxSetup({
                     headers: {
                         'Authorization': "Bearer {{ $session_token }}"
                     }
                 });
+
                 $.ajax({
                     url: '/api/content?type=profil',
                     type: "POST",
                     data: form,
-                    contentType: false,
-                    processData: false,
+                    contentType: false, // Supaya FormData bisa bekerja dengan benar
+                    processData: false, // Supaya FormData bisa bekerja dengan benar
                     success: function(result) {
+                        // Debugging: Periksa respons dari server
+                        console.log(result);
+
                         if (result['success'] == true) {
                             Swal.fire({
                                 icon: "success",
@@ -281,15 +290,19 @@
                         }
                     },
                     error: function(xhr) {
+                        // Debugging: Periksa kesalahan dari server
+                        console.error(xhr);
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Terjadi kesalahan saat menyimpan data.",
+                            text: xhr.responseJSON ? xhr.responseJSON.message :
+                                "Terjadi kesalahan saat menyimpan data.",
                             confirmButtonColor: '#3A57E8',
                         });
                     }
                 });
             } else {
+                // Jika validasi gagal, tampilkan pesan kesalahan dan jangan kirim form
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -297,7 +310,7 @@
                     confirmButtonColor: '#3A57E8',
                 });
             }
-            return false;
+            return false; // Menghentikan submit jika validasi gagal
         });
     </script>
 @endsection

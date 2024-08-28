@@ -13,74 +13,6 @@ class MessageController extends Controller
         $this->middleware('auth:api')->except("index", "show", "store");
     }
 
-    /**
-     * @OA\Get(
-     *     path="/message",
-     *     tags={"Message"},
-     *     summary="",
-     *     description="Get all data",
-     *     operationId="message_index",
-     *     @OA\Parameter(
-     *          name="per_page",
-     *          description="per_page value is number. ex : ?per_page=10",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="page",
-     *          description="page value is number. ex : ?page=1",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="sort",
-     *          description="Sort value is string with rule column-name:order. ex : ?sort=id:asc",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="string"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="where",
-     *          description="Where value is object. ex : ?where={'name':['john','doe'], 'dob':'1990-12-31'}",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="string"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="count",
-     *          description="Count value is boolean. ex : ?count=true",
-     *          required=false,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="boolean"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={"total_data":"", "per_page":"", "total_page":"", "page":""}
-     *              }
-     *         )
-     *     )
-     * )
-     */
-    
     public function index(Request $request)
     {
         // parameter
@@ -155,37 +87,6 @@ class MessageController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/message/{id}",
-     *     tags={"Message"},
-     *     summary="",
-     *     description="Get data by id",
-     *     operationId="message_show",
-     *     @OA\Parameter(
-     *          name="id",
-     *          description="id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Get Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function show($id)
     {
         // query
@@ -207,41 +108,7 @@ class MessageController extends Controller
         }
     }
 
-    /**
-     * @OA\Post(
-     *     path="/message",
-     *     tags={"Message"},
-     *     summary="",
-     *     description="Insert data",
-     *     operationId="message_store",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\RequestBody(
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(
-     *                      property="name",
-     *                      type="string"
-     *                  )
-     *              )
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Insert Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
-    public function store(Request $request)
+     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
@@ -257,49 +124,6 @@ class MessageController extends Controller
         }
     }
 
-    /**
-     * @OA\Put(
-     *     path="/message/{id}",
-     *     tags={"Message"},
-     *     summary="",
-     *     description="Update data",
-     *     operationId="message_update",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *          name="id",
-     *          description="id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\RequestBody(
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(
-     *                      property="name",
-     *                      type="string"
-     *                  )
-     *              )
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Update Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -319,39 +143,7 @@ class MessageController extends Controller
         }
     }
 
-    /**
-     * @OA\Delete(
-     *     path="/message/{id}",
-     *     tags={"Message"},
-     *     summary="",
-     *     description="Delete data",
-     *     operationId="message_destroy",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *          name="id",
-     *          description="id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="number"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="OK",
-     *         @OA\MediaType(
-     *              mediaType="application/json",
-     *              example={
-     *                  "success"=true,
-     *                  "message"="Delete Data Successfull",
-     *                  "data"={},
-     *                  "metadata"={}
-     *              }
-     *         )
-     *     )
-     * )
-     */
-    public function destroy($id)
+       public function destroy($id)
     {
         $query = Message::findOrFail($id);
         $query->delete();

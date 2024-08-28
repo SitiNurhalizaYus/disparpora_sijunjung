@@ -2,52 +2,108 @@
 
 @section('content')
     <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
-        <div class="card-header mb-2 px-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="header-title">
+        <div class="card-header mb-3 px-3">
+            <div class="flex-wrap d-flex justify-content-between align-items-center">
+                <div>
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/agenda/') }}" class="text-decoration-none text-dark">
+                        <a href="{{ url('/admin/agenda/') }}" style="text-decoration: none; color: inherit;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
-                                class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                                <path fill="black" fill-rule="evenodd"
-                                    d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
+                                class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
+                                <path fill="black"
+                                    fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                             </svg>
                             Agenda/Detail
                         </a>
                     </h3>
                 </div>
-                <div>
-                    <a href="#" id="edit-button" class="btn btn-warning btn-sm">
-                        <i class="bi bi-pencil"></i> Edit
+                <div style="display: flex;">
+                    <a href="{{ url('/admin/agenda/' . $agenda->id . '/edit') }}"
+                        class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit"
+                        data-bs-original-title="Edit">
+                        <span class="btn-inner">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                                <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </span>
                     </a>
-                    <button id="delete-button" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash"></i> Delete
+                    &nbsp;
+                    <button onclick="removeData({{ $agenda->id }})" class="btn btn-sm btn-icon btn-danger flex-end"
+                        data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
+                        <span class="btn-inner">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                <path
+                                    d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                                <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path
+                                    d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                            </svg>
+                        </span>
                     </button>
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-body">
-                        <h4 id="title"></h4>
-                        <p><strong>Tanggal Acara:</strong> <span id="event_date"></span></p>
-                        <p><strong>Penyelenggara:</strong> <span id="organizer"></span></p>
-                        <p><strong>Konten:</strong> <div id="content"></div></p>
-
-                        <div class="mt-4">
-                            <h5>File yang diunggah:</h5>
-                            <div id="file-preview"></div>
+                    <div class="card-body" id="detail-data-success" style="display: none;">
+                        <div class="mt-2 row">
+                            <div class="md-6 col">
+                                <h6 class="mb-1">Judul Agenda</h6>
+                                <p id="title"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="mb-1">Tanggal Acara</h6>
+                                <p id="event_date"></p>
+                            </div>
                         </div>
-
-                        <p class="mt-4"><strong>Status:</strong> 
-                            <span id="status"></span>
-                        </p>
-
-                        <p><strong>Dibuat pada:</strong> <span id="created_at"></span></p>
-                        <p><strong>Diperbarui pada:</strong> <span id="updated_at"></span></p>
+                        <div class="mt-2 row">
+                            <div class="md-6 col">
+                                <h6 class="mb-1">Penyelenggara</h6>
+                                <p id="organizer"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="mb-1">Status</h6>
+                                <p id="is_active"></p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <hr style="height: 2px">
+                        </div>
+                        <div class="mt-4">
+                            <h6 class="mb-1">Konten</h6>
+                            <p id="content"></p>
+                        </div>
+                        @if ($agenda->file_path)
+                            <div class="mt-4">
+                                <h6 class="mb-1">File yang diunggah</h6>
+                                <embed src="{{ asset($agenda->file_path) }}" type="application/pdf" width="100%"
+                                    height="600px" />
+                                <button class="btn btn-gray btn-sm mt-3"><a href="{{ asset($agenda->file_path) }}" target="_blank" style="color: white; text-decoration: none;">Lihat Dokumen
+                                        PDF</a></button>
+                            </div>
+                        @else
+                            <p>Tidak ada file yang diunggah.</p>
+                        @endif
+                    </div>
+                    <div class="card-body" id="detail-data-failed" style="display: none;">
+                        <p id="message"></p>
                     </div>
                 </div>
             </div>
@@ -55,117 +111,110 @@
     </div>
 
     <script>
-        $(document).ready(function() {
-            // Ambil data agenda menggunakan AJAX
-            const agendaId = {{ $id }}; // Asumsikan $id dikirim dari controller atau route parameter
+        $("#detail-data-success").hide();
+        $("#detail-data-failed").hide();
 
-            $.ajax({
-                url: '/api/agenda/' + agendaId,
-                type: "GET",
-                dataType: "json",
-                success: function(result) {
-                    if (result['success']) {
-                        // Isi data form dengan data yang diterima dari API
-                        $('#title').text(result['data']['title']);
-                        $('#event_date').text(result['data']['event_date']);
-                        $('#organizer').text(result['data']['organizer']);
-                        $('#content').html(result['data']['content']);
+        $.ajaxSetup({
+            headers: {
+                'Authorization': "Bearer {{ $session_token }}"
+            }
+        });
+        $.ajax({
+            url: '/api/agenda/{{ $agenda->id }}',
+            type: "GET",
+            dataType: "json",
+            processData: false,
+            success: function(result) {
+                if (result['success'] == true) {
+                    $("#detail-data-success").show();
+                    $("#detail-data-failed").hide();
 
-                        // Tampilkan preview file jika file_path tersedia
-                        if (result['data']['file_path']) {
-                            const fileType = result['data']['file_path'].split('.').pop().toLowerCase();
-                            const fileUrl = `{{ asset('uploads') }}/${result['data']['file_path']}`;
+                    $('#title').html(result['data']['title']);
+                    $('#event_date').html(result['data']['event_date']);
+                    $('#organizer').html(result['data']['organizer']);
+                    $('#content').html(result['data']['content']);
 
-                            if (['jpg', 'jpeg', 'png', 'gif'].includes(fileType)) {
-                                $('#file-preview').html(`<img src="${fileUrl}" alt="Gambar Agenda" class="img-fluid">`);
-                            } else if (fileType === 'pdf') {
-                                $('#file-preview').html(`
-                                    <a href="${fileUrl}" target="_blank" class="btn btn-primary">Lihat Dokumen PDF</a>
-                                    <iframe src="${fileUrl}" width="100%" height="600px"></iframe>
-                                `);
-                            } else {
-                                $('#file-preview').text("File tidak dikenali.");
-                            }
-                        } else {
-                            $('#file-preview').text("Tidak ada file yang diunggah.");
-                        }
-
-                        // Status Aktif
-                        if (result['data']['is_active']) {
-                            $('#status').html('<span class="badge bg-success">Aktif</span>');
-                        } else {
-                            $('#status').html('<span class="badge bg-danger">Tidak Aktif</span>');
-                        }
-
-                        // Tanggal Buat dan Update
-                        $('#created_at').text(result['data']['created_at']);
-                        $('#updated_at').text(result['data']['updated_at']);
-
-                        // Set edit button URL
-                        $('#edit-button').attr('href', '/admin/agenda/' + agendaId + '/edit');
+                    if (result['data']['is_active'] == 1) {
+                        $('#is_active').html('<span class="badge bg-success">Aktif</span>');
                     } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: result['message'],
-                            confirmButtonColor: '#3A57E8',
-                        });
+                        $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
                     }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Gagal mengambil data agenda.",
-                        confirmButtonColor: '#3A57E8',
-                    });
-                }
-            });
+                    $('#created_at').html(convertStringToDate(result['data']['created_at']));
 
-            // Fungsi untuk menghapus data
-            $('#delete-button').click(function() {
-                Swal.fire({
-                    title: "Apakah Anda yakin ingin menghapus?",
-                    showDenyButton: true,
-                    confirmButtonText: "Ya",
-                    denyButtonText: "Tidak",
-                    confirmButtonColor: '#1AA053',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/api/agenda/' + agendaId,
-                            type: "DELETE",
-                            success: function(result) {
-                                if (result['success']) {
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: "Berhasil dihapus",
-                                        text: result['message'],
-                                        confirmButtonColor: '#3A57E8',
-                                    }).then(() => {
-                                        window.location.replace("{{ url('/admin/agenda') }}");
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: "Oops...",
-                                        text: result['message'],
-                                        confirmButtonColor: '#3A57E8',
-                                    });
-                                }
-                            },
-                            error: function() {
+                    if (result['data']['file_path']) {
+                        var fileUrl = `{{ asset('uploads') }}/${result['data']['file_path']}`;
+                        $('#file-preview').html(`<embed src="${fileUrl}" type="application/pdf" width="100%" height="600px">`);
+                        $('#file-preview').after(`<button class="btn btn-gray btn-sm mt-3"><a href="${fileUrl}" target="_blank" style="color: white; text-decoration: none;">Lihat Dokumen PDF</a></button>`);
+                    }
+                } else {
+                    $("#detail-data-success").hide();
+                    $("#detail-data-failed").show();
+                    $('#message').html(result['message']);
+                }
+            },
+            fail: function() {
+                $("#detail-data-success").hide();
+                $("#detail-data-failed").show();
+                $('#message').html("Gagal mengambil data agenda.");
+            }
+        });
+
+        function removeData(id_agenda) {
+            Swal.fire({
+                title: "Are you sure want to delete?",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "Yes",
+                denyButtonText: "No",
+                confirmButtonColor: '#1AA053',
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    // delete
+                    $.ajaxSetup({
+                        headers: {
+                            'Authorization': "Bearer {{ $session_token }}"
+                        }
+                    });
+                    $.ajax({
+                        url: '/api/agenda/' + id_agenda,
+                        type: "DELETE",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        processData: false,
+                        success: function(result) {
+                            if (result['success'] == true) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Success",
+                                    text: result['message'],
+                                    confirmButtonColor: '#3A57E8',
+                                }).then((result) => {
+                                    window.location.replace("{{ url('/admin/agenda') }}");
+                                });
+                            } else {
                                 Swal.fire({
                                     icon: "error",
                                     title: "Oops...",
-                                    text: "Terjadi kesalahan saat menghapus data.",
+                                    text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 });
                             }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
             });
-        });
+        }
+
+        function convertStringToDate(dateString) {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
     </script>
 @endsection

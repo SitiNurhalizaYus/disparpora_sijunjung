@@ -58,27 +58,17 @@
                                     Konten harus diisi.</p>
                             </div>
 
-                            <!-- Bagian Upload Dokumen -->
                             <div class="form-group">
-                                <label class="form-label" for="file">Unggah File (Gambar atau PDF)</label>
+                                <label class="form-label" for="file">Unggah Dokumen (PDF)</label>
                                 <input class="form-control" type="file" id="file" name="file"
-                                    accept="image/jpeg,image/png,image/jpg,application/pdf">
-                                <input class="form-control" type="hidden" id="image" name="image" value="">
-                                <br>
-                                <!-- Bagian untuk preview file yang sudah diupload -->
-                                <div id="file-preview" class="mt-2">
-                                    @if ($agenda->image && Str::endsWith($agenda->image, ['.jpg', '.jpeg', '.png']))
-                                        <img src="{{ asset('/uploads/' . $agenda->image) }}" id="image-preview"
-                                            name="image-preview" width="300px" style="border-radius: 2%;">
-                                    @elseif ($agenda->image && Str::endsWith($agenda->image, ['.pdf']))
-                                        <a href="{{ asset('/uploads/' . $agenda->image) }}" target="_blank"
-                                            id="file-link">Lihat PDF</a>
-                                    @endif
-                                </div>
-                                <label class="form-label" for="photo" style="font-size: 10pt">*Format JPG, JPEG, PNG, dan
-                                    PDF</label>
+                                    accept="application/pdf">
+                                <input class="form-control" type="hidden" id="file_path" name="file_path" value="">
+                                <!-- Menampilkan nama file yang sudah ada -->
+                                @if ($agenda->file_path)
+                                    <p>File saat ini: <a href="{{ asset($agenda->file_path) }}" target="_blank">{{ basename($agenda->file_path) }}</a></p>
+                                @endif
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">Silakan
-                                    unggah file gambar atau PDF.</p>
+                                    unggah file PDF.</p>
                             </div>
 
                             <div class="form-group">
@@ -109,7 +99,6 @@
             });
 
             // Ambil data agenda menggunakan AJAX
-            // Ambil data agenda menggunakan AJAX
             $.ajax({
                 url: '/api/agenda/{{ $id }}',
                 type: "GET",
@@ -117,36 +106,16 @@
                 success: function(result) {
                     if (result['success']) {
                         // Isi data form dengan data yang diterima dari API
-                        $('#title').val(result['data']['title'] || ''); // Fallback jika title null
-                        $('#event_date').val(result['data']['event_date'] ||
-                        ''); // Fallback jika event_date null
-                        $('#organizer').val(result['data']['organizer'] ||
-                        ''); // Fallback jika organizer null
-                        $('#content').val(result['data']['content'] ||
-                        ''); // Fallback jika content null
-
-                        // Pastikan TinyMCE sudah terinisialisasi sebelum mengatur konten
-                        if (tinymce.get('content')) {
-                            tinymce.get('content').setContent(result['data']['content'] || '');
-                        }
-
-                        $('#file_path').val(result['data']['file_path'] ||
-                        ''); // Fallback jika file_path null
+                        $('#title').val(result['data']['title']);
+                        $('#event_date').val(result['data']['event_date']);
+                        $('#organizer').val(result['data']['organizer']);
+                        $('#content').val(result['data']['content']);
+                        $('#file_path').val(result['data']['file_path']);
 
                         // Tampilkan preview file jika file_path tersedia
                         if (result['data']['file_path']) {
                             const fileType = result['data']['file_path'].split('.').pop().toLowerCase();
-
-                            // Jika result['data']['file_path'] sudah mengandung 'uploads/', jangan tambahkan 'uploads/' lagi
-                            let fileUrl = result['data']['file_path'];
-
-                            // Tambahkan 'uploads/' hanya jika file path tidak mengandung 'uploads/'
-                            if (!fileUrl.includes('uploads/')) {
-                                fileUrl = `uploads/${fileUrl}`;
-                            }
-
-                            // Gunakan asset untuk membuat URL
-                            fileUrl = `{{ asset('') }}${fileUrl}`;
+                            let fileUrl = `{{ url('/') }}/uploads/${result['data']['file_path']}`;
 
                             if (fileType === 'pdf') {
                                 $('#file-preview').html(
@@ -154,16 +123,16 @@
                             } else if (['jpg', 'jpeg', 'png'].includes(fileType)) {
                                 $('#file-preview').html(
                                     `<img src="${fileUrl}" alt="Image Preview" class="img-fluid rounded" style="max-width: 200px;">`
-                                    );
+                                );
                             }
                         }
 
-                        $('#is_active').prop('checked', result['data']['is_active'] === 1);
+                        $('#is_active').prop('checked', result['data']['is_active']);
                     } else {
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: result['message'] || "Terjadi kesalahan.",
+                            text: result['message'],
                             confirmButtonColor: '#3A57E8',
                         });
                     }
@@ -172,8 +141,7 @@
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: xhr.responseJSON ? xhr.responseJSON.message :
-                            "Gagal mengambil data agenda.",
+                        text: "Gagal mengambil data agenda.",
                         confirmButtonColor: '#3A57E8',
                     });
                 }
@@ -205,6 +173,55 @@
             }
         }
 
+        // Ambil data agenda menggunakan AJAX
+        $.ajax({
+            url: '/api/agenda/{{ $id }}',
+            type: "GET",
+            dataType: "json",
+            success: function(result) {
+                if (result['success']) {
+                    // Isi data form dengan data yang diterima dari API
+                    $('#title').val(result['data']['title']);
+                    $('#event_date').val(result['data']['event_date']);
+                    $('#organizer').val(result['data']['organizer']);
+                    $('#content').val(result['data']['content']);
+                    $('#file_path').val(result['data']['file_path']);
+
+                    // Tampilkan preview file jika file_path tersedia
+                    if (result['data']['file_path']) {
+                        const fileType = result['data']['file_path'].split('.').pop().toLowerCase();
+                        let fileUrl = `{{ url('/') }}/uploads/${result['data']['file_path']}`;
+
+                        if (fileType === 'pdf') {
+                            $('#file-preview').html(
+                                `<a href="${fileUrl}" target="_blank">Lihat PDF</a>`);
+                        } else if (['jpg', 'jpeg', 'png'].includes(fileType)) {
+                            $('#file-preview').html(
+                                `<img src="${fileUrl}" alt="Image Preview" class="img-fluid rounded" style="max-width: 200px;">`
+                            );
+                        }
+                    }
+
+                    $('#is_active').prop('checked', result['data']['is_active']);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: result['message'],
+                        confirmButtonColor: '#3A57E8',
+                    });
+                }
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Gagal mengambil data agenda.",
+                    confirmButtonColor: '#3A57E8',
+                });
+            }
+        });
+
         // Validasi form sebelum disubmit
         function validateForm() {
             let isValid = true;
@@ -216,26 +233,24 @@
             return isValid;
         }
 
-        // Handle file upload (gambar dan PDF)
-        $('#file').change(function() {
-            if (validateFile()) {
-                var file = $(this).prop('files')[0];
-                var fileType = file.type;
+        // Handle file upload
+        $('#file').on('change', function() {
+            var file = $(this).prop('files')[0];
+            if (file.type !== 'application/pdf') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "File yang diunggah bukan PDF. Silakan unggah file dalam format PDF.",
+                    confirmButtonColor: '#3A57E8',
+                });
+                // Hapus file dari input jika tidak valid
+                $(this).val('');
+                $('#invalid-file').show();
+            } else {
+                // Jika file valid, hapus pesan error dan lakukan unggah file
+                $('#invalid-file').hide();
 
-                // Preview file
-                if (fileType === 'application/pdf') {
-                    $('#file-preview').html(`<a href="#" id="file-link" target="_blank">Lihat PDF</a>`);
-                } else if (fileType === 'image/jpeg' || fileType === 'image/png' || fileType === 'image/jpg') {
-                    var oFReader = new FileReader();
-                    oFReader.readAsDataURL(file);
-                    oFReader.onload = function(oFREvent) {
-                        $('#file-preview').html(
-                            `<img src="${oFREvent.target.result}" id="image-preview" class="img-fluid rounded" style="max-width: 200px;">`
-                        );
-                    };
-                }
-
-                // Upload file
+                // Unggah file ke server
                 var formdata = new FormData();
                 formdata.append("file", file);
 
@@ -244,7 +259,6 @@
                         'Authorization': "Bearer {{ $session_token }}"
                     }
                 });
-
                 $.ajax({
                     url: '/api/upload',
                     type: "POST",
@@ -252,7 +266,8 @@
                     processData: false,
                     contentType: false,
                     success: function(result) {
-                        if (result['success']) {
+                        if (result['success'] == true) {
+                            // Simpan URL file ke input hidden
                             $('#file_path').val(result['data']['url']);
                         } else {
                             Swal.fire({
@@ -263,7 +278,7 @@
                             });
                         }
                     },
-                    error: function(xhr) {
+                    error: function() {
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
@@ -274,6 +289,7 @@
                 });
             }
         });
+
 
         // Handle form submission
         $("#form-data").submit(function(event) {

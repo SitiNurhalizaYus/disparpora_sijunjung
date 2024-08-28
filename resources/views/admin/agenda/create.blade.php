@@ -55,10 +55,10 @@
 
                             <!-- Bagian Upload Dokumen -->
                             <div class="form-group">
-                                <label class="form-label" for="file">Unggah File (Gambar atau PDF)</label>
-                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg,application/pdf">
-                                <input class="form-control" type="hidden" id="file_path" name="file_path" value="no-file.pdf">
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">Silakan unggah file (JPG, JPEG, PNG, atau PDF).</p>
+                                <label class="form-label" for="file">Unggah Dokumen (PDF)</label>
+                                <input class="form-control" type="file" id="file" name="file" accept="application/pdf" required>
+                                <input class="form-control" type="hidden" id="file_path" name="file_path" value="">
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">Silakan unggah file PDF.</p>
                             </div>
 
                             <div class="form-group">
@@ -191,11 +191,24 @@
             }
         });
 
-        // Handle file upload (gambar dan PDF)
-        $('#file').change(function() {
+        // Handle file upload PDF
+        $('#file').on('change', function() {
             var file = $(this).prop('files')[0];
-            if (file && (file.type === 'application/pdf' || file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg')) {
+            if (file.type !== 'application/pdf') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "File yang diunggah bukan PDF. Silakan unggah file dalam format PDF.",
+                    confirmButtonColor: '#3A57E8',
+                });
+                // Hapus file dari input jika tidak valid
+                $(this).val('');
+                $('#invalid-file').show();
+            } else {
+                // Jika file valid, hapus pesan error dan lakukan unggah file
                 $('#invalid-file').hide();
+
+                // Unggah file ke server
                 var formdata = new FormData();
                 formdata.append("file", file);
 
@@ -204,7 +217,6 @@
                         'Authorization': "Bearer {{ $session_token }}"
                     }
                 });
-
                 $.ajax({
                     url: '/api/upload',
                     type: "POST",
@@ -213,6 +225,7 @@
                     contentType: false,
                     success: function(result) {
                         if (result['success'] == true) {
+                            // Simpan URL file ke input hidden
                             $('#file_path').val(result['data']['url']);
                         } else {
                             Swal.fire({
@@ -232,9 +245,6 @@
                         });
                     }
                 });
-            } else {
-                $('#invalid-file').show();
-                $(this).val('');
             }
         });
 

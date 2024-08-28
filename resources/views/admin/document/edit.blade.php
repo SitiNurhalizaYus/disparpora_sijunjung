@@ -32,22 +32,20 @@
                             {{ method_field('PUT') }}
                             <div class="form-group">
                                 <label class="form-label" for="title">Judul Dokumen</label>
-                                <input class="form-control" type="text" id="title" name="title" value="{{ $document->title }}"
+                                <input class="form-control" type="text" id="title" name="title" value=""
                                     placeholder="Masukkan Judul Dokumen" required>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul dokumen harus diisi.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="category">Kategori</label>
-                                <input class="form-control" type="text" id="category" name="category" value="{{ $document->category }}"
+                                <input class="form-control" type="text" id="category" name="category" value=""
                                     placeholder="Masukkan Kategori" required>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-category">Kategori harus diisi.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="file">Unggah Dokumen (PDF)</label>
-                                
-                                
                                 <input class="form-control" type="file" id="file" name="file" accept="application/pdf">
-                                <input class="form-control" type="hidden" id="file_path" name="file_path" value="{{ $document->file_path }}">
+                                <input class="form-control" type="hidden" id="file_path" name="file_path" value="">
                                 <!-- Menampilkan nama file yang sudah ada -->
                                 @if ($document->file_path)
                                     <p>File saat ini: <a href="{{ asset($document->file_path) }}" target="_blank">{{ basename($document->file_path) }}</a></p>
@@ -55,12 +53,12 @@
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">Silakan unggah file PDF.</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="notes">Catatan</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="3">{{ $document->notes }}</textarea>
+                                <label class="form-label" for="description">Catatan</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {{ $document->is_active ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
                                     <label class="form-check-label" for="is_active">Status Aktif</label>
                                 </div>
                             </div>
@@ -145,8 +143,58 @@
             }
         });
 
-        // Validate the entire form before submission
-        function validateForm() {
+        // Ambil data agenda menggunakan AJAX
+        $.ajax({
+                url: '/api/document/{{ $id }}',
+                type: "GET",
+                dataType: "json",
+                success: function(result) {
+                    if (result['success']) {
+                        // Isi data form dengan data yang diterima dari API
+                        $('#title').val(result['data']['title']);
+                        $('#category').val(result['data']['category']);
+                        $('#description').val(result['data']['description']);
+                        $('#file_path').val(result['data']['file_path']);
+
+                        // Tampilkan preview file jika file_path tersedia
+                        if (result['data']['file_path']) {
+                            const fileType = result['data']['file_path'].split('.').pop().toLowerCase();
+                            let fileUrl = `{{ url('/') }}/uploads/${result['data']['file_path']}`;
+
+                            if (fileType === 'pdf') {
+                                $('#file-preview').html(
+                                    `<a href="${fileUrl}" target="_blank">Lihat PDF</a>`);
+                            } else if (['jpg', 'jpeg', 'png'].includes(fileType)) {
+                                $('#file-preview').html(
+                                    `<img src="${fileUrl}" alt="Image Preview" class="img-fluid rounded" style="max-width: 200px;">`
+                                    );
+                            }
+                        }
+
+                        $('#is_active').prop('checked', result['data']['is_active']);
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: result['message'],
+                            confirmButtonColor: '#3A57E8',
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Gagal mengambil data agenda.",
+                        confirmButtonColor: '#3A57E8',
+                    });
+                }
+            });
+
+        
+            // Validate the entire form before submission
+        
+            function validateForm() {
             let isValid = true;
             isValid = validateInput('title', 'invalid-title') && isValid;
             isValid = validateInput('category', 'invalid-category') && isValid;
