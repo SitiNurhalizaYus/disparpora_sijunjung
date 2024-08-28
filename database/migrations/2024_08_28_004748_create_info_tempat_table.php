@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('info_tempats', function (Blueprint $table) {
+        Schema::create('infotempats', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('facilities')->nullable();
             $table->string('operating_hours')->nullable();
             $table->string('ticket_price')->nullable();

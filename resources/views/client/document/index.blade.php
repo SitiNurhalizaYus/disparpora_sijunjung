@@ -25,8 +25,6 @@
             </div>
         </div>
 
-
-
         <!-- Blog Start -->
         <div class="mb-5" id="about"
             style="justify-content: center; align-items: center; width: 75%; margin: 0 auto; margin-top: 50px;">
@@ -103,7 +101,7 @@
                     {
                         data: 'file_path',
                         render: function(data, type, row, meta) {
-                            return '<a href="' + data + '" class="btn btn-primary btn-sm">Unduh</a>';
+                            return '<a href="' + data + '" class="btn btn-primary btn-sm">Detail</a>';
                         },
                         orderable: false
                     }

@@ -115,12 +115,8 @@
                             <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi Publik</a>
                         </div>
                     </div>
-                    <div class="nav-item dropdown me-3">
-                        <a href="{{ url('/lokawisata') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Lokawisata</a>
-                        <div class="dropdown-menu m-0">
-                            <a href="{{ url('/lokawisata/alam') }}" class="dropdown-item">Wisata Alam</a>
-                            <a href="{{ url('/lokawisata/buatan') }}" class="dropdown-item">Wisata Buatan</a>
-                        </div>
+                    <div class="nav-item me-3">
+                        <a href="{{ route('client.lokawisata.index') }}" class="nav-link">Lokawisata</a>
                     </div>
                     <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal">
                         <i class="fa fa-search"></i>
