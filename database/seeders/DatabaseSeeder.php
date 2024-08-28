@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             GalleriesTableSeeder::class,
             DocumentsTableSeeder::class,
             ContactsTableSeeder::class,
+            ContentTableSeeder::class,
             PartnersTableSeeder::class,
             SlidersTableSeeder::class,
             SettingsTableSeeder::class,

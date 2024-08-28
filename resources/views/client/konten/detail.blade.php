@@ -18,7 +18,7 @@
             <div class="text-star px-5">
                 <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('profil', ['slug']) }}" class="text-green">{{ $konten['judul'] }}</a>
+                <span class="text-green">{{ $konten['title'] }}</span>
             </div>
         </div>
 
@@ -50,12 +50,12 @@
                         <!-- Detail Start -->
                         <div class="section-title position-relative pb-3 mb-5">
                             <h5 class="fw-bold text-primary text-uppercase">Profil</h5>
-                            <h1 class="mb-0">{{ $konten['judul'] }}</h1>
+                            <h1 class="mb-0">{{ $konten['title'] }}</h1>
                         </div>
                         <div class="mb-2">
                             <img class="position-relative w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
-                                src="{{ asset('/' . str_replace('/xxx/', '/500/', $konten['gambar'])) }}"
-                                style="object-fit: cover;">
+                                src="{{ asset('/' . str_replace('/xxx/', '/500/', $konten['image'])) }}"
+                                alt="{{ $konten['title'] }}" style="object-fit: cover;">
                         </div>
                         <p class="mb-4">
                             {!! $konten['description_long'] !!}
@@ -67,31 +67,28 @@
                             <p class="fw-bold">Share on : <br></p>
                             <div class="d-flex">
                                 <button class="share-btn facebook mx-2"
-                                    onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https://example.com', '_blank')">
+                                    onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}', '_blank')">
                                     <i class="bi bi-facebook"></i>
                                 </button>
                                 <button class="share-btn twitter mx-2"
-                                    onclick="window.open('https://twitter.com/intent/tweet?url=https://example.com&text=Check this out!', '_blank')">
+                                    onclick="window.open('https://twitter.com/intent/tweet?url={{ url()->current() }}&text=Check this out!', '_blank')">
                                     <i class="bi bi-twitter"></i>
                                 </button>
                                 <button class="share-btn linkedin mx-2"
-                                    onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=https://example.com', '_blank')">
+                                    onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url={{ url()->current() }}', '_blank')">
                                     <i class="bi bi-linkedin"></i>
                                 </button>
                                 <button class="share-btn whatsapp mx-2"
-                                    onclick="window.open('https://wa.me/?text=Check this out! https://example.com', '_blank')">
+                                    onclick="window.open('https://wa.me/?text=Check this out! {{ url()->current() }}', '_blank')">
                                     <i class="bi bi-whatsapp"></i>
                                 </button>
                                 <button class="share-btn email mx-2"
-                                    onclick="window.location.href='mailto:?subject=Interesting Article&body=Check this out! https://example.com'">
+                                    onclick="window.location.href='mailto:?subject=Interesting Article&body=Check this out! {{ url()->current() }}'">
                                     <i class="bi bi-envelope"></i>
                                 </button>
                             </div>
                         </div>
                         <!-- Bagikan Postingan End -->
-
-                        <a href="quote.html" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">Request
-                            A Quote</a>
                     </div>
 
                     <!-- Sidebar Start -->
@@ -104,14 +101,15 @@
                             </div>
                         </div>
                         <!-- Search Form End -->
+
                         <!-- Recent Post Start -->
                         <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
                                 <h3 class="mb-0">Recent Post</h3>
                             </div>
                             <div class="d-flex rounded overflow-hidden mb-3">
-                                <img class="img-fluid" src="img/blog-1.jpg"
-                                    style="width: 100px; height: 100px; object-fit: cover;" alt="">
+                                <img class="img-fluid" src="{{ asset('img/blog-1.jpg') }}"
+                                    style="width: 100px; height: 100px; object-fit: cover;" alt="Recent Post">
                                 <a href="" class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">Lorem
                                     ipsum dolor sit amet adipis elit</a>
                             </div>

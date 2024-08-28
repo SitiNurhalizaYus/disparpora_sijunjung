@@ -18,21 +18,18 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/', [App\Http\Controllers\Client\BerandaController::class, 'index']);
     Route::get('/beranda', [App\Http\Controllers\Client\BerandaController::class, 'index']);
     
+    Route::get('/profil{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail']);
+
     Route::get('/berita', [App\Http\Controllers\Client\BeritaController::class, 'index']);
     Route::get('/berita/{id_berita}', [App\Http\Controllers\Client\BeritaController::class, 'detail']);
     Route::get('/berita/{id_berita}', [App\Http\Controllers\Client\BeritaController::class, 'detailWithCategory']);
     
-    Route::get('/feature', [App\Http\Controllers\Client\FeatureController::class, 'index']);
-    Route::get('/pricing', [App\Http\Controllers\Client\PricingController::class, 'index']);
-    // Route::get('/blog', [App\Http\Controllers\Client\BlogController::class, 'index']);
-    // Route::get('/blog/detail/{id}', [App\Http\Controllers\Client\BlogController::class, 'detail']);
-    Route::get('/faq', [App\Http\Controllers\Client\FaqController::class, 'index']);
+    Route::get('/artikel', [App\Http\Controllers\Client\ArtikelController::class, 'index']);
+    Route::get('/artikel/{id_berita}', [App\Http\Controllers\Client\ArtikelController::class, 'detail']);
+    Route::get('/artikel/{id_berita}', [App\Http\Controllers\Client\ArtikelController::class, 'detailWithCategory']);
+    
     Route::get('/contact', [App\Http\Controllers\Client\ContactController::class, 'index']);
     Route::post('/contact/submit', [App\Http\Controllers\Client\ContactController::class, 'submit']);
-    // Route::get('/page/{id}', [App\Http\Controllers\Client\PageController::class, 'detail']);
-
-    Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail'])->name('profil');
-    Route::get('/berita/{slug}', [App\Http\Controllers\Client\BeritaController::class, 'detail'])->name('berita.detail');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {
@@ -62,6 +59,8 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('artikel', App\Http\Controllers\Admin\ArtikelController::class);
     Route::resource('category', App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('document', App\Http\Controllers\Admin\DocumentController::class);
+    Route::resource('galeri', App\Http\Controllers\Admin\DocumentController::class);
+    Route::resource('lokawisata', App\Http\Controllers\Admin\InfoTempatController::class);
     Route::resource('agenda', App\Http\Controllers\Admin\AgendaController::class);
     Route::resource('setting', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('user', App\Http\Controllers\Admin\UserController::class);

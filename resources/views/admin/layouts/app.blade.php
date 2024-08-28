@@ -303,8 +303,8 @@
 
                     {{-- pengumuman --}}
                     <li class="nav-item">
-                        <a class="nav-link @if (str_contains($menu, 'announcement')) {{ 'active' }} @endif"
-                            aria-current="page" href="{{ url('/admin/announcement') }}">
+                        <a class="nav-link @if (str_contains($menu, 'lokawisata')) {{ 'active' }} @endif"
+                            aria-current="page" href="{{ url('/admin/lokawisata') }}">
                             <i class="icon">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -316,7 +316,7 @@
                                         fill="currentColor"></path>
                                 </svg>
                             </i>
-                            <span class="item-name">Pengumuman</span>
+                            <span class="item-name">Lokawisata</span>
                         </a>
                     </li>
 

@@ -92,21 +92,20 @@
                     <div class="nav-item dropdown me-3">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/berita', ['type' => 'berita']) }}" class="dropdown-item">Struktur Organisasi Dinas</a>
-                            <a href="{{ route('profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan Misi</a>
-                            <a href="{{ route('profil', ['slug' => 'tujuan-strategis']) }}" class="dropdown-item">Tujuan Strategis</a>
-                            <a href="{{ route('profil', ['slug' => 'sasaran-strategis']) }}" class="dropdown-item">Sasaran Strategis</a>
+                            <a href="{{ url('/profil', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}" class="dropdown-item">Struktur Organisasi Dinas</a>
+                            <a href="{{ url('/profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan Misi</a>
+                            <a href="{{ url('/profil', ['slug' => 'tujuan-strategis']) }}" class="dropdown-item">Tujuan Strategis</a>
+                            <a href="{{ url('/profil', ['slug' => 'sasaran-strategis']) }}" class="dropdown-item">Sasaran Strategis</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Publikasi</a>
                         <div class="dropdown-menu m-0">
                             <a href="{{ url('/berita') }}" class="dropdown-item">Berita</a>
-                            <a href="{{ url('/content?type=artikel') }}" class="dropdown-item">Artikel</a>
-                            <a href="{{ url('/dokumen') }}" class="dropdown-item">Dokumen Publik</a>
+                            <a href="{{ url('/artikel') }}" class="dropdown-item">Artikel</a>
+                            <a href="{{ url('/dokument') }}" class="dropdown-item">Dokumen Publik</a>
                             <a href="{{ url('/galeri') }}" class="dropdown-item">Galeri</a>
-                            <a href="{{ url('/pengumuman') }}" class="dropdown-item">Pengumuman</a>
-                            <a href="{{ url('/event') }}" class="dropdown-item">Agenda</a>
+                            <a href="{{ url('/agenda') }}" class="dropdown-item">Agenda</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
