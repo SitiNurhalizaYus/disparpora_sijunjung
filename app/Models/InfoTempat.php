@@ -17,7 +17,7 @@ class InfoTempat extends Model
         'facilities',
         'operating_hours',
         'ticket_price',
-        'images',
+        'image',
         'link',
         'is_active'
     ];

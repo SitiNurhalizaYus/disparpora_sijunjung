@@ -33,6 +33,7 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
 
      Route::get('/document', [\App\Http\Controllers\Client\DocumentController::class, 'index'])->name('client.document.index');
      Route::get('/lokawisata', [\App\Http\Controllers\Client\InfoTempatController::class, 'index'])->name('client.lokawisata.index');
+     Route::get('/lokawisata/detail/{id}', [\App\Http\Controllers\Client\InfoTempatController::class, 'detail'])->name('client.lokawisata.detail');
 
 });
 

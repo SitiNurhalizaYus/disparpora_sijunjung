@@ -72,17 +72,21 @@
     </div>
 
     <div class="event-cards">
-        @foreach($infotempats as $infotempat)
-            <div class="event-card">
-                <div class="event-image">
-                    <img src="{{ $infotempat['images'] }}" alt="{{ $infotempat['name'] }}">
+        @if(!empty($info_tempats)) 
+            @foreach($info_tempats as $item)
+                <div class="event-card">
+                    <div class="event-image">
+                        <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}">
+                    </div>
+                    <div class="event-details">
+                        <h3 class="event-title">{{ $item['name'] }}</h3>
+                        <a href="{{ route('client.lokawisata.detail', ['id'=> $item['id']]) }}" class="event-link">Detail</a>
+                    </div>
                 </div>
-                <div class="event-details">
-                    <h3 class="event-title">{{ $infotempat['name'] }}</h3>
-                    <a href="{{ url('/lokawisata/detail/' . $infotempat['id']) }}" class="event-link">Detail</a>
-                </div>
-            </div>
-        @endforeach
+            @endforeach
+        @else
+            <p>No data available</p>
+        @endif
     </div>
 </div>
 @endsection
