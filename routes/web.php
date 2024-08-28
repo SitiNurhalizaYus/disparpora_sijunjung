@@ -17,7 +17,11 @@ use App\Http\Controllers\Api\UploadController;
 Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function () {
     Route::get('/', [App\Http\Controllers\Client\BerandaController::class, 'index']);
     Route::get('/beranda', [App\Http\Controllers\Client\BerandaController::class, 'index']);
-
+    
+    Route::get('/berita', [App\Http\Controllers\Client\BeritaController::class, 'index']);
+    Route::get('/berita/{id_berita}', [App\Http\Controllers\Client\BeritaController::class, 'detail']);
+    Route::get('/berita/{id_berita}', [App\Http\Controllers\Client\BeritaController::class, 'detailWithCategory']);
+    
     Route::get('/feature', [App\Http\Controllers\Client\FeatureController::class, 'index']);
     Route::get('/pricing', [App\Http\Controllers\Client\PricingController::class, 'index']);
     // Route::get('/blog', [App\Http\Controllers\Client\BlogController::class, 'index']);
@@ -28,7 +32,6 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     // Route::get('/page/{id}', [App\Http\Controllers\Client\PageController::class, 'detail']);
 
     Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail'])->name('profil');
-    Route::get('/berita', [App\Http\Controllers\Client\BeritaController::class, 'index'])->name('berita.index');
     Route::get('/berita/{slug}', [App\Http\Controllers\Client\BeritaController::class, 'detail'])->name('berita.detail');
 });
 

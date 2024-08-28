@@ -118,8 +118,7 @@ class UploadController extends Controller
 
             // Periksa apakah file adalah gambar atau PDF
             if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                $hd = $request->has('hd') ? $request->get('hd') == true : false;
-                $this->resizeAndSaveImage($file, $filename_new, $hd);
+                $this->resizeAndSaveImage($file, $filename_new);
             } elseif ($extension === 'pdf') {
                 // Simpan file PDF
                 $file->move(public_path('uploads/pdf/'), $filename_new);
@@ -134,7 +133,7 @@ class UploadController extends Controller
                 'ext' => '.' . $extension,
                 'size' => $size,
                 'hash' => $filename_new,
-                'url' => $filePath
+                'url' => $filePath,
             ];
 
             $data = Upload::create($req);
@@ -167,8 +166,7 @@ class UploadController extends Controller
             $filename_new = $date_format . '-' . str_replace(' ', '_', $filename) . '.' . $extension;
 
             // Resize dan simpan gambar
-            $hd = $request->has('hd') ? $request->get('hd') == true : false;
-            $this->resizeAndSaveImage($image, $filename_new, $hd);
+            $this->resizeAndSaveImage($image, $filename_new);
 
             // Hapus gambar lama dari storage
             $this->deleteOldImage($upload);
@@ -179,7 +177,6 @@ class UploadController extends Controller
                 'type' => $extension,
                 'ext' => '.' . $extension,
                 'size' => $size,
-                'hd' => $hd,
                 'hash' => $filename_new,
                 'url' => 'uploads/xxx/' . $filename_new,
             ]);
@@ -203,18 +200,14 @@ class UploadController extends Controller
         return new ApiResource(true, 201, 'Delete data successful', [], []);
     }
 
-    private function resizeAndSaveImage($image, $filename_new, $hd)
+    private function resizeAndSaveImage($image, $filename_new)
     {
-        if ($hd == true) {
-            $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' . $filename_new));
-            $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' . $filename_new));
-            $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' . $filename_new));
-            $image_resize_1000 = ImageManager::gd()->read($image->getRealPath())->resize(1000, 1000)->save(public_path('uploads/1000/' . $filename_new));
-        } else {
-            $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' . $filename_new));
-            $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' . $filename_new));
-            $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' . $filename_new));
-        }
+
+        // Resize gambar ke ukuran yang lebih kecil (100, 300, 500)
+        $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' . $filename_new));
+        $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' . $filename_new));
+        $image_resize_500 = ImageManager::gd()->read($image->getRealPath())->resize(500, 500)->save(public_path('uploads/500/' . $filename_new));
+        $image_asli = ImageManager::gd()->read($image->getRealPath())->save(public_path('uploads/' . $filename_new));
     }
 
     private function deleteOldImage($upload)
@@ -224,7 +217,7 @@ class UploadController extends Controller
                 public_path('uploads/100/' . $upload->hash),
                 public_path('uploads/300/' . $upload->hash),
                 public_path('uploads/500/' . $upload->hash),
-                public_path('uploads/1000/' . $upload->hash),
+                public_path('uploads/' . $upload->hash), // Tambahkan ini untuk menghapus file asli
             ];
 
             foreach ($paths as $path) {

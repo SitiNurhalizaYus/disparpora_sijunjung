@@ -2,131 +2,113 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\Konten;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class BeritaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kategoriId = 2;
-        
-        // Mengambil konten berdasarkan kategori
-        $kontens = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}"));
+        $type = $request->get('type', 'berita');
 
-        // Mengambil recent posts, yaitu konten terbaru yang tidak ada dalam $kontens
-        $recentPosts = Konten::where('kategori_id', $kategoriId)
-                            ->whereNotIn('id', $kontens->pluck('id'))
-                            ->orderBy('created_at', 'desc')
-                            ->take(5)
-                            ->get();
-        
-        // Mengambil setting, label, dan data lainnya
-        $data = [
-            'kontens' => $kontens,
-            'recentPosts' => $recentPosts,
-            'setting' => \App\Helpers\AppHelper::instance()->requestApiSetting(),
-            'labels' => \App\Helpers\AppHelper::instance()->requestApiGet('api/label'),
-            'og' => [
-                'url' => url('/berita'),
-                'title' => 'Berita',
-                'description' => 'Berita'
-            ]
-        ];
-        
-        // Mengembalikan view index dengan data
-        return view('client.berita.index', $data);
-    }
-    
-    public function detail($slug)
-    {
-        $kategoriId = 2;
-        
-        // Mengambil semua konten berdasarkan kategori
-        $kontens = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}"));
-        
-        // Menemukan konten berdasarkan slug
-        $konten = $kontens->firstWhere('slug', $slug);
-        
-        if (!$konten) {
-            abort(404, 'Konten tidak ditemukan');
+        // Memanggil API untuk mendapatkan data konten berdasarkan tipe berita
+        $contents = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content"))
+            ->filter(function ($item) use ($type) {
+                return $item['type'] === $type;
+            });
+        // dd($contents);
+
+            // Jika data tidak ditemukan, mungkin ada masalah dengan API atau pemanggilannya
+        if ($contents->isEmpty()) {
+            abort(404, 'Tidak ada konten berita yang ditemukan.');
         }
 
-        // Mengambil recent posts yang tidak termasuk dalam konten yang ditemukan
-        $recentPosts = Konten::where('kategori_id', $kategoriId)
-                            ->whereNotIn('id', $kontens->pluck('id'))
-                            ->orderBy('created_at', 'desc')
-                            ->take(5)
-                            ->get();
+        // Mengambil recent posts dari API
+        $recentPosts = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content?limit=5"))
+            ->filter(function ($item) use ($type) {
+                return $item['type'] === $type;
+            });
 
-        // Mengambil komentar, arsip, dan label
-        $comments = \App\Helpers\AppHelper::instance()->requestApiGet("api/comment?konten_id={$konten['id']}");
-        $arsips = \App\Helpers\AppHelper::instance()->requestApiGet('api/arsip');
+        // Mengambil kategori untuk sidebar dari API
+        $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/category"));
+
         $setting = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $labels = \App\Helpers\AppHelper::instance()->requestApiGet('api/label');
-
-        // Mengambil konten terkait dalam kategori yang sama
-        $kontensKategori = $kontens->filter(function ($item) use ($slug) {
-            return isset($item['slug']) && $item['slug'] !== $slug;
-        })->take(5);
 
         $data = [
-            'konten' => $konten,
-            'kontensKategori' => $kontensKategori,
+            'contents' => $contents,
             'recentPosts' => $recentPosts,
-            'konten_comments' => $comments,
-            'og' => [
-                'url' => url('/berita/' . $konten['slug']),
-                'title' => $konten['judul'],
-                'description' => $konten['description_short'],
-                'image' => $konten['gambar'],
-            ],
+            'categories' => $categories,
             'setting' => $setting,
-            'labels' => $labels,
-            'arsips' => $arsips,
+            'og' => [
+                'url' => url('/content'),
+                'title' => 'Berita',
+                'description' => 'Berita Terbaru'
+            ]
         ];
 
-        // Mengembalikan view detail dengan data
+        return view('client.berita.index', $data);
+    }
+
+
+
+    public function detail($id_berita, Request $request)
+    {
+        $type = $request->get('type', 'berita');
+
+        // Tetap menggunakan endpoint API 'content'
+        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_berita}?type={$type}"))->first();
+
+        if (!$content) {
+            abort(404, 'Berita tidak ditemukan');
+        }
+
+        $recentPosts = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content?type={$type}&limit=5"));
+        $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/categories"));
+
+        $data = [
+            'content' => $content,
+            'recentPosts' => $recentPosts,
+            'categories' => $categories,
+            'og' => [
+                'url' => url("/berita/{$id_berita}"),
+                'title' => $content['title'],
+                'description' => $content['description_short'],
+                'image' => $content['image'],
+            ],
+            'setting' => \App\Helpers\AppHelper::instance()->requestApiSetting()
+        ];
+
         return view('client.berita.detail', $data);
     }
 
-    public function showByLabel($labelId)
+    public function detailWithCategory($id_berita, Request $request)
     {
-        $kategoriId = 2; // Hanya mengambil kategori dengan ID 2
+        $type = $request->get('type', 'berita');
+        $category_id = $request->get('category_id', null);
 
-        // Mengambil konten berdasarkan kategori dan label
-        $kontens = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/konten?kategori_id={$kategoriId}&label_id={$labelId}"));
-dd($kontens);
-        // Mengambil recent posts yang tidak termasuk dalam konten yang ditemukan
-        $recentPosts = Konten::where('kategori_id', $kategoriId)
-                            ->whereNotIn('id', $kontens->pluck('id'))
-                            ->orderBy('created_at', 'desc')
-                            ->take(5)
-                            ->get();
+        // Tetap menggunakan endpoint API 'content'
+        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_berita}?type={$type}&category_id={$category_id}"))->first();
 
-        // Menemukan label berdasarkan ID
-        $label = collect(\App\Helpers\AppHelper::instance()->requestApiGet('api/label'))->firstWhere('id', $labelId);
-
-        if (!$label) {
-            abort(404, 'Label tidak ditemukan');
+        if (!$content) {
+            abort(404, 'Berita tidak ditemukan');
         }
 
+        $recentPosts = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content?type={$type}&category_id={$category_id}&limit=5"));
+        $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/categories"));
+
         $data = [
-            'kontens' => $kontens,
+            'content' => $content,
             'recentPosts' => $recentPosts,
-            'label' => $label,
-            'setting' => \App\Helpers\AppHelper::instance()->requestApiSetting(),
-            'labels' => \App\Helpers\AppHelper::instance()->requestApiGet('api/label'),
+            'categories' => $categories,
             'og' => [
-                'url' => url('/berita/label/' . $kategoriId .$labelId),
-                'title' => 'Berita: ' . $label['name'],
-                'description' => 'Berita berdasarkan label: ' . $label['name']
-            ]
+                'url' => url("/berita/{$id_berita}?category_id={$category_id}"),
+                'title' => $content['title'],
+                'description' => $content['description_short'],
+                'image' => $content['image'],
+            ],
+            'setting' => \App\Helpers\AppHelper::instance()->requestApiSetting()
         ];
 
-        // Mengembalikan view berdasarkan label dengan data
-        return view('client.berita.bylabel', $data);
+        return view('client.berita.index', $data);
     }
-
 }
