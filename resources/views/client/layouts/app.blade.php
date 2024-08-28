@@ -103,7 +103,7 @@
                         <div class="dropdown-menu m-0">
                             <a href="{{ url('/berita') }}" class="dropdown-item">Berita</a>
                             <a href="{{ url('/artikel') }}" class="dropdown-item">Artikel</a>
-                            <a href="{{ url('/dokument') }}" class="dropdown-item">Dokumen Publik</a>
+                            <a href="{{ route('client.document.index') }}" class="dropdown-item">Dokumen Publik</a>
                             <a href="{{ url('/galeri') }}" class="dropdown-item">Galeri</a>
                             <a href="{{ url('/agenda') }}" class="dropdown-item">Agenda</a>
                         </div>
