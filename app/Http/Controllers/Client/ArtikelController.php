@@ -28,7 +28,6 @@ class ArtikelController extends Controller
             ->filter(function ($item) use ($type) {
                 return $item['type'] === $type;
             });
-
         // Mengambil kategori untuk sidebar dari API
         $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/category"));
 
@@ -49,28 +48,26 @@ class ArtikelController extends Controller
         return view('client.artikel.index', $data);
     }
 
-
-
-    public function detail($id_artikel, Request $request)
+    public function detail($id_content, Request $request)
     {
         $type = $request->get('type', 'artikel');
 
         // Tetap menggunakan endpoint API 'content'
-        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_artikel}?type={$type}"))->first();
+        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_content}?type={$type}"))->first();
 
         if (!$content) {
-            abort(404, 'artikel tidak ditemukan');
+            abort(404, 'Artikel tidak ditemukan');
         }
 
         $recentPosts = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content?type={$type}&limit=5"));
-        $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/categories"));
+        $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/category"));
 
         $data = [
             'content' => $content,
             'recentPosts' => $recentPosts,
             'categories' => $categories,
             'og' => [
-                'url' => url("/artikel/{$id_artikel}"),
+                'url' => url("/artikel/{$id_content}"),
                 'title' => $content['title'],
                 'description' => $content['description_short'],
                 'image' => $content['image'],
@@ -79,36 +76,5 @@ class ArtikelController extends Controller
         ];
 
         return view('client.artikel.detail', $data);
-    }
-
-    public function detailWithCategory($id_artikel, Request $request)
-    {
-        $type = $request->get('type', 'artikel');
-        $category_id = $request->get('category_id', null);
-
-        // Tetap menggunakan endpoint API 'content'
-        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_artikel}?type={$type}&category_id={$category_id}"))->first();
-
-        if (!$content) {
-            abort(404, 'artikel tidak ditemukan');
-        }
-
-        $recentPosts = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content?type={$type}&category_id={$category_id}&limit=5"));
-        $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/categories"));
-
-        $data = [
-            'content' => $content,
-            'recentPosts' => $recentPosts,
-            'categories' => $categories,
-            'og' => [
-                'url' => url("/artikel/{$id_artikel}?category_id={$category_id}"),
-                'title' => $content['title'],
-                'description' => $content['description_short'],
-                'image' => $content['image'],
-            ],
-            'setting' => \App\Helpers\AppHelper::instance()->requestApiSetting()
-        ];
-
-        return view('client.artikel.index', $data);
     }
 }

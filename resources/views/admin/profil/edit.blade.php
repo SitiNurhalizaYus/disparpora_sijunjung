@@ -26,7 +26,8 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" class="needs-validation" id="form-data" name="form-data" enctype="multipart/form-data" novalidate>
+                        <form method="POST" class="needs-validation" id="form-data" name="form-data"
+                            enctype="multipart/form-data" novalidate>
                             @csrf
                             <input type="hidden" name="_method" value="PUT"> <!-- Simulasi metode PUT dengan POST -->
                             <input type="hidden" name="type" value="profil">
@@ -52,18 +53,20 @@
                             <div class="form-group">
                                 <label class="form-label" for="content">Konten Profil</label>
                                 <textarea class="form-control" type="text" id="content" name="content" style="display: none" required></textarea>
-                                <textarea class="form-control" id="description_long" name="description_long"
-                                    placeholder="Masukkan konten" required></textarea>
+                                <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
-                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg">
+                                <input class="form-control" type="file" id="file" name="file"
+                                    accept="image/jpeg,image/png,image/jpg">
                                 <input class="form-control" type="hidden" id="image" name="image" value="">
                                 <br>
                                 <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
                                     width="300px" style="border-radius: 2%;">
-                                <label class="form-label" for="photo" style="font-size: 10pt">*Format JPG, JPEG, dan PNG</label>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">Silakan unggah gambar.</p>
+                                <label class="form-label" for="photo" style="font-size: 10pt">*Format JPG, JPEG, dan
+                                    PNG</label>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">
+                                    Silakan unggah gambar.</p>
                             </div>
                             <div class="form-group">
                                 <div class="form-check form-switch">
@@ -105,7 +108,8 @@
                         $('#description_long').val(result['data']['content']);
                         $('#content').val(result['data']['content']);
                         $('#image').val(result['data']['image']);
-                        $('#image-preview').attr('src', "{{ url('/') }}/" + result['data']['image']);
+                        $('#image-preview').attr('src', "{{ url('/') }}/" + result['data'][
+                            'image']);
                         $('#is_active').prop('checked', result['data']['is_active']);
                     } else {
                         Swal.fire({
@@ -224,23 +228,31 @@
             }
         });
 
-        // Handle upload image
-        $('#file').change(function() {
-            if (validateFile()) {
-                // Preview image
-                $('#image-preview').attr('display', 'block');
+        //handle upload
+        $('#file').on('change', function() {
+            var file = $(this).prop('files')[0];
+            if (!file || !file.type.match('image.*')) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "File yang diunggah bukan gambar yang valid. Silakan unggah file dalam format JPG, JPEG, atau PNG.",
+                    confirmButtonColor: '#3A57E8',
+                });
+                $(this).val('');
+                $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                $('#invalid-file').show();
+            } else {
+                $('#invalid-file').hide();
+
                 var oFReader = new FileReader();
-                oFReader.readAsDataURL($("#file")[0].files[0]);
+                oFReader.readAsDataURL(file);
                 oFReader.onload = function(oFREvent) {
                     $('#image-preview').attr('src', oFREvent.target.result);
                 };
 
-                // Upload image
                 var formdata = new FormData();
-                if ($(this).prop('files').length > 0) {
-                    var file = $(this).prop('files')[0];
-                    formdata.append("file", file);
-                }
+                formdata.append("file", file);
+
                 $.ajaxSetup({
                     headers: {
                         'Authorization': "Bearer {{ $session_token }}"
@@ -254,20 +266,33 @@
                     contentType: false,
                     success: function(result) {
                         if (result['success'] == true) {
+                            // Simpan URL gambar ori
                             $('#image').val(result['data']['url']);
+
+                            // Tampilkan gambar ori di pratinjau
+                            var imagePathOri = result['data']['url'];
+                            $('#image-preview').attr('src', imagePathOri);
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Gagal mengunggah gambar.",
+                                confirmButtonColor: '#3A57E8',
+                            });
                         }
                     },
-                    error: function(xhr) {
+                    error: function() {
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Failed to upload image.",
+                            text: "Terjadi kesalahan saat mengunggah gambar.",
                             confirmButtonColor: '#3A57E8',
                         });
                     }
                 });
             }
         });
+
 
         // Validate the entire form before submission
         function validateForm() {
@@ -295,10 +320,10 @@
 
                 $.ajax({
                     url: '/api/content/{{ $content->id_content }}',
-                    type: "POST",  // Menggunakan POST dengan _method PUT
+                    type: "POST", // Menggunakan POST dengan _method PUT
                     data: form,
-                    contentType: false,  // Supaya FormData bisa bekerja dengan benar
-                    processData: false,  // Supaya FormData bisa bekerja dengan benar
+                    contentType: false, // Supaya FormData bisa bekerja dengan benar
+                    processData: false, // Supaya FormData bisa bekerja dengan benar
                     success: function(result) {
                         if (result['success'] == true) {
                             Swal.fire({

@@ -57,7 +57,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
-                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg" required>
+                                <input class="form-control" type="file" id="file" name="file"
+                                    accept="image/jpeg,image/png,image/jpg" required>
                                 <input class="form-control" type="hidden" id="image" name="image" value="noimage.jpg"
                                     placeholder="image">
                                 <br>
@@ -167,6 +168,7 @@
             }
         });
 
+        //handle upload
         $('#file').on('change', function() {
             var file = $(this).prop('files')[0];
             if (!file || !file.type.match('image.*')) {
@@ -178,10 +180,9 @@
                 });
                 $(this).val('');
                 $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
-                $('#image').val('noimage.jpg');
-                $('#invalid-picture').show();
+                $('#invalid-file').show();
             } else {
-                $('#invalid-picture').hide();
+                $('#invalid-file').hide();
 
                 var oFReader = new FileReader();
                 oFReader.readAsDataURL(file);
@@ -205,8 +206,12 @@
                     contentType: false,
                     success: function(result) {
                         if (result['success'] == true) {
+                            // Simpan URL gambar ori
                             $('#image').val(result['data']['url']);
-                            $('#invalid-file').hide();
+
+                            // Tampilkan gambar ori di pratinjau
+                            var imagePathOri = result['data']['url'];
+                            $('#image-preview').attr('src', imagePathOri);
                         } else {
                             Swal.fire({
                                 icon: "error",
@@ -227,6 +232,7 @@
                 });
             }
         });
+
 
         function validateForm() {
             let isValid = true;
@@ -250,7 +256,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/api/content?type=berita',
+                    url: '/api/content?type=profil',
                     type: "POST",
                     data: form,
                     contentType: false,
@@ -263,7 +269,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/berita') }}");
+                                window.location.replace("{{ url('/admin/profil') }}");
                             });
                         } else {
                             Swal.fire({

@@ -37,7 +37,7 @@
                                     <div class="blog-item bg-light rounded overflow-hidden">
                                         <div class="blog-img position-relative overflow-hidden">
                                             <img class="img-fluid"
-                                                src="{{ asset('/' . str_replace('/xxx/', '/300/', $konten['image'])) }}"
+                                                src="{{ asset('/' . str_replace('/xxx/', '/500/', $konten['image'])) }}"
                                                 alt="{{ $konten['title'] }}">
                                         </div>
                                         <div class="p-4">

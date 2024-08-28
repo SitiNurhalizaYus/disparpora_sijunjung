@@ -10,18 +10,19 @@ class ProfilController extends Controller
 {
     public function detail($slug)
     {
-        $type = 'profil'; // Menggunakan type 'profil'
+        // Mengambil konten dengan type 'profil'
+        $type = 'profil';
         $kontens = collect(AppHelper::instance()->requestApiGet("api/content?type={$type}"));
 
-        // Cari konten yang sesuai dengan slug yang diberikan
+        // Cari konten berdasarkan slug
         $konten = $kontens->firstWhere('slug', $slug);
 
-        // Jika konten tidak ditemukan, tampilkan halaman 404
+        // Jika konten tidak ditemukan, tampilkan 404
         if (!$konten) {
             abort(404, 'Konten tidak ditemukan');
         }
 
-        // Filter konten untuk kategori yang sama, kecuali konten saat ini
+        // Mengambil konten lain untuk sidebar, kecuali konten saat ini
         $kontensKategori = $kontens->filter(function ($item) use ($slug) {
             return $item['slug'] !== $slug;
         })->take(5);

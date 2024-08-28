@@ -51,12 +51,12 @@ class BeritaController extends Controller
 
 
 
-    public function detail($id_berita, Request $request)
+    public function detail($id_content, Request $request)
     {
         $type = $request->get('type', 'berita');
 
         // Tetap menggunakan endpoint API 'content'
-        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_berita}?type={$type}"))->first();
+        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_content}?type={$type}"))->first();
 
         if (!$content) {
             abort(404, 'Berita tidak ditemukan');
@@ -70,7 +70,7 @@ class BeritaController extends Controller
             'recentPosts' => $recentPosts,
             'categories' => $categories,
             'og' => [
-                'url' => url("/berita/{$id_berita}"),
+                'url' => url("/berita/{$id_content}"),
                 'title' => $content['title'],
                 'description' => $content['description_short'],
                 'image' => $content['image'],
@@ -81,13 +81,13 @@ class BeritaController extends Controller
         return view('client.berita.detail', $data);
     }
 
-    public function detailWithCategory($id_berita, Request $request)
+    public function detailWithCategory($id_content, Request $request)
     {
         $type = $request->get('type', 'berita');
         $category_id = $request->get('category_id', null);
 
         // Tetap menggunakan endpoint API 'content'
-        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_berita}?type={$type}&category_id={$category_id}"))->first();
+        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_content}?type={$type}&category_id={$category_id}"))->first();
 
         if (!$content) {
             abort(404, 'Berita tidak ditemukan');
@@ -101,7 +101,7 @@ class BeritaController extends Controller
             'recentPosts' => $recentPosts,
             'categories' => $categories,
             'og' => [
-                'url' => url("/berita/{$id_berita}?category_id={$category_id}"),
+                'url' => url("/berita/{$id_content}?category_id={$category_id}"),
                 'title' => $content['title'],
                 'description' => $content['description_short'],
                 'image' => $content['image'],
