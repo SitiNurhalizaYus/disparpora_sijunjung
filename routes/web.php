@@ -28,8 +28,8 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/artikel/{id_berita}', [App\Http\Controllers\Client\ArtikelController::class, 'detail']);
     Route::get('/artikel/{id_berita}', [App\Http\Controllers\Client\ArtikelController::class, 'detailWithCategory']);
     
-    Route::get('/contact', [App\Http\Controllers\Client\ContactController::class, 'index']);
-    Route::post('/contact/submit', [App\Http\Controllers\Client\ContactController::class, 'submit']);
+    Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index']);
+    Route::post('/message/submit', [App\Http\Controllers\Client\HubungikamiController::class, 'submit']);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {
@@ -60,8 +60,9 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('category', App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('document', App\Http\Controllers\Admin\DocumentController::class);
     Route::resource('galeri', App\Http\Controllers\Admin\DocumentController::class);
-    Route::resource('lokawisata', App\Http\Controllers\Admin\InfoTempatController::class);
     Route::resource('agenda', App\Http\Controllers\Admin\AgendaController::class);
+    Route::resource('lokawisata', App\Http\Controllers\Admin\InfoTempatController::class);
+    Route::resource('message', App\Http\Controllers\Admin\AgendaController::class);
     Route::resource('setting', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('user', App\Http\Controllers\Admin\UserController::class);
     Route::resource('messege', App\Http\Controllers\Admin\MessageController::class);

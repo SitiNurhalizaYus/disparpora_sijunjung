@@ -1,11 +1,10 @@
 <?php
+namespace App\Http\Controllers\Api;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use App\Models\Message;
 use Illuminate\Http\Request;
-
 class MessageController extends Controller
 {
     public function __construct()

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use RichanFongdasen\EloquentBlameable\BlameableTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Message extends Model
 {
@@ -20,4 +21,10 @@ class Message extends Model
         'notes',
         'is_active'
     ];
+
+     // Relasi ke pengguna yang membuat agenda
+     public function createdBy()
+     {
+         return $this->belongsTo(User::class, 'created_by');
+     }
 }

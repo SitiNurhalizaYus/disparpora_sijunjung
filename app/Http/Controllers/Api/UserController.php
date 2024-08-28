@@ -80,6 +80,12 @@ class UserController extends Controller
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
+         // get count
+         if($count == true) {
+            $query = $query->count('id_user');
+            $data['count'] = $query;
+        }
+
         // Dapatkan data
         if ($count == true) {
             $data['count'] = $query->count('users.id_user');

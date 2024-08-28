@@ -89,6 +89,12 @@ class ContentController extends Controller
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
+        // get count
+        if($count == true) {
+            $query = $query->count('id_content');
+            $data['count'] = $query;
+        }
+
         if ($per_page > 0) {
             // Pastikan menggunakan limit jika offset digunakan
             $data = $query->orderBy($sort[0], $sort[1])

@@ -68,6 +68,12 @@ class PosterController extends Controller
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
+         // get count
+         if($count == true) {
+            $query = $query->count('id');
+            $data['count'] = $query;
+        }
+
         // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'
         if ($per_page == 0 || $per_page == 'all') {
             $data = $query->orderBy($sort[0], $sort[1])->get()->toArray();

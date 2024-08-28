@@ -18,6 +18,8 @@ class ProfilController extends Controller
     public function index(Request $request)
     {
         // Mengambil parameter dari request
+        
+        $count = $request->get('count', false);
         $sort = $request->get('sort', 'id_content:asc');
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));
@@ -68,6 +70,12 @@ class ProfilController extends Controller
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $per_page);
         $metadata['page'] = $page;
+
+         // get count
+         if($count == true) {
+            $query = $query->count('id_content');
+            $data['count'] = $query;
+        }
 
         // Mengambil data dengan pagination
         if ($per_page == 0 || $per_page == 'all') {

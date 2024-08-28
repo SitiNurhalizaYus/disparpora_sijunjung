@@ -18,13 +18,14 @@ class ArtikelController extends Controller
     public function index(Request $request)
     {
         // Mengambil parameter dari request
+        
+        $count = $request->get('count', false);
         $sort = $request->get('sort', 'id_content:asc');
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));
         $search = $request->get('search', '');
         $where = json_decode($request->get('where', '{}'), true);
         $category_id = $request->get('category_id');
-        $arsip_id = $request->get('arsip_id');
 
         // Memastikan nilai per_page dan page tidak negatif atau nol
         if ($per_page <= 0) {
@@ -63,10 +64,6 @@ class ArtikelController extends Controller
             $query->where('category_id', $category_id);
         }
 
-        if ($arsip_id) {
-            $query->where('arsip_id', $arsip_id);
-        }
-
         // Menambahkan filter pencarian berdasarkan judul jika ada
         if ($search) {
             $query->where('title', 'like', "%{$search}%");
@@ -78,6 +75,12 @@ class ArtikelController extends Controller
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $per_page);
         $metadata['page'] = $page;
+
+         // get count
+         if($count == true) {
+            $query = $query->count('id_content');
+            $data['count'] = $query;
+        }
 
         // Mengambil data dengan pagination
         if ($per_page == 0 || $per_page == 'all') {

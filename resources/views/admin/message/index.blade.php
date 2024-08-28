@@ -1,35 +1,31 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="conatiner-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+    <div class="container-fluid content-inner mt-n5 py-0" style="margin-top: 100px !important;">
+        <div class="card-header mb-2 px-3">
+            <div class="flex-wrap d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="header-title">
+                        <h2 class="card-title">Pesan</h2>
+                        <p>List data</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="flex-wrap d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="header-title">
-                                    <h2 class="card-title">Message</h2>
-                                    <p>List data</p>
-                                </div>
-                            </div>
-                            <div>
-                            </div>
-                        </div>
-                    </div>
+            
                     <div class="card-body">
                         <br>
                         <div class="table-responsive">
                             <table id="datatable" class="table table-striped" data-toggle="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Subject</th>
-                                        <th>Created At</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th class="text-center">Nama</th>
+                                        <th class="text-center">Email</th>
+                                        <th class="text-center">Created At</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -43,6 +39,20 @@
     </div>
 
     <script>
+        function convertStringToDate(str) {
+    var date = new Date(str);
+    let options = {
+        // weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        // hour: "numeric",
+        // minute: "numeric",
+        // second: "numeric"
+    };
+    var newdate = date.toLocaleDateString('id', options);
+    return newdate;
+}
         $('#datatable').DataTable( {
             order: [[ 0, 'asc' ]],
             lengthMenu: [[ 5, 15, 25, 100, -1 ], [ 5, 15, 25, 100, 'All' ]],
@@ -76,44 +86,27 @@
             },
             columns: [
                 {
-                    data: 'id'
-                },
-                {
                     data: 'name',
                     render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data + '</span>';
+                        return '<span style="white-space: normal;">' + data.substring(0, 50) + '...</span>';
                     }
                 },
                 {
                     data: 'email',
                     render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data + '</span>';
-                    }
-                },
-                {
-                    data: 'subject',
-                    render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data + '</span>';
+                        return '<span style="white-space: normal;">' + data.substring(0, 50) + '...</span>';
                     }
                 },
                 {
                     data: 'created_at',
+                    className: 'text-center',
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + convertStringToDate(data) + '</span>';
                     }
                 },
                 {
-                    data: 'is_active',
-                    render: function (data, type, row, meta) {
-                        if(data == '1') {
-                            return '<span class="badge bg-success">Aktif</span>';
-                        } else {
-                            return '<span class="badge bg-danger">Tidak Aktif</span>';
-                        }
-                    }
-                },
-                {
                     data: 'id',
+                    className: 'text-center',
                     render: function (data, type, row, meta) {
                         var btn_detail = `
                             <a href="{{ url("/admin/message/`+data+`") }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
@@ -133,24 +126,21 @@
                                     </svg>
                                 </span>
                             </button>`;
-                        return '<div style="display: flex;">'+btn_detail+'&nbsp;'+btn_delete+'</div>';
+                        return '<div style="display: flex; align-items: center; justify-content: center;">'+btn_detail+'&nbsp;'+btn_delete+'</div>';
                     }
                 }
             ],
             columnDefs: [
-                {targets: [0], width: "5%"},
-                {targets: [1], width: "15%"},
-                {targets: [1], width: "15%"},
-                {targets: [2], width: "30%"},
-                {targets: [3], width: "20%"},
-                {targets: [4], width: "20%"},
-                {targets: [5], width: "10%", orderable: false}
+                {targets: [0], width: "30%"},
+                {targets: [1], width: "20%"},
+                {targets: [2], width: "20%"},
+                {targets: [3], width: "20%", orderable: false}
             ],
         });
 
         function removeData(id) {
             Swal.fire({
-                title: "Kamu yakin ingin menghapus?",
+                title: "Are you sure want to delete?",
                 showDenyButton: true,
                 showCancelButton: false,
                 confirmButtonText: "Yes",

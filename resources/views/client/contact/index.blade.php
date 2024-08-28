@@ -86,11 +86,11 @@
                         Contact Us
                     </p>
                     <h2 class="text-white mb-4">Have any query? <br> Get in Touch.</h2>
-                    <img src="{{ asset('landing-pages/assets/images/home-4/contact.webp') }}" alt="" class="img-fluid"
+                    <img src="{{ asset('landing-pages/assets/images/home-4/message.webp') }}" alt="" class="img-fluid"
                         loading="lazy">
                 </div>
                 <div class="col-md-12 col-lg-6 mt-4 mt-md-0">
-                    <form action="{{url('/contact/submit')}}" method="post">
+                    <form action="{{url('/message/submit')}}" method="post">
                         @csrf
                         <div class="form-group">
                             <label for="full-name" class="form-label">Full Name</label>
@@ -121,7 +121,7 @@
     </div>
     <div>
         <iframe
-            src="{{ $setting['contact-map'] }}"
+            src="{{ $setting['message-map'] }}"
             width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>

@@ -322,8 +322,8 @@
 
                     {{-- pesan --}}
                     <li class="nav-item">
-                        <a class="nav-link @if (str_contains($menu, 'contact')) {{ 'active' }} @endif"
-                            aria-current="page" href="{{ url('/admin/contact') }}">
+                        <a class="nav-link @if (str_contains($menu, 'message')) {{ 'active' }} @endif"
+                            aria-current="page" href="{{ url('/admin/message') }}">
                             <i class="icon">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
