@@ -34,7 +34,7 @@ Route::apiResource('category', App\Http\Controllers\Api\CategoryController::clas
 
 // Route::apiResource('galeri', App\Http\Controllers\Api\EventController::class); 
 Route::apiResource('lokawisata', App\Http\Controllers\Api\InfoTempatController::class); 
-Route::apiResource('pesan', App\Http\Controllers\Api\MessageController::class); 
+Route::apiResource('message', App\Http\Controllers\Api\MessageController::class); 
 
 Route::apiResource('upload', App\Http\Controllers\Api\UploadController::class);
 Route::apiResource('user', App\Http\Controllers\Api\UserController::class);

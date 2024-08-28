@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email');
             $table->string('subject');
             $table->text('message');
             $table->string('file_path')->nullable();
+            $table->string('reply')->nullable();
             // default
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(0);

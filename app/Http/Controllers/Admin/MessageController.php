@@ -35,18 +35,9 @@ class MessageController extends Controller
         $data['menu'] = 'message-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+        $data['message'] = \App\Models\Message::find($id);
         $data['id'] = $id;
         return view('admin.message.show', $data);
-    }
-
-    public function create()
-    {
-        $data = [];
-        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'message-create';
-        $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
-        $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        return view('admin.message.create', $data);
     }
 
     public function edit($id)

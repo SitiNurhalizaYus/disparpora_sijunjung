@@ -13,7 +13,7 @@ class ContactsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('contacts')->insert([
+        DB::table('messages')->insert([
             [
                 'name' => 'Dinas Pariwisata dan Olahraga',
                 'email' => 'parporadinas@gmail.com',

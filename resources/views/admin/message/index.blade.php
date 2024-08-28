@@ -24,7 +24,8 @@
                                     <tr>
                                         <th class="text-center">Nama</th>
                                         <th class="text-center">Email</th>
-                                        <th class="text-center">Created At</th>
+                                        <th class="text-center">Topik</th>
+                                        <th class="text-center">Diterima</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -98,6 +99,12 @@
                     }
                 },
                 {
+                    data: 'subject',
+                    render: function (data, type, row, meta) {
+                        return '<span style="white-space: normal;">' + data.substring(0, 50) + '...</span>';
+                    }
+                },
+                {
                     data: 'created_at',
                     className: 'text-center',
                     render: function (data, type, row, meta) {
@@ -131,10 +138,11 @@
                 }
             ],
             columnDefs: [
-                {targets: [0], width: "30%"},
+                {targets: [0], width: "15%"},
                 {targets: [1], width: "20%"},
-                {targets: [2], width: "20%"},
-                {targets: [3], width: "20%", orderable: false}
+                {targets: [2], width: "30%"},
+                {targets: [3], width: "15%"},
+                {targets: [4], width: "10%", orderable: false}
             ],
         });
 

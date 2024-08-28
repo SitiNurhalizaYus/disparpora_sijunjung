@@ -19,23 +19,34 @@ class MessageController extends Controller
         $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
-        $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
-        $page = $request->has('page') ? $request->get('page') : 1;
+        $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
+        $page = $request->has('page') ? intval($request->get('page')) : 1;
+
+        // Validasi per_page dan page agar tidak bernilai negatif atau nol
+        if ($per_page <= 0) {
+            $per_page = 10;
+        }
+        if ($page <= 0) {
+            $page = 1;
+        }
 
         $sort = explode(':', $sort);
+        if (count($sort) !== 2) {
+            $sort = ['id', 'asc']; // Default sorting jika tidak valid
+        }
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
         // query
-        $query = Message::where([['id','>','0']]);
+        $query = Message::where([['id', '>', '0']]);
 
         // cek token
-        if(!auth()->guard('api')->user()) {
+        if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
-        if($where){
-            foreach($where as $key => $value) {
+        if ($where) {
+            foreach ($where as $key => $value) {
                 if (is_array($value)) {
                     $query = $query->whereIn($key, $value);
                 } else {
@@ -44,38 +55,36 @@ class MessageController extends Controller
             }
         }
 
-        if($search){
-            $query = $query->whereAny(['name'], 'like', "%{$search}%");
+        if ($search) {
+            $query = $query->where('name', 'like', "%{$search}%");
         }
 
-        // data
-        $data = [];
+        // metadata dan data
         $metadata = [];
-
-        // metadata
-        $metadata['total_data'] = $query->count('id');
+        $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-        // get count
-        if($count == true) {
+         // get count
+         if($count == true) {
             $query = $query->count('id');
             $data['count'] = $query;
         }
-        // get data
-        else {
-            $query = $query
-                ->orderBy($sort[0], $sort[1])
-                ->limit($per_page)
-                ->offset(($page-1) * $per_page)
-                ->get()
-                ->toArray();
 
-            foreach($query as $qry) {
-                $temp = $qry;
-                array_push($data, $temp);
-            };
+        // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'
+        if ($per_page == 0 || $per_page == 'all') {
+            $data = $query->orderBy($sort[0], $sort[1])->get()->toArray();
+            $metadata['total_data'] = count($data); // Update total data
+            $metadata['per_page'] = $metadata['total_data'];
+            $metadata['total_page'] = 1;
+            $metadata['page'] = 1;
+        } else {
+            $data = $query->orderBy($sort[0], $sort[1])
+                          ->limit($per_page)
+                          ->offset(($page - 1) * $per_page)
+                          ->get()
+                          ->toArray();
         }
 
         // result
