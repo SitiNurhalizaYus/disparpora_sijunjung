@@ -16,7 +16,7 @@ class Team extends Model
         'name',
         'role',
         'image',
-        'notes',
+        'description',
         'is_active'
     ];
 }
