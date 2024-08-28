@@ -15,8 +15,8 @@ class ContactsTableSeeder extends Seeder
     {
         DB::table('contacts')->insert([
             [
-                'name' => 'John Doe',
-                'email' => 'john.doe@example.com',
+                'name' => 'Dinas Pariwisata dan Olahraga',
+                'email' => 'parporadinas@gmail.com',
                 'subject' => 'Pertanyaan tentang Festival',
                 'message' => 'Kapan festival dimulai?',
                 'file_path' => 'path/to/file.pdf',

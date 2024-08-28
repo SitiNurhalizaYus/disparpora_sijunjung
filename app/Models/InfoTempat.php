@@ -11,13 +11,13 @@ class InfoTempat extends Model
     use HasFactory;
 
     protected $fillable = [
-        'agent_id',
         'name',
         'description',
         'facilities',
         'operating_hours',
         'ticket_price',
         'images',
+        'link',
         'is_active'
     ];
 

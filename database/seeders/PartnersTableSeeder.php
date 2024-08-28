@@ -15,8 +15,26 @@ class PartnersTableSeeder extends Seeder
     {
         DB::table('mitras')->insert([
             [
-                'name' => 'PT Wisata Nusantara',
-                'image' => 'path/to/image.jpg',
+                'name' => 'CSR BCA',
+                'image' => 'path/to/noimage.jpg',
+                'link' => 'http://wisatanusantara.com',
+                'notes' => 'Mitra resmi Dinas Pariwisata dan Olahraga.',
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Bank Nagari',
+                'image' => 'path/to/noimage.jpg',
+                'link' => 'http://wisatanusantara.com',
+                'notes' => 'Mitra resmi Dinas Pariwisata dan Olahraga.',
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'PDAM',
+                'image' => 'path/to/noimage.jpg',
                 'link' => 'http://wisatanusantara.com',
                 'notes' => 'Mitra resmi Dinas Pariwisata dan Olahraga.',
                 'is_active' => true,
