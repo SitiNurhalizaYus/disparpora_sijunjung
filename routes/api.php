@@ -26,6 +26,7 @@ Route::apiResource('profil', App\Http\Controllers\Api\ProfilController::class);
 Route::apiResource('berita', App\Http\Controllers\Api\BeritaController::class);
 Route::apiResource('artikel', App\Http\Controllers\Api\ArtikelController::class);
 Route::apiResource('document', App\Http\Controllers\Api\DocumentController::class); 
+Route::apiResource('agenda', App\Http\Controllers\Api\AgendaController::class); 
 
 Route::apiResource('category', App\Http\Controllers\Api\CategoryController::class); 
 

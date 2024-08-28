@@ -59,6 +59,7 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('artikel', App\Http\Controllers\Admin\ArtikelController::class);
     Route::resource('category', App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('document', App\Http\Controllers\Admin\DocumentController::class);
+    Route::resource('agenda', App\Http\Controllers\Admin\AgendaController::class);
     Route::resource('setting', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('user', App\Http\Controllers\Admin\UserController::class);
 
