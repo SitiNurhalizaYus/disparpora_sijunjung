@@ -11,7 +11,6 @@ class InfoTempat extends Model
     use HasFactory;
 
     protected $fillable = [
-        'agent_id',
         'name',
         'description',
         'facilities',
