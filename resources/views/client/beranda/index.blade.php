@@ -66,7 +66,7 @@
     </div>
     <!-- Full Screen Search End -->
 
-    <!-- Facts Start -->
+    {{-- <!-- Facts Start -->
     <div class="container-fluid facts py-5 pt-lg-0">
         <div class="container py-5 pt-lg-0">
             <div class="row gx-0">
@@ -671,7 +671,7 @@
             </div>
         </div>
     </div>
-    <!-- Blog Start -->
+    <!-- Blog Start --> --}}
 
 
     <!-- Vendor Start -->

@@ -102,8 +102,8 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Publikasi</a>
                         <div class="dropdown-menu m-0">
                             <a href="{{ route('berita.index') }}" class="dropdown-item">Berita</a>
-                            <a href="{{ route('artikel.index') }}" class="dropdown-item">Artikel</a>
-                            <a href="{{ route('document.index') }}" class="dropdown-item">Dokumen Publik</a>
+                            <a href="{{ route('client.artikel.index') }}" class="dropdown-item">Artikel</a>
+                            <a href="{{ route('client.document.index') }}" class="dropdown-item">Dokumen Publik</a>
                             {{-- <a href="{{ route('galeri.index') }}" class="dropdown-item">Galeri</a> --}}
                             <a href="{{ route('agenda.index') }}" class="dropdown-item">Agenda</a>
                         </div>
@@ -116,7 +116,7 @@
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
-                        <a href="{{ route('lokawisata.index') }}" class="nav-link" data-bs-toggle="dropdown">Lokawisata</a>
+                        <a href="{{ route('client.lokawisata.index') }}" class="nav-link">Lokawisata</a>
                     </div>
                     <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal">
                         <i class="fa fa-search"></i>

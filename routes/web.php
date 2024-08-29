@@ -24,11 +24,17 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/berita/{id_berita}', [App\Http\Controllers\Client\BeritaController::class, 'detail']);
     Route::get('/berita/{id_berita}', [App\Http\Controllers\Client\BeritaController::class, 'detailWithCategory']);
 
-    Route::get('/artikel', [App\Http\Controllers\Client\ArtikelController::class, 'index'])->name('artikel.index');
+    Route::get('/artikel', [App\Http\Controllers\Client\ArtikelController::class, 'index'])->name('client.artikel.index');
     Route::get('/artikel/{slug}', [App\Http\Controllers\Client\ArtikelController::class, 'detail'])->name('artikel.detail');
 
     Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index']);
     Route::post('/message/submit', [App\Http\Controllers\Client\HubungikamiController::class, 'submit']);
+
+    Route::get('/document', [App\Http\Controllers\Client\DocumentController::class, 'index'])->name('client.document.index');
+
+    
+    Route::get('/lokawisata', [App\Http\Controllers\Client\InfoTempatController::class, 'index'])->name('client.lokawisata.index');
+    Route::get('/lokawisata/{id}', [App\Http\Controllers\Client\InfoTempatController::class, 'detail'])->name('client.lokawisata.detail');    
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function () {
