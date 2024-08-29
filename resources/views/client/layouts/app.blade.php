@@ -41,6 +41,26 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('landingpage/assets/css/style.css') }}" rel="stylesheet">
+
+    <!-- CSS for sticky footer -->
+    <style>
+        html, body {
+            height: 100%;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+        }
+        
+        .footer {
+            margin-top: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -50,89 +70,89 @@
     </div>
     <!-- Spinner End -->
 
-    <!-- Topbar Start -->
-    <div class="container-fluid bg-dark px-5 d-none d-lg-block">
-        <div class="row gx-0">
-            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
-                <div class="d-inline-flex align-items-center" style="height: 50px;">
-                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
-                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
+    <div class="content-wrapper">
+        <!-- Topbar Start -->
+        <div class="container-fluid bg-dark px-5 d-none d-lg-block">
+            <div class="row gx-0">
+                <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+                    <div class="d-inline-flex align-items-center" style="height: 50px;">
+                        <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
+                        <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
+                        <small class="text-light"><i class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4 text-center text-lg-end">
-                <div class="d-inline-flex align-items-center" style="height: 50px;">
-                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-instagram fw-normal"></i></a>
-                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-youtube fw-normal"></i></a>
-                    <!-- Icon Pengaturan untuk login admin-->
-                    <a class="btn btn-md rounded-circle" href="{{ url('/admin/login') }}"><i class="bi bi-gear"></i></a>
+                <div class="col-lg-4 text-center text-lg-end">
+                    <div class="d-inline-flex align-items-center" style="height: 50px;">
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-twitter fw-normal"></i></a>
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-instagram fw-normal"></i></a>
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-youtube fw-normal"></i></a>
+                        <!-- Icon Pengaturan untuk login admin-->
+                        <a class="btn btn-md rounded-circle" href="{{ url('/admin/login') }}"><i class="bi bi-gear"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Topbar End -->
+        <!-- Topbar End -->
 
-    <!-- Navbar Start -->
-    <div class="container-fluid position-relative p-0">
-        <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
-            <a href="{{ url('/beranda') }}" class="navbar-brand p-0">
-                <h2 class="m-0">
-                    <img src="{{ asset(str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
-                    {{ $setting['name-short'] }}
-                </h2>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="fa fa-bars"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav mx-auto py-0">
-                    <a href="{{ url('/beranda') }}" class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
-                    <div class="nav-item dropdown me-3">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
-                        <div class="dropdown-menu m-0">
-                            <a href="{{ url('/profil', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}" class="dropdown-item">Struktur Organisasi Dinas</a>
-                            <a href="{{ url('/profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan Misi</a>
-                            <a href="{{ url('/profil', ['slug' => 'tujuan-strategis']) }}" class="dropdown-item">Tujuan Strategis</a>
-                            <a href="{{ url('/profil', ['slug' => 'sasaran-strategis']) }}" class="dropdown-item">Sasaran Strategis</a>
+        <!-- Navbar Start -->
+        <div class="container-fluid position-relative p-0">
+            <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+                <a href="{{ url('/beranda') }}" class="navbar-brand p-0">
+                    <h2 class="m-0">
+                        <img src="{{ asset(str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
+                        {{ $setting['name-short'] }}
+                    </h2>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav mx-auto py-0">
+                        <a href="{{ url('/beranda') }}" class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
+                        <div class="nav-item dropdown me-3">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
+                            <div class="dropdown-menu m-0">
+                                <a href="{{ url('/profil', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}" class="dropdown-item">Struktur Organisasi Dinas</a>
+                                <a href="{{ url('/profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan Misi</a>
+                                <a href="{{ url('/profil', ['slug' => 'tujuan-strategis']) }}" class="dropdown-item">Tujuan Strategis</a>
+                                <a href="{{ url('/profil', ['slug' => 'sasaran-strategis']) }}" class="dropdown-item">Sasaran Strategis</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="nav-item dropdown me-3">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Publikasi</a>
-                        <div class="dropdown-menu m-0">
-                            <a href="{{ route('berita.index') }}" class="dropdown-item">Berita</a>
-                            <a href="{{ route('client.artikel.index') }}" class="dropdown-item">Artikel</a>
-                            <a href="{{ route('client.document.index') }}" class="dropdown-item">Dokumen Publik</a>
-                            {{-- <a href="{{ route('galeri.index') }}" class="dropdown-item">Galeri</a> --}}
-                            <a href="{{ route('agenda.index') }}" class="dropdown-item">Agenda</a>
+                        <div class="nav-item dropdown me-3">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Publikasi</a>
+                            <div class="dropdown-menu m-0">
+                                <a href="{{ route('client.berita.index') }}" class="dropdown-item">Berita</a>
+                                <a href="{{ route('client.artikel.index') }}" class="dropdown-item">Artikel</a>
+                                <a href="{{ route('client.document.index') }}" class="dropdown-item">Dokumen Publik</a>
+                                <a href="{{ route('client.agenda.index') }}" class="dropdown-item">Agenda</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="nav-item dropdown me-3">
-                        <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">PPID</a>
-                        <div class="dropdown-menu m-0">
-                            {{-- <a href="{{ url('/ppid/laporan') }}" class="dropdown-item">Laporan Layanan Informasi Publik</a> --}}
-                            <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi Publik</a>
+                        <div class="nav-item dropdown me-3">
+                            <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">PPID</a>
+                            <div class="dropdown-menu m-0">
+                                <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi Publik</a>
+                            </div>
                         </div>
+                        <div class="nav-item dropdown me-3">
+                            <a href="{{ route('client.lokawisata.index') }}" class="nav-link">Lokawisata</a>
+                        </div>
+                        <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <a href="{{ url('/hubungikami') }}" class="btn btn-primary py-2 px-4 ms-3">Hubungi Kami</a>
                     </div>
-                    <div class="nav-item dropdown me-3">
-                        <a href="{{ route('client.lokawisata.index') }}" class="nav-link">Lokawisata</a>
-                    </div>
-                    <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal">
-                        <i class="fa fa-search"></i>
-                    </button>
-                    <a href="{{ url('/hubungikami') }}" class="btn btn-primary py-2 px-4 ms-3">
-                        Hubungi Kami</a>
                 </div>
-            </div>
-        </nav>
-    </div>
-    <!-- Navbar End -->
+            </nav>
+        </div>
+        <!-- Navbar End -->
 
-    @yield('content')
+        <!-- Content -->
+        @yield('content')
+    </div>
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-light mt-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="footer container-fluid bg-dark text-light wow fadeInUp" data-wow-delay="0.1s">
         <div class="container">
             <div class="row gx-5">
                 <div class="col-lg-4 col-md-6 footer-about">

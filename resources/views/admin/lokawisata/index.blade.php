@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/lokawisata/create') }}" class="btn btn-md 2 btn-primary">
+                    <a href="{{ url('/admin/lokawisatas/create') }}" class="btn btn-md 2 btn-primary">
                         ADD+
                     </a>
                 </div>
@@ -142,7 +142,7 @@
                     data: 'id',
                     render: function(data, type, row, meta) {
                         var btn_detail = `
-                            <a href="{{ url('/admin/lokawisata/`+data+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
+                            <a href="{{ url('/admin/lokawisatas/`+data+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>                                    <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -150,7 +150,7 @@
                                 </span>
                             </a>`;
                         var btn_edit = `
-                            <a href="{{ url('/admin/lokawisata/`+data+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
+                            <a href="{{ url('/admin/lokawisatas/`+data+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -233,7 +233,7 @@
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then((result) => {
-                                    window.location.replace("{{ url('/admin/lokawisata') }}");
+                                    window.location.replace("{{ url('/admin/lokawisatas') }}");
                                 });
                             } else {
                                 Swal.fire({

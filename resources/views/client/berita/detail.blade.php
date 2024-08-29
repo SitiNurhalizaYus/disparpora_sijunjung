@@ -21,10 +21,9 @@
             <div class="px-5">
                 <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('berita.index', ['kategori_id' => 2]) }}" class="text-green">Informasi</a>
+                <a href="{{ route('client.berita.index') }}" class="text-green">Berita</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('berita.detail', ['slug' => $konten['slug']]) }}"
-                    class="text-green">{{ $konten['judul'] }}</a>
+                <span class="text-green" id="breadcrumb-title">Detail</span>
             </div>
         </div>
 
@@ -34,150 +33,128 @@
                 <div class="row g-5">
                     <!-- Blog Content Start -->
                     <div class="col-lg-8">
-                        <div class="mb-5">
-                            <img class="img-fluid w-100 rounded mb-5"
-                                src="{{ asset('/' . str_replace('/xxx/', '/500/', $konten['gambar'])) }}"
-                                alt="{{ $konten['judul'] }}">
-                            <h1 class="mb-4">{{ $konten['judul'] }}</h1>
-                            <p>{!! $konten['description_long'] !!}</p>
+                        <div class="row g-5 mb-5" id="blog-detail">
+                            <!-- Konten detail akan dimuat di sini menggunakan AJAX -->
                         </div>
 
-                        <!-- Comment List Start -->
-                        <div class="mb-5">
-                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="mb-0">{{ is_array($konten_comments) ? count($konten_comments) : 0 }} Comments
-                                </h3>
-                            </div>
+                        <!-- Bagikan Postingan Start -->
+                        <div class="share-buttons mb-5 mt-3 wow zoomIn" data-wow-delay="0.3s">
+                            <p class="fw-bold">Share on : <br></p>
+                            <div class="d-flex">
+                                <button class="share-btn facebook mx-2"
+                                    onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank')">
+                                    <i class="bi bi-facebook"></i>
+                                </button>
+                                <button class="share-btn twitter mx-2"
+                                    onclick="window.open('https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(document.title), '_blank')">
+                                    <i class="bi bi-twitter"></i>
+                                </button>
+                                <button class="share-btn linkedin mx-2"
+                                    onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(window.location.href), '_blank')">
+                                    <i class="bi bi-linkedin"></i>
+                                </button>
+                                <button class="share-btn whatsapp mx-2"
+                                    onclick="window.open('https://wa.me/?text=' + encodeURIComponent('Check this out! ' + window.location.href), '_blank')">
+                                    <i class="bi bi-whatsapp"></i>
+                                </button>
+                                <button class="share-btn email mx-2"
+                                    onclick="window.location.href='mailto:?subject=' + encodeURIComponent(document.title) + '&body=' + encodeURIComponent('Check this out! ' + window.location.href)">
+                                    <i class="bi bi-envelope"></i>
+                                </button>
 
-                            @forelse ($konten_comments as $comment)
-                                <div class="d-flex mb-4">
-                                    <img src="{{ asset('img/user.jpg') }}" class="img-fluid rounded"
-                                        style="width: 45px; height: 45px;">
-                                    <div class="ps-3">
-                                        <h6><a
-                                                href="#">{{ isset($comment['user']['name']) ? $comment['user']['name'] : 'Anonymous' }}</a>
-                                            <small><i>{{ \Carbon\Carbon::parse($comment['created_at'])->format('d M Y') }}</i></small>
-                                        </h6>
-                                        <p>{{ $comment['content'] }}</p>
-                                        <button class="btn btn-sm btn-light">Reply</button>
-                                    </div>
-                                </div>
-                            @empty
-                                <p>No comments available.</p>
-                            @endforelse
+                            </div>
                         </div>
-                        <!-- Comment List End -->
-
-                        <!-- Comment Form Start -->
-                        @auth
-                            <div class="bg-light rounded p-5">
-                                <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                    <h3 class="mb-0">Leave A Comment</h3>
-                                </div>
-                                <form action="{{ route('berita.detail') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="konten_id" value="{{ $konten['id'] }}">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <textarea class="form-control bg-white border-0" rows="5" placeholder="Comment" name="content" required></textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <button class="btn btn-primary w-100 py-3" type="submit">Leave Your
-                                                Comment</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        @else
-                            <div class="bg-light rounded p-5">
-                                <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                    <h3 class="mb-0">Leave A Comment</h3>
-                                </div>
-                                <p>Please <a href="{{ route('client.login') }}">log in</a> to leave a comment.</p>
-                            </div>
-                        @endauth
-                        <!-- Comment Form End -->
+                        <!-- Bagikan Postingan End -->
                     </div>
                     <!-- Blog Content End -->
 
                     <!-- Sidebar Start -->
                     <div class="col-lg-4">
-                        <!-- Search Form Start -->
-                        <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
-                            <div class="input-group">
-                                <input type="text" class="form-control p-3" placeholder="Keyword">
-                                <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
-                            </div>
-                        </div>
-                        <!-- Search Form End -->
 
-                        <!-- Category Start -->
+                        <!-- Recent Post Start -->
                         <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
-                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="mb-0">Categories</h3>
-                            </div>
-                            <div class="link-animated d-flex flex-column justify-content-start">
-                                @foreach ($labels as $label)
-                                    <a href="{{ route('berita.label', ['kategoriId' => $label['kategori_id'], 'labelId' => $label['id']]) }}"
-                                        class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2">
-                                        <i class="bi bi-arrow-right me-2"></i>{{ $label['name'] }}</a>
-                                @endforeach
-                            </div>
-                        </div>
-                        <!-- Category End -->
-
-                        <!-- Recent Posts Start -->
-                        {{-- <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
                             <div class="section-title section-title-sm position-relative pb-3 mb-4">
                                 <h3 class="mb-0">Recent Posts</h3>
                             </div>
-                            @foreach ($recentPosts as $recentPost)
-                                <div class="d-flex rounded overflow-hidden mb-3">
-                                    <img class="img-fluid" src="{{ asset('storage/' . $recentPost['gambar']) }}"
-                                        style="width: 100px; height: 100px; object-fit: cover;"
-                                        alt="{{ $recentPost['judul'] }}">
-                                    <a href="{{ route('publikasi.detail', ['slug' => $recentPost['slug']]) }}"
-                                        class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">{{ Str::limit($recentPost['judul'], 50) }}
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div> --}}
-                        <!-- Recent Posts End -->
-
-                        <!-- Archives Start -->
-                        {{-- <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
-                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="mb-0">Archives</h3>
-                            </div>
-                            <div class="d-flex flex-wrap m-n1">
-                                @foreach ($arsips as $arsip)
-                                    <a href="{{ route('berita.index', $arsip['label_slug']) }}"
-                                        class="btn btn-light m-1">{{ $arsip['tahun'] }}</a>
-                                @endforeach
-                            </div>
-                        </div> --}}
-                        <!-- Archives End -->
-
-
-                        <!-- Label Start -->
-                        <div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
-                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="mb-0">Label</h3>
-                            </div>
-                            <div class="d-flex flex-wrap m-n1">
-                                @foreach ($labels as $label)
-                                    <a href="{{ route('berita.index', $label['slug']) }}"
-                                        class="btn btn-light m-1">{{ $label['name'] }}</a>
-                                @endforeach
+                            <div id="recent-post-list">
+                                <!-- Recent posts akan dimuat di sini menggunakan AJAX -->
                             </div>
                         </div>
-                        <!-- Label End -->
+                        <!-- Recent Post End -->
+
                     </div>
                     <!-- Sidebar End -->
                 </div>
             </div>
         </div>
-
         <!-- Blog End -->
     </div>
 @endsection
+
+<!-- Script untuk memuat konten detail dan recent posts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Fungsi untuk memuat detail konten dengan AJAX
+        function loadContentDetail(slug) {
+            $.ajax({
+                url: "{{ url('/api/content') }}/" + slug,
+                method: "GET",
+                success: function(response) {
+                    const content = response.data;
+                    const detailHtml = `
+                        <img class="img-fluid w-100 rounded mb-5" src="${content.image}" alt="${content.title}">
+                        <h1 class="mb-4">${content.title}</h1>
+                        <p>${content.content}</p>
+                    `;
+                    $('#blog-detail').html(detailHtml);
+                    $('#breadcrumb-title').text(content.title);
+
+                    // Setelah detail dimuat, muat recent posts tanpa konten ini
+                    loadRecentPosts(slug);
+                },
+                error: function(xhr) {
+                    $('#blog-detail').html(
+                        '<p class="text-center">Gagal memuat detail berita. Silakan coba lagi nanti.</p>'
+                    );
+                }
+            });
+        }
+
+        // Fungsi untuk memuat recent posts dengan AJAX
+        function loadRecentPosts(slug) {
+            $.ajax({
+                url: "{{ url('/api/content') }}",
+                method: "GET",
+                data: {
+                    recent: true,
+                    type: 'berita',
+                    per_page: 5, // Membatasi jumlah recent posts
+                    exclude_slug: slug // Kirim slug yang akan dikecualikan
+                },
+                success: function(response) {
+                    let recentPostList = '';
+                    $.each(response.data, function(index, post) {
+                        recentPostList += `
+                            <div class="d-flex rounded overflow-hidden mb-3">
+                                <img class="img-fluid" src="${post.image}" style="width: 100px; height: 100px; object-fit: cover;" alt="${post.title}">
+                                <a href="{{ route('client.berita.index') }}/${post.slug}" class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">${post.title}</a>
+                            </div>
+                        `;
+                    });
+                    $('#recent-post-list').html(recentPostList);
+                },
+                error: function(xhr) {
+                    $('#recent-post-list').html(
+                        '<p class="text-center">Gagal memuat postingan terbaru. Silakan coba lagi nanti.</p>'
+                    );
+                }
+            });
+        }
+
+        // Muat detail konten berdasarkan slug dari URL
+        const slug = window.location.pathname.split('/').pop();
+        loadContentDetail(slug);
+    });
+</script>
+

@@ -21,7 +21,7 @@
             <div class="text-star px-5">
                 <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('artikel.index') }}" class="text-green">Artikel</a>
+                <a href="{{ route('client.artikel.index') }}" class="text-green">Artikel</a>
             </div>
         </div>
 
@@ -34,8 +34,8 @@
                         <div class="row g-5" id="content-list">
                             <!-- Konten akan dimuat di sini menggunakan AJAX -->
                         </div>
-                        <div class="d-flex justify-content-center mt-4">
-                            <button id="load-more" class="btn btn-primary" data-page="1">Load More</button>
+                        <div id="pagination" class="d-flex justify-content-center mt-4">
+                            <!-- Pagination akan dimuat di sini -->
                         </div>
                     </div>
                     <!-- Blog list End -->
@@ -73,7 +73,6 @@
                             </div>
                         </div>
                         <!-- Archives End -->
-                        
                     </div>
                     <!-- Sidebar End -->
                 </div>
@@ -86,22 +85,37 @@
     <script>
         $(document).ready(function() {
             let currentPage = 1;
-            let perPage = 10;
+            let perPage = 4;
             let categoryId = null;
             let searchQuery = '';
+            let month = null;
+            let year = null;
 
             // Fungsi untuk memuat konten artikel dengan AJAX
             function loadContent(page = 1, append = false) {
+                let data = {
+                    page: page,
+                    per_page: perPage,
+                    type: 'artikel'
+                };
+
+                if (searchQuery) {
+                    data.search = searchQuery;
+                }
+
+                if (categoryId) {
+                    data.category_id = categoryId;
+                }
+
+                if (month && year) {
+                    data.month = month;
+                    data.year = year;
+                }
+
                 $.ajax({
                     url: "{{ url('/api/content') }}",
                     method: "GET",
-                    data: {
-                        page: page,
-                        per_page: perPage,
-                        search: searchQuery,
-                        category_id: categoryId,
-                        type: 'artikel'
-                    },
+                    data: data,
                     success: function(response) {
                         let contentList = '';
                         if (response.data.length > 0) {
@@ -143,12 +157,62 @@
                             $('#content-list').html(contentList);
                         }
 
-                        // Periksa jika data habis
-                        if (response.metadata.page >= response.metadata.total_page) {
-                            $('#load-more').hide();
-                        } else {
-                            $('#load-more').show();
+                        // Tampilkan pagination
+                        let paginationHtml = '';
+                        const totalPages = response.metadata.total_page;
+
+                        if (totalPages > 1) {
+                            paginationHtml += `
+                        <nav aria-label="...">
+                            <ul class="pagination">
+                    `;
+
+                            // Tombol Previous
+                            if (currentPage > 1) {
+                                paginationHtml += `
+                            <li class="page-item">
+                                <a class="page-link" href="#" data-page="${currentPage - 1}" tabindex="-1">Previous</a>
+                            </li>
+                        `;
+                            } else {
+                                paginationHtml += `
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                        `;
+                            }
+
+                            // Tombol Halaman
+                            for (let i = 1; i <= totalPages; i++) {
+                                paginationHtml += `
+                            <li class="page-item ${currentPage === i ? 'active' : ''}">
+                                <a class="page-link" href="#" data-page="${i}">${i}</a>
+                            </li>
+                        `;
+                            }
+
+                            // Tombol Next
+                            if (currentPage < totalPages) {
+                                paginationHtml += `
+                            <li class="page-item">
+                                <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+                            </li>
+                        `;
+                            } else {
+                                paginationHtml += `
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        `;
+                            }
+
+                            paginationHtml += `
+                            </ul>
+                        </nav>
+                    `;
                         }
+
+                        $('#pagination').html(paginationHtml);
                     },
                     error: function(xhr) {
                         $('#content-list').html(
@@ -167,7 +231,7 @@
                         let categoryList = '';
                         $.each(response.data, function(index, category) {
                             categoryList += `
-                        <a href="" class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2" data-category-id="${category.id_category}">
+                        <a href="#" class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2" data-category-id="${category.id_category}">
                             <i class="bi bi-arrow-right me-2"></i>${category.name}
                         </a>
                     `;
@@ -186,21 +250,20 @@
                         let archiveList = '';
                         $.each(response.data, function(index, archive) {
                             archiveList += `
-                            <a href="{{ url('/content?type=artikel') }}&month=${archive.month}&year=${archive.year}" class="btn btn-light m-1">
-                                ${archive.month_name} ${archive.year}
-                            </a>
-                        `;
+                        <a href="#" class="btn btn-light m-1" data-month="${archive.month}" data-year="${archive.year}">
+                            ${archive.month_name} ${archive.year}
+                        </a>
+                    `;
                         });
                         $('#archive-list').html(archiveList);
                     }
                 });
             }
 
-
             // Memuat data artikel pertama kali
             loadContent(currentPage);
 
-            // Memuat kategori dan recent posts
+            // Memuat kategori dan arsip
             loadCategories();
             loadArchives();
 
@@ -223,10 +286,24 @@
                 $(this).addClass('active');
             });
 
-            // Event untuk load more pagination
-            $('#load-more').on('click', function() {
-                currentPage++;
-                loadContent(currentPage, true);
+            // Event untuk filter arsip
+            $('#archive-list').on('click', 'a', function(e) {
+                e.preventDefault();
+                month = $(this).data('month');
+                year = $(this).data('year');
+                currentPage = 1;
+                loadContent(currentPage);
+
+                // Sorot arsip yang dipilih
+                $('#archive-list a').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            // Event untuk pagination
+            $('#pagination').on('click', '.page-link', function(e) {
+                e.preventDefault();
+                currentPage = $(this).data('page');
+                loadContent(currentPage);
             });
         });
     </script>

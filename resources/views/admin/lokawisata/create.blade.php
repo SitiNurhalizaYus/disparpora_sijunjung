@@ -252,7 +252,7 @@
                             text: result['message'],
                             confirmButtonColor: '#3A57E8',
                         }).then((result) => {
-                            window.location.replace("{{ url('/admin/lokawisata') }}");
+                            window.location.replace("{{ url('/admin/lokawisatas') }}");
                         });
                     } else {
                         Swal.fire({

@@ -22,7 +22,6 @@ class ArtikelController extends Controller
         $data['og']['title'] = 'Artikel';
         $data['og']['description'] = 'Daftar Artikel';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
         $data['contents'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/content');
         
         // Tidak memuat konten di sini, karena konten akan diambil melalui AJAX
@@ -40,7 +39,6 @@ class ArtikelController extends Controller
         $data['og']['image'] = $data['artikel']['image'];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['contents'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/content');
-        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
         
         return view('client.artikel.detail', $data);
     }
