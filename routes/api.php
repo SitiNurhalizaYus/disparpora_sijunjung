@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\MessageController;
+//use App\Http\Controllers\Api\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +42,9 @@ Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class)
 
 Route::apiResource('mitra', App\Http\Controllers\Api\MitraController::class);
 Route::apiResource('poster', App\Http\Controllers\Api\PosterController::class);
+Route::apiResource('message', App\Http\Controllers\Api\MessageController::class);
+
+Route::apiResource('gallery', App\Http\Controllers\Api\GalleryController::class); 
 
 Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
 Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);

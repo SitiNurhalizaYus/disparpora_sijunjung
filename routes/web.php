@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UploadController;
+use App\Http\Controllers\Client\AgendaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +26,16 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/berita/{id_berita}', [App\Http\Controllers\Client\BeritaController::class, 'detailWithCategory']);
     
     Route::get('/artikel', [App\Http\Controllers\Client\ArtikelController::class, 'index']);
-    Route::get('/artikel/{id_berita}', [App\Http\Controllers\Client\ArtikelController::class, 'detail']);
-    Route::get('/artikel/{id_berita}', [App\Http\Controllers\Client\ArtikelController::class, 'detailWithCategory']);
-    
+    Route::get('/artikel/{id_artikel}', [App\Http\Controllers\Client\ArtikelController::class, 'detail']);
+    Route::get('/artikel/{id_artikel}', [App\Http\Controllers\Client\ArtikelController::class, 'detailWithCategory']);
+
     Route::get('/contact', [App\Http\Controllers\Client\ContactController::class, 'index']);
     Route::post('/contact/submit', [App\Http\Controllers\Client\ContactController::class, 'submit']);
+
+    Route::get('/agenda', [App\Http\Controllers\Client\AgendaController::class, 'index']);
+    Route::get('/galeri', [App\Http\Controllers\Client\GalleryController::class, 'index']);
+    //Route::get('/download/{filePath}', [AgendaController::class, 'downloadFile'])->name('download.file');
+
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function() {
