@@ -94,6 +94,9 @@ class InfoTempatController extends Controller
     {
         // query
         $query = InfoTempat::where([['id', '>', '0']]);
+        
+        $data = is_numeric($id) ? $query->find($id) : $query->where('slug', $id)->first();
+
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -115,6 +118,7 @@ class InfoTempatController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'slug' => 'required|unique:info_tempats,slug',
         ]);
 
         $req = $request->post();

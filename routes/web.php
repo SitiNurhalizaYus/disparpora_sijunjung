@@ -70,5 +70,6 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('setting', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('user', App\Http\Controllers\Admin\UserController::class);
     Route::resource('messege', App\Http\Controllers\Admin\MessageController::class);
+    Route::resource('lokawisata', App\Http\Controllers\Admin\InfoTempatController::class);
 
 });
