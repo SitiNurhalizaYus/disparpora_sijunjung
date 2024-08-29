@@ -101,26 +101,22 @@
                     <div class="nav-item dropdown me-3">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Publikasi</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/berita') }}" class="dropdown-item">Berita</a>
-                            <a href="{{ url('/artikel') }}" class="dropdown-item">Artikel</a>
-                            <a href="{{ url('/document') }}" class="dropdown-item">Dokumen Publik</a>
-                            <a href="{{ url('/galeri') }}" class="dropdown-item">Galeri</a>
-                            <a href="{{ url('/agenda') }}" class="dropdown-item">Agenda</a>
+                            <a href="{{ route('berita.index') }}" class="dropdown-item">Berita</a>
+                            <a href="{{ route('artikel.index') }}" class="dropdown-item">Artikel</a>
+                            <a href="{{ route('document.index') }}" class="dropdown-item">Dokumen Publik</a>
+                            {{-- <a href="{{ route('galeri.index') }}" class="dropdown-item">Galeri</a> --}}
+                            <a href="{{ route('agenda.index') }}" class="dropdown-item">Agenda</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
                         <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">PPID</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{{ url('/ppid/laporan') }}" class="dropdown-item">Laporan Layanan Informasi Publik</a>
+                            {{-- <a href="{{ url('/ppid/laporan') }}" class="dropdown-item">Laporan Layanan Informasi Publik</a> --}}
                             <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi Publik</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown me-3">
-                        <a href="{{ url('/lokawisata') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Lokawisata</a>
-                        <div class="dropdown-menu m-0">
-                            <a href="{{ url('/lokawisata/alam') }}" class="dropdown-item">Wisata Alam</a>
-                            <a href="{{ url('/lokawisata/buatan') }}" class="dropdown-item">Wisata Buatan</a>
-                        </div>
+                        <a href="{{ route('lokawisata.index') }}" class="nav-link" data-bs-toggle="dropdown">Lokawisata</a>
                     </div>
                     <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal">
                         <i class="fa fa-search"></i>

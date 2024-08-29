@@ -7,7 +7,7 @@
                 <div class="header-title">
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/user/') }}" style="text-decoration: none; color: inherit;">
+                        <a href="{{ url('/admin/users/') }}" style="text-decoration: none; color: inherit;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                 <path fill="black"
@@ -18,7 +18,7 @@
                     </h3>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/user/' . $id_user . '/edit') }}" class="btn btn-warning btn-sm">
+                    <a href="{{ url('/admin/users/' . $id_user . '/edit') }}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> Edit
                     </a>
                     <button onclick="removeData({{ $id_user }})" class="btn btn-danger btn-sm">
@@ -154,7 +154,7 @@
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then((result) => {
-                                    window.location.replace("{{ url('/admin/user') }}");
+                                    window.location.replace("{{ url('/admin/users') }}");
                                 });
                             } else {
                                 Swal.fire({

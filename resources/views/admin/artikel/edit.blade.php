@@ -104,7 +104,7 @@
 
     <script>
         $(document).ready(function() {
-            // Ambil data artikel menggunakan AJAX
+            // Ambil data artikels menggunakan AJAX
             $.ajaxSetup({
                 headers: {
                     'Authorization': "Bearer {{ $session_token }}"
@@ -112,7 +112,7 @@
             });
 
             $.ajax({
-                url: '/api/content/{{ $content->id_content }}', // URL untuk mengambil data artikel
+                url: '/api/content/{{ $content->id_content }}', // URL untuk mengambil data artikels
                 type: "GET",
                 dataType: "json",
                 success: function(result) {
@@ -141,7 +141,7 @@
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: "Gagal mengambil data artikel.",
+                        text: "Gagal mengambil data artikels.",
                         confirmButtonColor: '#3A57E8',
                     });
                 }
@@ -328,7 +328,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/artikel') }}");
+                                window.location.replace("{{ url('/admin/artikels') }}");
                             });
                         } else {
                             Swal.fire({

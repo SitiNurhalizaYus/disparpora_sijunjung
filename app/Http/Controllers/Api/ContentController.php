@@ -29,6 +29,7 @@ class ContentController extends Controller
         $page = intval($request->get('page', 1));
         $type = $request->get('type', null);
         $category_id = $request->get('category_id', null);
+        $recent = $request->get('recent', false);
 
         // Menentukan kolom dan arah sorting (default 'id_content:asc')
         $sort = explode(':', $sort);
@@ -51,6 +52,11 @@ class ContentController extends Controller
         // Menambahkan filter berdasarkan category_id jika ada
         if ($category_id) {
             $query->where('category_id', $category_id);
+        }
+
+        // Jika `recent` disetel ke true, ambil data berdasarkan tanggal terbaru
+        if ($recent) {
+            $query->orderBy('created_at', 'desc');
         }
 
         // Filter dinamis berdasarkan semua kolom yang ada di tabel
@@ -90,7 +96,7 @@ class ContentController extends Controller
         $metadata['page'] = $page;
 
         // get count
-        if($count == true) {
+        if ($count == true) {
             $query = $query->count('id_content');
             $data['count'] = $query;
         }
@@ -198,7 +204,7 @@ class ContentController extends Controller
         if ($type !== 'profil') {
             $data['category_id'] = $request->category_id; // Set category_id sesuai dengan input kategori
         }
-        
+
         $data['updated_by'] = auth()->id();
         $data = $request->all();
         $content->update($data);

@@ -7,7 +7,7 @@
                 <div class="header-title">
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/berita/') }}" class="text-decoration-none text-dark">
+                        <a href="{{ url('/admin/beritas/') }}" class="text-decoration-none text-dark">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                                 <path fill="black" fill-rule="evenodd"
@@ -18,7 +18,7 @@
                     </h3>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/berita/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
+                    <a href="{{ url('/admin/beritas/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> Edit
                     </a>
                     <button onclick="removeData({{ $id_content }})" class="btn btn-danger btn-sm">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <!-- Konten data berita -->
+                    <!-- Konten data beritas -->
                     <div class="card-body" id="detail-data-success" style="display: none;">
                         <div class="row">
                             <div class="col-md-6">
@@ -108,7 +108,7 @@
                 }
             });
 
-            // Request untuk mendapatkan data berita
+            // Request untuk mendapatkan data beritas
             $.ajax({
                 url: '/api/content/{{ $id_content }}?type=berita',
                 type: "GET",
@@ -161,7 +161,7 @@
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Request untuk menghapus data berita
+                    // Request untuk menghapus data beritas
                     $.ajaxSetup({
                         headers: {
                             'Authorization': "Bearer {{ $session_token }}"
@@ -180,7 +180,7 @@
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then(() => {
-                                    window.location.replace("{{ url('/admin/berita') }}");
+                                    window.location.replace("{{ url('/admin/beritas') }}");
                                 });
                             } else {
                                 Swal.fire({

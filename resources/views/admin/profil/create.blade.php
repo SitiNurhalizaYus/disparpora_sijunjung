@@ -278,7 +278,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/profil') }}");
+                                window.location.replace("{{ url('/admin/profils') }}");
                             });
                         } else {
                             Swal.fire({

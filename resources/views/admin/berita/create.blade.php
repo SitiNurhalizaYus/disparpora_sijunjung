@@ -342,7 +342,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/berita') }}");
+                                window.location.replace("{{ url('/admin/beritas') }}");
                             });
                         } else {
                             Swal.fire({

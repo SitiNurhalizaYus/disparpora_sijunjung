@@ -130,16 +130,16 @@
                         </a>
                         <ul class="sub-nav collapse @if (str_contains($menu, 'poster') ||
                                 str_contains($menu, 'mitra') ||
-                                str_contains($menu, 'profil') ||
-                                str_contains($menu, 'berita') ||
-                                str_contains($menu, 'artikel') ||
+                                str_contains($menu, 'profils') ||
+                                str_contains($menu, 'beritas') ||
+                                str_contains($menu, 'artikels') ||
                                 str_contains($menu, 'category') ||
                                 str_contains($menu, 'arsip')) show @endif"
                             id="kelola-konten-menu" data-bs-parent="#sidebar-menu">
 
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'poster')) active @endif"
-                                    aria-current="page" href="{{ url('/admin/poster') }}">
+                                    aria-current="page" href="{{ url('/admin/posters') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -152,7 +152,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'mitra')) active @endif"
-                                    href="{{ url('/admin/mitra') }}">
+                                    href="{{ url('/admin/mitras') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -165,8 +165,8 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link @if (str_contains($menu, 'profil')) active @endif"
-                                    aria-current="page" href="{{ url('/admin/profil') }}">
+                                <a class="nav-link @if (str_contains($menu, 'profils')) active @endif"
+                                    aria-current="page" href="{{ url('/admin/profils') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -178,8 +178,8 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link @if (str_contains($menu, 'berita')) active @endif"
-                                    href="{{ url('/admin/berita') }}">
+                                <a class="nav-link @if (str_contains($menu, 'beritas')) active @endif"
+                                    href="{{ url('/admin/beritas') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -191,8 +191,8 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link @if (str_contains($menu, 'artikel')) active @endif"
-                                    href="{{ url('/admin/artikel') }}">
+                                <a class="nav-link @if (str_contains($menu, 'artikels')) active @endif"
+                                    href="{{ url('/admin/artikels') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -206,7 +206,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'category')) active @endif"
-                                    href="{{ url('/admin/category') }}">
+                                    href="{{ url('/admin/categories') }}">
                                     <i class="icon">
                                         <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -237,7 +237,7 @@
                     {{-- dokumen publik --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'document')) {{ 'active' }} @endif"
-                            aria-current="page" href="{{ url('/admin/document') }}">
+                            aria-current="page" href="{{ url('/admin/documents') }}">
                             <i class="icon">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -259,7 +259,7 @@
                     {{-- galeri --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'galery')) {{ 'active' }} @endif"
-                            aria-current="page" href="{{ url('/admin/galery') }}">
+                            aria-current="page" href="{{ url('/admin/galeries') }}">
                             <i class="icon">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -285,7 +285,7 @@
                     {{-- agenda --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'agenda')) {{ 'active' }} @endif"
-                            aria-current="page" href="{{ url('/admin/agenda') }}">
+                            aria-current="page" href="{{ url('/admin/agendas') }}">
                             <i class="icon">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -304,7 +304,7 @@
                     {{-- pengumuman --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'lokawisata')) {{ 'active' }} @endif"
-                            aria-current="page" href="{{ url('/admin/lokawisata') }}">
+                            aria-current="page" href="{{ url('/admin/lokawisatas') }}">
                             <i class="icon">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -323,7 +323,7 @@
                     {{-- pesan --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'message')) {{ 'active' }} @endif"
-                            aria-current="page" href="{{ url('/admin/message') }}">
+                            aria-current="page" href="{{ url('/admin/messages') }}">
                             <i class="icon">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -346,7 +346,7 @@
                         {{-- pengguna --}}
                         <li class="nav-item">
                             <a class="nav-link @if (str_contains($menu, 'user')) {{ 'active' }} @endif"
-                                aria-current="page" href="{{ url('/admin/user') }}">
+                                aria-current="page" href="{{ url('/admin/users') }}">
                                 <i class="icon">
                                     <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -370,7 +370,7 @@
                         {{-- setting --}}
                         <li class="nav-item">
                             <a class="nav-link @if (str_contains($menu, 'setting')) {{ 'active' }} @endif"
-                                aria-current="page" href="{{ url('/admin/setting') }}">
+                                aria-current="page" href="{{ url('/admin/settings') }}">
                                 <i class="icon">
                                     <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">

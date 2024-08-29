@@ -7,7 +7,7 @@
                 <div>
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/agenda/') }}" style="text-decoration: none; color: inherit;">
+                        <a href="{{ url('/admin/agendas/') }}" style="text-decoration: none; color: inherit;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                 <path fill="black"
@@ -18,7 +18,7 @@
                     </h3>
                 </div>
                 <div style="display: flex;">
-                    <a href="{{ url('/admin/agenda/' . $agenda->id . '/edit') }}"
+                    <a href="{{ url('/admin/agendas/' . $agenda->id . '/edit') }}"
                         class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit"
                         data-bs-original-title="Edit">
                         <span class="btn-inner">
@@ -190,7 +190,7 @@
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then((result) => {
-                                    window.location.replace("{{ url('/admin/agenda') }}");
+                                    window.location.replace("{{ url('/admin/agendas') }}");
                                 });
                             } else {
                                 Swal.fire({

@@ -7,7 +7,7 @@
                 <div>
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/message/') }}" style="text-decoration: none; color: inherit;">
+                        <a href="{{ url('/admin/messages/') }}" style="text-decoration: none; color: inherit;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                 <path fill="black"
@@ -154,7 +154,7 @@
                                         confirmButtonColor: '#3A57E8',
                                     }).then(() => {
                                         window.location.replace(
-                                            "{{ url('/admin/message') }}");
+                                            "{{ url('/admin/messages') }}");
                                     });
                                 } else {
                                     Swal.fire({

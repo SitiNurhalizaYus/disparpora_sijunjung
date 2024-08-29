@@ -146,7 +146,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/agenda') }}");
+                                window.location.replace("{{ url('/admin/agendas') }}");
                             });
                         } else {
                             Swal.fire({

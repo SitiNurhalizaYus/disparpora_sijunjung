@@ -7,7 +7,7 @@
                 <div class="header-title">
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/profil/') }}" class="text-decoration-none text-dark">
+                        <a href="{{ url('/admin/profils/') }}" class="text-decoration-none text-dark">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                                 <path fill="black" fill-rule="evenodd"
@@ -18,7 +18,7 @@
                     </h3>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/profil/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
+                    <a href="{{ url('/admin/profils/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> Edit
                     </a>
                     <button onclick="removeData({{ $id_content }})" class="btn btn-danger btn-sm">
@@ -38,12 +38,12 @@
                         </div>
                     </div>
 
-                    <!-- Konten data profil -->
+                    <!-- Konten data profils -->
                     <div class="card-body" id="detail-data-success" style="display: none;">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-info text-white"><strong>Informasi profil</strong></div>
+                                    <div class="card-header bg-info text-white"><strong>Informasi profils</strong></div>
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="title"></span></h4>
                                         <p class="card-text"><h6>Deskripsi Singkat: </h6><span id="description_short"></span></p>
@@ -67,7 +67,7 @@
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                                     <div class="card-header bg-dark text-white text-center"><strong>Gambar</strong></div>
                                     <div class="card-body text-center">
-                                        <img id="image" class="img-fluid rounded" alt="profil Image"
+                                        <img id="image" class="img-fluid rounded" alt="profils Image"
                                             style="max-width: 100%;">
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-gray text-white text-center"><strong>Konten profil</strong></div>
+                                    <div class="card-header bg-gray text-white text-center"><strong>Konten profils</strong></div>
                                     <div class="card-body">
                                         <div id="description_long" style="color: black;"></div>
                                     </div>
@@ -107,7 +107,7 @@
                 }
             });
 
-            // Request untuk mendapatkan data profil
+            // Request untuk mendapatkan data profils
             $.ajax({
                 url: '/api/content/{{ $id_content }}?type=profil',
                 type: "GET",
@@ -159,7 +159,7 @@
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Request untuk menghapus data profil
+                    // Request untuk menghapus data profils
                     $.ajaxSetup({
                         headers: {
                             'Authorization': "Bearer {{ $session_token }}"
@@ -178,7 +178,7 @@
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then(() => {
-                                    window.location.replace("{{ url('/admin/profil') }}");
+                                    window.location.replace("{{ url('/admin/profils') }}");
                                 });
                             } else {
                                 Swal.fire({

@@ -4,77 +4,44 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
+use App\Helpers;
 
 class ArtikelController extends Controller
 {
-    public function index(Request $request)
+    public function __construct()
     {
-        $type = $request->get('type', 'artikel');
+    }
 
-        // Memanggil API untuk mendapatkan data konten berdasarkan tipe artikel
-        $contents = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content"))
-            ->filter(function ($item) use ($type) {
-                return $item['type'] === $type;
-            });
-        // dd($contents);
-
-            // Jika data tidak ditemukan, mungkin ada masalah dengan API atau pemanggilannya
-        if ($contents->isEmpty()) {
-            abort(404, 'Tidak ada konten artikel yang ditemukan.');
-        }
-
-        // Mengambil recent posts dari API
-        $recentPosts = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content?limit=5"))
-            ->filter(function ($item) use ($type) {
-                return $item['type'] === $type;
-            });
-        // Mengambil kategori untuk sidebar dari API
-        $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/category"));
-
-        $setting = \App\Helpers\AppHelper::instance()->requestApiSetting();
-
-        $data = [
-            'contents' => $contents,
-            'recentPosts' => $recentPosts,
-            'categories' => $categories,
-            'setting' => $setting,
-            'og' => [
-                'url' => url('/content'),
-                'title' => 'Artikel',
-                'description' => 'Artikel Terbaru'
-            ]
-        ];
-
+    public function index()
+    {
+        $data = [];
+        $data['og'] = [];
+        $data['og']['url'] = url('/').'/artikel';
+        $data['og']['title'] = 'Artikel';
+        $data['og']['description'] = 'Daftar Artikel';
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
+        $data['contents'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/content');
+        
+        // Tidak memuat konten di sini, karena konten akan diambil melalui AJAX
         return view('client.artikel.index', $data);
     }
 
-    public function detail($id_content, Request $request)
+    public function detail($id_content)
     {
-        $type = $request->get('type', 'artikel');
-
-        // Tetap menggunakan endpoint API 'content'
-        $content = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content/{$id_content}?type={$type}"))->first();
-
-        if (!$content) {
-            abort(404, 'Artikel tidak ditemukan');
-        }
-
-        $recentPosts = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/content?type={$type}&limit=5"));
-        $categories = collect(\App\Helpers\AppHelper::instance()->requestApiGet("api/category"));
-
-        $data = [
-            'content' => $content,
-            'recentPosts' => $recentPosts,
-            'categories' => $categories,
-            'og' => [
-                'url' => url("/artikel/{$id_content}"),
-                'title' => $content['title'],
-                'description' => $content['description_short'],
-                'image' => $content['image'],
-            ],
-            'setting' => \App\Helpers\AppHelper::instance()->requestApiSetting()
-        ];
-
+        $data = [];
+        $data['artikel'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/content/'.$id_content.'?type=artikel');
+        $data['og'] = [];
+        $data['og']['url'] = url('/').'/artikel/'.$data['artikel']['slug'];
+        $data['og']['title'] = $data['artikel']['title'];
+        $data['og']['description'] = $data['artikel']['description_short'];
+        $data['og']['image'] = $data['artikel']['image'];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['contents'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/content');
+        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
+        
         return view('client.artikel.detail', $data);
     }
 }

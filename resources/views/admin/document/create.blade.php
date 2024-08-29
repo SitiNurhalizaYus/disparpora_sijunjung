@@ -194,7 +194,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/document') }}");
+                                window.location.replace("{{ url('/admin/documents') }}");
                             });
                         } else {
                             Swal.fire({

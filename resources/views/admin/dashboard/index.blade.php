@@ -241,9 +241,9 @@
             }
         });
 
-        // Ambil jumlah berita
+        // Ambil jumlah beritas
         $.ajax({
-            url: '/api/berita?',
+            url: '/api/beritas?',
             type: "GET",
             dataType: "json",
             success: function(result) {
@@ -258,9 +258,9 @@
             }
         });
 
-        // Ambil jumlah artikel
+        // Ambil jumlah artikels
         $.ajax({
-            url: '/api/artikel?',
+            url: '/api/artikels?',
             type: "GET",
             dataType: "json",
             success: function(result) {

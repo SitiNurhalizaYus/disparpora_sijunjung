@@ -90,7 +90,7 @@
 
     <script>
         $(document).ready(function() {
-            // Ambil data profil menggunakan AJAX
+            // Ambil data profils menggunakan AJAX
             $.ajaxSetup({
                 headers: {
                     'Authorization': "Bearer {{ $session_token }}"
@@ -98,7 +98,7 @@
             });
 
             $.ajax({
-                url: '/api/content/{{ $content->id_content }}', // URL untuk mengambil data profil
+                url: '/api/content/{{ $content->id_content }}', // URL untuk mengambil data profils
                 type: "GET",
                 dataType: "json",
                 success: function(result) {
@@ -127,7 +127,7 @@
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: "Gagal mengambil data profil.",
+                        text: "Gagal mengambil data profils.",
                         confirmButtonColor: '#3A57E8',
                     });
                 }
@@ -314,7 +314,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/profil') }}");
+                                window.location.replace("{{ url('/admin/profils') }}");
                             });
                         } else {
                             Swal.fire({
