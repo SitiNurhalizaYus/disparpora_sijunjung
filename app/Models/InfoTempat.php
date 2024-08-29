@@ -12,11 +12,12 @@ class InfoTempat extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'description',
         'facilities',
         'operating_hours',
         'ticket_price',
-        'images',
+        'image',
         'link',
         'is_active'
     ];

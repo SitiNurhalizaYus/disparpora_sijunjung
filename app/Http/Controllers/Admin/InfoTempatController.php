@@ -18,10 +18,10 @@ class InfoTempatController extends Controller
         if($has_session) {
             $data = [];
             $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-            $data['menu'] = 'partner-list';
+            $data['menu'] = 'lokawisata-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-            return view('admin.infotempat.index', $data);
+            return view('admin.lokawisata.index', $data);
         } else {
             session()->flash('message', 'Session expired.');
             return redirect()->route('admin.login');
@@ -32,32 +32,32 @@ class InfoTempatController extends Controller
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'partner-show';
+        $data['menu'] = 'lokawisata-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         $data['id'] = $id;
-        return view('admin.infotempat.show', $data);
+        return view('admin.lokawisata.show', $data);
     }
 
     public function create()
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'partner-create';
+        $data['menu'] = 'lokawisata-create';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        return view('admin.infotempat.create', $data);
+        return view('admin.lokawisata.create', $data);
     }
 
     public function edit($id)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['menu'] = 'partner-edit';
+        $data['menu'] = 'lokawisata-edit';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         $data['id'] = $id;
-        return view('admin.infotempat.edit', $data);
+        return view('admin.lokawisata.edit', $data);
     }
 
 }

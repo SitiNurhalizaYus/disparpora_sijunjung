@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Event;
-use App\Models\Survei;
 use App\Models\Comment;
+use App\Models\Event;
+use App\Models\InfoTempat;
+use App\Models\Survei;
+use App\Models\User;
+use Database\Seeders\InfoTempatTableSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -29,6 +31,7 @@ class DatabaseSeeder extends Seeder
             PartnersTableSeeder::class,
             SlidersTableSeeder::class,
             SettingsTableSeeder::class,
+            InfoTempatTableSeeder::class,
         ]);
 
         // User::factory()->create([
