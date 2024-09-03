@@ -28,7 +28,7 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
 
     Route::get('/agenda', [App\Http\Controllers\Client\AgendaController::class, 'index'])->name('client.agenda.index');
    
-    Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index']);
+    Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index'])->name('client.contact.index');
     Route::post('/message/submit', [App\Http\Controllers\Client\HubungikamiController::class, 'submit']);
 
     Route::get('/document', [App\Http\Controllers\Client\DocumentController::class, 'index'])->name('client.document.index');

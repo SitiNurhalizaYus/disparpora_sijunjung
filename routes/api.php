@@ -41,10 +41,10 @@ Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
 Route::apiResource('user_level', App\Http\Controllers\Api\userLevelController::class);
 Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
 
-Route::get('arsip', [App\Http\Controllers\Api\ArsipController::class, 'getArchives']);
 Route::apiResource('mitra', App\Http\Controllers\Api\MitraController::class);
 Route::apiResource('poster', App\Http\Controllers\Api\PosterController::class);
 
+Route::get('arsip', [App\Http\Controllers\Api\ArsipController::class, 'getArchives']);
 Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
 Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);
 Route::get('dashboard/top-os', [App\Http\Controllers\Api\DashboardController::class, 'topOs']);

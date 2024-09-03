@@ -243,7 +243,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/setting') }}");
+                                window.location.replace("{{ url('/admin/settings') }}");
                             });
                         } else {
                             Swal.fire({

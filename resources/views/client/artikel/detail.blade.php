@@ -89,71 +89,70 @@
         </div>
         <!-- Blog End -->
     </div>
-@endsection
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Fungsi untuk memuat detail konten dengan AJAX
-        function loadContentDetail(slug) {
-            $.ajax({
-                url: "{{ url('/api/content') }}/" + slug,
-                method: "GET",
-                success: function(response) {
-                    const content = response.data;
-                    const detailHtml = `
-                        <img class="img-fluid w-100 rounded mb-5" src="${content.image}" alt="${content.title}">
-                        <h1 class="mb-4">${content.title}</h1>
-                        <p>${content.content}</p>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk memuat detail konten dengan AJAX
+            function loadContentDetail(slug) {
+                $.ajax({
+                    url: "{{ url('/api/content') }}/" + slug,
+                    method: "GET",
+                    success: function(response) {
+                        const content = response.data;
+                        const detailHtml = `
+                    <img class="img-fluid w-100 rounded mb-5" src="${content.image}" alt="${content.title}">
+                    <h1 class="mb-4">${content.title}</h1>
+                    <p>${content.content}</p>
                     `;
-                    $('#blog-detail').html(detailHtml);
-                    $('#breadcrumb-title').text(content.title);
+                        $('#blog-detail').html(detailHtml);
+                        $('#breadcrumb-title').text(content.title);
 
-                    // Setelah detail dimuat, muat recent posts tanpa konten ini
-                    loadRecentPosts(slug);
-                },
-                error: function(xhr) {
-                    $('#blog-detail').html(
-                        '<p class="text-center">Gagal memuat detail berita. Silakan coba lagi nanti.</p>'
-                    );
-                }
-            });
-        }
+                        // Setelah detail dimuat, muat recent posts tanpa konten ini
+                        loadRecentPosts(slug);
+                    },
+                    error: function(xhr) {
+                        $('#blog-detail').html(
+                            '<p class="text-center">Gagal memuat detail berita. Silakan coba lagi nanti.</p>'
+                        );
+                    }
+                });
+            }
 
-        // Fungsi untuk memuat recent posts dengan AJAX
-        function loadRecentPosts(slug) {
-            $.ajax({
-                url: "{{ url('/api/content') }}",
-                method: "GET",
-                data: {
-                    recent: true,
-                    type: 'berita',
-                    per_page: 5, // Membatasi jumlah recent posts
-                    exclude_slug: slug // Kirim slug yang akan dikecualikan
-                },
-                success: function(response) {
-                    let recentPostList = '';
-                    $.each(response.data, function(index, post) {
-                        recentPostList += `
+            // Fungsi untuk memuat recent posts dengan AJAX
+            function loadRecentPosts(slug) {
+                $.ajax({
+                    url: "{{ url('/api/content') }}",
+                    method: "GET",
+                    data: {
+                        recent: true,
+                        type: 'berita',
+                        per_page: 5, // Membatasi jumlah recent posts
+                        exclude_slug: slug // Kirim slug yang akan dikecualikan
+                    },
+                    success: function(response) {
+                        let recentPostList = '';
+                        $.each(response.data, function(index, post) {
+                            recentPostList += `
                             <div class="d-flex rounded overflow-hidden mb-3">
                                 <img class="img-fluid" src="${post.image}" style="width: 100px; height: 100px; object-fit: cover;" alt="${post.title}">
                                 <a href="{{ route('client.berita.index') }}/${post.slug}" class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">${post.title}</a>
-                            </div>
-                        `;
-                    });
-                    $('#recent-post-list').html(recentPostList);
-                },
-                error: function(xhr) {
-                    $('#recent-post-list').html(
-                        '<p class="text-center">Gagal memuat postingan terbaru. Silakan coba lagi nanti.</p>'
-                    );
-                }
-            });
-        }
+                                </div>
+                                `;
+                        });
+                        $('#recent-post-list').html(recentPostList);
+                    },
+                    error: function(xhr) {
+                        $('#recent-post-list').html(
+                            '<p class="text-center">Gagal memuat postingan terbaru. Silakan coba lagi nanti.</p>'
+                        );
+                    }
+                });
+            }
 
-        // Muat detail konten berdasarkan slug dari URL
-        const slug = window.location.pathname.split('/').pop();
-        loadContentDetail(slug);
-    });
-</script>
-
+            // Muat detail konten berdasarkan slug dari URL
+            const slug = window.location.pathname.split('/').pop();
+            loadContentDetail(slug);
+        });
+    </script>
+@endsection

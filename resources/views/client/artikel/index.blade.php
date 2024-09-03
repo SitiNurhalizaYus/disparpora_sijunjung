@@ -31,6 +31,11 @@
                 <div class="row g-5">
                     <!-- Blog list Start -->
                     <div class="col-lg-8">
+                        <!-- Category Title -->
+                        <div id="category-title" class="mb-4" style="display: none;">
+                            <h2 class="text-center text-primary" id="selected-category-title"></h2>
+                        </div>
+
                         <div class="row g-5" id="content-list">
                             <!-- Konten akan dimuat di sini menggunakan AJAX -->
                         </div>
@@ -79,54 +84,53 @@
             </div>
         </div>
         <!-- Blog End -->
-    @endsection
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            let currentPage = 1;
-            let perPage = 4;
-            let categoryId = null;
-            let searchQuery = '';
-            let month = null;
-            let year = null;
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                let currentPage = 1;
+                let perPage = 4;
+                let categoryId = null;
+                let searchQuery = '';
+                let month = null;
+                let year = null;
 
-            // Fungsi untuk memuat konten artikel dengan AJAX
-            function loadContent(page = 1, append = false) {
-                let data = {
-                    page: page,
-                    per_page: perPage,
-                    type: 'artikel'
-                };
+                // Fungsi untuk memuat konten artikel dengan AJAX
+                function loadContent(page = 1, append = false) {
+                    let data = {
+                        page: page,
+                        per_page: perPage,
+                        type: 'artikel'
+                    };
 
-                if (searchQuery) {
-                    data.search = searchQuery;
-                }
+                    if (searchQuery) {
+                        data.search = searchQuery;
+                    }
 
-                if (categoryId) {
-                    data.category_id = categoryId;
-                }
+                    if (categoryId) {
+                        data.category_id = categoryId;
+                    }
 
-                if (month && year) {
-                    data.month = month;
-                    data.year = year;
-                }
+                    if (month && year) {
+                        data.month = month;
+                        data.year = year;
+                    }
 
-                $.ajax({
-                    url: "{{ url('/api/content') }}",
-                    method: "GET",
-                    data: data,
-                    success: function(response) {
-                        let contentList = '';
-                        if (response.data.length > 0) {
-                            $.each(response.data, function(index, content) {
-                                const formattedDate = new Date(content.created_at)
-                                    .toLocaleDateString('id-ID', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric'
-                                    });
-                                contentList += `
+                    $.ajax({
+                        url: "{{ url('/api/content') }}",
+                        method: "GET",
+                        data: data,
+                        success: function(response) {
+                            let contentList = '';
+                            if (response.data.length > 0) {
+                                $.each(response.data, function(index, content) {
+                                    const formattedDate = new Date(content.created_at)
+                                        .toLocaleDateString('id-ID', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        });
+                                    contentList += `
                             <div class="col-md-6 wow slideInUp" data-wow-delay="0.1s">
                                 <div class="blog-item bg-light rounded overflow-hidden">
                                     <div class="blog-img position-relative overflow-hidden">
@@ -143,167 +147,174 @@
                                 </div>
                             </div>
                         `;
-                            });
-                        } else {
-                            if (!append) {
-                                contentList =
-                                    '<p class="text-center">Tidak ada artikel yang ditemukan.</p>';
+                                });
+                            } else {
+                                if (!append) {
+                                    contentList =
+                                        '<p class="text-center">Tidak ada artikel yang ditemukan.</p>';
+                                }
                             }
-                        }
 
-                        if (append) {
-                            $('#content-list').append(contentList);
-                        } else {
-                            $('#content-list').html(contentList);
-                        }
+                            if (append) {
+                                $('#content-list').append(contentList);
+                            } else {
+                                $('#content-list').html(contentList);
+                            }
 
-                        // Tampilkan pagination
-                        let paginationHtml = '';
-                        const totalPages = response.metadata.total_page;
+                            // Tampilkan pagination
+                            let paginationHtml = '';
+                            const totalPages = response.metadata.total_page;
 
-                        if (totalPages > 1) {
-                            paginationHtml += `
+                            if (totalPages > 1) {
+                                paginationHtml += `
                         <nav aria-label="...">
                             <ul class="pagination">
                     `;
 
-                            // Tombol Previous
-                            if (currentPage > 1) {
-                                paginationHtml += `
+                                // Tombol Previous
+                                if (currentPage > 1) {
+                                    paginationHtml += `
                             <li class="page-item">
                                 <a class="page-link" href="#" data-page="${currentPage - 1}" tabindex="-1">Previous</a>
                             </li>
                         `;
-                            } else {
-                                paginationHtml += `
+                                } else {
+                                    paginationHtml += `
                             <li class="page-item disabled">
                                 <a class="page-link" href="#" tabindex="-1">Previous</a>
                             </li>
                         `;
-                            }
+                                }
 
-                            // Tombol Halaman
-                            for (let i = 1; i <= totalPages; i++) {
-                                paginationHtml += `
+                                // Tombol Halaman
+                                for (let i = 1; i <= totalPages; i++) {
+                                    paginationHtml += `
                             <li class="page-item ${currentPage === i ? 'active' : ''}">
                                 <a class="page-link" href="#" data-page="${i}">${i}</a>
                             </li>
                         `;
-                            }
+                                }
 
-                            // Tombol Next
-                            if (currentPage < totalPages) {
-                                paginationHtml += `
+                                // Tombol Next
+                                if (currentPage < totalPages) {
+                                    paginationHtml += `
                             <li class="page-item">
                                 <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
                             </li>
                         `;
-                            } else {
-                                paginationHtml += `
+                                } else {
+                                    paginationHtml += `
                             <li class="page-item disabled">
                                 <a class="page-link" href="#">Next</a>
                             </li>
                         `;
-                            }
+                                }
 
-                            paginationHtml += `
+                                paginationHtml += `
                             </ul>
                         </nav>
                     `;
+                            }
+
+                            $('#pagination').html(paginationHtml);
+                        },
+                        error: function(xhr) {
+                            $('#content-list').html(
+                                '<p class="text-center">Gagal memuat artikel. Silakan coba lagi nanti.</p>'
+                            );
                         }
+                    });
+                }
 
-                        $('#pagination').html(paginationHtml);
-                    },
-                    error: function(xhr) {
-                        $('#content-list').html(
-                            '<p class="text-center">Gagal memuat artikel. Silakan coba lagi nanti.</p>'
-                        );
-                    }
-                });
-            }
-
-            // Fungsi untuk memuat kategori dengan AJAX
-            function loadCategories() {
-                $.ajax({
-                    url: "{{ url('/api/category') }}",
-                    method: "GET",
-                    success: function(response) {
-                        let categoryList = '';
-                        $.each(response.data, function(index, category) {
-                            categoryList += `
-                        <a href="#" class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2" data-category-id="${category.id_category}">
+                // Fungsi untuk memuat kategori dengan AJAX
+                function loadCategories() {
+                    $.ajax({
+                        url: "{{ url('/api/category') }}",
+                        method: "GET",
+                        success: function(response) {
+                            let categoryList = '';
+                            $.each(response.data, function(index, category) {
+                                categoryList += `
+                        <a href="#" class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2" data-category-id="${category.id_category}" data-category-name="${category.name}">
                             <i class="bi bi-arrow-right me-2"></i>${category.name}
                         </a>
                     `;
-                        });
-                        $('#category-list').html(categoryList);
-                    }
-                });
-            }
+                            });
+                            $('#category-list').html(categoryList);
+                        }
+                    });
+                }
 
-            // Fungsi untuk memuat arsip dengan AJAX
-            function loadArchives() {
-                $.ajax({
-                    url: "{{ url('/api/arsip') }}",
-                    method: "GET",
-                    success: function(response) {
-                        let archiveList = '';
-                        $.each(response.data, function(index, archive) {
-                            archiveList += `
+                // Fungsi untuk memuat arsip dengan AJAX
+                function loadArchives() {
+                    $.ajax({
+                        url: "{{ url('/api/arsip') }}",
+                        method: "GET",
+                        success: function(response) {
+                            let archiveList = '';
+                            $.each(response.data, function(index, archive) {
+                                archiveList += `
                         <a href="#" class="btn btn-light m-1" data-month="${archive.month}" data-year="${archive.year}">
                             ${archive.month_name} ${archive.year}
                         </a>
                     `;
-                        });
-                        $('#archive-list').html(archiveList);
-                    }
+                            });
+                            $('#archive-list').html(archiveList);
+                        }
+                    });
+                }
+
+                // Memuat data artikel pertama kali
+                loadContent(currentPage);
+
+                // Memuat kategori dan arsip
+                loadCategories();
+                loadArchives();
+
+                // Event untuk pencarian
+                $('#search-button').on('click', function() {
+                    searchQuery = $('#search-input').val();
+                    currentPage = 1;
+                    loadContent(currentPage);
                 });
-            }
 
-            // Memuat data artikel pertama kali
-            loadContent(currentPage);
+                // Event untuk filter kategori
+                $('#category-list').on('click', 'a', function(e) {
+                    e.preventDefault();
+                    categoryId = $(this).data('category-id');
+                    const categoryName = $(this).data('category-name');
+                    currentPage = 1;
+                    loadContent(currentPage);
 
-            // Memuat kategori dan arsip
-            loadCategories();
-            loadArchives();
+                    // Sorot kategori yang dipilih
+                    $('#category-list a').removeClass('active');
+                    $(this).addClass('active');
 
-            // Event untuk pencarian
-            $('#search-button').on('click', function() {
-                searchQuery = $('#search-input').val();
-                currentPage = 1;
-                loadContent(currentPage);
+                    // Tampilkan judul kategori yang dipilih
+                    $('#selected-category-title').text(`Category: ${categoryName}`);
+                    $('#category-title').show();
+                });
+
+                // Event untuk filter arsip
+                $('#archive-list').on('click', 'a', function(e) {
+                    e.preventDefault();
+                    month = $(this).data('month');
+                    year = $(this).data('year');
+                    currentPage = 1;
+                    loadContent(currentPage);
+
+                    // Sembunyikan judul kategori jika arsip dipilih
+                    $('#category-title').hide();
+                });
+
+                // Event untuk pagination
+                $('#pagination').on('click', '.page-link', function(e) {
+                    e.preventDefault();
+                    currentPage = $(this).data('page');
+                    loadContent(currentPage);
+                });
             });
+        </script>
 
-            // Event untuk filter kategori
-            $('#category-list').on('click', 'a', function(e) {
-                e.preventDefault();
-                categoryId = $(this).data('category-id');
-                currentPage = 1;
-                loadContent(currentPage);
-
-                // Sorot kategori yang dipilih
-                $('#category-list a').removeClass('active');
-                $(this).addClass('active');
-            });
-
-            // Event untuk filter arsip
-            $('#archive-list').on('click', 'a', function(e) {
-                e.preventDefault();
-                month = $(this).data('month');
-                year = $(this).data('year');
-                currentPage = 1;
-                loadContent(currentPage);
-
-                // Sorot arsip yang dipilih
-                $('#archive-list a').removeClass('active');
-                $(this).addClass('active');
-            });
-
-            // Event untuk pagination
-            $('#pagination').on('click', '.page-link', function(e) {
-                e.preventDefault();
-                currentPage = $(this).data('page');
-                loadContent(currentPage);
-            });
-        });
-    </script>
+        </script>
+    @endsection

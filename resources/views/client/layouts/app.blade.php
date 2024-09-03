@@ -9,8 +9,10 @@
     <!-- logo-parpora -->
     <link rel="shortcut icon" href="{{ asset(str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
     <link rel="apple-touch-icon" href="{{ asset(str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset(str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset(str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
+    <link rel="apple-touch-icon" sizes="72x72"
+        href="{{ asset(str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
+    <link rel="apple-touch-icon" sizes="114x114"
+        href="{{ asset(str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}">
 
     <!-- social media shared -->
     <meta property="og:type" content="website">
@@ -26,7 +28,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -44,19 +48,20 @@
 
     <!-- CSS for sticky footer -->
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
         }
-        
+
         body {
             display: flex;
             flex-direction: column;
         }
-        
+
         .content-wrapper {
             flex: 1;
         }
-        
+
         .footer {
             margin-top: auto;
         }
@@ -65,7 +70,8 @@
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner"></div>
     </div>
     <!-- Spinner End -->
@@ -76,19 +82,27 @@
             <div class="row gx-0">
                 <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                     <div class="d-inline-flex align-items-center" style="height: 50px;">
-                        <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
-                        <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
-                        <small class="text-light"><i class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
+                        <small class="me-3 text-light"><i
+                                class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
+                        <small class="me-3 text-light"><i
+                                class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
+                        <small class="text-light"><i
+                                class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
                     </div>
                 </div>
                 <div class="col-lg-4 text-center text-lg-end">
                     <div class="d-inline-flex align-items-center" style="height: 50px;">
-                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-instagram fw-normal"></i></a>
-                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i class="fab fa-youtube fw-normal"></i></a>
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
+                                class="bi bi-twitter"></i></i></a>
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
+                                class="fab fa-facebook-f fw-normal"></i></a>
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
+                                class="fab fa-instagram fw-normal"></i></a>
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
+                                class="fab fa-youtube fw-normal"></i></a>
                         <!-- Icon Pengaturan untuk login admin-->
-                        <a class="btn btn-md rounded-circle" href="{{ url('/admin/login') }}"><i class="bi bi-gear"></i></a>
+                        <a class="btn btn-md rounded-circle" href="{{ url('/admin/login') }}"><i
+                                class="bi bi-gear"></i></a>
                     </div>
                 </div>
             </div>
@@ -104,40 +118,51 @@
                         {{ $setting['name-short'] }}
                     </h2>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto py-0">
-                        <a href="{{ url('/beranda') }}" class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
+                        <a href="{{ url('/beranda') }}"
+                            class="nav-item nav-link {{ Request::is('beranda') ? 'active' : '' }} me-3">Beranda</a>
                         <div class="nav-item dropdown me-3">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
                             <div class="dropdown-menu m-0">
-                                <a href="{{ url('/profil', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}" class="dropdown-item">Struktur Organisasi Dinas</a>
-                                <a href="{{ url('/profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi dan Misi</a>
-                                <a href="{{ url('/profil', ['slug' => 'tujuan-strategis']) }}" class="dropdown-item">Tujuan Strategis</a>
-                                <a href="{{ url('/profil', ['slug' => 'sasaran-strategis']) }}" class="dropdown-item">Sasaran Strategis</a>
+                                <a href="{{ url('/profil', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}"
+                                    class="dropdown-item">Struktur Organisasi Dinas</a>
+                                <a href="{{ url('/profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi
+                                    dan Misi</a>
+                                <a href="{{ url('/profil', ['slug' => 'tujuan-strategis']) }}"
+                                    class="dropdown-item">Tujuan Strategis</a>
+                                <a href="{{ url('/profil', ['slug' => 'sasaran-strategis']) }}"
+                                    class="dropdown-item">Sasaran Strategis</a>
                             </div>
                         </div>
                         <div class="nav-item dropdown me-3">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Publikasi</a>
+                            <a href="#" class="nav-link dropdown-toggle"
+                                data-bs-toggle="dropdown">Publikasi</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{{ route('client.berita.index') }}" class="dropdown-item">Berita</a>
                                 <a href="{{ route('client.artikel.index') }}" class="dropdown-item">Artikel</a>
-                                <a href="{{ route('client.document.index') }}" class="dropdown-item">Dokumen Publik</a>
+                                <a href="{{ route('client.document.index') }}" class="dropdown-item">Dokumen
+                                    Publik</a>
                                 <a href="{{ route('client.agenda.index') }}" class="dropdown-item">Agenda</a>
                             </div>
                         </div>
                         <div class="nav-item dropdown me-3">
-                            <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">PPID</a>
+                            <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle"
+                                data-bs-toggle="dropdown">PPID</a>
                             <div class="dropdown-menu m-0">
-                                <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi Publik</a>
+                                <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi
+                                    Publik</a>
                             </div>
                         </div>
                         <div class="nav-item dropdown me-3">
                             <a href="{{ route('client.lokawisata.index') }}" class="nav-link">Lokawisata</a>
                         </div>
-                        <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal">
+                        <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
+                            data-bs-target="#searchModal">
                             <i class="fa fa-search"></i>
                         </button>
                         <a href="{{ url('/hubungikami') }}" class="btn btn-primary py-2 px-4 ms-3">Hubungi Kami</a>
@@ -152,99 +177,75 @@
     </div>
 
     <!-- Footer Start -->
-    <div class="footer container-fluid bg-dark text-light wow fadeInUp" data-wow-delay="0.1s">
+    <div class="footer container-fluid bg-dark text-light py-5">
         <div class="container">
-            <div class="row gx-5">
-                <div class="col-lg-4 col-md-6 footer-about">
-                    <div class="d-flex flex-column align-items-center justify-content-center text-center h-100 bg-primary p-4">
-                        <a href="{{ url('/beranda') }}" class="navbar-brand">
-                            <h1 class="m-0 text-white">
-                                <img src="{{ asset(str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}">
-                                Disparpora
-                            </h1>
-                        </a>
-                        <p class="mt-3 mb-4">{{ $setting['address'] }}</p>
-                        <form action="">
-                            <div class="input-group">
-                                <input type="text" class="form-control border-white p-3" placeholder="Your Email">
-                                <button class="btn btn-dark">Sign Up</button>
-                            </div>
-                        </form>
-                    </div>
+            <div class="row">
+                <!-- Logo and Address Section -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h1 class="text-white mb-3">
+                        <img src="{{ asset(str_replace('/xxx/', '/300/', $setting['logo-geopark'])) }}"
+                            alt="Logo" class="me-2" style="width: 40px;">
+                        Disparpora
+                    </h1>
+                    <p>{{ $setting['address'] }}</p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z" />
+                        </svg> <a href="mailto:{{ $setting['email'] }}"
+                            class="text-light">{{ $setting['email'] }}</a></p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z" />
+                        </svg> <a href="tel:{{ $setting['phone'] }}" class="text-light">{{ $setting['phone'] }}</a>
+                    </p>
                 </div>
-                <div class="col-lg-8 col-md-6">
-                    <div class="row gx-5">
-                        <div class="col-lg-4 col-md-12 pt-5 mb-5">
-                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="text-light mb-0">Get In Touch</h3>
-                            </div>
-                            <div class="d-flex mb-2">
-                                <i class="bi bi-geo-alt text-primary me-2"></i>
-                                <p class="mb-0">maps..</p>
-                            </div>
-                            <div class="d-flex mb-2">
-                                <i class="bi bi-envelope-open text-primary me-2"></i>
-                                <p class="mb-0">{{ $setting['email'] }}</p>
-                            </div>
-                            <div class="d-flex mb-2">
-                                <i class="bi bi-telephone text-primary me-2"></i>
-                                <p class="mb-0">{{ $setting['phone'] }}</p>
-                            </div>
-                            <div class="d-flex mt-4">
-                                <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram fw-normal"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
-                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="text-light mb-0">Quick Links</h3>
-                            </div>
-                            <div class="link-animated d-flex flex-column justify-content-start">
-                                <a class="text-light mb-2" href="{{ url('/beranda') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Beranda</a>
-                                <a class="text-light mb-2" href="{{ url('/profildinas') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Profil</a>
-                                <a class="text-light mb-2" href="{{ url('/service') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
-                                <a class="text-light" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
-                            <div class="section-title section-title-sm position-relative pb-3 mb-4">
-                                <h3 class="text-light mb-0">Popular Links</h3>
-                            </div>
-                            <div class="link-animated d-flex flex-column justify-content-start">
-                                <a class="text-light mb-2" href="{{ url('/beranda') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Beranda</a>
-                                <a class="text-light mb-2" href="{{ url('/profildinas') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Profil</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                                <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
-                                <a class="text-light" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
-                            </div>
-                        </div>
+
+                <!-- Quick Links Section -->
+                <div class="link-animated d-flex flex-column col-lg-3 col-md-6 mb-4">
+                    <h3 class="text-light mb-3">Quick Links</h3>
+                    <ul class="list-unstyled ms-3">
+                        <li><a class="text-light" href="{{ url('/beranda') }}">• Beranda</a></li>
+                        <li><a class="text-light" href="{{ url('/profildinas') }}">• Profil</a></li>
+                        <li><a class="text-light" href="{{ route('client.artikel.index') }}">• Artikel</a></li>
+                        <li><a class="text-light" href="{{ route('client.contact.index') }}">• Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Map and Social Media Section -->
+                <div class="col-lg-6 col-md-12">
+                    <h3 class="text-light mb-3">Our Location</h3>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4172.845819895561!2d100.93594582345908!3d-0.6634303272020157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e2b2101459e56cf%3A0x812aecc4641eabad!2sDinas%20Pariwisata%2C%20Pemuda%2C%20Dan%20Olahraga%20Kabupaten%20Sijunjung!5e0!3m2!1sid!2sid!4v1724945132927!5m2!1sid!2sid"
+                        width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <div class="d-flex mt-3">
+                        <a class="btn btn-primary btn-square me-2" href="{{ $setting['socmed-facebook'] }}"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-primary btn-square me-2" href="{{ $setting['socmed-twitter'] }}"><i
+                                class="fab fa-twitter"></i></a>
+                        <a class="btn btn-primary btn-square me-2" href="{{ $setting['socmed-instagram'] }}"><i
+                                class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="container-fluid text-white" style="background: #000f0b;">
-        <div class="container text-center">
-            <div class="row justify-content-end">
-                <div class="col-lg-8 col-md-6">
-                    <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
-                        <p class="mb-0">copyright &copy; 2024 - <a class="text-white border-bottom" href="#">{{ $setting['name-long'] }}</a>.
-                            <a class="text-white border-bottom" href="https://htmlcodex.com"></a>
-                        </p>
-                    </div>
+            <div class="row mt-4">
+                <div class="col text-center">
+                    <p class="mb-0">© 2024 {{ $setting['name-long'] }}. All Rights Reserved.</p>
                 </div>
             </div>
         </div>
     </div>
     <!-- Footer End -->
 
+
+
+
+
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded back-to-top"><i
+            class="bi bi-arrow-up"></i></a>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
