@@ -31,6 +31,14 @@
                 <div class="row g-5">
                     <!-- Blog list Start -->
                     <div class="col-lg-8">
+                        <!-- Category Title -->
+                        <div id="category-title" class="mb-4" style="display: none;">
+                            <h2 class="text-center text-primary" id="selected-category-title"></h2>
+                        </div>
+                        ` <!-- Archive Title -->
+                        <div id="archive-title" class="mb-4" style="display: none;">
+                            <h2 class="text-center text-primary" id="selected-archive-title"></h2>
+                        </div>
                         <div class="row g-5" id="content-list">
                             <!-- Konten akan dimuat di sini menggunakan AJAX -->
                         </div>
@@ -79,8 +87,8 @@
             </div>
         </div>
         <!-- Blog End -->
-        
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
                 let currentPage = 1;
@@ -104,9 +112,7 @@
 
                     if (categoryId) {
                         data.category_id = categoryId;
-                    }
-
-                    if (month && year) {
+                    } else if (month && year) {
                         data.month = month;
                         data.year = year;
                     }
@@ -126,22 +132,22 @@
                                             day: 'numeric'
                                         });
                                     contentList += `
-                            <div class="col-md-6 wow slideInUp" data-wow-delay="0.1s">
-                                <div class="blog-item bg-light rounded overflow-hidden">
-                                    <div class="blog-img position-relative overflow-hidden">
-                                        <img class="img-fluid" src="${content.image}" alt="${content.title}">
+                                <div class="col-md-6 wow slideInUp" data-wow-delay="0.1s">
+                                    <div class="blog-item bg-light rounded overflow-hidden">
+                                        <div class="blog-img position-relative overflow-hidden">
+                                            <img class="img-fluid" src="${content.image}" alt="${content.title}">
+                                        </div>
+                                        <div class="p-4">
+                                            <div class="d-flex mb-3">
+                                                <small><i class="far fa-calendar-alt text-primary me-2"></i>${formattedDate}</small>
+                                            </div>
+                                            <h4 class="mb-3">${content.title}</h4>
+                                            <p>${content.description_short}</p>
+                                            <a class="text-uppercase" href="{{ url('/berita') }}/${content.slug}">Read More <i class="bi bi-arrow-right"></i></a>
+                                        </div>
                                     </div>
-                                    <div class="p-4">
-                                        <div class="d-flex mb-3">
-                                            <small><i class="far fa-calendar-alt text-primary me-2"></i>${formattedDate}</small>
-                                        </div>
-                                        <h4 class="mb-3">${content.title}</h4>
-                                        <p>${content.description_short}</p>
-                                        <a class="text-uppercase" href="{{ url('/berita') }}/${content.slug}">Read More <i class="bi bi-arrow-right"></i></a>
-                                        </div>
                                 </div>
-                                </div>
-                        `;
+                            `;
                                 });
                             } else {
                                 if (!append) {
@@ -162,32 +168,32 @@
 
                             if (totalPages > 1) {
                                 paginationHtml += `
-                        <nav aria-label="...">
-                            <ul class="pagination">
-                                `;
+                            <nav aria-label="...">
+                                <ul class="pagination">
+                        `;
 
                                 // Tombol Previous
                                 if (currentPage > 1) {
                                     paginationHtml += `
-                                    <li class="page-item">
-                                <a class="page-link" href="#" data-page="${currentPage - 1}" tabindex="-1">Previous</a>
-                            </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" data-page="${currentPage - 1}" tabindex="-1">Previous</a>
+                                </li>
                             `;
                                 } else {
                                     paginationHtml += `
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                        `;
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                            `;
                                 }
 
                                 // Tombol Halaman
                                 for (let i = 1; i <= totalPages; i++) {
                                     paginationHtml += `
                                 <li class="page-item ${currentPage === i ? 'active' : ''}">
-                                <a class="page-link" href="#" data-page="${i}">${i}</a>
-                            </li>
-                        `;
+                                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                                </li>
+                            `;
                                 }
 
                                 // Tombol Next
@@ -195,20 +201,20 @@
                                     paginationHtml += `
                                 <li class="page-item">
                                     <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
-                                    </li>
-                        `;
+                                </li>
+                            `;
                                 } else {
                                     paginationHtml += `
-                        <li class="page-item disabled">
-                                <a class="page-link" href="#">Next</a>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Next</a>
                                 </li>
-                                `;
+                            `;
                                 }
 
                                 paginationHtml += `
-                            </ul>
+                                </ul>
                             </nav>
-                            `;
+                        `;
                             }
 
                             $('#pagination').html(paginationHtml);
@@ -230,10 +236,10 @@
                             let categoryList = '';
                             $.each(response.data, function(index, category) {
                                 categoryList += `
-                            <a href="#" class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2" data-category-id="${category.id_category}">
+                            <a href="#" class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2" data-category-id="${category.id_category}" data-category-name="${category.name}">
                                 <i class="bi bi-arrow-right me-2"></i>${category.name}
-                                </a>
-                                `;
+                            </a>
+                        `;
                             });
                             $('#category-list').html(categoryList);
                         }
@@ -249,10 +255,10 @@
                             let archiveList = '';
                             $.each(response.data, function(index, archive) {
                                 archiveList += `
-                        <a href="#" class="btn btn-light m-1" data-month="${archive.month}" data-year="${archive.year}">
-                            ${archive.month_name} ${archive.year}
+                            <a href="#" class="btn btn-light m-1" data-month="${archive.month}" data-year="${archive.year}">
+                                ${archive.month_name} ${archive.year}
                             </a>
-                            `;
+                        `;
                             });
                             $('#archive-list').html(archiveList);
                         }
@@ -270,19 +276,36 @@
                 $('#search-button').on('click', function() {
                     searchQuery = $('#search-input').val();
                     currentPage = 1;
+                    categoryId = null;
+                    month = null;
+                    year = null;
                     loadContent(currentPage);
+
+                    // Sembunyikan judul kategori jika melakukan pencarian
+                    $('#category-title').hide();
+                    $('#archive-title').hide();
                 });
 
                 // Event untuk filter kategori
                 $('#category-list').on('click', 'a', function(e) {
                     e.preventDefault();
                     categoryId = $(this).data('category-id');
+                    const categoryName = $(this).data('category-name');
                     currentPage = 1;
+                    month = null;
+                    year = null;
                     loadContent(currentPage);
 
                     // Sorot kategori yang dipilih
                     $('#category-list a').removeClass('active');
                     $(this).addClass('active');
+
+                    // Tampilkan judul kategori yang dipilih
+                    $('#selected-category-title').text(`Category: ${categoryName}`);
+                    $('#category-title').show();
+
+                    // Sembunyikan judul arsip
+                    $('#archive-title').hide();
                 });
 
                 // Event untuk filter arsip
@@ -291,12 +314,22 @@
                     month = $(this).data('month');
                     year = $(this).data('year');
                     currentPage = 1;
+                    categoryId = null;
                     loadContent(currentPage);
 
                     // Sorot arsip yang dipilih
                     $('#archive-list a').removeClass('active');
                     $(this).addClass('active');
+
+                    // Tampilkan judul arsip yang dipilih
+                    const monthName = $(this).text();
+                    $('#selected-archive-title').text(`Archive: ${monthName}`);
+                    $('#archive-title').show();
+
+                    // Sembunyikan judul kategori jika arsip dipilih
+                    $('#category-title').hide();
                 });
+
 
                 // Event untuk pagination
                 $('#pagination').on('click', '.page-link', function(e) {
