@@ -641,5 +641,146 @@ h6,
     margin-top: 10px; /* Jarak antara logo dan teks */
 }
 
+ /* Timeline wrapper */
+ .timeline {
+    position: relative;
+    padding: 1rem 0;
+    margin-top: 1rem;
+}
+
+/* Vertical line in the timeline */
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #e9ecef;
+    left: 40px;
+    margin-left: -1px;
+}
+
+/* Each timeline item */
+.timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Vertical line connecting the items */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    height: 100%;
+    width: 2px;
+    background-color: #e9ecef;
+    z-index: -1; /* Garis di belakang konten */
+}
+
+/* Date block for agenda */
+.timeline-date {
+    position: absolute;
+    left: 0;
+    width: 80px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.2;
+    background-color: #fff;
+    padding: 1rem;
+    border: 1px solid #dc3545;
+    border-radius: 6px; /* Membuat persegi dengan sedikit lengkung */
+}
+
+.timeline-date .day {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #dc3545;
+}
+
+.timeline-date .month {
+    font-size: 1rem;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+
+/* Content block for agenda */
+.timeline-content {
+    margin-left: 120px;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(58 59 69 / 15%);
+    position: relative;
+}
+
+/* Title and content of the agenda */
+.timeline-content h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.timeline-content p {
+    margin-bottom: 0;
+    color: #6c757d;
+}
+
+.timeline-content .badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+}
+
+/* Style for the "Lihat" link */
+.timeline-content a {
+    font-weight: bold;
+    color: #017454; /* Warna hijau untuk teks "Lihat" */
+    text-decoration: none;
+}
+
+.timeline-content a:hover {
+    text-decoration: underline;
+}
+
+/* Vertical divider */
+.vertical-divider {
+    height: 100%;
+    width: 1px;
+    background-color: #e9ecef;
+}
+
+/* Styling untuk pagination */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-link {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e9ecef;
+    background-color: #fff;
+    color: #343a40;
+    cursor: pointer;
+}
+
+.page-link.active {
+    background-color: #017454;
+    color: #fff;
+}
+
+.page-link:hover {
+    background-color: #017454;
+    color: #fff;
+}
+
+.page-link.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 
 

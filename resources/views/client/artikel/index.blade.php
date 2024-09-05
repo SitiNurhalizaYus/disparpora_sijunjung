@@ -132,22 +132,21 @@
                                             day: 'numeric'
                                         });
                                     contentList += `
-                                <div class="col-md-6 wow slideInUp" data-wow-delay="0.1s">
-                                    <div class="blog-item bg-light rounded overflow-hidden">
-                                        <div class="blog-img position-relative overflow-hidden">
-                                            <img class="img-fluid" src="${content.image}" alt="${content.title}">
-                                        </div>
-                                        <div class="p-4">
-                                            <div class="d-flex mb-3">
-                                                <small><i class="far fa-calendar-alt text-primary me-2"></i>${formattedDate}</small>
-                                            </div>
-                                            <h4 class="mb-3">${content.title}</h4>
-                                            <p>${content.description_short}</p>
-                                            <a class="text-uppercase" href="{{ url('/artikel') }}/${content.slug}">Read More <i class="bi bi-arrow-right"></i></a>
-                                        </div>
-                                    </div>
+                    <div class="col-md-6 wow slideInUp" data-wow-delay="0.1s">
+                        <div class="blog-item bg-light rounded overflow-hidden">
+                            <div class="blog-img position-relative overflow-hidden">
+                                <img class="img-fluid" src="${content.image}" alt="${content.title}">
+                            </div>
+                            <div class="p-4">
+                                <div class="d-flex mb-3">
+                                    <small><i class="far fa-calendar-alt text-primary me-2"></i>${formattedDate}</small>
                                 </div>
-                            `;
+                                <h4 class="mb-3">${content.title}</h4>
+                                <p>${content.description_short}</p>
+                                <a class="text-uppercase" href="{{ url('/artikel') }}/${content.slug}">Read More <i class="bi bi-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>`;
                                 });
                             } else {
                                 if (!append) {
@@ -162,70 +161,35 @@
                                 $('#content-list').html(contentList);
                             }
 
-                            // Tampilkan pagination
-                            let paginationHtml = '';
-                            const totalPages = response.metadata.total_page;
-
-                            if (totalPages > 1) {
-                                paginationHtml += `
-                            <nav aria-label="...">
-                                <ul class="pagination">
-                        `;
-
-                                // Tombol Previous
-                                if (currentPage > 1) {
-                                    paginationHtml += `
-                                <li class="page-item">
-                                    <a class="page-link" href="#" data-page="${currentPage - 1}" tabindex="-1">Previous</a>
-                                </li>
-                            `;
-                                } else {
-                                    paginationHtml += `
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                </li>
-                            `;
+                            // Pagination
+                            let pagination = '';
+                            if (response.metadata.total_page > 1) {
+                                pagination +=
+                                    `<button class="page-link" data-page="${response.metadata.page - 1}" ${response.metadata.page === 1 ? 'disabled' : ''}>Previous</button>`;
+                                for (let i = 1; i <= response.metadata.total_page; i++) {
+                                    pagination +=
+                                        `<button class="page-link ${i === response.metadata.page ? 'active' : ''}" data-page="${i}">${i}</button>`;
                                 }
-
-                                // Tombol Halaman
-                                for (let i = 1; i <= totalPages; i++) {
-                                    paginationHtml += `
-                                <li class="page-item ${currentPage === i ? 'active' : ''}">
-                                    <a class="page-link" href="#" data-page="${i}">${i}</a>
-                                </li>
-                            `;
-                                }
-
-                                // Tombol Next
-                                if (currentPage < totalPages) {
-                                    paginationHtml += `
-                                <li class="page-item">
-                                    <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
-                                </li>
-                            `;
-                                } else {
-                                    paginationHtml += `
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            `;
-                                }
-
-                                paginationHtml += `
-                                </ul>
-                            </nav>
-                        `;
+                                pagination +=
+                                    `<button class="page-link" data-page="${response.metadata.page + 1}" ${response.metadata.page === response.metadata.total_page ? 'disabled' : ''}>Next</button>`;
                             }
-
-                            $('#pagination').html(paginationHtml);
+                            $('#pagination').html(pagination);
                         },
                         error: function(xhr) {
                             $('#content-list').html(
                                 '<p class="text-center">Gagal memuat artikel. Silakan coba lagi nanti.</p>'
-                            );
+                                );
                         }
                     });
                 }
+
+                // Event untuk pagination
+                $('#pagination').on('click', '.page-link', function(e) {
+                    e.preventDefault();
+                    const page = $(this).data('page');
+                    loadContent(page);
+                });
+
 
                 // Fungsi untuk memuat kategori dengan AJAX
                 function loadCategories() {
@@ -328,14 +292,6 @@
 
                     // Sembunyikan judul kategori jika arsip dipilih
                     $('#category-title').hide();
-                });
-
-
-                // Event untuk pagination
-                $('#pagination').on('click', '.page-link', function(e) {
-                    e.preventDefault();
-                    currentPage = $(this).data('page');
-                    loadContent(currentPage);
                 });
             });
         </script>
