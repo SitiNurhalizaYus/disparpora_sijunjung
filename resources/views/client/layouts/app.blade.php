@@ -129,15 +129,16 @@
                         <div class="nav-item dropdown me-3">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
                             <div class="dropdown-menu m-0">
-                                <a href="{{ url('/profil', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}"
+                                <a href="{{ route('client.profil.detail', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}" 
                                     class="dropdown-item">Struktur Organisasi Dinas</a>
-                                <a href="{{ url('/profil', ['slug' => 'visi-misi']) }}" class="dropdown-item">Visi
-                                    dan Misi</a>
-                                <a href="{{ url('/profil', ['slug' => 'tujuan-strategis']) }}"
+                                <a href="{{ route('client.profil.detail', ['slug' => 'visi-misi-dinas-pariwisata']) }}" 
+                                    class="dropdown-item">Visi dan Misi</a>
+                                <a href="{{ route('client.profil.detail', ['slug' => 'tujuan-strategis-dinas-pariwisata']) }}" 
                                     class="dropdown-item">Tujuan Strategis</a>
-                                <a href="{{ url('/profil', ['slug' => 'sasaran-strategis']) }}"
+                                <a href="{{ route('client.profil.detail', ['slug' => 'sasaran-dinas-pariwisata-sijunjung']) }}" 
                                     class="dropdown-item">Sasaran Strategis</a>
                             </div>
+                            
                         </div>
                         <div class="nav-item dropdown me-3">
                             <a href="#" class="nav-link dropdown-toggle"
@@ -154,7 +155,7 @@
                             <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle"
                                 data-bs-toggle="dropdown">PPID</a>
                             <div class="dropdown-menu m-0">
-                                <a href="{{ url('/ppid/statistik') }}" class="dropdown-item">Statistik Informasi
+                                <a href="{{ route('client.statistik') }}" class="dropdown-item">Statistik Informasi
                                     Publik</a>
                             </div>
                         </div>
@@ -165,7 +166,7 @@
                             data-bs-target="#searchModal">
                             <i class="fa fa-search"></i>
                         </button>
-                        <a href="{{ url('/hubungikami') }}" class="btn btn-primary py-2 px-4 ms-3">Hubungi Kami</a>
+                        <a href="{{ route('client.message.index') }}" class="btn btn-primary py-2 px-4 ms-3">Hubungi Kami</a>
                     </div>
                 </div>
             </nav>
@@ -209,7 +210,7 @@
                         <li><a class="text-light" href="{{ url('/beranda') }}">• Beranda</a></li>
                         <li><a class="text-light" href="{{ url('/profildinas') }}">• Profil</a></li>
                         <li><a class="text-light" href="{{ route('client.artikel.index') }}">• Artikel</a></li>
-                        <li><a class="text-light" href="{{ route('client.contact.index') }}">• Contact Us</a></li>
+                        <li><a class="text-light" href="{{ route('client.message.index') }}">• Contact Us</a></li>
                     </ul>
                 </div>
 

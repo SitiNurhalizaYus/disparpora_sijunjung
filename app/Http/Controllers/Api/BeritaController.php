@@ -18,7 +18,6 @@ class BeritaController extends Controller
     public function index(Request $request)
     {
         // Mengambil parameter dari request
-        
         $count = $request->get('count', false);
         $sort = $request->get('sort', 'id_content:asc');
         $per_page = intval($request->get('per_page', 10));
@@ -69,6 +68,18 @@ class BeritaController extends Controller
             $query->where('title', 'like', "%{$search}%");
         }
 
+        // Jika count=true, hanya mengembalikan jumlah data
+        if ($count == true) {
+            $total_count = $query->count('id_content');
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Data count retrieved successfully',
+                'data' => [],
+                'metadata' => ['count' => $total_count]
+            ]);
+        }
+
         // Metadata untuk pagination
         $metadata = [];
         $metadata['total_data'] = $query->count();
@@ -76,26 +87,21 @@ class BeritaController extends Controller
         $metadata['total_page'] = ceil($metadata['total_data'] / $per_page);
         $metadata['page'] = $page;
 
-        // get count
-        if($count == true) {
-            $query = $query->count('id_content');
-            $data['count'] = $query;
-        }
-
         // Mengambil data dengan pagination
         if ($per_page == 0 || $per_page == 'all') {
             $data = $query->orderBy($sort[0], $sort[1])->get();
         } else {
             $data = $query->orderBy($sort[0], $sort[1])
-                          ->limit($per_page)
-                          ->offset(($page - 1) * $per_page)
-                          ->get();
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page)
+                ->get();
         }
 
         // Menggunakan ContentResource untuk response
         return ContentResource::collection($data)
             ->additional(['metadata' => $metadata]);
     }
+
 
     public function show($id_content)
     {

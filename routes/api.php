@@ -24,9 +24,9 @@ Route::post('login', App\Http\Controllers\Api\LoginController::class);
 Route::get('login', App\Http\Controllers\Api\LoginController::class); 
 Route::apiResource('big_number', App\Http\Controllers\Api\BigNumberController::class); 
 Route::apiResource('content', App\Http\Controllers\Api\ContentController::class);
-Route::apiResource('profil', App\Http\Controllers\Api\ContentController::class);
+Route::apiResource('profil', App\Http\Controllers\Api\ProfilController::class);
 Route::apiResource('berita', App\Http\Controllers\Api\BeritaController::class);
-Route::apiResource('artikel', App\Http\Controllers\Api\ContentController::class);
+Route::apiResource('artikel', App\Http\Controllers\Api\ArtikelController::class);
 Route::apiResource('document', App\Http\Controllers\Api\DocumentController::class); 
 Route::apiResource('agenda', App\Http\Controllers\Api\AgendaController::class); 
 
@@ -45,6 +45,8 @@ Route::apiResource('mitra', App\Http\Controllers\Api\MitraController::class);
 Route::apiResource('poster', App\Http\Controllers\Api\PosterController::class);
 
 Route::get('arsip', [App\Http\Controllers\Api\ArsipController::class, 'getArchives']);
+Route::get('statistik', [App\Http\Controllers\Api\DashboardController::class, 'topPageNonAdmin']);
+Route::get('statistik-bulanan', [App\Http\Controllers\Api\DashboardController::class, 'getStatistikBulanan']);
 Route::get('dashboard/top-page', [App\Http\Controllers\Api\DashboardController::class, 'topPage']);
 Route::get('dashboard/top-device', [App\Http\Controllers\Api\DashboardController::class, 'topDevice']);
 Route::get('dashboard/top-os', [App\Http\Controllers\Api\DashboardController::class, 'topOs']);

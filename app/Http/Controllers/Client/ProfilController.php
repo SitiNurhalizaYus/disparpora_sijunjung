@@ -4,42 +4,28 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Helpers\AppHelper;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
+use App\Helpers;
 
 class ProfilController extends Controller
 {
-    public function detail($slug)
+    public function __construct()
     {
-        // Mengambil konten dengan type 'profil'
-        $type = 'profil';
-        $kontens = collect(AppHelper::instance()->requestApiGet("api/content?type={$type}"));
+    }
 
-        // Cari konten berdasarkan slug
-        $konten = $kontens->firstWhere('slug', $slug);
-
-        // Jika konten tidak ditemukan, tampilkan 404
-        if (!$konten) {
-            abort(404, 'Konten tidak ditemukan');
-        }
-
-        // Mengambil konten lain untuk sidebar, kecuali konten saat ini
-        $kontensKategori = $kontens->filter(function ($item) use ($slug) {
-            return $item['slug'] !== $slug;
-        })->take(5);
-
-        // Mengatur data yang akan dikirim ke view
-        $data = [
-            'konten' => $konten,
-            'kontensKategori' => $kontensKategori,
-            'og' => [
-                'url' => url('/profil/' . $konten['slug']),
-                'title' => $konten['title'],
-                'description' => $konten['description_short'],
-                'image' => $konten['image'],
-            ],
-            'setting' => AppHelper::instance()->requestApiSetting(),
-        ];
-
-        return view('client.konten.detail', $data);
+    public function detail($id_content)
+    {
+        $data = [];
+        $data['profil'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/content/'.$id_content.'?type=profil');
+        $data['og'] = [];
+        $data['og']['url'] = url('/').'/profil/'.$data['profil']['slug'];
+        $data['og']['title'] = $data['profil']['title'];
+        $data['og']['description'] = $data['profil']['description_short'];
+        $data['og']['image'] = $data['profil']['image'];
+        $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
+        $data['contents'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/content');
+        
+        return view('client.profil.detail', $data);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -16,12 +17,12 @@ class MitraController extends Controller
     public function index(Request $request)
     {
         // parameter
-        $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
-        $where = $request->has('where') ? $request->get('where') : '{}';
-        $search = $request->has('search') ? $request->get('search') : '';
-        $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
-        $page = $request->has('page') ? intval($request->get('page')) : 1;
+        $count = $request->get('count', false); // Mengambil parameter count
+        $sort = $request->get('sort', 'id:asc');
+        $where = $request->get('where', '{}');
+        $search = $request->get('search', '');
+        $per_page = intval($request->get('per_page', 10));
+        $page = intval($request->get('page', 1));
 
         // Validasi per_page dan page agar tidak bernilai negatif atau nol
         if ($per_page <= 0) {
@@ -46,32 +47,34 @@ class MitraController extends Controller
             $query = $query->where('is_active', 1);
         }
 
+        // Filter berdasarkan parameter where
         if ($where) {
             foreach ($where as $key => $value) {
                 if (is_array($value)) {
-                    $query = $query->whereIn($key, $value);
+                    $query->whereIn($key, $value);
                 } else {
-                    $query = $query->where($key, $value);
+                    $query->where($key, $value);
                 }
             }
         }
 
+        // Pencarian berdasarkan nama mitra
         if ($search) {
-            $query = $query->where('name', 'like', "%{$search}%");
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        // Jika count=true, hanya mengembalikan jumlah data
+        if ($count == true) {
+            $total_count = $query->count('id');
+            return new ApiResource(true, 200, 'Data count retrieved successfully', [], ['count' => $total_count]);
         }
 
         // metadata dan data
         $metadata = [];
         $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
-        $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
+        $metadata['total_page'] = ceil($metadata['total_data'] / $per_page);
         $metadata['page'] = $page;
-
-         // get count
-         if($count == true) {
-            $query = $query->count('id');
-            $data['count'] = $query;
-        }
 
         // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'
         if ($per_page == 0 || $per_page == 'all') {
@@ -103,7 +106,7 @@ class MitraController extends Controller
 
         // cek token
         if (!auth()->guard('api')->user()) {
-            $query = $query->where('is_active', 1);
+            $query->where('is_active', 1);
         }
 
         // data

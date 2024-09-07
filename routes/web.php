@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UploadController;
 
@@ -18,7 +19,7 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/', [App\Http\Controllers\Client\BerandaController::class, 'index']);
     Route::get('/beranda', [App\Http\Controllers\Client\BerandaController::class, 'index']);
 
-    Route::get('/profil{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail']);
+    Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail'])->name('client.profil.detail');
 
     Route::get('/berita', [App\Http\Controllers\Client\BeritaController::class, 'index'])->name('client.berita.index');
     Route::get('/berita/{slug}', [App\Http\Controllers\Client\BeritaController::class, 'detail'])->name('client.berita.detail');
@@ -27,8 +28,8 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/artikel/{slug}', [App\Http\Controllers\Client\ArtikelController::class, 'detail'])->name('client.artikel.detail');
 
     Route::get('/agenda', [App\Http\Controllers\Client\AgendaController::class, 'index'])->name('client.agenda.index');
-   
-    Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index'])->name('client.contact.index');
+    Route::get('/ppid/statistik', [App\Http\Controllers\Client\StatistikController::class, 'index'])->name('client.statistik');
+    Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index'])->name('client.message.index');
     Route::post('/message/submit', [App\Http\Controllers\Client\HubungikamiController::class, 'submit']);
 
     Route::get('/document', [App\Http\Controllers\Client\DocumentController::class, 'index'])->name('client.document.index');

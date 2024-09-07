@@ -64,7 +64,7 @@
                                                 fill="currentColor"></path>
                                         </svg>
                                         <div class="progress-detail" style="margin-left: 1rem;">
-                                            <p class="mb-2">Total Message</p>
+                                            <p class="mb-2">Total Pesan</p>
                                             <h4 class="counter" id="counter_message">0</h4>
                                         </div>
                                     </div>
@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1100">
+                            {{-- <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1100">
                                 <div class="card-body">
                                     <div class="progress-widget">
                                         <svg class="icon-60" width="60" viewBox="0 0 24 24" fill="none"
@@ -119,8 +119,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </li>
-                            <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1200">
+                            </li> --}}
+                            {{-- <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1200">
                                 <div class="card-body">
                                     <div class="progress-widget">
                                         <svg class="icon-60" width="60" viewBox="0 0 24 24" fill="none"
@@ -138,7 +138,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </li>
+                            </li> --}}
                         </ul>
                         <div class="swiper-button swiper-button-next"></div>
                         <div class="swiper-button swiper-button-prev"></div>
@@ -241,71 +241,42 @@
             }
         });
 
-        // Ambil jumlah beritas
+        // berita
         $.ajax({
-            url: '/api/beritas?',
+            url: '/api/berita?count=true',
             type: "GET",
             dataType: "json",
+            processData: false,
             success: function(result) {
-                if (result['metadata'] && result['metadata']['total_data']) {
-                    $('#counter_berita').html(result['metadata']['total_data']);
-                } else {
-                    $('#counter_berita').html(0);
+                if (result['success'] == true) {
+                    $('#counter_berita').html(result['metadata']['count']);
                 }
-            },
-            error: function() {
-                $('#counter_berita').html(0);
             }
         });
 
-        // Ambil jumlah artikels
+        // artikel
         $.ajax({
-            url: '/api/artikels?',
+            url: '/api/artikel?count=true',
             type: "GET",
             dataType: "json",
+            processData: false,
             success: function(result) {
-                if (result['metadata'] && result['metadata']['total_data']) {
-                    $('#counter_artikel').html(result['metadata']['total_data']);
-                } else {
-                    $('#counter_artikel').html(0);
+                if (result['success'] == true) {
+                    $('#counter_artikel').html(result['metadata']['count']);
                 }
-            },
-            error: function() {
-                $('#counter_artikel').html(0);
             }
         });
 
-        // Ambil jumlah mitra
+        //mitra
         $.ajax({
-            url: '/api/mitra?',
+            url: '/api/mitra?count=true',
             type: "GET",
             dataType: "json",
+            processData: false,
             success: function(result) {
-                if (result['metadata'] && result['metadata']['total_data']) {
-                    $('#counter_mitra').html(result['metadata']['total_data']);
-                } else {
-                    $('#counter_mitra').html(0);
+                if (result['success'] == true) {
+                    $('#counter_mitra').html(result['metadata']['count']);
                 }
-            },
-            error: function() {
-                $('#counter_mitra').html(0);
-            }
-        });
-
-        // Ambil jumlah pesan
-        $.ajax({
-            url: '/api/message?',
-            type: "GET",
-            dataType: "json",
-            success: function(result) {
-                if (result['success'] == true && result['metadata'] && result['metadata']['total_data']) {
-                    $('#counter_message').html(result['metadata']['total_data']);
-                } else {
-                    $('#counter_message').html(0);
-                }
-            },
-            error: function() {
-                $('#counter_message').html(0);
             }
         });
 
@@ -317,7 +288,7 @@
             processData: false,
             success: function(result) {
                 if (result['success'] == true) {
-                    $('#counter_message').html(result['data']['count']);
+                    $('#counter_message').html(result['metadata']['count']);
                 }
             }
         });

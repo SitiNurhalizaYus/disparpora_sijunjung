@@ -15,11 +15,11 @@ class HubungikamiController extends Controller
     {
         $data = [];
         $data['og'] = [];
-        $data['og']['url'] = url('/').'/message';
-        $data['og']['title'] = 'Message';
-        $data['og']['description'] = 'Message';
+        $data['og']['url'] = url('/').'/hubungi-kami';
+        $data['og']['title'] = 'Hubungi-kami';
+        $data['og']['description'] = 'Hubungi-kami';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
+        $data['messages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/message');
         $data['result'] = [];
         return view('client.message.index', $data);
     }
@@ -28,11 +28,10 @@ class HubungikamiController extends Controller
     {
         $payload = $request->all();
         $data['og'] = [];
-        $data['og']['url'] = url('/').'/message';
-        $data['og']['title'] = 'Message';
-        $data['og']['description'] = 'Message';
+        $data['og']['url'] = url('/').'/hubungi-kami';
+        $data['og']['title'] = 'Hubungi-kami';
+        $data['og']['description'] = 'Hubungi-kami';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
         $data['result'] = \App\Helpers\AppHelper::instance()->requestApiPost('/api/message', $payload);
         return view('client.message.index', $data);
     }

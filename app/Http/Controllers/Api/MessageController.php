@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResource;
 use App\Models\Message;
 use Illuminate\Http\Request;
+
 class MessageController extends Controller
 {
     public function __construct()
@@ -15,12 +17,12 @@ class MessageController extends Controller
     public function index(Request $request)
     {
         // parameter
-        $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
-        $where = $request->has('where') ? $request->get('where') : '{}';
-        $search = $request->has('search') ? $request->get('search') : '';
-        $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
-        $page = $request->has('page') ? intval($request->get('page')) : 1;
+        $count = $request->get('count', false); // Mengambil parameter count
+        $sort = $request->get('sort', 'id:asc');
+        $where = $request->get('where', '{}');
+        $search = $request->get('search', '');
+        $per_page = intval($request->get('per_page', 10));
+        $page = intval($request->get('page', 1));
 
         // Validasi per_page dan page agar tidak bernilai negatif atau nol
         if ($per_page <= 0) {
@@ -59,18 +61,18 @@ class MessageController extends Controller
             $query = $query->where('name', 'like', "%{$search}%");
         }
 
+        // Jika count=true, hanya mengembalikan jumlah data
+        if ($count == true) {
+            $total_count = $query->count();
+            return new ApiResource(true, 200, 'Data count retrieved successfully', [], ['count' => $total_count]);
+        }
+
         // metadata dan data
         $metadata = [];
         $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
-
-         // get count
-         if($count == true) {
-            $query = $query->count('id');
-            $data['count'] = $query;
-        }
 
         // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'
         if ($per_page == 0 || $per_page == 'all') {
@@ -88,7 +90,7 @@ class MessageController extends Controller
         }
 
         // result
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
             return new ApiResource(false, 200, 'No data found', [], $metadata);
@@ -98,10 +100,10 @@ class MessageController extends Controller
     public function show($id)
     {
         // query
-        $query = Message::where([['id','>','0']]);
+        $query = Message::where([['id', '>', '0']]);
 
         // cek token
-        if(!auth()->guard('api')->user()) {
+        if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
@@ -109,14 +111,14 @@ class MessageController extends Controller
         $data = $query->find($id);
 
         // result
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
 
-     public function store(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
@@ -125,7 +127,7 @@ class MessageController extends Controller
         $req = $request->post();
         $data = Message::create($req);
 
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 201, 'Insert data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Failed to insert data', [], []);
@@ -144,19 +146,19 @@ class MessageController extends Controller
 
         $data = Message::findOrFail($id);
 
-        if($data) {
+        if ($data) {
             return new ApiResource(true, 201, 'Update data successfull', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Failed to update data', [], []);
         }
     }
 
-       public function destroy($id)
+    public function destroy($id)
     {
         $query = Message::findOrFail($id);
         $query->delete();
 
-        if($query) {
+        if ($query) {
             return new ApiResource(true, 201, 'Delete data successfull', [], []);
         } else {
             return new ApiResource(false, 400, 'Failed to delete data', [], []);
