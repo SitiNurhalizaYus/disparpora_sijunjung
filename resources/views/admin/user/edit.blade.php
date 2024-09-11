@@ -245,7 +245,7 @@
             }
         }
 
-        let uploadedFilePath = ''; // Variable untuk menyimpan path file sementara
+        //handle upload
         $('#file').change(function() {
             if (validateFile()) {
                 // Preview image

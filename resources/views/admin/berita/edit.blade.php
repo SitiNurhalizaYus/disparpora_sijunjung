@@ -245,7 +245,7 @@
             }
         });
 
-        // Handle upload 
+        //handle upload
         $('#file').change(function() {
             if (validateFile()) {
                 // Preview image
@@ -262,30 +262,64 @@
                     var file = $(this).prop('files')[0];
                     formdata.append("file", file);
                 }
-                $.ajaxSetup({
-                    headers: {
-                        'Authorization': "Bearer {{ $session_token }}"
+                // Tampilkan loading
+                Swal.fire({
+                    title: 'Mengunggah...',
+                    html: 'Tunggu sebentar, gambar sedang diunggah',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
                     }
                 });
+
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Bearer {{ $session_token }}",
+                    }
+                });
+
                 $.ajax({
-                    url: '/api/upload',
+                    url: '/api/upload', // Endpoint untuk mengunggah gambar
                     type: "POST",
                     data: formdata,
                     processData: false,
                     contentType: false,
                     success: function(result) {
+                        Swal.close(); // Tutup dialog loading
                         if (result['success'] == true) {
+                            // Simpan path file sementara ke dalam variabel
                             $('#image').val(result['data']['url'].replace('/xxx/', '/500/'));
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil",
+                                text: "Gambar berhasil diunggah.",
+                                timer: 2000, // Notifikasi akan ditutup otomatis setelah 2 detik
+                                showConfirmButton: false, // Tidak menampilkan tombol OK
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Gagal mengunggah gambar.",
+                                confirmButtonColor: '#3A57E8',
+                            });
                         }
                     },
                     error: function(xhr) {
+                        Swal.close(); // Tutup dialog loading
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Failed to upload image.",
+                            text: "Terjadi kesalahan saat mengunggah gambar.",
                             confirmButtonColor: '#3A57E8',
                         });
+
+                        // Reset file input and image preview
+                        $('#file').val('');
+                        $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                        $('#picture').val('noimage.jpg');
                     }
+
                 });
             }
         });
