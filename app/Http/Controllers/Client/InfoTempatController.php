@@ -29,11 +29,11 @@ class InfoTempatController extends Controller
     public function detail($id)
     {
         $data = [];
-        $data['info_tempats'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/lokawisata/'.$id);
+        $data['lokawisata'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/lokawisata/'.$id);
         $data['og'] = [];
-        $data['og']['url'] = url('/').'/lokawisata/detail/'.$data['info_tempats']['slug'];
-        $data['og']['title'] = $data['info_tempats']['name'];
-        $data['og']['description'] = 'infotempat';
+        $data['og']['url'] = url('/').'/lokawisata/'.$data['lokawisata']['slug'];
+        $data['og']['title'] = $data['lokawisata']['name'];
+        $data['og']['description'] = 'Lokawisata';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
         return view('client.lokawisata.detail', $data);

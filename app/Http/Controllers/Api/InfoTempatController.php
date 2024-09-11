@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ApiResource;
 use App\Models\InfoTempat;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Resources\ApiResource;
+use App\Http\Controllers\Controller;
 
 class InfoTempatController extends Controller
 {
@@ -68,7 +70,7 @@ class InfoTempatController extends Controller
         $metadata['page'] = $page;
 
         // get count
-        if($count == true) {
+        if ($count == true) {
             $query = $query->count('id');
             $data['count'] = $query;
         }
@@ -82,10 +84,10 @@ class InfoTempatController extends Controller
             $metadata['page'] = 1;
         } else {
             $data = $query->orderBy($sort[0], $sort[1])
-                          ->limit($per_page)
-                          ->offset(($page - 1) * $per_page)
-                          ->get()
-                          ->toArray();
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page)
+                ->get()
+                ->toArray();
         }
 
         // result
@@ -98,19 +100,19 @@ class InfoTempatController extends Controller
 
     public function show($id)
     {
+
         // query
         $query = InfoTempat::where([['id', '>', '0']]);
-        
-        $data = is_numeric($id) ? $query->find($id) : $query->where('slug', $id)->first();
 
-
-        // cek token
         if (!auth()->guard('api')->user()) {
-            $query = $query->where('is_active', 1);
+            $query->where('is_active', 1);
         }
 
-        // data
-        $data = $query->find($id);
+        if (is_numeric($id)) {
+            $data = $query->find($id);
+        } else {
+            $data = $query->where('slug', $id)->first();
+        }
 
         // result
         if ($data) {
@@ -124,14 +126,18 @@ class InfoTempatController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'slug' => 'required|unique:info_tempats,slug',
         ]);
 
-        $req = $request->post();
-        $data = InfoTempat::create($req);
+        $slug = $this->generateUniqueSlug($request->input('name'));
 
-        if ($data) {
-            return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
+        $data = $request->all();
+        $data['slug'] = $slug;
+        $data['created_by'] = auth()->id();
+
+        $lokawisata = InfoTempat::create($data);
+
+        if ($lokawisata) {
+            return new ApiResource(true, 201, 'Data berhasil ditambahkan', $data, []);
         } else {
             return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
         }
@@ -139,22 +145,27 @@ class InfoTempatController extends Controller
 
     public function update(Request $request, $id)
     {
+        $lokawisata = InfoTempat::findOrFail($id);
+
         $request->validate([
             'name' => 'required',
         ]);
 
-        $req = $request->post();
-        $query = InfoTempat::findOrFail($id);
-        $query->update($req);
+        $slug = $this->generateUniqueSlug($request->input('name'));
 
-        $data = InfoTempat::findOrFail($id);
+        $data = $request->all();
+        $data['slug'] = $slug;
+        $data['updated_by'] = auth()->id();
+
+        $lokawisata->update($data);
 
         if ($data) {
-            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data, []);
         } else {
             return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
         }
     }
+
 
     public function destroy($id)
     {
@@ -166,5 +177,19 @@ class InfoTempatController extends Controller
         } else {
             return new ApiResource(false, 400, 'Data gagal dihapus', [], []);
         }
+    }
+
+    private function generateUniqueSlug($name)
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (InfoTempat::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
     }
 }

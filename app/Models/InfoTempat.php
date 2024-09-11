@@ -22,9 +22,9 @@ class InfoTempat extends Model
         'is_active'
     ];
 
-    public function agent()
+    public function users()
     {
-        return $this->belongsTo(Agent::class);
+        return $this->belongsTo(User::class);
     }
 
 }

@@ -36,7 +36,6 @@
                             <div>
                                 <h1 class="mb-4">Kirim pertanyaan, saran, atau masukan anda kepada kami</h1>
                                 <p>Dinas Pariwisata Pemuda Dan Olahraga Kabupaten Sijunjung</p>
-                                <a href="#" class="text-primary">Lihat Publikasi Kiriman</a>
                             </div>
                         </div>
                     </div>

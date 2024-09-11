@@ -153,34 +153,42 @@ h6,
 
 /* Share Button Color */
 .share-btn.facebook i {
-    color: #1877f2; /* Facebook color */
+    color: #1877f2;
+    /* Facebook color */
 }
 
 .share-btn.twitter i {
-    color: #1da1f2; /* Twitter color */
+    color: #1da1f2;
+    /* Twitter color */
 }
 
 .share-btn.linkedin i {
-    color: #0a66c2; /* LinkedIn color */
+    color: #0a66c2;
+    /* LinkedIn color */
 }
 
 .share-btn.whatsapp i {
-    color: #25d366; /* WhatsApp color */
+    color: #25d366;
+    /* WhatsApp color */
 }
 
 .share-btn.email i {
-    color: #ea4335; /* Email color */
+    color: #ea4335;
+    /* Email color */
 }
 
 /* Hover Effect */
 .share-btn:hover {
-    color: #000; /* Change color to black on hover */
-    transform: scale(1.1); /* Slightly enlarge the icon */
+    color: #000;
+    /* Change color to black on hover */
+    transform: scale(1.1);
+    /* Slightly enlarge the icon */
 }
 
 /* Share Button Icon Style */
 .share-btn i {
-    font-size: 2rem; /* Adjust icon size */
+    font-size: 2rem;
+    /* Adjust icon size */
 }
 
 /* Share on Text */
@@ -258,7 +266,7 @@ h6,
     .navbar-dark .navbar-brand h1 {
         color: var(--green);
     }
-    
+
     .navbar-dark .navbar-brand h2 {
         color: var(--black);
     }
@@ -625,24 +633,31 @@ h6,
 
 /* CSS untuk Logo dan Nama */
 .logo-section {
-    margin-bottom: 30px; /* Jarak antara logo dan nama dengan konten berikutnya */
+    margin-bottom: 30px;
+    /* Jarak antara logo dan nama dengan konten berikutnya */
 }
 
 .logo-img {
-    max-width: 150px; /* Sesuaikan ukuran maksimum logo */
-    height: auto; /* Mengatur tinggi otomatis agar sesuai dengan proporsi */
+    max-width: 150px;
+    /* Sesuaikan ukuran maksimum logo */
+    height: auto;
+    /* Mengatur tinggi otomatis agar sesuai dengan proporsi */
     display: block;
-    margin: 0 auto; /* Tengah-tengah secara horizontal */
+    margin: 0 auto;
+    /* Tengah-tengah secara horizontal */
 }
 
 .logo-text {
-    font-size: 24px; /* Ukuran font nama logo, sesuaikan jika perlu */
-    color: #ffffff; /* Warna font */
-    margin-top: 10px; /* Jarak antara logo dan teks */
+    font-size: 24px;
+    /* Ukuran font nama logo, sesuaikan jika perlu */
+    color: #ffffff;
+    /* Warna font */
+    margin-top: 10px;
+    /* Jarak antara logo dan teks */
 }
 
- /* Timeline wrapper */
- .timeline {
+/* Timeline wrapper */
+.timeline {
     position: relative;
     padding: 1rem 0;
     margin-top: 1rem;
@@ -677,7 +692,8 @@ h6,
     height: 100%;
     width: 2px;
     background-color: #e9ecef;
-    z-index: -1; /* Garis di belakang konten */
+    z-index: -1;
+    /* Garis di belakang konten */
 }
 
 /* Date block for agenda */
@@ -691,7 +707,8 @@ h6,
     background-color: #fff;
     padding: 1rem;
     border: 1px solid #dc3545;
-    border-radius: 6px; /* Membuat persegi dengan sedikit lengkung */
+    border-radius: 6px;
+    /* Membuat persegi dengan sedikit lengkung */
 }
 
 .timeline-date .day {
@@ -736,7 +753,8 @@ h6,
 /* Style for the "Lihat" link */
 .timeline-content a {
     font-weight: bold;
-    color: #017454; /* Warna hijau untuk teks "Lihat" */
+    color: #017454;
+    /* Warna hijau untuk teks "Lihat" */
     text-decoration: none;
 }
 
@@ -782,5 +800,116 @@ h6,
     opacity: 0.5;
 }
 
+.event-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 50px;
+    padding: 20px;
+}
 
+.event-card {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+}
 
+.event-image img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.event-details {
+    padding: 15px;
+}
+
+.event-title {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.event-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.event-link:hover {
+    text-decoration: underline;
+}
+
+.detail-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.detail-header img {
+    max-width: 150px;
+    border-radius: 10px;
+}
+
+.detail-header h1 {
+    font-size: 28px;
+    color: #333;
+    margin: 0;
+}
+
+.detail-header .location-link {
+    display: flex;
+    align-items: center;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.detail-header .location-link i {
+    margin-right: 8px;
+}
+
+.detail-section {
+    margin-bottom: 20px;
+}
+
+.detail-section h2 {
+    font-size: 20px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.detail-section p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.detail-section ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.detail-section ul li {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}

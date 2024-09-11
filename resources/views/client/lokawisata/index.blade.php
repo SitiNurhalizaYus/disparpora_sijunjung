@@ -1,55 +1,6 @@
 @extends('client.layouts.app')
 
 @section('content')
-    <style>
-        .event-cards {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 50px;
-            padding: 20px;
-        }
-
-        .event-card {
-            background: #fff;
-            border: 1px solid #e1e1e1;
-            border-radius: 5px;
-            width: 100%;
-            max-width: 300px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            text-align: center;
-        }
-
-        .event-image img {
-            width: 100%;
-            height: auto;
-            border-bottom: 1px solid #e1e1e1;
-        }
-
-        .event-details {
-            padding: 15px;
-        }
-
-        .event-title {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .event-link {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .event-link:hover {
-            text-decoration: underline;
-        }
-    </style>
-
     <div class="container-fluid position-relative p-0">
         <div class="container-fluid bg-primary py-5 bg-header">
             <div class="row py-5">
@@ -63,6 +14,7 @@
                 </div>
             </div>
         </div>
+
         <div class="container-fluid bg-primary py-3 bg-light">
             <div class="text-star px-5">
                 <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
@@ -71,23 +23,95 @@
             </div>
         </div>
 
-        <div class="event-cards">
-            @if (!empty($info_tempats))
-                @foreach ($info_tempats as $item)
-                    <div class="event-card">
-                        <div class="event-image">
-                            <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}">
-                        </div>
-                        <div class="event-details">
-                            <h3 class="event-title">{{ $item['name'] }}</h3>
-                            <a href="{{ route('client.lokawisata.detail', ['id' => $item['id']]) }}"
-                                class="event-link">Detail</a>
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <p>No data available</p>
-            @endif
+        <!-- Event Cards Container -->
+        <div id="event-cards-container" class="event-cards"></div>
+
+        <!-- Spinner for loading -->
+        <div id="loading-spinner" class="text-center my-5" style="display:none;">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div id="load-more-container" class="text-center my-5" style="display:none;">
+            <button id="load-more-btn" class="btn btn-primary">Load More</button>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var currentPage = 1;  // Halaman pertama
+        var perPage = 8;  // Jumlah data per halaman
+        var lastPage = false; // Indikator apakah sudah mencapai halaman terakhir
+
+        // Fungsi untuk memuat data Lokawisata menggunakan AJAX
+        function loadLokawisata(page = 1) {
+            // Tampilkan spinner
+            $('#loading-spinner').show();
+            $('#load-more-container').hide();
+
+            // Lakukan request AJAX ke API Lokawisata dengan parameter halaman dan jumlah data per halaman
+            $.ajax({
+                url: `/api/lokawisata?page=${page}&per_page=${perPage}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    var eventCards = '';
+                    
+                    // Periksa apakah data tersedia
+                    if (response.data && response.data.length > 0) {
+                        response.data.forEach(function(item) {
+                            eventCards += `
+                                <div class="event-card">
+                                    <div class="event-image">
+                                        <img src="${item.image}" alt="${item.name}">
+                                    </div>
+                                    <div class="event-details">
+                                        <h3 class="event-title">${item.name}</h3>
+                                        <a href="{{ url('/lokawisata') }}/${item.slug}" class="event-link">Detail</a>
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        // Tambahkan data baru ke container
+                        $('#event-cards-container').append(eventCards);
+
+                        // Cek apakah sudah halaman terakhir
+                        if (response.data.length < perPage) {
+                            lastPage = true;
+                        }
+                    } else {
+                        // Jika tidak ada data, sembunyikan tombol Load More
+                        lastPage = true;
+                    }
+
+                    // Sembunyikan spinner
+                    $('#loading-spinner').hide();
+
+                    // Tampilkan tombol Load More jika belum mencapai halaman terakhir
+                    if (!lastPage) {
+                        $('#load-more-container').show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Sembunyikan spinner dan tampilkan pesan error
+                    $('#loading-spinner').hide();
+                    $('#event-cards-container').html('<p>Error loading data</p>');
+                }
+            });
+        }
+
+        // Panggil fungsi loadLokawisata saat halaman dimuat
+        $(document).ready(function() {
+            loadLokawisata();
+
+            // Ketika tombol Load More diklik
+            $('#load-more-btn').on('click', function() {
+                currentPage++; // Tambah halaman
+                loadLokawisata(currentPage); // Muat data baru
+            });
+        });
+    </script>
 @endsection
