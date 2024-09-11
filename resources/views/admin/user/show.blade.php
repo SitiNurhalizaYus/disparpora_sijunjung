@@ -53,11 +53,11 @@
                             <img id="picture" width="300px" style="border-radius: 2%;">
                         </div>
                         <div class="mt-2">
-                            <hr style="height: 2px">
-                        </div>
-                        <div class="mt-2">
                             <h6 class="mb-1">Catatan</h6>
                             <p id="notes"></p>&nbsp;
+                        </div>
+                        <div>
+                            <hr style="height: 2px">
                         </div>
                         <div class="mt-2">
                             <h6 class="mb-1">Status</h6>

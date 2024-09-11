@@ -29,16 +29,17 @@
                     <div class="card-body">
                         <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
                             {{ csrf_field() }}
+                            {{ method_field('PUT') }}
                             <div class="form-group">
-                                <label class="form-label" for="level_id">Peran </label>
+                                <label class="form-label" for="level_id">Peran</label>
                                 <select class="form-select" id="level_id" name="level_id" required>
                                     <option value="" disabled selected>Pilih Peran</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Editor</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id_level }}">{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
-                                <div class="invalid-feedback" style="font-size: 0.75rem;">
-                                    Pilih peran yang valid.
-                                </div>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-category">
+                                    Silahkan pilih peran</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="username">Username </label>
@@ -81,12 +82,15 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="picture">Foto</label>
-                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg">
-                                <input class="form-control" type="hidden" id="picture" name="picture" value="noimage.jpg"
-                                    placeholder="image">
+                                <input class="form-control" type="file" id="file" name="file"
+                                    accept="image/jpeg,image/png,image/jpg">
+                                <input class="form-control" type="hidden" id="picture" name="picture">
                                 <br>
-                                <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
-                                    width="300px" style="border-radius: 2%;">
+                                <img id="image-preview" name="image-preview" width="300px" style="border-radius: 2%;">
+                                <br><label class="form-label" for="photo" style="font-size: 10pt">*Format JPG, JPEG,
+                                    dan PNG</label>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-picture">
+                                    Silakan unggah foto.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="notes">Catatan</label>
@@ -111,6 +115,56 @@
     </div>
 
     <script>
+        $(document).ready(function() {
+            // Ambil data beritas menggunakan AJAX
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': "Bearer {{ $session_token }}"
+                }
+            });
+            // get data
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': "Bearer {{ $session_token }}"
+                }
+            });
+            $.ajax({
+                url: '/api/user/{{ $id_user }}',
+                type: "GET",
+                dataType: "json",
+                processData: false,
+                success: function(result) {
+                    if (result['success'] == true) {
+                        $("#detail-data-success").show();
+                        $("#detail-data-failed").hide();
+
+                        $('#level_id').val(result['data']['level_id']);
+                        $('#username').val(result['data']['username']);
+                        $('#email').val(result['data']['email']);
+                        $('#name').val(result['data']['name']);
+                        $("#picture").val(result['data']['picture']);
+                        $("#image-preview").attr("src", "{{ url('/') }}/" + result['data'][
+                            'picture'
+                        ].replace(
+                            '/xxx/', '/300/'));
+                        $('#notes').val(result['data']['notes']);
+                        $('#is_active').prop("checked", result['data']['is_active']);
+
+                    } else {
+                        $("#detail-data-success").hide();
+                        $("#detail-data-failed").show();
+
+                        $('#message').html(result['message']);
+                    }
+                },
+                fail: function() {
+                    $("#detail-data-success").hide();
+                    $("#detail-data-failed").show();
+
+                    $('#message').html(result['message']);
+                }
+            });
+        });
         // Enable form validation
         (function() {
             'use strict';
@@ -135,127 +189,166 @@
             }
         });
 
-        // get data
-        $.ajaxSetup({
-            headers: {
-                'Authorization': "Bearer {{ $session_token }}"
+        function validateInput(inputId, errorId, condition = true) {
+            if (condition && !$(`#${inputId}`).val()) {
+                $(`#${errorId}`).show();
+                return false;
+            } else {
+                $(`#${errorId}`).hide();
+                return true;
             }
-        });
-        $.ajax({
-            url: '/api/user/{{ $id_user }}',
-            type: "GET",
-            dataType: "json",
-            processData: false,
-            success: function(result) {
-                if (result['success'] == true) {
-                    $("#detail-data-success").show();
-                    $("#detail-data-failed").hide();
+        }
 
-                    $('#level_id').val(result['data']['level_id']);
-                    $('#username').val(result['data']['username']);
-                    $('#email').val(result['data']['email']);
-                    $('#name').val(result['data']['name']);
-                    $("#picture").val(result['data']['picture']);
-                    $("#image-preview").attr("src", "{{ url('/') }}/" + result['data']['picture'].replace(
-                        '/xxx/', '/300/'));
-                    $('#notes').val(result['data']['notes']);
-                    $('#is_active').prop("checked", result['data']['is_active']);
-
-                } else {
-                    $("#detail-data-success").hide();
-                    $("#detail-data-failed").show();
-
-                    $('#message').html(result['message']);
-                }
-            },
-            fail: function() {
-                $("#detail-data-success").hide();
-                $("#detail-data-failed").show();
-
-                $('#message').html(result['message']);
-            }
-        });
-
-       // handle upload image
-       $('#file').change(function() {
-            // preview
-            $('#image-preview').attr('display', 'block');
-            var oFReader = new FileReader();
-            oFReader.readAsDataURL($("#file")[0].files[0]);
-            oFReader.onload = function(oFREvent) {
-                $('#image-preview').attr('src', oFREvent.target.result);
-            };
-
-            // upload
-            formdata = new FormData();
-            if ($(this).prop('files').length > 0) {
-                file = $(this).prop('files')[0];
-                formdata.append("file", file);
-            }
-            $.ajaxSetup({
-                headers: {
-                    'Authorization': "Bearer {{ $session_token }}"
-                }
-            });
-            $.ajax({
-                url: '/api/upload',
-                type: "POST",
-                data: formdata,
-                processData: false,
-                contentType: false,
-                success: function(result) {
-                    if (result['success'] == true) {
-                        $('#picture').val(result['data']['url']);
-                    }
-                }
-            });
-        });
-
-        // handle wysiwyg
-        tinymce.init({
-            selector: 'textarea#content',
-            plugins: 'code table lists',
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
-            promotion: false,
-            setup: function(ed) {
-                ed.on('change', function(e) {
-                    $('#description_long').val(ed.getContent());
+        // Handle validation for email and username uniqueness
+        function handleUniqueError(error) {
+            if (error.email) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Email ini sudah terdaftar. Silakan gunakan email lain.",
+                    confirmButtonColor: '#3A57E8',
                 });
+                $('#email').addClass('is-invalid');
             }
-        });
-
-        // handle post
-        $('#form-data').submit(false);
-        $("#form-data").submit(function() {
-
-            if ($(this).valid()) {
-                var form = $("#form-data").serializeArray();
-                var formdata = {};
-                $.map(form, function(n, i) {
-                    formdata[n['name']] = n['value'];
+            if (error.username) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Username ini sudah digunakan. Silakan gunakan username lain.",
+                    confirmButtonColor: '#3A57E8',
                 });
-                if ('is_active' in formdata) {
-                    if (formdata['is_active'] == 'on') {
-                        formdata['is_active'] = true;
-                    } else {
-                        formdata['is_active'] = false;
-                    }
-                } else {
-                    formdata['is_active'] = false;
+                $('#username').addClass('is-invalid');
+            }
+        }
+
+        // Validasi file gambar yang diunggah
+        function validateFile() {
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            const file = $('#file')[0].files[0];
+
+            if (file && !allowedTypes.includes(file.type)) {
+                $('#invalid-file').show();
+                $('#file').val(''); // Kosongkan input file jika tidak valid
+
+                // Tampilkan pemberitahuan menggunakan Swal
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File tidak valid',
+                    text: 'File yang diunggah harus berupa gambar (.jpg, .jpeg, .png).',
+                    confirmButtonColor: '#3A57E8',
+                });
+
+                return false;
+            } else {
+                $('#invalid-file').hide();
+                return true;
+            }
+        }
+
+        let uploadedFilePath = ''; // Variable untuk menyimpan path file sementara
+        $('#file').change(function() {
+            if (validateFile()) {
+                // Preview image
+                $('#image-preview').attr('display', 'block');
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL($("#file")[0].files[0]);
+                oFReader.onload = function(oFREvent) {
+                    $('#image-preview').attr('src', oFREvent.target.result);
+                };
+
+                // Upload image
+                var formdata = new FormData();
+                if ($(this).prop('files').length > 0) {
+                    var file = $(this).prop('files')[0];
+                    formdata.append("file", file);
                 }
+                // Tampilkan loading
+                Swal.fire({
+                    title: 'Mengunggah...',
+                    html: 'Tunggu sebentar, gambar sedang diunggah',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
 
                 $.ajaxSetup({
                     headers: {
-                        'Authorization': "Bearer {{ $session_token }}"
+                        'Authorization': "Bearer {{ $session_token }}",
                     }
                 });
+
+                $.ajax({
+                    url: '/api/upload', // Endpoint untuk mengunggah gambar
+                    type: "POST",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        Swal.close(); // Tutup dialog loading
+                        if (result['success'] == true) {
+                            // Simpan path file sementara ke dalam variabel
+                            $('#picture').val(result['data']['url'].replace('/xxx/', '/500/'));
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil",
+                                text: "Gambar berhasil diunggah.",
+                                timer: 2000, // Notifikasi akan ditutup otomatis setelah 2 detik
+                                showConfirmButton: false, // Tidak menampilkan tombol OK
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Gagal mengunggah gambar.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.close(); // Tutup dialog loading
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat mengunggah gambar.",
+                            confirmButtonColor: '#3A57E8',
+                        });
+
+                        // Reset file input and image preview
+                        $('#file').val('');
+                        $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                        $('#picture').val('noimage.jpg');
+                    }
+
+                });
+            }
+        });
+
+        function validateForm() {
+            let isValid = true;
+            isValid = validateInput('level_id', 'invalid-category') && isValid;
+            isValid = validateInput('username', 'invalid-username') && isValid;
+            isValid = validateInput('email', 'invalid-email') && isValid;
+            isValid = validateInput('name', 'invalid-name') && isValid;
+            return isValid;
+        }
+
+        // Handle form submission
+        $("#form-data").submit(function(event) {
+            event.preventDefault();
+
+            if (validateForm()) {
+                var form = new FormData(document.getElementById("form-data"));
+
+                // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
+                form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+
                 $.ajax({
                     url: '/api/user/{{ $id_user }}',
-                    type: "PUT",
-                    data: JSON.stringify(formdata),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    processData: false,
+                    type: "POST", // Menggunakan POST dengan _method PUT
+                    data: form,
+                    contentType: false, // Supaya FormData bisa bekerja dengan benar
+                    processData: false, // Supaya FormData bisa bekerja dengan benar
                     success: function(result) {
                         if (result['success'] == true) {
                             Swal.fire({
@@ -274,17 +367,40 @@
                                 confirmButtonColor: '#3A57E8',
                             });
                         }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            let errorMessage = '';
+                            Object.keys(errors).forEach(function(key) {
+                                errorMessage += errors[key][0] + '\n';
+                            });
+                            Swal.fire({
+                                icon: "error",
+                                title: "Validasi Gagal",
+                                text: errorMessage,
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Terjadi kesalahan saat menyimpan data.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        }
                     }
                 });
             } else {
+                // Jika validasi gagal, tampilkan pesan kesalahan dan jangan kirim form
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "You must complete the entire form.",
+                    text: "Anda harus melengkapi seluruh form dengan benar.",
                     confirmButtonColor: '#3A57E8',
                 });
             }
-            return false;
+            return false; // Menghentikan submit jika validasi gagal
         });
     </script>
 @endsection

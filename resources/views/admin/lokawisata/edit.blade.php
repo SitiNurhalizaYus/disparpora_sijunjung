@@ -127,49 +127,54 @@
     </div>
 
     <script>
-        // Ambil data lokawisata menggunakan AJAX
-        $.ajax({
-            url: '/api/lokawisata/{{ $id }}',
-            type: "GET",
-            dataType: "json",
-            success: function(result) {
-                if (result['success']) {
-                    // Isi data form dengan data yang diterima dari API
-                    $('#name').val(result['data']['name']);
-                    $('#slug').val(result['data']['slug']);
-                    $('#link').val(result['data']['link']);
-                    $('#facilities').val(result['data']['facilities']);
-                    $('#operating_hours').val(result['data']['operating_hours']);
-                    $('#ticket_price').val(result['data']['ticket_price']);
-                    $('#description_long').val(result['data']['description']);
-                    $('#description').val(result['data']['description']);
-                    $('#image').val(result['data']['image']);
-
-                    // Preview image jika ada
-                    if (result['data']['image']) {
-                        $('#image-preview').attr('src', "{{ url('/') }}/uploads/xxx/" + result['data'][
+        $(document).ready(function() {
+            // Ambil data beritas menggunakan AJAX
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': "Bearer {{ $session_token }}"
+                }
+            });
+            // Ambil data lokawisata menggunakan AJAX
+            $.ajax({
+                url: '/api/lokawisata/{{ $id }}',
+                type: "GET",
+                dataType: "json",
+                success: function(result) {
+                    if (result['success']) {
+                        // Isi data form dengan data yang diterima dari API
+                        $('#name').val(result['data']['name']);
+                        $('#slug').val(result['data']['slug']);
+                        $('#link').val(result['data']['link']);
+                        $('#facilities').val(result['data']['facilities']);
+                        $('#operating_hours').val(result['data']['operating_hours']);
+                        $('#ticket_price').val(result['data']['ticket_price']);
+                        $('#description_long').val(result['data']['description']);
+                        $('#description').val(result['data']['description']);
+                        $('#image').val(result['data']['image']);
+                        $("#image-preview").attr("src", "{{ url('/') }}/" + result['data'][
                             'image'
-                        ]);
-                    }
+                        ].replace(
+                            '/xxx/', '/300/'));
 
-                    $('#is_active').prop('checked', result['data']['is_active']);
-                } else {
+                        $('#is_active').prop('checked', result['data']['is_active']);
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: result['message'],
+                            confirmButtonColor: '#3A57E8',
+                        });
+                    }
+                },
+                error: function(xhr) {
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: result['message'],
+                        text: "Gagal mengambil data Lokawisata.",
                         confirmButtonColor: '#3A57E8',
                     });
                 }
-            },
-            error: function(xhr) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Gagal mengambil data Lokawisata.",
-                    confirmButtonColor: '#3A57E8',
-                });
-            }
+            });
         });
 
         // Handle validation display
@@ -246,40 +251,27 @@
             }
         }
 
-        // Attach real-time validation to file input
-        $('#file').on('change', function() {
-            var file = $(this).prop('files')[0];
-            if (!file || !file.type.match('image.*')) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "File yang diunggah bukan gambar yang valid. Silakan unggah file dalam format JPG, JPEG, atau PNG.",
-                    confirmButtonColor: '#3A57E8',
-                });
-                $(this).val('');
-                $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
-                $('#image').val('noimage.jpg');
-                $('#invalid-picture').show();
-            } else {
-                $('#invalid-picture').hide();
-
+        //handle upload
+        let uploadedFilePath = ''; // Variable untuk menyimpan path file sementara
+        $('#file').change(function() {
+            if (validateFile()) {
+                // Preview image
+                $('#image-preview').attr('display', 'block');
                 var oFReader = new FileReader();
-                oFReader.readAsDataURL(file);
+                oFReader.readAsDataURL($("#file")[0].files[0]);
                 oFReader.onload = function(oFREvent) {
                     $('#image-preview').attr('src', oFREvent.target.result);
                 };
 
-                // Generate unique file name (e.g., by adding a timestamp or hash)
-                var fileName = file.name.split('.')[0] + '-' + new Date().getTime() + '.' + file.name.split('.')
-                    .pop();
-                $('#image').val(fileName);
-
+                // Upload image
                 var formdata = new FormData();
-                formdata.append("file", file);
-
+                if ($(this).prop('files').length > 0) {
+                    var file = $(this).prop('files')[0];
+                    formdata.append("file", file);
+                }
                 $.ajaxSetup({
                     headers: {
-                        'Authorization': "Bearer {{ $session_token }}",
+                        'Authorization': "Bearer {{ $session_token }}"
                     }
                 });
                 $.ajax({
@@ -291,31 +283,15 @@
                     success: function(result) {
                         if (result['success'] == true) {
                             $('#image').val(result['data']['url'].replace('/xxx/', '/500/'));
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Gagal mengunggah gambar.",
-                                confirmButtonColor: '#3A57E8',
-                            });
                         }
                     },
                     error: function(xhr) {
-                        if (xhr.responseJSON && xhr.responseJSON.message.includes('Duplicate entry')) {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Gagal Mengunggah",
-                                text: "Nama file gambar sudah ada. Ganti nama file atau unggah file yang berbeda.",
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Terjadi kesalahan saat mengunggah gambar.",
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Gagal mengunggah gambar.",
+                            confirmButtonColor: '#3A57E8',
+                        });
                     }
                 });
             }
@@ -349,31 +325,25 @@
             return isValid;
         }
 
-        // handle form submission
+        // Handle form submission
         $("#form-data").submit(function(event) {
             event.preventDefault();
 
             if (validateForm()) {
-                var form = $("#form-data").serializeArray();
-                var formdata = {};
-                $.map(form, function(n, i) {
-                    formdata[n['name']] = n['value'];
-                });
+                var form = new FormData(document.getElementById("form-data"));
 
-                formdata['is_active'] = $('#is_active').is(":checked") ? 1 : 0;
+                // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
+                form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
 
-                $.ajaxSetup({
-                    headers: {
-                        'Authorization': "Bearer {{ $session_token }}",
-                    }
-                });
+                form.set('name', $('#name').val());
+                form.set('slug', $('#slug').val());
+
                 $.ajax({
                     url: '/api/lokawisata/{{ $id }}',
-                    type: "PUT",
-                    data: JSON.stringify(formdata),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    processData: false,
+                    type: "POST", // Menggunakan POST dengan _method PUT
+                    data: form,
+                    contentType: false, // Supaya FormData bisa bekerja dengan benar
+                    processData: false, // Supaya FormData bisa bekerja dengan benar
                     success: function(result) {
                         if (result['success'] == true) {
                             Swal.fire({
@@ -392,9 +362,32 @@
                                 confirmButtonColor: '#3A57E8',
                             });
                         }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            let errorMessage = '';
+                            Object.keys(errors).forEach(function(key) {
+                                errorMessage += errors[key][0] + '\n';
+                            });
+                            Swal.fire({
+                                icon: "error",
+                                title: "Validasi Gagal",
+                                text: errorMessage,
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Terjadi kesalahan saat menyimpan data.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        }
                     }
                 });
             } else {
+                // Jika validasi gagal, tampilkan pesan kesalahan dan jangan kirim form
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -402,17 +395,7 @@
                     confirmButtonColor: '#3A57E8',
                 });
             }
-            return false;
+            return false; // Menghentikan submit jika validasi gagal
         });
-
-        function validateInput(inputId, errorId) {
-            if (!$(`#${inputId}`).val()) {
-                $(`#${errorId}`).show();
-                return false;
-            } else {
-                $(`#${errorId}`).hide();
-                return true;
-            }
-        }
     </script>
 @endsection
