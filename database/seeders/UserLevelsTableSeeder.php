@@ -14,9 +14,9 @@ class UserLevelsTableSeeder extends Seeder
     public function run()
     {
         DB::table('user_levels')->insert([
-            ['name' => 'Admin', 'notes' => 'Administrator of the system', 'is_active' => true],
-            ['name' => 'Editor', 'notes' => 'Content editor', 'is_active' => true],
-            // Tambahkan 4 role lainnya jika diperlukan
+            ['name' => 'Admin', 'notes' => 'Hak akses penuh.', 'is_active' => true],
+            ['name' => 'Editor', 'notes' => 'Akses penuh untuk mengelola konten.', 'is_active' => true],
+            ['name' => 'Kontributor', 'notes' => 'Akses untuk membuat konten tetapi tidak memiliki hak untuk menerbitkan (konten menunggu persetujuan editor).', 'is_active' => true],
         ]);
     }
 }
