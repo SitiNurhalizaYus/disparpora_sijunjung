@@ -124,7 +124,14 @@ class AgendaController extends Controller
         ]);
 
         $req = $request->all();
-        $req['created_by'] = auth()->guard('api')->id();
+        $data['created_by'] = auth()->id();
+
+        $user = auth()->user();
+        if ($user->level_id == 3) {
+            // Jika user adalah kontributor, status aktif otomatis 0
+            $data['is_active'] = 0;
+        }
+
         $data = Agenda::create($req);
 
         if ($data) {
@@ -149,8 +156,21 @@ class AgendaController extends Controller
             'file_path' => 'nullable|string|max:255',
         ]);
 
-        $req['updated_by'] = auth()->guard('api')->id();
+       
         $req = $request->all();
+        $data['updated_by'] = auth()->id();
+
+        $user = auth()->user();
+        if ($user->level_id == 3) {
+            // Kontributor tidak dapat mengubah status jika konten aktif
+            if ($data->is_active == 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kontributor tidak dapat mengubah konten yang sudah aktif'
+                ], 403);
+            }
+            unset($data['is_active']);
+        }
         $data->update($req);
 
         if ($data) {

@@ -7,18 +7,18 @@
                 <div>
                     <h3 class="card-title">
                         <!-- Tombol Back -->
-                        <a href="{{ url('/admin/category/') }}" style="text-decoration: none; color: inherit;">
+                        <a href="{{ url('/admin/categories/') }}" style="text-decoration: none; color: inherit;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
                                 <path fill="black"
                                     fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                             </svg>
-                           Kategori/Detail
+                            Kategori/Detail
                         </a>
                     </h3>
                 </div>
                 <div style="display: flex;">
-                    <a href="{{ url('/admin/category/' . $id_category . '/edit') }}"
+                    <a href="{{ url('/admin/categories/' . $id_category . '/edit') }}"
                         class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit"
                         data-bs-original-title="Edit">
                         <span class="btn-inner">
@@ -74,13 +74,19 @@
                         <div class="mt-2">
                             <hr style="height: 2px">
                         </div>
-                        <div class="mt-2">
-                            <h6 class="mb-1">Status </h6>
-                            <p id="is_active"> </p>
-                        </div>
-                        <div class="mt-2">
-                            <h6 class="mb-1">Dibuat</h6>
-                            <p id="created_at"></p>
+                        <div class="mt-2 row">
+                            <div class="col-md-6">
+                                <h6 class="mb-1">Status </h6>
+                                <p id="is_active"> </p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="mb-1">Dibuat</h6>
+                                <p><span id="created_by"></span><br><span id="created_at"></span></p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="mb-1">Diperbarui</h6>
+                                <p><span id="updated_by"></span><br><span id="updated_at"></p>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body" id="detail-data-failed" style="display: none;">
@@ -96,17 +102,17 @@
         $("#detail-data-failed").hide();
 
         $.ajaxSetup({
-            headers:{
-                'Authorization': "Bearer {{$session_token}}"
+            headers: {
+                'Authorization': "Bearer {{ $session_token }}"
             }
         });
         $.ajax({
-            url: '/api/category/{{$id_category}}',
+            url: '/api/category/{{ $id_category }}',
             type: "GET",
             dataType: "json",
             processData: false,
-            success: function (result) {
-                if(result['success'] == true) {
+            success: function(result) {
+                if (result['success'] == true) {
                     $("#detail-data-success").show();
                     $("#detail-data-failed").hide();
 
@@ -114,12 +120,15 @@
                     $('#slug').html(result['data']['slug']);
                     $('#notes').html(result['data']['notes']);
 
-                    if(result['data']['is_active'] == 1) {
+                    if (result['data']['is_active'] == 1) {
                         $('#is_active').html('<span class="badge bg-success">Aktif</span>');
                     } else {
                         $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
                     }
-                    $('#created_at').html(convertStringToDate(result['data']['created_at']));
+                    $('#created_at').text(convertStringToDate(result['data']['created_at']));
+                    $('#created_by').text(result['data']['created_by']);
+                    $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
+                    $('#updated_by').text(result['data']['updated_by']);
 
                 } else {
                     $("#detail-data-success").hide();
@@ -128,7 +137,7 @@
                     $('#message').html(result['message']);
                 }
             },
-            fail: function () {
+            fail: function() {
                 $("#detail-data-success").hide();
                 $("#detail-data-failed").show();
 
@@ -149,25 +158,25 @@
 
                     // delete
                     $.ajaxSetup({
-                        headers:{
-                            'Authorization': "Bearer {{$session_token}}"
+                        headers: {
+                            'Authorization': "Bearer {{ $session_token }}"
                         }
                     });
                     $.ajax({
-                        url: '/api/category/'+id_category,
+                        url: '/api/category/' + id_category,
                         type: "DELETE",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         processData: false,
-                        success: function (result) {
-                            if(result['success'] == true) {
+                        success: function(result) {
+                            if (result['success'] == true) {
                                 Swal.fire({
                                     icon: "success",
                                     title: "Success",
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then((result) => {
-                                    window.location.replace("{{ url('/admin/category') }}");
+                                    window.location.replace("{{ url('/admin/categories') }}");
                                 });
                             } else {
                                 Swal.fire({

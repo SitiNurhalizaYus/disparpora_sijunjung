@@ -46,8 +46,10 @@
                                     <div class="card-header bg-info text-white"><strong>Informasi Poster</strong></div>
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="name"></span></h4>
-                                        <p class="card-text"><h6>Deskripsi: </h6><span id="description"></span></p>
-                                        <p class="card-text"><h6>Link: </h6><a href="#" id="link"></a></p>
+                                        <p class="card-text">
+                                        <h6>Deskripsi: </h6><span id="description"></span></p>
+                                        <p class="card-text">
+                                        <h6>Link: </h6><a href="#" id="link"></a></p>
                                     </div>
                                 </div>
                             </div>
@@ -55,9 +57,9 @@
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                                     <div class="card-header bg-secondary text-white"><strong> Detail Tambahan</strong></div>
                                     <div class="card-body">
-                                        <p class="card-text"><h6>Catatan: </h6><span id="notes"></span></p>
                                         <p class="card-text"><h6>Status: </h6><span id="is_active"></span></p>
-                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_at"></span></p>
+                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_by"></span><br><span id="created_at"></span></p>
+                                        <p class="card-text"><h6>Diperbarui: </h6><span id="updated_by"></span><br><span id="updated_at"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -121,6 +123,9 @@
                             '<span class="badge bg-success">Aktif</span>' :
                             '<span class="badge bg-danger">Tidak Aktif</span>');
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
+                        $('#created_by').text(result['data']['created_by']);
+                        $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
+                        $('#updated_by').text(result['data']['updated_by']);
                     } else {
                         // Tampilkan pesan error jika gagal memuat data
                         $("#detail-data-success").hide();
@@ -185,7 +190,13 @@
 
         // Fungsi untuk mengonversi string tanggal menjadi format yang lebih ramah
         function convertStringToDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
             return new Date(dateString).toLocaleDateString('id-ID', options);
         }
     </script>

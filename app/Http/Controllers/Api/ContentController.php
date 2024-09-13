@@ -107,7 +107,7 @@ class ContentController extends Controller
         ]);
 
         $slug = $this->generateUniqueSlug($request->input('title'));
-        $data = $request->all();
+        $req = $request->all();
         $data['slug'] = $slug;
         $data['created_by'] = auth()->id();
 
@@ -121,9 +121,9 @@ class ContentController extends Controller
             $data['category_id'] = $request->category_id;
         }
 
-        $content = Content::create($data);
+        $data = Content::create($req);
 
-        return (new ContentResource($content))->additional([
+        return (new ContentResource($data))->additional([
             'success' => true,
             'message' => 'Data berhasil disimpan'
         ]);
@@ -131,21 +131,21 @@ class ContentController extends Controller
 
     public function update(Request $request, $id_content)
     {
-        $content = Content::findOrFail($id_content);
+        $data = Content::findOrFail($id_content);
 
         $request->validate([
             'title' => 'required',
         ]);
 
         $slug = $this->generateUniqueSlug($request->input('title'));
-        $data = $request->all();
+        $req = $request->all();
         $data['slug'] = $slug;
         $data['updated_by'] = auth()->id();
 
         $user = auth()->user();
         if ($user->level_id == 3) {
             // Kontributor tidak dapat mengubah status jika konten aktif
-            if ($content->is_active == 1) {
+            if ($data->is_active == 1) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Kontributor tidak dapat mengubah konten yang sudah aktif'
@@ -158,9 +158,9 @@ class ContentController extends Controller
             $data['category_id'] = $request->category_id;
         }
 
-        $content->update($data);
+        $data->update($req);
 
-        return (new ContentResource($content))->additional([
+        return (new ContentResource($data))->additional([
             'success' => true,
             'message' => 'Data berhasil diperbarui'
         ]);

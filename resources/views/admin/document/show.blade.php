@@ -78,9 +78,13 @@
                                 <h6 class="mb-1">Kategori</h6>
                                 <p id="category"></p>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <h6 class="mb-1">Dibuat</h6>
-                                <p id="created_at"></p>
+                                <p><span id="created_by"></span><br><span id="created_at"></span></p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="mb-1">Diperbarui</h6>
+                                <p><span id="updated_by"></span><br><span id="updated_at"></span></p>
                             </div>
                         </div>
                         <div class="mt-4">
@@ -95,7 +99,8 @@
                                 <h6 class="mb-1">Dokumen</h6>
                                 <embed src="{{ asset($document->file_path) }}" type="application/pdf" width="100%"
                                     height="600px" />
-                                <button class="btn btn-gray btn-sm mt-3"><a href="{{ asset($document->file_path) }}" target="_blank" style="color: white; text-decoration: none;">Lihat Dokumen
+                                <button class="btn btn-gray btn-sm mt-3"><a href="{{ asset($document->file_path) }}"
+                                        target="_blank" style="color: white; text-decoration: none;">Lihat Dokumen
                                         PDF</a></button>
                             </div>
                         @else
@@ -138,8 +143,10 @@
                     } else {
                         $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
                     }
-                    $('#created_at').html(convertStringToDate(result['data']['created_at']));
-
+                    $('#created_at').text(convertStringToDate(result['data']['created_at']));
+                    $('#created_by').text(result['data']['created_by']);
+                    $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
+                    $('#updated_by').text(result['data']['updated_by']);
                 } else {
                     $("#detail-data-success").hide();
                     $("#detail-data-failed").show();

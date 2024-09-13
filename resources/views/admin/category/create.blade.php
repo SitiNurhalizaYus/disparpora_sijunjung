@@ -165,7 +165,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/category') }}");
+                                window.location.replace("{{ url('/admin/categories') }}");
                             });
                         } else {
                             Swal.fire({

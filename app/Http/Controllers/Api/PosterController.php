@@ -124,7 +124,15 @@ class PosterController extends Controller
             'name' => 'required',
         ]);
 
-        $req = $request->post();
+        $req = $request->all();
+        $data['created_by'] = auth()->id();
+
+        $user = auth()->user();
+        if ($user->level_id == 3) {
+            // Jika user adalah kontributor, status aktif otomatis 0
+            $data['is_active'] = 0;
+        }
+
         $data = Poster::create($req);
 
         if ($data) {
@@ -136,15 +144,26 @@ class PosterController extends Controller
 
     public function update(Request $request, $id)
     {
+        $data = Poster::find($id);
         $request->validate([
             'name' => 'required',
         ]);
 
-        $req = $request->post();
-        $query = Poster::findOrFail($id);
-        $query->update($req);
+        $req = $request->all();
+        $data['updated_by'] = auth()->id();
 
-        $data = Poster::findOrFail($id);
+        $user = auth()->user();
+        if ($user->level_id == 3) {
+            // Kontributor tidak dapat mengubah status jika konten aktif
+            if ($data->is_active == 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kontributor tidak dapat mengubah konten yang sudah aktif'
+                ], 403);
+            }
+            unset($data['is_active']);
+        }
+        $data->update($req);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ApiResource;
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Helpers\AppHelper;
+use Illuminate\Http\Request;
+use App\Http\Resources\ApiResource;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -41,8 +43,9 @@ class UserController extends Controller
 
         // query: joining users and user_levels tables
         $query = User::select('users.*', 'user_levels.name as level_name')
-            ->join('user_levels', 'users.level_id', '=', 'user_levels.id_level')
+            ->leftJoin('user_levels', 'users.level_id', '=', 'user_levels.id_level')
             ->where([['users.id_user', '>', '0']]);
+
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
@@ -80,8 +83,8 @@ class UserController extends Controller
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-         // get count
-         if($count == true) {
+        // get count
+        if ($count == true) {
             $query = $query->count('id_user');
             $data['count'] = $query;
         }
@@ -116,8 +119,9 @@ class UserController extends Controller
     {
         // query: joining users and user_levels tables
         $query = User::select('users.*', 'user_levels.name as level_name')
-            ->join('user_levels', 'users.level_id', '=', 'user_levels.id_level')
+            ->leftJoin('user_levels', 'users.level_id', '=', 'user_levels.id_level')
             ->where([['users.id_user', '>', '0']]);
+
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
@@ -187,10 +191,17 @@ class UserController extends Controller
             unset($req['password']);
         }
 
+        $query = Auth::user();
         $query = User::findOrFail($id_user);
         $query->update($req);
 
-        $data = User::findOrFail($id_user);
+        // Update data session setelah perubahan profil berhasil
+        AppHelper::instance()->setSession($query->toArray(), session('token'));
+
+        $data = User::select('users.*', 'user_levels.name as level_name')
+            ->leftJoin('user_levels', 'users.level_id', '=', 'user_levels.id_level')
+            ->where('users.id_user', $id_user)
+            ->first();
 
         if ($data) {
             return new ApiResource(true, 201, 'Update data successful', $data->toArray(), []);

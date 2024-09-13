@@ -73,9 +73,9 @@ class UploadController extends Controller
 
         // result
         if ($data) {
-            return new ApiResource(true, 200, 'Get data successful', $data, $metadata);
+            return new ApiResource(true, 200, 'Data berhasil diambil', $data, $metadata);
         } else {
-            return new ApiResource(false, 200, 'No data found', [], $metadata);
+            return new ApiResource(false, 200, 'Data tidak ditemukan', [], $metadata);
         }
     }
 
@@ -94,9 +94,9 @@ class UploadController extends Controller
 
         // result
         if ($data) {
-            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
+            return new ApiResource(true, 200, 'Data berhasil diambil', $data->toArray(), []);
         } else {
-            return new ApiResource(false, 200, 'No data found', [], []);
+            return new ApiResource(false, 200, 'Data tidak ditemukan', [], []);
         }
     }
 
@@ -116,6 +116,13 @@ class UploadController extends Controller
 
             $filePath = 'uploads/xxx/' . $filename_new;
 
+            // Cek apakah file sudah ada di database berdasarkan hash (nama file baru)
+            $existingFile = Upload::where('hash', $filename_new)->first();
+            if ($existingFile) {
+                // File sudah ada, jangan disimpan ulang
+                return new ApiResource(true, 200, 'File sudah ada', $existingFile->toArray(), ['url' => $existingFile->url]);
+            }
+
             // Periksa apakah file adalah gambar atau PDF
             if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
                 $this->resizeAndSaveImage($file, $filename_new);
@@ -124,7 +131,7 @@ class UploadController extends Controller
                 $file->move(public_path('uploads/pdf/'), $filename_new);
                 $filePath = 'uploads/pdf/' . $filename_new;
             } else {
-                return new ApiResource(false, 400, 'Unsupported file type', [], []);
+                return new ApiResource(false, 400, 'Tipe file tidak didukung', [], []);
             }
 
             $req = [
@@ -139,15 +146,14 @@ class UploadController extends Controller
             $data = Upload::create($req);
 
             if ($data) {
-                return new ApiResource(true, 201, 'Insert data successful', $data->toArray(), ['url' => $filePath]);
+                return new ApiResource(true, 201, 'Data berhasil ditambahkan', $data->toArray(), ['url' => $filePath]);
             } else {
-                return new ApiResource(false, 400, 'Failed to insert data', [], []);
+                return new ApiResource(false, 400, 'Gagal menambahkan data', [], []);
             }
         } else {
-            return new ApiResource(false, 400, 'File not found', [], []);
+            return new ApiResource(false, 400, 'File tidak ditemukan', [], []);
         }
     }
-
 
     public function update(Request $request, $id)
     {
@@ -168,7 +174,7 @@ class UploadController extends Controller
             // Resize dan simpan gambar
             $this->resizeAndSaveImage($image, $filename_new);
 
-            // Hapus gambar lama dari storage
+            // Hapus gambar lama dari storage dan tabel upload
             $this->deleteOldImage($upload);
 
             // Update informasi gambar di database
@@ -181,9 +187,9 @@ class UploadController extends Controller
                 'url' => 'uploads/xxx/' . $filename_new,
             ]);
 
-            return new ApiResource(true, 200, 'Update data successful', $upload->toArray(), []);
+            return new ApiResource(true, 200, 'Data berhasil diperbarui', $upload->toArray(), []);
         } else {
-            return new ApiResource(false, 400, 'Image not found', [], []);
+            return new ApiResource(false, 400, 'Gambar tidak ditemukan', [], []);
         }
     }
 
@@ -191,18 +197,17 @@ class UploadController extends Controller
     {
         $upload = Upload::findOrFail($id);
 
-        // Hapus gambar dari storage
+        // Hapus gambar dari storage dan tabel upload
         $this->deleteOldImage($upload);
 
         // Hapus data dari tabel uploads
         $upload->delete();
 
-        return new ApiResource(true, 201, 'Delete data successful', [], []);
+        return new ApiResource(true, 201, 'Data berhasil dihapus', [], []);
     }
 
     private function resizeAndSaveImage($image, $filename_new)
     {
-
         // Resize gambar ke ukuran yang lebih kecil (100, 300, 500)
         $image_resize_100 = ImageManager::gd()->read($image->getRealPath())->resize(100, 100)->save(public_path('uploads/100/' . $filename_new));
         $image_resize_300 = ImageManager::gd()->read($image->getRealPath())->resize(300, 300)->save(public_path('uploads/300/' . $filename_new));
@@ -225,6 +230,9 @@ class UploadController extends Controller
                     unlink($path);
                 }
             }
+
+            // Hapus juga dari tabel upload setelah file dihapus
+            $upload->delete();
         }
     }
 }

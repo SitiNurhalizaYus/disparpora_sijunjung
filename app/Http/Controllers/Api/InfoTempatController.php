@@ -128,15 +128,20 @@ class InfoTempatController extends Controller
             'name' => 'required',
         ]);
 
-        $slug = $this->generateUniqueSlug($request->input('name'));
-
-        $data = $request->all();
+        $slug = $this->generateUniqueSlug($request->input('title'));
+        $req = $request->all();
         $data['slug'] = $slug;
         $data['created_by'] = auth()->id();
 
-        $lokawisata = InfoTempat::create($data);
+        $user = auth()->user();
+        if ($user->level_id == 3) {
+            // Jika user adalah kontributor, status aktif otomatis 0
+            $data['is_active'] = 0;
+        }
 
-        if ($lokawisata) {
+        $data = InfoTempat::create($req);
+
+        if ($data) {
             return new ApiResource(true, 201, 'Data berhasil ditambahkan', $data, []);
         } else {
             return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
@@ -145,7 +150,7 @@ class InfoTempatController extends Controller
 
     public function update(Request $request, $id)
     {
-        $lokawisata = InfoTempat::findOrFail($id);
+        $data = InfoTempat::findOrFail($id);
 
         $request->validate([
             'name' => 'required',
@@ -153,11 +158,22 @@ class InfoTempatController extends Controller
 
         $slug = $this->generateUniqueSlug($request->input('name'));
 
-        $data = $request->all();
+        $req = $request->all();
         $data['slug'] = $slug;
         $data['updated_by'] = auth()->id();
 
-        $lokawisata->update($data);
+        $user = auth()->user();
+        if ($user->level_id == 3) {
+            // Kontributor tidak dapat mengubah status jika konten aktif
+            if ($data->is_active == 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kontributor tidak dapat mengubah konten yang sudah aktif'
+                ], 403);
+            }
+            unset($data['is_active']);
+        }
+        $data->update($req);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data berhasil diperbarui', $data, []);

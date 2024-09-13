@@ -41,8 +41,10 @@
                                     <div class="card-header bg-info text-white"><strong>Informasi Profil</strong></div>
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="title"></span></h4>
-                                        <p class="card-text"><h6>Deskripsi Singkat: </h6><span id="description_short"></span></p>
-                                        <p class="card-text"><h6>Slug: </h6><span id="slug"></span></p> 
+                                        <p class="card-text">
+                                        <h6>Deskripsi Singkat: </h6><span id="description_short"></span></p>
+                                        <p class="card-text">
+                                        <h6>Slug: </h6><span id="slug"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -51,8 +53,8 @@
                                     <div class="card-header bg-secondary text-white"><strong>Detail Tambahan</strong></div>
                                     <div class="card-body">
                                         <p class="card-text"><h6>Status: </h6><span id="is_active"></span></p>
-                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_at"></span></p>
-                                        <p class="card-text"><h6>Diperbarui: </h6><span id="updated_at"></span></p>
+                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_by"></span><br><span id="created_at"></span></p>
+                                        <p class="card-text"><h6>Diperbarui: </h6><span id="updated_by"></span><br><span id="updated_at"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +73,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-gray text-white text-center"><strong>Konten Profil</strong></div>
+                                    <div class="card-header bg-gray text-white text-center"><strong>Konten Profil</strong>
+                                    </div>
                                     <div class="card-body">
                                         <div id="description_long" style="color: black;"></div>
                                     </div>
@@ -127,7 +130,9 @@
                             '<span class="badge bg-success">Aktif</span>' :
                             '<span class="badge bg-danger">Tidak Aktif</span>');
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
+                        $('#created_by').text(result['data']['created_by']);
                         $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
+                        $('#updated_by').text(result['data']['updated_by']);
 
                         // Render tombol Edit dan Delete sesuai ketentuan
                         let actionButtons = '';
@@ -216,7 +221,13 @@
 
         // Fungsi untuk mengonversi string tanggal menjadi format yang lebih ramah
         function convertStringToDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
             return new Date(dateString).toLocaleDateString('id-ID', options);
         }
     </script>

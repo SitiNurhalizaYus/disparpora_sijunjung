@@ -52,8 +52,8 @@
                                     <div class="card-header bg-secondary text-white"><strong>Detail Tambahan</strong></div>
                                     <div class="card-body">
                                         <p class="card-text"><h6>Status: </h6><span id="is_active"></span></p>
-                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_at"></span></p>
-                                        <p class="card-text"><h6>Diperbarui: </h6><span id="updated_at"></span></p>
+                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_by"></span><br><span id="created_at"></span></p>
+                                        <p class="card-text"><h6>Diperbarui: </h6><span id="updated_by"></span><br><span id="updated_at"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -155,10 +155,12 @@
                         $("#image").attr("src", "{{ url('/') }}/" + result['data']['image']);
                         $('#description_long').html(result['data']['content']);
                         $('#is_active').html(result['data']['is_active'] == 1 ?
-                            '<span class="badge bg-success">Aktif</span>' :
-                            '<span class="badge bg-danger">Tidak Aktif</span>');
+                        '<span class="badge bg-success">Aktif</span>' :
+                        '<span class="badge bg-danger">Tidak Aktif</span>');
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
+                        $('#created_by').text(result['data']['created_by']);
                         $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
+                        $('#updated_by').text(result['data']['updated_by']);
                     } else {
                         // Tampilkan pesan error jika gagal memuat data
                         $("#detail-data-success").hide();

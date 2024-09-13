@@ -163,6 +163,7 @@
                                 <hr class="hr-horizontal" style="background-color: white">
                             </li>
 
+                            @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'profils')) active @endif"
                                     aria-current="page" href="{{ url('/admin/profils') }}">
@@ -175,6 +176,7 @@
                                     <span class="item-name">Profil</span>
                                 </a>
                             </li>
+                            @endif
 
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'beritas')) active @endif"

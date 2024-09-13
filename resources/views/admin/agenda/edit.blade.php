@@ -71,12 +71,17 @@
                                     unggah file PDF.</p>
                             </div>
 
-                            <div class="form-group">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
-                                    <label class="form-check-label" for="is_active">Status Aktif</label>
+                            @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
+                                <div class="form-group">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
+                                        <label class="form-check-label" for="is_active">Status Aktif</label>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
+                            @if ($session_data['user_level_id'] == 3)
+                                <input type="hidden" name="is_active" value="0">
+                            @endif
                             <br><br>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
