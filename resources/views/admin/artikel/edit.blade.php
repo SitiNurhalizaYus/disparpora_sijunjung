@@ -32,9 +32,9 @@
                             <input type="hidden" name="_method" value="PUT"> <!-- Simulasi metode PUT dengan POST -->
                             <input type="hidden" name="type" value="artikel">
                             <div class="form-group">
-                                <label class="form-label" for="title">Judul Artikel</label>
+                                <label class="form-label" for="title">Judul artikel</label>
                                 <input class="form-control" type="text" id="title" name="title"
-                                    value="" placeholder="Masukkan Judul Artikel" required
+                                    value="" placeholder="Masukkan Judul artikel" required
                                     pattern="[A-Za-z0-9\s]+$">
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul
                                     harus diisi dan tidak boleh ada simbol.</p>
@@ -67,7 +67,7 @@
                                     Silahkan pilih category</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="content">Konten Artikel</label>
+                                <label class="form-label" for="content">Konten artikel</label>
                                 <textarea class="form-control" type="text" id="content" name="content" style="display: none" required></textarea>
                                 <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
                             </div>
@@ -195,7 +195,7 @@
                 $('#invalid-file').show();
                 $('#file').val(''); // Kosongkan input file jika tidak valid
 
-                // Tampilkan pemberitahuan menggunakan Swal
+                // Tampilkan pemartikelhuan menggunakan Swal
                 Swal.fire({
                     icon: 'error',
                     title: 'File tidak valid',
@@ -245,7 +245,7 @@
             }
         });
 
-        // Handle upload image
+        //handle upload
         $('#file').change(function() {
             if (validateFile()) {
                 // Preview image
@@ -262,30 +262,64 @@
                     var file = $(this).prop('files')[0];
                     formdata.append("file", file);
                 }
-                $.ajaxSetup({
-                    headers: {
-                        'Authorization': "Bearer {{ $session_token }}"
+                // Tampilkan loading
+                Swal.fire({
+                    title: 'Mengunggah...',
+                    html: 'Tunggu sebentar, gambar sedang diunggah',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
                     }
                 });
+
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Bearer {{ $session_token }}",
+                    }
+                });
+
                 $.ajax({
-                    url: '/api/upload',
+                    url: '/api/upload', // Endpoint untuk mengunggah gambar
                     type: "POST",
                     data: formdata,
                     processData: false,
                     contentType: false,
                     success: function(result) {
+                        Swal.close(); // Tutup dialog loading
                         if (result['success'] == true) {
+                            // Simpan path file sementara ke dalam variabel
                             $('#image').val(result['data']['url'].replace('/xxx/', '/500/'));
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil",
+                                text: "Gambar berhasil diunggah.",
+                                timer: 2000, // Notifikasi akan ditutup otomatis setelah 2 detik
+                                showConfirmButton: false, // Tidak menampilkan tombol OK
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Gagal mengunggah gambar.",
+                                confirmButtonColor: '#3A57E8',
+                            });
                         }
                     },
                     error: function(xhr) {
+                        Swal.close(); // Tutup dialog loading
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Failed to upload image.",
+                            text: "Terjadi kesalahan saat mengunggah gambar.",
                             confirmButtonColor: '#3A57E8',
                         });
+
+                        // Reset file input and image preview
+                        $('#file').val('');
+                        $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                        $('#picture').val('noimage.jpg');
                     }
+
                 });
             }
         });

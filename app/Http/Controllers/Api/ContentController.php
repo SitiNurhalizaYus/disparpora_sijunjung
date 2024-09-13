@@ -22,81 +22,57 @@ class ContentController extends Controller
         // Ambil parameter dari request
         $count = $request->get('count', false);
         $sort = $request->get('sort', 'id_content:asc');
-        $where = $request->get('where', '{}');
         $search = $request->get('search', '');
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));
         $type = $request->get('type', null);
         $category_id = $request->get('category_id', null);
-        $recent = $request->get('recent', false);
-        $exclude_slug = $request->get('exclude_slug', null); // Parameter untuk mengecualikan slug
 
         // Menentukan kolom dan arah sorting (default 'id_content:asc')
         $sort = explode(':', $sort);
         if (count($sort) !== 2 || !Schema::hasColumn('contents', $sort[0])) {
-            $sort = ['id_content', 'asc']; // Sorting default jika tidak valid
+            $sort = ['id_content', 'asc'];
         }
 
         // Membuat query dasar untuk tabel Content dengan relasi arsip dan kategori
         $query = Content::with(['category', 'createdBy', 'updatedBy']);
 
-        // Filter berdasarkan bulan dan tahun
-        if ($request->has('month') && $request->has('year')) {
-            $query->whereMonth('created_at', $request->month)
-                ->whereYear('created_at', $request->year);
-        }
-
-        // Menambahkan filter berdasarkan tipe konten jika ada
+        // Filter berdasarkan tipe konten
         if ($type) {
             $query->where('type', $type);
         }
 
-        // Menambahkan filter berdasarkan category_id jika ada
+        // Filter berdasarkan category_id
         if ($category_id) {
             $query->where('category_id', $category_id);
         }
 
-        // Jika slug untuk dikecualikan ada, tambah pengecualian
-        if ($exclude_slug) {
-            $query->where('slug', '!=', $exclude_slug);
-        }
-
-        // Jika `recent` disetel ke true, ambil data berdasarkan tanggal terbaru
-        if ($recent) {
-            $query->orderBy('created_at', 'desc');
-        }
-
-        // Menambahkan pencarian berdasarkan judul jika ada
+        // Filter berdasarkan pencarian judul
         if ($search) {
             $query->where('title', 'like', "%{$search}%");
         }
 
-        // Membuat metadata untuk pagination
-        $metadata = [];
-        $metadata['total_data'] = $query->count(); // Total data sebelum paginasi
+        // Paginasi dan sorting
+        $metadata['total_data'] = $query->count();
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
         if ($per_page > 0) {
-            // Pastikan menggunakan limit jika offset digunakan
             $data = $query->orderBy($sort[0], $sort[1])
                 ->limit($per_page)
                 ->offset(($page - 1) * $per_page)
                 ->get();
         } else {
-            // Jika per_page adalah 0 atau 'all', ambil semua data tanpa limit dan offset
             $data = $query->orderBy($sort[0], $sort[1])->get();
         }
 
-        // Mengembalikan hasil data dalam format ContentResource dengan metadata tambahan
         return ContentResource::collection($data)->additional([
             'success' => true,
             'message' => 'Get data successful',
             'metadata' => $metadata
         ]);
     }
-
 
     public function show($id_content)
     {
@@ -107,11 +83,9 @@ class ContentController extends Controller
             $query->where('is_active', 1);
         }
 
-        if (is_numeric($id_content)) {
-            $data = $query->find($id_content);
-        } else {
-            $data = $query->where('slug', $id_content)->first();
-        }
+        $data = is_numeric($id_content) 
+            ? $query->find($id_content) 
+            : $query->where('slug', $id_content)->first();
 
         if ($data) {
             return (new ContentResource($data))->additional([
@@ -133,10 +107,15 @@ class ContentController extends Controller
         ]);
 
         $slug = $this->generateUniqueSlug($request->input('title'));
-
         $data = $request->all();
         $data['slug'] = $slug;
         $data['created_by'] = auth()->id();
+
+        $user = auth()->user();
+        if ($user->level_id == 3) {
+            // Jika user adalah kontributor, status aktif otomatis 0
+            $data['is_active'] = 0;
+        }
 
         if ($request->input('type', 'berita') !== 'profil') {
             $data['category_id'] = $request->category_id;
@@ -159,10 +138,21 @@ class ContentController extends Controller
         ]);
 
         $slug = $this->generateUniqueSlug($request->input('title'));
-
         $data = $request->all();
         $data['slug'] = $slug;
         $data['updated_by'] = auth()->id();
+
+        $user = auth()->user();
+        if ($user->level_id == 3) {
+            // Kontributor tidak dapat mengubah status jika konten aktif
+            if ($content->is_active == 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kontributor tidak dapat mengubah konten yang sudah aktif'
+                ], 403);
+            }
+            unset($data['is_active']);
+        }
 
         if ($request->input('type', 'berita') !== 'profil') {
             $data['category_id'] = $request->category_id;
@@ -179,6 +169,15 @@ class ContentController extends Controller
     public function destroy($id_content)
     {
         $content = Content::findOrFail($id_content);
+
+        $user = auth()->user();
+        if ($user->level_id == 3 && $content->is_active == 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kontributor tidak dapat menghapus konten yang sudah aktif'
+            ], 403);
+        }
+
         $content->delete();
 
         return response()->json([

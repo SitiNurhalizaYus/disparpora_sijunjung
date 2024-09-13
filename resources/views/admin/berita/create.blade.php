@@ -67,7 +67,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
-                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg" required>
+                                <input class="form-control" type="file" id="file" name="file"
+                                    accept="image/jpeg,image/png,image/jpg" required>
                                 <input class="form-control" type="hidden" id="image" name="image"
                                     value="noimage.jpg">
                                 <br>
@@ -78,15 +79,20 @@
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">
                                     Silakan unggah gambar.</p>
                             </div>
-                            <div class="form-group">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
-                                    <label class="form-check-label" for="is_active">Status Aktif</label>
+                            @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
+                                <div class="form-group">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
+                                        <label class="form-check-label" for="is_active">Status Aktif</label>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
+                            @if ($session_data['user_level_id'] == 3)
+                                <input type="hidden" name="is_active" value="0">
+                            @endif
                             <br><br>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
+                                <a href="{{ URL::previous() }}" class="btn btn-danger" id="cancel-button">Batal</a>
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </div>
                         </form>
@@ -96,21 +102,24 @@
         </div>
     </div>
     <script>
-         // Handle fetching categories via AJAX
-         $(document).ready(function() {
+        // Handle fetching categories via AJAX
+        $(document).ready(function() {
             $.ajax({
                 url: '/api/category', // API endpoint untuk mengambil kategori
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    let categories = response.data || response; // Cek apakah data ada di dalam properti data atau langsung di response
+                    let categories = response.data ||
+                        response; // Cek apakah data ada di dalam properti data atau langsung di response
                     let categoryDropdown = $('#category_id');
                     categoryDropdown.empty(); // Kosongkan dropdown sebelum mengisi ulang
-                    categoryDropdown.append('<option value="" disabled selected>Pilih Kategori</option>');
+                    categoryDropdown.append(
+                        '<option value="" disabled selected>Pilih Kategori</option>');
 
                     // Loop melalui hasil dan tambahkan opsi ke dropdown
                     $.each(categories, function(index, category) {
-                        categoryDropdown.append('<option value="' + category.id_category + '">' + category.name + '</option>');
+                        categoryDropdown.append('<option value="' + category.id_category +
+                            '">' + category.name + '</option>');
                     });
 
                     // Jika ada validasi yang gagal sebelumnya dan nilai lama ada, set kembali nilai dropdown
@@ -304,7 +313,7 @@
             return isValid;
         }
 
-        //handle post
+        //handle simpan
         $("#form-data").submit(function(event) {
             event.preventDefault();
 

@@ -17,13 +17,8 @@
                         </a>
                     </h3>
                 </div>
-                <div>
-                    <a href="{{ url('/admin/profils/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
-                        <i class="bi bi-pencil"></i> Edit
-                    </a>
-                    <button onclick="removeData({{ $id_content }})" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash"></i> Delete
-                    </button>
+                <div id="action-buttons">
+                    <!-- Tombol Edit dan Delete akan di-render di sini -->
                 </div>
             </div>
         </div>
@@ -38,12 +33,12 @@
                         </div>
                     </div>
 
-                    <!-- Konten data profils -->
+                    <!-- Konten data profil -->
                     <div class="card-body" id="detail-data-success" style="display: none;">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-info text-white"><strong>Informasi profils</strong></div>
+                                    <div class="card-header bg-info text-white"><strong>Informasi Profil</strong></div>
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="title"></span></h4>
                                         <p class="card-text"><h6>Deskripsi Singkat: </h6><span id="description_short"></span></p>
@@ -67,7 +62,7 @@
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                                     <div class="card-header bg-dark text-white text-center"><strong>Gambar</strong></div>
                                     <div class="card-body text-center">
-                                        <img id="image" class="img-fluid rounded" alt="profils Image"
+                                        <img id="image" class="img-fluid rounded" alt="Profil Image"
                                             style="max-width: 100%;">
                                     </div>
                                 </div>
@@ -76,7 +71,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-gray text-white text-center"><strong>Konten profils</strong></div>
+                                    <div class="card-header bg-gray text-white text-center"><strong>Konten Profil</strong></div>
                                     <div class="card-body">
                                         <div id="description_long" style="color: black;"></div>
                                     </div>
@@ -107,7 +102,7 @@
                 }
             });
 
-            // Request untuk mendapatkan data profils
+            // Request untuk mendapatkan data profil
             $.ajax({
                 url: '/api/content/{{ $id_content }}?type=profil',
                 type: "GET",
@@ -122,6 +117,7 @@
                         $("#detail-data-success").show();
                         $("#detail-data-failed").hide();
 
+                        // Mengisi data ke view
                         $('#title').text(result['data']['title']);
                         $('#description_short').text(result['data']['description_short']);
                         $('#slug').text(result['data']['slug']);
@@ -132,6 +128,30 @@
                             '<span class="badge bg-danger">Tidak Aktif</span>');
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
                         $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
+
+                        // Render tombol Edit dan Delete sesuai ketentuan
+                        let actionButtons = '';
+                        if ($session_data['user_level_id'] == 3 && result['data']['is_active'] == 1) {
+                            // Kontributor dengan konten aktif, disable tombol
+                            actionButtons = `
+                                <a href="javascript:void(0);" class="btn btn-warning btn-sm disabled">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <button class="btn btn-danger btn-sm disabled">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>`;
+                        } else {
+                            // User selain kontributor atau konten belum aktif
+                            actionButtons = `
+                                <a href="{{ url('/admin/profils/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <button onclick="removeData({{ $id_content }})" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>`;
+                        }
+                        $('#action-buttons').html(actionButtons);
+
                     } else {
                         // Tampilkan pesan error jika gagal memuat data
                         $("#detail-data-success").hide();
@@ -159,7 +179,7 @@
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Request untuk menghapus data profils
+                    // Request untuk menghapus data profil
                     $.ajaxSetup({
                         headers: {
                             'Authorization': "Bearer {{ $session_token }}"

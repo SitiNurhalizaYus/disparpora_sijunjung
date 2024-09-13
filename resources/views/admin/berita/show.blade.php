@@ -17,13 +17,8 @@
                         </a>
                     </h3>
                 </div>
-                <div>
-                    <a href="{{ url('/admin/beritas/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
-                        <i class="bi bi-pencil"></i> Edit
-                    </a>
-                    <button onclick="removeData({{ $id_content }})" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash"></i> Delete
-                    </button>
+                <div id="action-buttons">
+                    <!-- Tombol Edit dan Delete akan dirender di sini -->
                 </div>
             </div>
         </div>
@@ -123,6 +118,36 @@
                         $("#detail-data-success").show();
                         $("#detail-data-failed").hide();
 
+                        var is_active = result.data.is_active;
+                        var user_level_id = {{ $session_data['user_level_id'] }}; // Ambil level user
+
+                        // Render tombol berdasarkan is_active dan level_id
+                        var actionButtonsHtml = '';
+                        if (user_level_id == 3 && is_active == 1) {
+                            // Jika kontributor dan konten sudah aktif, disable tombol edit dan delete
+                            actionButtonsHtml += `
+                                <a href="javascript:void(0);" class="btn btn-warning btn-sm disabled">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <button class="btn btn-danger btn-sm disabled">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            `;
+                        } else {
+                            // Jika bukan kontributor atau konten belum aktif
+                            actionButtonsHtml += `
+                                <a href="{{ url('/admin/beritas/' . $id_content . '/edit') }}" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <button onclick="removeData({{ $id_content }})" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            `;
+                        }
+
+                        $('#action-buttons').html(actionButtonsHtml); // Masukkan tombol ke dalam div action-buttons
+
+                        // Menampilkan data konten
                         $('#title').text(result['data']['title']);
                         $('#description_short').text(result['data']['description_short']);
                         $('#slug').text(result['data']['slug']);
@@ -151,8 +176,8 @@
             });
         });
 
-        // Fungsi untuk menghapus data
-        function removeData(id_content) {
+                // Fungsi untuk menghapus data
+                function removeData(id_content) {
             Swal.fire({
                 title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
@@ -190,6 +215,14 @@
                                     confirmButtonColor: '#3A57E8',
                                 });
                             }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Failed to delete the content.",
+                                confirmButtonColor: '#3A57E8',
+                            });
                         }
                     });
                 }
@@ -203,3 +236,4 @@
         }
     </script>
 @endsection
+

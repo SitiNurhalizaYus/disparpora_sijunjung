@@ -46,7 +46,7 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::get('auth', [App\Http\Controllers\Admin\AuthController::class, 'index']);
     Route::get('auth/login', [App\Http\Controllers\Admin\AuthController::class, 'login'])->name('admin.login');
     Route::post('auth/action_login', [App\Http\Controllers\Admin\AuthController::class, 'action_login']);
-    Route::get('auth/logout', [App\Http\Controllers\Admin\AuthController::class, 'logout']);
+    Route::get('auth/logout', [App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('admin.logout');
     Route::get('auth/forgot', [App\Http\Controllers\Admin\AuthController::class, 'forgot']);
     Route::get('auth/error', [App\Http\Controllers\Admin\AuthController::class, 'error'])->name('admin.error');
 

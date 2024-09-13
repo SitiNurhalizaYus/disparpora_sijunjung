@@ -99,7 +99,6 @@
                             <span class="item-name">Dashboard</span>
                         </a>
                     </li>
-
                     <li>
                         <hr class="hr-horizontal" style="background-color: white">
                     </li>
@@ -320,6 +319,7 @@
                         </a>
                     </li>
 
+                    @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                     {{-- pesan --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'message')) {{ 'active' }} @endif"
@@ -338,6 +338,7 @@
                             <span class="item-name">Pesan</span>
                         </a>
                     </li>
+                    @endif
 
                     @if ($session_data['user_level_id'] == 1)
                         <li>
