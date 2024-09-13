@@ -127,12 +127,12 @@ class MitraController extends Controller
         ]);
 
         $req = $request->all();
-        $data['created_by'] = auth()->id();
+        $req['created_by'] = auth()->id();
 
         $user = auth()->user();
         if ($user->level_id == 3) {
             // Jika user adalah kontributor, status aktif otomatis 0
-            $data['is_active'] = 0;
+            $req['is_active'] = 0;
         }
 
         $data = Mitra::create($req);

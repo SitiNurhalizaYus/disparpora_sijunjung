@@ -130,13 +130,13 @@ class InfoTempatController extends Controller
 
         $slug = $this->generateUniqueSlug($request->input('title'));
         $req = $request->all();
-        $data['slug'] = $slug;
-        $data['created_by'] = auth()->id();
+        $req['slug'] = $slug;
+        $req['created_by'] = auth()->id();
 
         $user = auth()->user();
         if ($user->level_id == 3) {
             // Jika user adalah kontributor, status aktif otomatis 0
-            $data['is_active'] = 0;
+            $req['is_active'] = 0;
         }
 
         $data = InfoTempat::create($req);

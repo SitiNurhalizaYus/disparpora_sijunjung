@@ -42,9 +42,7 @@ class UserController extends Controller
         $where = json_decode($where, true);
 
         // query: joining users and user_levels tables
-        $query = User::select('users.*', 'user_levels.name as level_name')
-            ->leftJoin('user_levels', 'users.level_id', '=', 'user_levels.id_level')
-            ->where([['users.id_user', '>', '0']]);
+        $query = User::with(relations: ['levels']);
 
 
         // cek token
@@ -118,27 +116,26 @@ class UserController extends Controller
     public function show($id_user)
     {
         // query: joining users and user_levels tables
-        $query = User::select('users.*', 'user_levels.name as level_name')
-            ->leftJoin('user_levels', 'users.level_id', '=', 'user_levels.id_level')
-            ->where([['users.id_user', '>', '0']]);
-
+        $data = User::with('levels')->where('id_user', $id_user)->first();
 
         // cek token
         $jwt_payload = auth()->guard('api')->user();
-        if ($jwt_payload['level_id'] != 1) {
-            $query = $query->where('users.id_user', $jwt_payload['id_user']);
+        if ($jwt_payload['level_id'] != 1 && $jwt_payload['id_user'] != $id_user) {
+            return new ApiResource(false, 401, 'Does Not Have Access', [], []);
         }
 
-        // data
-        $data = $query->find($id_user);
+        // Siapkan data response
+        $response = $data->toArray();
+        $response['level_name'] = isset($data->levels) ? $data->levels->name : 'Unknown';
 
-        // result
+        // Return result
         if ($data) {
-            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
+            return new ApiResource(true, 200, 'Get data successful', $response, []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
+
 
     public function store(Request $request)
     {
@@ -169,46 +166,56 @@ class UserController extends Controller
 
     public function update(Request $request, $id_user)
     {
-        // cek token
+        // Cek token
         $jwt_payload = auth()->guard('api')->user();
-        if ($jwt_payload['level_id'] != 1) {
-            if ($jwt_payload['id_user'] != $id_user) {
-                return new ApiResource(false, 401, 'Does Not Have Access', [], []);
-            }
+        if ($jwt_payload['level_id'] != 1 && $jwt_payload['id_user'] != $id_user) {
+            return new ApiResource(false, 401, 'Does Not Have Access', [], []);
         }
 
+        // Validasi data
         $request->validate([
             'name' => 'sometimes|required',
             'email' => 'sometimes|required|unique:users,email,' . $id_user . ',id_user',
             'username' => 'sometimes|required|unique:users,username,' . $id_user . ',id_user',
             'password' => 'sometimes|required',
+            'level_id' => 'required' // Pastikan level_id divalidasi
         ]);
 
+        // Ambil semua input
         $req = $request->all();
+
+        // Jika ada password, encrypt
         if ($request->filled('password')) {
             $req['password'] = bcrypt($req['password']);
         } else {
             unset($req['password']);
         }
 
-        $query = Auth::user();
-        $query = User::findOrFail($id_user);
-        $query->update($req);
+        // Temukan user
+        $user = User::findOrFail($id_user);
 
-        // Update data session setelah perubahan profil berhasil
-        AppHelper::instance()->setSession($query->toArray(), session('token'));
+        // Update data user
+        $user->update($req);
 
-        $data = User::select('users.*', 'user_levels.name as level_name')
-            ->leftJoin('user_levels', 'users.level_id', '=', 'user_levels.id_level')
-            ->where('users.id_user', $id_user)
-            ->first();
+        // Update data session setelah perubahan profil
+        AppHelper::instance()->setSession($user->toArray(), session('token'));
 
+        // Ambil data terbaru dengan relasi levels
+        $data = User::with('levels')->where('id_user', $id_user)->first();
+
+        // Siapkan data response
+        $response = $data->toArray();
+        // Tambahkan level_name ke dalam response, cek jika relasi levels ada
+        $response['level_name'] = isset($data->levels) ? $data->levels->name : 'Unknown'; // Mengambil nama level
+   
+        // Return response setelah update
         if ($data) {
-            return new ApiResource(true, 201, 'Update data successful', $data->toArray(), []);
+            return new ApiResource(true, 201, 'Update data successful', $response, []);
         } else {
             return new ApiResource(false, 400, 'Failed to update data', [], []);
         }
     }
+
 
     public function destroy($id_user)
     {

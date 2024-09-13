@@ -83,8 +83,8 @@ class ContentController extends Controller
             $query->where('is_active', 1);
         }
 
-        $data = is_numeric($id_content) 
-            ? $query->find($id_content) 
+        $data = is_numeric($id_content)
+            ? $query->find($id_content)
             : $query->where('slug', $id_content)->first();
 
         if ($data) {
@@ -102,32 +102,42 @@ class ContentController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
             'title' => 'required',
         ]);
 
+        // Generate slug unik berdasarkan title
         $slug = $this->generateUniqueSlug($request->input('title'));
-        $req = $request->all();
-        $data['slug'] = $slug;
-        $data['created_by'] = auth()->id();
 
+        // Ambil semua input dari request
+        $req = $request->all();
+
+        // Tambahkan slug dan created_by ke data yang akan disimpan
+        $req['slug'] = $slug;
+        $req['created_by'] = auth()->id();
+
+        // Periksa level user, jika kontributor (level_id = 3), atur is_active = 0
         $user = auth()->user();
         if ($user->level_id == 3) {
-            // Jika user adalah kontributor, status aktif otomatis 0
-            $data['is_active'] = 0;
+            $req['is_active'] = 0;
         }
 
+        // Jika tipe bukan profil, tambahkan category_id
         if ($request->input('type', 'berita') !== 'profil') {
-            $data['category_id'] = $request->category_id;
+            $req['category_id'] = $request->category_id;
         }
 
+        // Simpan data ke dalam tabel content
         $data = Content::create($req);
 
+        // Return response dengan resource tambahan
         return (new ContentResource($data))->additional([
             'success' => true,
             'message' => 'Data berhasil disimpan'
         ]);
     }
+
 
     public function update(Request $request, $id_content)
     {
