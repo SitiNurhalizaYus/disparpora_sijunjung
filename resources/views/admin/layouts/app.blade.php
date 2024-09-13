@@ -164,18 +164,18 @@
                             </li>
 
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
-                            <li class="nav-item">
-                                <a class="nav-link @if (str_contains($menu, 'profils')) active @endif"
-                                    aria-current="page" href="{{ url('/admin/profils') }}">
-                                    <i class="icon">
-                                        <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="4" cy="4" r="4" fill="currentColor" />
-                                        </svg>
-                                    </i>
-                                    <span class="item-name">Profil</span>
-                                </a>
-                            </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @if (str_contains($menu, 'profils')) active @endif"
+                                        aria-current="page" href="{{ url('/admin/profils') }}">
+                                        <i class="icon">
+                                            <svg class="icon-8" width="8" height="8" viewBox="0 0 8 8"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="4" cy="4" r="4" fill="currentColor" />
+                                            </svg>
+                                        </i>
+                                        <span class="item-name">Profil</span>
+                                    </a>
+                                </li>
                             @endif
 
                             <li class="nav-item">
@@ -322,24 +322,24 @@
                     </li>
 
                     @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
-                    {{-- pesan --}}
-                    <li class="nav-item">
-                        <a class="nav-link @if (str_contains($menu, 'message')) {{ 'active' }} @endif"
-                            aria-current="page" href="{{ url('/admin/messages') }}">
-                            <i class="icon">
-                                <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path opacity="0.4"
-                                        d="M12.02 2C6.21 2 2 6.74 2 12C2 13.68 2.49 15.41 3.35 16.99C3.51 17.25 3.53 17.58 3.42 17.89L2.75 20.13C2.6 20.67 3.06 21.07 3.57 20.91L5.59 20.31C6.14 20.13 6.57 20.36 7.081 20.67C8.541 21.53 10.36 21.97 12 21.97C16.96 21.97 22 18.14 22 11.97C22 6.65 17.7 2 12.02 2Z"
-                                        fill="currentColor"></path>
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M11.9807 13.2901C11.2707 13.2801 10.7007 12.7101 10.7007 12.0001C10.7007 11.3001 11.2807 10.7201 11.9807 10.7301C12.6907 10.7301 13.2607 11.3001 13.2607 12.0101C13.2607 12.7101 12.6907 13.2901 11.9807 13.2901ZM7.37033 13.2901C6.67033 13.2901 6.09033 12.7101 6.09033 12.0101C6.09033 11.3001 6.66033 10.7301 7.37033 10.7301C8.08033 10.7301 8.65033 11.3001 8.65033 12.0101C8.65033 12.7101 8.08033 13.2801 7.37033 13.2901ZM15.3105 12.0101C15.3105 12.7101 15.8805 13.2901 16.5905 13.2901C17.3005 13.2901 17.8705 12.7101 17.8705 12.0101C17.8705 11.3001 17.3005 10.7301 16.5905 10.7301C15.8805 10.7301 15.3105 11.3001 15.3105 12.0101Z"
-                                        fill="currentColor"></path>
-                                </svg>
-                            </i>
-                            <span class="item-name">Pesan</span>
-                        </a>
-                    </li>
+                        {{-- pesan --}}
+                        <li class="nav-item">
+                            <a class="nav-link @if (str_contains($menu, 'message')) {{ 'active' }} @endif"
+                                aria-current="page" href="{{ url('/admin/messages') }}">
+                                <i class="icon">
+                                    <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path opacity="0.4"
+                                            d="M12.02 2C6.21 2 2 6.74 2 12C2 13.68 2.49 15.41 3.35 16.99C3.51 17.25 3.53 17.58 3.42 17.89L2.75 20.13C2.6 20.67 3.06 21.07 3.57 20.91L5.59 20.31C6.14 20.13 6.57 20.36 7.081 20.67C8.541 21.53 10.36 21.97 12 21.97C16.96 21.97 22 18.14 22 11.97C22 6.65 17.7 2 12.02 2Z"
+                                            fill="currentColor"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M11.9807 13.2901C11.2707 13.2801 10.7007 12.7101 10.7007 12.0001C10.7007 11.3001 11.2807 10.7201 11.9807 10.7301C12.6907 10.7301 13.2607 11.3001 13.2607 12.0101C13.2607 12.7101 12.6907 13.2901 11.9807 13.2901ZM7.37033 13.2901C6.67033 13.2901 6.09033 12.7101 6.09033 12.0101C6.09033 11.3001 6.66033 10.7301 7.37033 10.7301C8.08033 10.7301 8.65033 11.3001 8.65033 12.0101C8.65033 12.7101 8.08033 13.2801 7.37033 13.2901ZM15.3105 12.0101C15.3105 12.7101 15.8805 13.2901 16.5905 13.2901C17.3005 13.2901 17.8705 12.7101 17.8705 12.0101C17.8705 11.3001 17.3005 10.7301 16.5905 10.7301C15.8805 10.7301 15.3105 11.3001 15.3105 12.0101Z"
+                                            fill="currentColor"></path>
+                                    </svg>
+                                </i>
+                                <span class="item-name">Pesan</span>
+                            </a>
+                        </li>
                     @endif
 
                     @if ($session_data['user_level_id'] == 1)
@@ -435,13 +435,13 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
                             <li class="nav-item dropdown">
-                                <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('/' . str_replace('/xxx/', '/100/', $session_data['user_picture'])) . '?' . time() }}"
+                                <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img id="user-picture" src="{{ asset('/' . str_replace('/xxx/', '/100/', $session_data['user_picture'])) . '?' . time() }}"
                                         class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
-                                    <div class="caption ms-3 d-none d-md-block ">
-                                        <h6 class="mb-0 caption-title">{{ $session_data['user_name'] }}</h6>
-                                        <p class="mb-0 caption-sub-title">{{ $session_data['user_level_name'] }}</p>
+                                    <div class="caption ms-3 d-none d-md-block">
+                                        <h6 class="mb-0 caption-title" id="user-name">{{ $session_data['user_name'] }}</h6>
+                                        <p class="mb-0 caption-sub-title" id="user-level-name">{{ $session_data['user_level_name'] }}</p>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -449,11 +449,10 @@
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="{{ url('/admin/auth/logout') }}">Logout</a>
-                                    </li>
+                                    <li><a class="dropdown-item" href="{{ url('/admin/auth/logout') }}">Logout</a></li>
                                 </ul>
                             </li>
-                        </ul>
+                        </ul>                        
                     </div>
                 </div>
             </nav>

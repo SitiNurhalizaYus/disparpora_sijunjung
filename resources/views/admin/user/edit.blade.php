@@ -337,70 +337,58 @@
         $("#form-data").submit(function(event) {
             event.preventDefault();
 
-            if (validateForm()) {
-                var form = new FormData(document.getElementById("form-data"));
+            var form = new FormData(document.getElementById("form-data"));
+            form.append('_method', 'PUT'); // Tambahkan method PUT untuk request update
+            form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
 
-                // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
-                form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
-
-                $.ajax({
-                    url: '/api/user/{{ $id_user }}',
-                    type: "POST", // Menggunakan POST dengan _method PUT
-                    data: form,
-                    contentType: false, // Supaya FormData bisa bekerja dengan benar
-                    processData: false, // Supaya FormData bisa bekerja dengan benar
-                    success: function(result) {
-                        if (result['success'] == true) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Success",
-                                text: result['message'],
-                                confirmButtonColor: '#3A57E8',
-                            }).then((result) => {
-                                window.location.replace("{{ url('/admin/users') }}");
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: result['message'],
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            let errorMessage = '';
-                            Object.keys(errors).forEach(function(key) {
-                                errorMessage += errors[key][0] + '\n';
-                            });
-                            Swal.fire({
-                                icon: "error",
-                                title: "Validasi Gagal",
-                                text: errorMessage,
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Terjadi kesalahan saat menyimpan data.",
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
+            $.ajax({
+                url: '/api/user/{{ $id_user }}',
+                type: "POST",
+                data: form,
+                contentType: false,
+                processData: false,
+                success: function(result) {
+                    if (result['success'] == true) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: result['message']
+                        }).then(() => {
+                            window.location.replace("{{ url('/admin/users') }}");
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: result['message']
+                        });
                     }
-                });
-            } else {
-                // Jika validasi gagal, tampilkan pesan kesalahan dan jangan kirim form
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Anda harus melengkapi seluruh form dengan benar.",
-                    confirmButtonColor: '#3A57E8',
-                });
-            }
-            return false; // Menghentikan submit jika validasi gagal
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMessage = '';
+                        Object.keys(errors).forEach(function(key) {
+                            errorMessage += errors[key][0] + '\n';
+                        });
+                        Swal.fire({
+                            icon: "error",
+                            title: "Validasi Gagal",
+                            text: errorMessage
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat menyimpan data."
+                        });
+                    }
+                }
+            });
+        });
+
+        $('#is_password').change(function() {
+            $('#password').prop("disabled", !$(this).is(":checked"));
         });
     </script>
 @endsection

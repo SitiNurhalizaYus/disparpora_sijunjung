@@ -11,42 +11,47 @@ use App\Models\UserLevel;
 
 class LoginController extends Controller
 {
-    
     public function __invoke(Request $request)
     {
         try {
+            // Validasi input
             $validator = Validator::make($request->all(), [
-                'username'     => 'required',
-                'password'  => 'required'
+                'username' => 'required',
+                'password' => 'required'
             ]);
+
+            // Jika validasi gagal
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 422);
             }
+
+            // Autentikasi user
             $credentials = $request->only('username', 'password');
             $token = auth()->guard('api')->attempt($credentials);
-            // check
-            if($token) {
-                // update last_login
-                $req = ['last_login' =>  date('Y-m-d H:i:s')];
-                $query = User::findOrFail(auth()->guard('api')->user()['id_user']);
-                $query->update($req);
 
-                // data
+            // Jika token valid (berarti login berhasil)
+            if ($token) {
+                // Update last_login untuk user yang berhasil login
+                $user = User::find(auth()->guard('api')->user()->id_user);
+                $user->last_login = now();
+                $user->save();
+
+                // Ambil user_level_name dari relasi UserLevel
+                $user->user_level_name = UserLevel::find($user->level_id)->name;
+
+                // Data response
                 $data = [
-                    'user' => auth()->guard('api')->user(),
-                    'token'   => $token
+                    'user' => $user,
+                    'token' => $token
                 ];
-                $data['user']['last_login'] = date('Y-m-d H:i:s');
-                $data['user']['level_name'] = UserLevel::find($data['user']['level_id'])['name'];
-
-                return new ApiResource(true, 200, 'Login successfull.', $data, []);
+                return new ApiResource(true, 200, 'Login successful.', $data, []);
             } else {
-                $data = [];
-                return new ApiResource(false, 403, 'Login failed, incorrect username or password.', $data, []);
+                // Login gagal, kirim response gagal
+                return new ApiResource(false, 403, 'Login failed, incorrect username or password.', [], []);
             }
         } catch (\Exception $error) {
-            return new ApiResource(false, 400, 'Internal server error, '.$error->getMessage(), [], []);
+            // Menangani kesalahan dan mengirim pesan error
+            return new ApiResource(false, 400, 'Internal server error: ' . $error->getMessage(), [], []);
         }
     }
-
 }

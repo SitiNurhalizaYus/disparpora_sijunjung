@@ -18,13 +18,14 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        // parameter
+        // Parameter
         $count = $request->has('count') ? $request->get('count') : false;
         $sort = $request->has('sort') ? $request->get('sort') : 'users.id_user:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? $request->get('per_page') : 10;
         $page = $request->has('page') ? $request->get('page') : 1;
+        $level_id = $request->get('level_id', null);
 
         // Validasi per_page dan page agar tidak bernilai negatif atau nol
         if ($per_page <= 0) {
@@ -41,14 +42,18 @@ class UserController extends Controller
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-        // query: joining users and user_levels tables
-        $query = User::with(relations: ['levels']);
+        // Query: joining users and user_levels tables
+        $query = User::with('levels');
 
-
-        // cek token
+        // Cek token
         $jwt_payload = auth()->guard('api')->user();
         if ($jwt_payload['level_id'] != 1) {
             $query = $query->where('users.id_user', $jwt_payload['id_user']);
+        }
+
+        // Filter berdasarkan level_id
+        if ($level_id) {
+            $query->where('level_id', $level_id);
         }
 
         // Filtering berdasarkan kondisi
@@ -64,14 +69,14 @@ class UserController extends Controller
 
         // Filtering berdasarkan pencarian
         if ($search) {
-            $query = $query->where(function ($query) use ($search) {
+            $query->where(function ($query) use ($search) {
                 $query->where('users.username', 'like', "%{$search}%")
                     ->orWhere('users.name', 'like', "%{$search}%")
                     ->orWhere('users.email', 'like', "%{$search}%");
             });
         }
 
-        // data dan metadata
+        // Data dan metadata
         $data = [];
         $metadata = [];
 
@@ -80,12 +85,6 @@ class UserController extends Controller
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
-
-        // get count
-        if ($count == true) {
-            $query = $query->count('id_user');
-            $data['count'] = $query;
-        }
 
         // Dapatkan data
         if ($count == true) {
@@ -99,47 +98,36 @@ class UserController extends Controller
                 ->toArray();
 
             foreach ($query as $qry) {
-                $temp = $qry;
-                array_push($data, $temp);
+                array_push($data, $qry);
             }
         }
 
         // Kembalikan hasil
-        if ($data) {
-            return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
-        } else {
-            return new ApiResource(false, 200, 'No data found', [], $metadata);
-        }
+        return new ApiResource(true, 200, 'Get data successful', $data, $metadata);
     }
-
 
     public function show($id_user)
     {
-        // query: joining users and user_levels tables
+        // Query: joining users and user_levels tables
         $data = User::with('levels')->where('id_user', $id_user)->first();
 
-        // cek token
+        // Cek token
         $jwt_payload = auth()->guard('api')->user();
         if ($jwt_payload['level_id'] != 1 && $jwt_payload['id_user'] != $id_user) {
             return new ApiResource(false, 401, 'Does Not Have Access', [], []);
         }
 
-        // Siapkan data response
-        $response = $data->toArray();
-        $response['level_name'] = isset($data->levels) ? $data->levels->name : 'Unknown';
-
         // Return result
         if ($data) {
-            return new ApiResource(true, 200, 'Get data successful', $response, []);
+            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
         }
     }
 
-
     public function store(Request $request)
     {
-        // cek token
+        // Cek token
         $jwt_payload = auth()->guard('api')->user();
         if ($jwt_payload['level_id'] != 1) {
             return new ApiResource(false, 401, 'Does Not Have Access', [], []);
@@ -150,6 +138,7 @@ class UserController extends Controller
             'email' => 'required|unique:users',
             'username' => 'required|unique:users',
             'password' => 'required',
+            'level_id' => 'required'
         ]);
 
         $req = $request->all();
@@ -174,11 +163,10 @@ class UserController extends Controller
 
         // Validasi data
         $request->validate([
-            'name' => 'sometimes|required',
-            'email' => 'sometimes|required|unique:users,email,' . $id_user . ',id_user',
-            'username' => 'sometimes|required|unique:users,username,' . $id_user . ',id_user',
-            'password' => 'sometimes|required',
-            'level_id' => 'required' // Pastikan level_id divalidasi
+            'name' => 'required',
+            'email' => 'required|unique:users,email,' . $id_user . ',id_user',
+            'username' => 'required|unique:users,username,' . $id_user . ',id_user',
+            'level_id' => 'required'
         ]);
 
         // Ambil semua input
@@ -201,25 +189,15 @@ class UserController extends Controller
         AppHelper::instance()->setSession($user->toArray(), session('token'));
 
         // Ambil data terbaru dengan relasi levels
-        $data = User::with('levels')->where('id_user', $id_user)->first();
+        $data = User::with('levels')->findOrFail($id_user);
 
-        // Siapkan data response
-        $response = $data->toArray();
-        // Tambahkan level_name ke dalam response, cek jika relasi levels ada
-        $response['level_name'] = isset($data->levels) ? $data->levels->name : 'Unknown'; // Mengambil nama level
-   
         // Return response setelah update
-        if ($data) {
-            return new ApiResource(true, 201, 'Update data successful', $response, []);
-        } else {
-            return new ApiResource(false, 400, 'Failed to update data', [], []);
-        }
+        return new ApiResource(true, 201, 'Update data successful', $data->toArray(), []);
     }
-
 
     public function destroy($id_user)
     {
-        // cek token
+        // Cek token
         $jwt_payload = auth()->guard('api')->user();
         if ($jwt_payload['level_id'] != 1) {
             return new ApiResource(false, 401, 'Does Not Have Access', [], []);

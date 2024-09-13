@@ -106,7 +106,7 @@
                     }
                 },
                 {
-                    data: 'level_name',
+                    data: 'levels.name',
                     render: function(data, type, row, meta) {
                         return '<span style="white-space: normal;">' + data + '</span>';
                     }

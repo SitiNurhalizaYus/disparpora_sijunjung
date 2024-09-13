@@ -54,7 +54,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    
+    public function levels()
+    {
+        return $this->belongsTo(UserLevel::class, 'level_id','id_level');
+    }
+
     // Relasi ke Konten yang dibuat oleh user
     public function createdContents()
     {

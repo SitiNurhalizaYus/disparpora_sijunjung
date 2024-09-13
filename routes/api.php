@@ -39,6 +39,7 @@ Route::apiResource('message', App\Http\Controllers\Api\MessageController::class)
 Route::apiResource('upload', App\Http\Controllers\Api\UploadController::class);
 Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
 Route::apiResource('user_level', App\Http\Controllers\Api\userLevelController::class);
+Route::apiResource('profile', App\Http\Controllers\Api\UserController::class);
 Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
 
 Route::apiResource('mitra', App\Http\Controllers\Api\MitraController::class);

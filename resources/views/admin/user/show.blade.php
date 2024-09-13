@@ -34,7 +34,7 @@
                     <div class="card-body" id="detail-data-success" style="display: none;">
                         <div class="mt-2">
                             <h6 class="mb-1">Peran</h6>
-                            <p id="level_name"></p>
+                            <p id="user_level_name"></p>
                         </div>
                         <div class="mt-2">
                             <h6 class="mb-1">Username</h6>
@@ -95,7 +95,7 @@
                     $("#detail-data-success").show();
                     $("#detail-data-failed").hide();
 
-                    $('#level_name').html(result['data']['level_name']);
+                    $('#user_level_name').text(result['data']['levels']['name']);
                     $('#username').html(result['data']['username']);
                     $('#email').html(result['data']['email']);
                     $('#name').html(result['data']['name']);

@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Helpers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 
 class AppHelper
 {
@@ -13,15 +15,22 @@ class AppHelper
         return new AppHelper();
     }
 
-    function removeSession() {
+    function removeSession()
+    {
         session()->flush();
     }
 
-    function setSession($user, $token) {
+    function setSession($user, $token)
+    {
+        // Pastikan relasi levels di-load sebelum mengambil nama level
+        $user = User::with('levels')->find($user['id_user']);
+        // Cek apakah user memiliki relasi levels
+        $user_level_name = isset($user['levels']) ? $user['levels']['name'] : 'Unknown';
+
         session([
             'user_id' => $user['id_user'],
             'user_level_id' => $user['level_id'],
-            'user_level_name' => $user['level_name'],
+            'user_level_name' => $user_level_name,  // Ambil nama level dari relasi levels
             'user_name' => $user['name'],
             'user_email' => $user['email'],
             'user_picture' => $user['picture'],
@@ -29,7 +38,9 @@ class AppHelper
         ]);
     }
 
-    function getSessionData() {
+
+    function getSessionData()
+    {
         return [
             'user_id' => session('user_id', null),
             'user_level_id' => session('user_level_id', null),
@@ -40,11 +51,13 @@ class AppHelper
         ];
     }
 
-    function getSessionToken() {
+    function getSessionToken()
+    {
         return session('token', null);
     }
 
-    function checkSession() {
+    function checkSession()
+    {
         if ($this->getSessionToken()) {
             return true;
         } else {
@@ -52,26 +65,30 @@ class AppHelper
         }
     }
 
-    function convertDateTimeIndo($date_string) {
-		setlocale(LC_TIME, 'IND');
+    function convertDateTimeIndo($date_string)
+    {
+        setlocale(LC_TIME, 'IND');
         $date_format = new Carbon($date_string);
-		return $date_format->formatLocalized('%d %B %Y %H:%M:%S');
+        return $date_format->formatLocalized('%d %B %Y %H:%M:%S');
     }
 
-    function convertDateIndo($date_string) {
-		setlocale(LC_TIME, 'IND');
+    function convertDateIndo($date_string)
+    {
+        setlocale(LC_TIME, 'IND');
         $date_format = new Carbon($date_string);
-		return $date_format->formatLocalized('%d %B %Y');
+        return $date_format->formatLocalized('%d %B %Y');
     }
 
 
-    function convertMonthIndo($date_string) {
-		setlocale(LC_TIME, 'IND');
+    function convertMonthIndo($date_string)
+    {
+        setlocale(LC_TIME, 'IND');
         $date_format = new Carbon($date_string);
-		return $date_format->formatLocalized('%B %Y');
+        return $date_format->formatLocalized('%B %Y');
     }
 
-    function requestApiSetting(){
+    function requestApiSetting()
+    {
         try {
             $res_data = [];
             $req = Request::create('api/setting', 'GET');
@@ -85,14 +102,14 @@ class AppHelper
                 error_log($res_json['message']);
             }
             return $res_data;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
             return [];
         }
     }
 
-    function requestApiGet($endpoint){
+    function requestApiGet($endpoint)
+    {
         try {
             $res_data = [];
             $req = Request::create($endpoint, 'GET');
@@ -104,14 +121,14 @@ class AppHelper
                 Log::error($res_json['message']);
             }
             return $res_data;
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return [];
         }
     }
 
-    function requestApiPost($endpoint, $payload){
+    function requestApiPost($endpoint, $payload)
+    {
         try {
             $res_data = [];
             $req = Request::create($endpoint, 'POST')->replace($payload);
@@ -123,14 +140,14 @@ class AppHelper
                 Log::error($res_json['message']);
             }
             return $res_data;
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return [];
         }
     }
 
-    function requestApiLogin($endpoint, $payload){
+    function requestApiLogin($endpoint, $payload)
+    {
         try {
             $res_data = [];
             $req = Request::create($endpoint, 'POST')->replace($payload);
@@ -142,41 +159,41 @@ class AppHelper
                 Log::error($res_json['message']);
             }
             return [$res_data, $res_json['message']];
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return [[], $e->getMessage()];
         }
     }
 
-    function getOS($user_agent) {
+    function getOS($user_agent)
+    {
 
         $os_platform  = "Unknown OS Platform";
         $os_array     = array(
-                              '/windows nt 10/i'      =>  'Windows 10',
-                              '/windows nt 6.3/i'     =>  'Windows 8.1',
-                              '/windows nt 6.2/i'     =>  'Windows 8',
-                              '/windows nt 6.1/i'     =>  'Windows 7',
-                              '/windows nt 6.0/i'     =>  'Windows Vista',
-                              '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
-                              '/windows nt 5.1/i'     =>  'Windows XP',
-                              '/windows xp/i'         =>  'Windows XP',
-                              '/windows nt 5.0/i'     =>  'Windows 2000',
-                              '/windows me/i'         =>  'Windows ME',
-                              '/win98/i'              =>  'Windows 98',
-                              '/win95/i'              =>  'Windows 95',
-                              '/win16/i'              =>  'Windows 3.11',
-                              '/macintosh|mac os x/i' =>  'Mac OS X',
-                              '/mac_powerpc/i'        =>  'Mac OS 9',
-                              '/linux/i'              =>  'Linux',
-                              '/ubuntu/i'             =>  'Ubuntu',
-                              '/iphone/i'             =>  'iPhone',
-                              '/ipod/i'               =>  'iPod',
-                              '/ipad/i'               =>  'iPad',
-                              '/android/i'            =>  'Android',
-                              '/blackberry/i'         =>  'BlackBerry',
-                              '/webos/i'              =>  'Mobile'
-                        );
+            '/windows nt 10/i'      =>  'Windows 10',
+            '/windows nt 6.3/i'     =>  'Windows 8.1',
+            '/windows nt 6.2/i'     =>  'Windows 8',
+            '/windows nt 6.1/i'     =>  'Windows 7',
+            '/windows nt 6.0/i'     =>  'Windows Vista',
+            '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+            '/windows nt 5.1/i'     =>  'Windows XP',
+            '/windows xp/i'         =>  'Windows XP',
+            '/windows nt 5.0/i'     =>  'Windows 2000',
+            '/windows me/i'         =>  'Windows ME',
+            '/win98/i'              =>  'Windows 98',
+            '/win95/i'              =>  'Windows 95',
+            '/win16/i'              =>  'Windows 3.11',
+            '/macintosh|mac os x/i' =>  'Mac OS X',
+            '/mac_powerpc/i'        =>  'Mac OS 9',
+            '/linux/i'              =>  'Linux',
+            '/ubuntu/i'             =>  'Ubuntu',
+            '/iphone/i'             =>  'iPhone',
+            '/ipod/i'               =>  'iPod',
+            '/ipad/i'               =>  'iPad',
+            '/android/i'            =>  'Android',
+            '/blackberry/i'         =>  'BlackBerry',
+            '/webos/i'              =>  'Mobile'
+        );
 
         foreach ($os_array as $regex => $value)
             if (preg_match($regex, $user_agent))
@@ -185,21 +202,22 @@ class AppHelper
         return $os_platform;
     }
 
-    function getBrowser($user_agent) {
+    function getBrowser($user_agent)
+    {
 
         $browser        = "Unknown Browser";
         $browser_array = array(
-                                '/msie/i'      => 'Internet Explorer',
-                                '/firefox/i'   => 'Firefox',
-                                '/safari/i'    => 'Safari',
-                                '/chrome/i'    => 'Chrome',
-                                '/edge/i'      => 'Edge',
-                                '/opera/i'     => 'Opera',
-                                '/netscape/i'  => 'Netscape',
-                                '/maxthon/i'   => 'Maxthon',
-                                '/konqueror/i' => 'Konqueror',
-                                '/mobile/i'    => 'Handheld Browser'
-                         );
+            '/msie/i'      => 'Internet Explorer',
+            '/firefox/i'   => 'Firefox',
+            '/safari/i'    => 'Safari',
+            '/chrome/i'    => 'Chrome',
+            '/edge/i'      => 'Edge',
+            '/opera/i'     => 'Opera',
+            '/netscape/i'  => 'Netscape',
+            '/maxthon/i'   => 'Maxthon',
+            '/konqueror/i' => 'Konqueror',
+            '/mobile/i'    => 'Handheld Browser'
+        );
 
         foreach ($browser_array as $regex => $value)
             if (preg_match($regex, $user_agent))
@@ -208,15 +226,13 @@ class AppHelper
         return $browser;
     }
 
-    function createLogs($routeName, $routePath) {
+    function createLogs($routeName, $routePath)
+    {
         $status = 0;
         logger('WebLogs class is running:');
-        logger([$routeName,$routePath]);
+        logger([$routeName, $routePath]);
         // Save to database here
         // ...
         return $status;
     }
-
 }
-
-

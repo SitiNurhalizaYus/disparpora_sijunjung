@@ -47,11 +47,11 @@ class UserController extends Controller
                 $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
                 $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
                 $data['id_user'] = $id_user;
-                $level_user = User::findOrFail($id_user);
+                $user = User::findOrFail($id_user);
 
-                $category = UserLevel::find($level_user->level_id);
+                $category = UserLevel::find($user->level_id);
 
-                $data['level_user'] = $level_user;
+                $data['user'] = $user;
                 $data['name_category'] = $category ? $category->name : 'Peran tidak ditemukan';
 
                 return view('admin.user.show', $data);
@@ -106,10 +106,10 @@ class UserController extends Controller
                 $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
                 $data['id_user'] = $id_user;
 
-                $level_user = User::findOrFail($id_user);
+                $user = User::findOrFail($id_user);
                 $categories = UserLevel::all()->unique('name');
 
-                $data['level_user'] = $level_user;
+                $data['user'] = $user;
                 $data['categories'] = $categories;
 
                 return view('admin.user.edit', $data);
