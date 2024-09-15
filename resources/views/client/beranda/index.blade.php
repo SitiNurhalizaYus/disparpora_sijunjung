@@ -143,7 +143,7 @@
                                 </div>
                                 <h4 class="mb-3">{{ $berita['title'] }}</h4>
                                 <p>{{ $berita['description_short'] }}</p>
-                                <a class="text-uppercase" href="{{ url('/berita', $berita['slug']) }}">Read More <i
+                                <a class="text-uppercase" href="{{ url('/artikel', $berita['slug']) }}">Read More <i
                                         class="bi bi-arrow-right"></i></a>
                             </div>
                         </div>
@@ -199,7 +199,7 @@
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-4 mx-auto" style="max-width: 600px;">
-                <h5 class="fw-bold text-primary text-uppercase">Testimonial</h5>
+                <h5 class="fw-bold text-primary text-uppercase"></h5>
                 <h1 class="mb-0">Apa Kata Pengunjung dan Pelaku Usaha</h1>
             </div>
             <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.6s">
@@ -297,7 +297,7 @@
     <script>
         $(document).ready(function() {
             $.ajax({
-                url: "{{ url('/api/statistics') }}",
+                url: "{{ url('/api/statistik') }}",
                 method: "GET",
                 success: function(response) {
                     $('#destinations-count').text(response.destinations_count);

@@ -112,7 +112,8 @@ class UploadController extends Controller
 
             setlocale(LC_TIME, 'IND');
             $date_format = Carbon::now()->format('Ymd_His');
-            $filename_new = $date_format . '-' . str_replace(' ', '_', $fileName) . '.' . $extension;
+            // $filename_new = $date_format . '-' . str_replace(' ', '_', $fileName) . '.' . $extension;
+            $filename_new =  $fileName . '.' . $extension;
 
             $filePath = 'uploads/xxx/' . $filename_new;
 
@@ -169,7 +170,8 @@ class UploadController extends Controller
 
             // Format nama file baru
             $date_format = Carbon::now()->format('Ymd_His');
-            $filename_new = $date_format . '-' . str_replace(' ', '_', $filename) . '.' . $extension;
+            // $filename_new = $date_format . '-' . str_replace(' ', '_', $filename) . '.' . $extension;
+            $filename_new =  $filename . '.' . $extension;
 
             // Resize dan simpan gambar
             $this->resizeAndSaveImage($image, $filename_new);
