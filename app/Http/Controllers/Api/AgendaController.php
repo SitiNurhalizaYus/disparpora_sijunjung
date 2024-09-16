@@ -19,7 +19,7 @@ class AgendaController extends Controller
     {
         // parameter
         $count = $request->has('count') ? $request->get('count') : false;
-        $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
+        $sort = $request->has('sort') ? $request->get('sort') : 'event_date:desc'; // Default sorting berdasarkan tanggal terbaru
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
@@ -35,8 +35,9 @@ class AgendaController extends Controller
 
         $sort = explode(':', $sort);
         if (count($sort) !== 2) {
-            $sort = ['id', 'asc']; // Default sorting jika tidak valid
+            $sort = ['event_date', 'desc']; // Default sorting jika tidak valid
         }
+
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
@@ -48,6 +49,7 @@ class AgendaController extends Controller
             $query = $query->where('is_active', 1);
         }
 
+        // Apply where clause jika ada
         if ($where) {
             foreach ($where as $key => $value) {
                 if (is_array($value)) {
@@ -58,6 +60,7 @@ class AgendaController extends Controller
             }
         }
 
+        // Apply pencarian
         if ($search) {
             $query = $query->where('name', 'like', "%{$search}%");
         }
@@ -69,8 +72,8 @@ class AgendaController extends Controller
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-         // get count
-         if($count == true) {
+        // get count
+        if ($count == true) {
             $query = $query->count('id');
             $data['count'] = $query;
         }
@@ -97,6 +100,7 @@ class AgendaController extends Controller
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
+
 
     public function show($id)
     {
@@ -156,7 +160,7 @@ class AgendaController extends Controller
             'file_path' => 'nullable|string|max:255',
         ]);
 
-       
+
         $req = $request->all();
         $data['updated_by'] = auth()->id();
 
