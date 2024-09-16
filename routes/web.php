@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UploadController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\VerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,29 +17,49 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+
+// Rute untuk memproses verifikasi email
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+    ->middleware(['signed', 'throttle:6,1']) // Menggunakan middleware 'signed' dan 'throttle'
+    ->name('verification.verify');
+
+// // Rute untuk mengirim ulang tautan verifikasi
+// Route::post('/email/resend', [VerificationController::class, 'resend'])
+//     ->middleware(['auth', 'throttle:6,1'])
+//     ->name('verification.resend');
+
+// Route::get('/email/verify', function () {
+//     return view('client.auth.verify-email');
+// })->middleware('auth')->name('verification.notice');
+
+// Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\Client\EmailVerificationController::class, 'verify'])
+//     ->middleware(['signed','throttle:6,1'])
+//     ->name('verification.verify');
+
+// Route::post('/email/resend', [App\Http\Controllers\Client\EmailVerificationController::class, 'resend'])
+//     ->middleware(['auth', 'throttle:6,1'])
+//     ->name('verification.resend');
+
+// Route::get('/email/verify-message', [App\Http\Controllers\Client\MessageController::class, 'verifyMessage'])->name('message.verify');
+// Rute untuk menyimpan pesan
+// Route::post('/message/store', [App\Http\Controllers\Client\MessageController::class, 'sendMessage'])->name('message.store');
+
+
+// Rute untuk email verifikasi
+Route::get('/email-verified', function () {
+    return view('emails.email_verified');
+})->name('email.verified');
+
+// Rute untuk halaman pesan (message.index)
+Route::get('/message', function () {
+    return view('client.message.index');
+})->name('message.index');
+
 Auth::routes(['verify' => true]);
 
 Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function () {
     Route::get('/', [App\Http\Controllers\Client\BerandaController::class, 'index']);
     Route::get('/beranda', [App\Http\Controllers\Client\BerandaController::class, 'index']);
-
-    Route::post('/email/resend', [App\Http\Controllers\Client\EmailVerificationController::class, 'resend'])->name('verification.resend');
-    Route::get('/email/verify/{id_user}/{hash}', [App\Http\Controllers\Client\EmailVerificationController::class, 'verify'])
-    ->name('verification.verify');
-
-
-    Route::get('/email/verify', function () {
-        return view('auth.verify-email');
-    })->middleware('auth')->name('verification.notice');
-
-    // Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\Client\EmailVerificationController::class, 'verify'])
-    //     ->middleware(['auth', 'signed'])
-    //     ->name('verification.verify');
-
-    Route::post('/email/resend', [App\Http\Controllers\Client\EmailVerificationController::class, 'resend'])
-        ->middleware(['auth', 'throttle:6,1'])
-        ->name('verification.resend');
-
 
     Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index'])->name('client.message.index');
     Route::post('/message/submit', [App\Http\Controllers\Client\HubungikamiController::class, 'submit']);

@@ -1,9 +1,13 @@
-<h1>Halo, {{ $user->name }}!</h1>
-
-<p>Terima kasih telah mendaftar di sistem kami. Silakan klik tautan di bawah ini untuk memverifikasi alamat email Anda:</p>
-
-<a href="{{ $verificationUrl }}">Verifikasi Email</a>
-
-<p>Tautan ini akan kadaluwarsa dalam 60 menit.</p>
-
-<p>Jika Anda tidak merasa melakukan registrasi, silakan abaikan email ini.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Email</title>
+</head>
+<body>
+    <h1>Verifikasi Email Anda</h1>
+    <p>Klik tautan berikut untuk memverifikasi email Anda:</p>
+    <a href="{{ url('/api/verify/' . $id . '?token=' . $token) }}">Verifikasi Email</a>
+</body>
+</html>

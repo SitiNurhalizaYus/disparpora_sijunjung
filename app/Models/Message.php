@@ -13,13 +13,11 @@ class Message extends Model
     use BlameableTrait;
 
     protected $fillable = [
-        'id',
-        'name',
-        'email',
-        'subject',
-        'message',
-        'notes',
-        'is_active'
+    'name', 'email', 'subject', 'message', 'file_path', 'verified', 'created_by', 'updated_by','is_active'
+    ];
+
+    protected $casts = [
+        'verified' => 'boolean',
     ];
 
      // Relasi ke pengguna yang membuat agenda

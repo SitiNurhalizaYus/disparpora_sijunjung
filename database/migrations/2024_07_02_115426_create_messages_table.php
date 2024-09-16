@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('message');
             $table->string('file_path')->nullable();
             $table->string('reply')->nullable();
+            $table->boolean('verified')->default(0);
             // default
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(0);
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contacts');
+        Schema::dropIfExists('messages');
     }
 };

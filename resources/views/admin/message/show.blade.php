@@ -27,6 +27,7 @@
                 <p><strong> Email :</strong> <span id="email"></span></p>
                 <p><strong> Subjek :</strong> <span id="subject"></span></p>
                 <p><strong> Pesan :</strong> <span id="message"></span></p>
+                <p><strong> Gambar :</strong><br><span id="file_path"></span></p>
                 <p><strong> Waktu Kirim :</strong> <span id="created_at"></span></p>
             </div>
         </div>
@@ -83,6 +84,8 @@
                         $('#email').text(result.data.email);
                         $('#subject').text(result.data.subject);
                         $('#message').text(result.data.message);
+                        // $("#file_path").attr("src", "{{ url('/') }}/" + result['data']['file_path']
+                        // .replace('/xxx/', '/300/'));
                         $('#created_at').text(convertStringToDate(result.data.created_at));
 
                         // Cek status is_active, jika 1 tampilkan balasan
