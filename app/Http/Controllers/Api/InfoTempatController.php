@@ -98,17 +98,17 @@ class InfoTempatController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy'
-        $query = InfoTempat::with(['createdBy', 'updatedBy'])->where('id', $id);
+        // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy', serta mencari berdasarkan slug
+        $query = InfoTempat::with(['createdBy', 'updatedBy'])->where('slug', $slug);
 
         // Jika tidak ada autentikasi, filter hanya konten yang aktif
         if (!auth()->guard('api')->user()) {
             $query->where('is_active', 1); // Hanya ambil data yang aktif
         }
 
-        $data = $query->first(); // Ambil data pertama yang cocok dengan id
+        $data = $query->first(); // Ambil data pertama yang cocok dengan slug
 
         if (!$data) {
             return new ApiResource(false, 404, 'Data not found', [], []);
@@ -122,8 +122,9 @@ class InfoTempatController extends Controller
         if ($data->updatedBy) {
             $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
         }
+
         // result
-        if ($data) {
+        if ($result) {
             return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);

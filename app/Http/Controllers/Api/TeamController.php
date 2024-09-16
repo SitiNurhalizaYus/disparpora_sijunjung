@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -76,10 +77,10 @@ class TeamController extends Controller
             $metadata['page'] = 1;
         } else {
             $data = $query->orderBy($sort[0], $sort[1])
-                          ->limit($per_page)
-                          ->offset(($page - 1) * $per_page)
-                          ->get()
-                          ->toArray();
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page)
+                ->get()
+                ->toArray();
         }
 
         // result
@@ -92,31 +93,31 @@ class TeamController extends Controller
 
     public function show($id)
     {
-         // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy'
-    $query = Team::with(['createdBy', 'updatedBy'])->where('id', $id);
+        // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy'
+        $query = Team::with(['createdBy', 'updatedBy'])->where('id', $id);
 
-    // Jika tidak ada autentikasi, filter hanya konten yang aktif
-    if (!auth()->guard('api')->user()) {
-        $query->where('is_active', 1); // Hanya ambil data yang aktif
-    }
+        // Jika tidak ada autentikasi, filter hanya konten yang aktif
+        if (!auth()->guard('api')->user()) {
+            $query->where('is_active', 1); // Hanya ambil data yang aktif
+        }
 
-    $data = $query->first(); // Ambil data pertama yang cocok dengan id
+        $data = $query->first(); // Ambil data pertama yang cocok dengan id
 
-    if (!$data) {
-        return new ApiResource(false, 404, 'Data not found', [], []);
-    }
+        if (!$data) {
+            return new ApiResource(false, 404, 'Data not found', [], []);
+        }
 
-    // Menampilkan data agenda dan mengubah 'created_by' dan 'updated_by' menjadi nama user
-    $result = $data->toArray();
-    if ($data->createdBy) {
-        $result['created_by'] = $data->createdBy->name; // Menampilkan nama user dari 'created_by'
-    }
-    if ($data->updatedBy) {
-        $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
-    }
+        // Menampilkan data agenda dan mengubah 'created_by' dan 'updated_by' menjadi nama user
+        $result = $data->toArray();
+        if ($data->createdBy) {
+            $result['created_by'] = $data->createdBy->name; // Menampilkan nama user dari 'created_by'
+        }
+        if ($data->updatedBy) {
+            $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
+        }
 
         // result
-        if ($data) {
+        if ($result) {
             return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);

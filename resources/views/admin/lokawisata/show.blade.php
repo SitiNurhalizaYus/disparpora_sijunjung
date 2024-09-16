@@ -18,10 +18,10 @@
                     </h3>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/lokawisatas/' . $id . '/edit') }}" class="btn btn-warning btn-sm">
+                    <a href="{{ url('/admin/lokawisatas/' . $slug . '/edit') }}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> Edit
                     </a>
-                    <button onclick="removeData({{ $id }})" class="btn btn-danger btn-sm">
+                    <button onclick="removeData({{ $slug }})" class="btn btn-danger btn-sm">
                         <i class="bi bi-trash"></i> Delete
                     </button>
                 </div>
@@ -131,7 +131,7 @@
 
             // Request untuk mendapatkan data lokawisatas
             $.ajax({
-                url: '/api/lokawisata/{{ $id }}',
+                url: '/api/lokawisata/{{ $slug }}',
                 type: "GET",
                 dataType: "json",
                 processData: false,

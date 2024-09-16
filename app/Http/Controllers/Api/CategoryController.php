@@ -122,7 +122,7 @@ class CategoryController extends Controller
             $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
         }
         // result
-        if ($data) {
+        if ($result) {
             return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);

@@ -123,7 +123,7 @@ class DocumentController extends Controller
         }
 
         // result
-        if ($data) {
+        if ($result) {
             return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);
