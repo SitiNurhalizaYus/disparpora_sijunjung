@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Log;
+use App\Helpers\AppHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ApiResource;
@@ -13,13 +14,14 @@ class DashboardController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api')->except('topPageNonAdmin','getStatistikBulanan');
+        $this->middleware('auth:api')->except('topPageNonAdmin', 'getStatistikBulanan');
     }
 
     public function topPageNonAdmin(Request $request)
     {
-        // Query untuk mengambil halaman selain admin
+        // Query untuk mengambil halaman selain admin dan mengecualikan halaman yang berhubungan dengan email
         $query = Log::where('path', 'not like', '%admin%')
+            ->where('path', 'not like', '%email%') // Menambahkan kondisi untuk mengabaikan path yang mengandung 'email'
             ->groupBy('path')
             ->selectRaw('path, count(*) as total')
             ->orderBy('total', 'desc')
@@ -40,6 +42,7 @@ class DashboardController extends Controller
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
+
 
     public function getStatistikBulanan()
     {
