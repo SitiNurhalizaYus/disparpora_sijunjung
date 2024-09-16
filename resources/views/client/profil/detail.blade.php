@@ -105,8 +105,8 @@
                         const imagePath = `${baseUrl}/uploads/${content.image.split('/').pop()}`;
     
                         const detailHtml = `
-                             <img class="img-fluid w-100 rounded mb-5" src="${imagePath}" alt="${content.title}">
-                            <h1 class="mb-4">${content.title}</h1>
+                        <h1 class="mb-3">${content.title}</h1>
+                        <img class="img-fluid w-100 rounded mb-3" src="${imagePath}" alt="${content.title}">
                             <p>${content.content}</p>
                         `;
                         $('#blog-detail').html(detailHtml);
