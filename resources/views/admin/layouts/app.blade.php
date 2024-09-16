@@ -136,7 +136,7 @@
                                 str_contains($menu, 'arsip')) show @endif"
                             id="kelola-konten-menu" data-bs-parent="#sidebar-menu">
 
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'poster')) active @endif"
                                     aria-current="page" href="{{ url('/admin/posters') }}">
                                     <i class="icon">
@@ -147,7 +147,7 @@
                                     </i>
                                     <span class="item-name">Poster</span>
                                 </a>
-                            </li>
+                            </li> --}}
 
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'mitra')) active @endif"

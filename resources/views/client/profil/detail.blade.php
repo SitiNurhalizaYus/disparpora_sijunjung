@@ -92,6 +92,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            const baseUrl = "{{ url('/') }}";
             // Fungsi untuk memuat detail konten dengan AJAX
             function loadContentDetail(slug) {
                 $.ajax({
@@ -99,10 +100,14 @@
                     method: "GET",
                     success: function(response) {
                         const content = response.data;
+                        
+                        // Menggabungkan base URL dengan path gambar
+                        const imagePath = `${baseUrl}/uploads/${content.image.split('/').pop()}`;
+    
                         const detailHtml = `
-                        <h1 class="mb-4">${content.title}</h1>
-                        <img class="img-fluid w-100 rounded mb-5" src="${content.image}" alt="${content.title}">
-                        <p>${content.content}</p>
+                             <img class="img-fluid w-100 rounded mb-5" src="${imagePath}" alt="${content.title}">
+                            <h1 class="mb-4">${content.title}</h1>
+                            <p>${content.content}</p>
                         `;
                         $('#blog-detail').html(detailHtml);
                         $('#breadcrumb-title').text(content.title);

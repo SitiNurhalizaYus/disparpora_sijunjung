@@ -21,7 +21,10 @@ class DashboardController extends Controller
     {
         // Query untuk mengambil halaman selain admin dan mengecualikan halaman yang berhubungan dengan email
         $query = Log::where('path', 'not like', '%admin%')
+            ->where('path', 'not like', '%login%') // Menambahkan kondisi untuk mengabaikan path yang mengandung 'email'
+            ->where('path', 'not like', '%register%') // Menambahkan kondisi untuk mengabaikan path yang mengandung 'email'
             ->where('path', 'not like', '%email%') // Menambahkan kondisi untuk mengabaikan path yang mengandung 'email'
+            ->where('path', 'not like', '%api%') // Menambahkan kondisi untuk mengabaikan path yang mengandung 'email'
             ->groupBy('path')
             ->selectRaw('path, count(*) as total')
             ->orderBy('total', 'desc')

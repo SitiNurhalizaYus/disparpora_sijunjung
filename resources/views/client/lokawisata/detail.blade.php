@@ -45,7 +45,7 @@
                 <!-- Deskripsi, Fasilitas, Jam Operasional, Harga Tiket -->
                 <div class="col-md-6">
                     <div class="detail-section mb-4">
-                        <h2>Deskripsi</h2>
+                        <h2 >Deskripsi</h2>
                         <p id="lokawisata-description"></p>
                     </div>
 
@@ -96,7 +96,7 @@
                         const lokawisata = response.data;
 
                         // Isi data pada elemen HTML
-                        $('#lokawisata-image').attr('src', lokawisata.image);
+                        $('#lokawisata-image').attr('src', '/' + lokawisata.image);
                         $('#lokawisata-name').text(lokawisata.name);
                         $('#breadcrumb-title').text(lokawisata.name);
                         $('#lokawisata-description').html(lokawisata.description);
