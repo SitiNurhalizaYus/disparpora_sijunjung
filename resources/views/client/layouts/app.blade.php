@@ -66,6 +66,7 @@
             margin-top: auto;
         }
     </style>
+
 </head>
 
 <body>
@@ -129,16 +130,16 @@
                         <div class="nav-item dropdown me-3">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profil</a>
                             <div class="dropdown-menu m-0">
-                                <a href="{{ route('client.profil.detail', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}" 
+                                <a href="{{ route('client.profil.detail', ['slug' => 'struktur-organisasi-dinas-pariwisata']) }}"
                                     class="dropdown-item">Struktur Organisasi Dinas</a>
-                                <a href="{{ route('client.profil.detail', ['slug' => 'visi-misi-dinas-pariwisata']) }}" 
+                                <a href="{{ route('client.profil.detail', ['slug' => 'visi-misi-dinas-pariwisata']) }}"
                                     class="dropdown-item">Visi dan Misi</a>
-                                <a href="{{ route('client.profil.detail', ['slug' => 'tujuan-strategis-dinas-pariwisata']) }}" 
+                                <a href="{{ route('client.profil.detail', ['slug' => 'tujuan-strategis-dinas-pariwisata']) }}"
                                     class="dropdown-item">Tujuan Strategis</a>
-                                <a href="{{ route('client.profil.detail', ['slug' => 'sasaran-dinas-pariwisata-sijunjung']) }}" 
+                                <a href="{{ route('client.profil.detail', ['slug' => 'sasaran-dinas-pariwisata-sijunjung']) }}"
                                     class="dropdown-item">Sasaran Strategis</a>
                             </div>
-                            
+
                         </div>
                         <div class="nav-item dropdown me-3">
                             <a href="#" class="nav-link dropdown-toggle"
@@ -166,7 +167,8 @@
                             data-bs-target="#searchModal">
                             <i class="fa fa-search"></i>
                         </button>
-                        <a href="{{ route('client.message.index') }}" class="btn btn-primary py-2 px-4 ms-3">Hubungi Kami</a>
+                        <a href="{{ route('client.message.index') }}" class="btn btn-primary py-2 px-4 ms-3">Hubungi
+                            Kami</a>
                     </div>
                 </div>
             </nav>

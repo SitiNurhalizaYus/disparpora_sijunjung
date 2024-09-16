@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ApiResource;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use App\Mail\ReplyMessageMail;
+use App\Http\Resources\ApiResource;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class MessageController extends Controller
 {
@@ -16,33 +18,26 @@ class MessageController extends Controller
 
     public function index(Request $request)
     {
-        // parameter
-        $count = $request->get('count', false); // Mengambil parameter count
+        $count = $request->get('count', false);
         $sort = $request->get('sort', 'id:asc');
         $where = $request->get('where', '{}');
         $search = $request->get('search', '');
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));
 
-        // Validasi per_page dan page agar tidak bernilai negatif atau nol
-        if ($per_page <= 0) {
-            $per_page = 10;
-        }
-        if ($page <= 0) {
-            $page = 1;
-        }
+        if ($per_page <= 0) $per_page = 10;
+        if ($page <= 0) $page = 1;
 
         $sort = explode(':', $sort);
         if (count($sort) !== 2) {
-            $sort = ['id', 'asc']; // Default sorting jika tidak valid
+            $sort = ['id', 'asc'];
         }
+
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-        // query
         $query = Message::where([['id', '>', '0']]);
 
-        // cek token
         if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
@@ -61,23 +56,20 @@ class MessageController extends Controller
             $query = $query->where('name', 'like', "%{$search}%");
         }
 
-        // Jika count=true, hanya mengembalikan jumlah data
         if ($count == true) {
             $total_count = $query->count();
             return new ApiResource(true, 200, 'Data count retrieved successfully', [], ['count' => $total_count]);
         }
 
-        // metadata dan data
         $metadata = [];
-        $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
+        $metadata['total_data'] = $query->count();
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
 
-        // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'
         if ($per_page == 0 || $per_page == 'all') {
             $data = $query->orderBy($sort[0], $sort[1])->get()->toArray();
-            $metadata['total_data'] = count($data); // Update total data
+            $metadata['total_data'] = count($data);
             $metadata['per_page'] = $metadata['total_data'];
             $metadata['total_page'] = 1;
             $metadata['page'] = 1;
@@ -89,7 +81,6 @@ class MessageController extends Controller
                           ->toArray();
         }
 
-        // result
         if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data, $metadata);
         } else {
@@ -99,18 +90,14 @@ class MessageController extends Controller
 
     public function show($id)
     {
-        // query
         $query = Message::where([['id', '>', '0']]);
 
-        // cek token
         if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
-        // data
         $data = $query->find($id);
 
-        // result
         if ($data) {
             return new ApiResource(true, 200, 'Get data successfull', $data->toArray(), []);
         } else {
@@ -122,6 +109,9 @@ class MessageController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'email' => 'required|email',
+            'subject' => 'required',
+            'message' => 'required',
         ]);
 
         $req = $request->post();
@@ -162,6 +152,28 @@ class MessageController extends Controller
             return new ApiResource(true, 201, 'Delete data successfull', [], []);
         } else {
             return new ApiResource(false, 400, 'Failed to delete data', [], []);
+        }
+    }
+
+    public function sendReply(Request $request, $id)
+    {
+        $request->validate([
+            'reply' => 'required|string',
+        ]);
+
+        $message = Message::findOrFail($id);
+
+        $message->reply = $request->input('reply');
+        $message->updated_by = auth()->user()->id;
+        $message->is_active = 1; // Pesan dianggap sudah dibalas
+        $message->save();
+
+        try {
+            Mail::to($message->email)->send(new ReplyMessageMail($message->name, $message->reply, $message->subject));
+
+            return new ApiResource(true, 200, 'Balasan berhasil dikirim dan email terkirim ke pengirim pesan.', [], []);
+        } catch (\Exception $e) {
+            return new ApiResource(false, 500, 'Gagal mengirim balasan. Silakan coba lagi.', [], []);
         }
     }
 }

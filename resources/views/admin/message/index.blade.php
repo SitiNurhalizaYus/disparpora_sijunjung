@@ -15,7 +15,6 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-            
                     <div class="card-body">
                         <br>
                         <div class="table-responsive">
@@ -26,7 +25,8 @@
                                         <th class="text-center">Email</th>
                                         <th class="text-center">Topik</th>
                                         <th class="text-center">Diterima</th>
-                                        <th class="text-center">Action</th>
+                                        <th class="text-center">Status</th> <!-- Kolom Status -->
+                                        <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -41,22 +41,18 @@
 
     <script>
         function convertStringToDate(str) {
-    var date = new Date(str);
-    let options = {
-        // weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        // hour: "numeric",
-        // minute: "numeric",
-        // second: "numeric"
-    };
-    var newdate = date.toLocaleDateString('id', options);
-    return newdate;
-}
-        $('#datatable').DataTable( {
+            var date = new Date(str);
+            let options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            };
+            return date.toLocaleDateString('id', options);
+        }
+
+        $('#datatable').DataTable({
             order: [[ 0, 'asc' ]],
-            lengthMenu: [[ 5, 15, 25, 100, -1 ], [ 5, 15, 25, 100, 'All' ]],
+            lengthMenu: [[ 5, 15, 25, 100, -1 ], [ 5, 15, 25, 100, 'Semua' ]],
             pageLength: 5,
             processing: true,
             serverSide: true,
@@ -95,7 +91,7 @@
                 {
                     data: 'email',
                     render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data.substring(0, 50) + '...</span>';
+                        return '<span style="white-space: normal;">' + data + '</span>';
                     }
                 },
                 {
@@ -112,6 +108,15 @@
                     }
                 },
                 {
+                    data: 'is_active',
+                    className: 'text-center',
+                    render: function(data, type, row, meta) {
+                        return data == 1 ? 
+                            '<span class="badge bg-success">Sudah Dibalas</span>' :
+                            '<span class="badge bg-warning">Belum Dibalas</span>';
+                    }
+                },
+                {
                     data: 'id',
                     className: 'text-center',
                     render: function (data, type, row, meta) {
@@ -119,12 +124,13 @@
                             <a href="{{ url("/admin/messages/`+data+`") }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>                                    <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
+                                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </span>
                             </a>`;
                         var btn_delete = `
-                            <button onclick="removeData(`+data+`)" class="btn btn-sm btn-icon btn-danger flex-end" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
+                            <button onclick="removeData(`+data+`)" class="btn btn-sm btn-icon btn-danger flex-end" data-bs-toggle="tooltip" aria-label="Hapus" data-bs-original-title="Hapus">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                         <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -138,21 +144,22 @@
                 }
             ],
             columnDefs: [
-                {targets: [0], width: "15%"},
-                {targets: [1], width: "20%"},
+                {targets: [0], width: "20%"},
+                {targets: [1], width: "10%"},
                 {targets: [2], width: "30%"},
-                {targets: [3], width: "15%"},
-                {targets: [4], width: "10%", orderable: false}
+                {targets: [3], width: "10%"},
+                {targets: [4], width: "10%", orderable: false}, // Kolom status
+                {targets: [5], width: "10%", orderable: false}
             ],
         });
 
         function removeData(id) {
             Swal.fire({
-                title: "Are you sure want to delete?",
+                title: "Apakah kamu yakin ingin menghapus?",
                 showDenyButton: true,
                 showCancelButton: false,
-                confirmButtonText: "Yes",
-                denyButtonText: "No",
+                confirmButtonText: "Ya",
+                denyButtonText: "Tidak",
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -173,7 +180,7 @@
                             if(result['success'] == true) {
                                 Swal.fire({
                                     icon: "success",
-                                    title: "Success",
+                                    title: "Sukses",
                                     text: result['message'],
                                     confirmButtonColor: '#3A57E8',
                                 }).then((result) => {

@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Message;
 use App\Helpers\AppHelper;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ApiResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -212,4 +217,6 @@ class UserController extends Controller
             return new ApiResource(false, 400, 'Failed to delete data', [], []);
         }
     }
+    
 }
+

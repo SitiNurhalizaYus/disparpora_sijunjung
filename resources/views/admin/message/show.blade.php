@@ -31,10 +31,16 @@
             </div>
         </div>
 
+        <!-- Bagian Balasan (Reply) -->
         <div class="card">
             <div class="card-header bg-primary text-white"><strong> Balas Pesan</strong></div>
             <div class="card-body text-dark">
-                <form id="replyForm">
+                <div id="reply-section">
+                    <!-- Balasan sudah ada, maka tampilkan -->
+                </div>
+
+                <!-- Jika status is_active 0, tampilkan form balasan -->
+                <form id="replyForm" style="display:none;">
                     @csrf
                     <div class="form-group">
                         <label for="reply">Balasan</label>
@@ -42,17 +48,26 @@
                     </div>
                     <button type="submit" class="btn btn-success mt-3">Kirim Balasan</button>
                 </form>
+
+                <!-- Loader -->
+                <div id="loading" class="text-center" style="display:none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Mengirim...</span>
+                    </div>
+                    <p>Mengirim balasan, mohon tunggu...</p>
+                </div>
             </div>
         </div>
-
     </div>
 
     <script>
         $(document).ready(function() {
-            // Konfigurasi AJAX Setup dengan token
+            let token = "{{ $session_token }}";
+
             $.ajaxSetup({
                 headers: {
-                    'Authorization': "Bearer {{ $session_token }}"
+                    'Authorization': "Bearer " + token,
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
@@ -69,6 +84,17 @@
                         $('#subject').text(result.data.subject);
                         $('#message').text(result.data.message);
                         $('#created_at').text(convertStringToDate(result.data.created_at));
+
+                        // Cek status is_active, jika 1 tampilkan balasan
+                        if (result.data.is_active == 1) {
+                            $('#reply-section').html(`
+                                <p><strong>Balasan :</strong></p>
+                                <p>${result.data.reply}</p>
+                            `);
+                        } else {
+                            // Jika status belum aktif, tampilkan form balasan
+                            $('#replyForm').show();
+                        }
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -88,7 +114,7 @@
                 }
             });
 
-            // Kirim balasan pesan menggunakan AJAX
+            // Kirim balasan pesan menggunakan AJAX dengan loader dan konfirmasi
             $('#replyForm').submit(function(e) {
                 e.preventDefault();
 
@@ -96,79 +122,79 @@
                     reply: $('#reply').val()
                 };
 
-                $.ajax({
-                    url: '/api/message/{{ $id }}/reply', // Pastikan URL ini sesuai dengan rute di API
-                    type: 'POST',
-                    data: JSON.stringify(replyData),
-                    contentType: 'application/json',
-                    success: function(result) {
-                        if (result.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Balasan Terkirim',
-                                text: result.message,
-                                confirmButtonColor: '#3A57E8',
-                            }).then(() => {
-                                $('#reply').val(''); // Kosongkan form setelah berhasil mengirim balasan
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: result.message,
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Gagal mengirim balasan.',
-                            confirmButtonColor: '#3A57E8',
-                        });
-                    }
-                });
-            });
+                if (replyData.reply.trim() === '') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Balasan kosong',
+                        text: 'Mohon masukkan balasan sebelum mengirim.',
+                        confirmButtonColor: '#3A57E8',
+                    });
+                    return;
+                }
 
-            // Fungsi untuk menghapus data
-            function removeData(id) {
+                // Konfirmasi sebelum mengirim balasan
                 Swal.fire({
-                    title: "Kamu yakin ingin menghapus?",
-                    showDenyButton: true,
-                    confirmButtonText: "Yes",
-                    denyButtonText: "No",
+                    title: 'Kirim balasan?',
+                    text: "Anda tidak akan bisa mengubah setelah balasan dikirim!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, kirim!',
+                    cancelButtonText: 'Tidak, batalkan',
                     confirmButtonColor: '#1AA053',
+                    cancelButtonColor: '#d33'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Request untuk menghapus data message
+                        // Tampilkan loader dan sembunyikan form
+                        $('#replyForm').hide();
+                        $('#loading').show();
+
                         $.ajax({
-                            url: '/api/message/' + id,
-                            type: "DELETE",
+                            url: '/api/message/{{ $id }}/reply',
+                            type: 'POST',
+                            data: JSON.stringify(replyData),
+                            contentType: 'application/json',
                             success: function(result) {
+                                $('#loading').hide(); // Sembunyikan loader
+
                                 if (result.success) {
                                     Swal.fire({
-                                        icon: "success",
-                                        title: "Deleted",
+                                        icon: 'success',
+                                        title: 'Balasan Terkirim',
                                         text: result.message,
                                         confirmButtonColor: '#3A57E8',
                                     }).then(() => {
-                                        window.location.replace(
-                                            "{{ url('/admin/messages') }}");
+                                        $('#reply').val(''); // Kosongkan form setelah berhasil mengirim balasan
+                                        $('#replyForm').hide(); // Sembunyikan form balasan
+                                        $('#reply-section').html(`
+                                            <p><strong>Balasan :</strong></p>
+                                            <p>${replyData.reply}</p>
+                                        `);
                                     });
                                 } else {
                                     Swal.fire({
-                                        icon: "error",
-                                        title: "Oops...",
+                                        icon: 'error',
+                                        title: 'Oops...',
                                         text: result.message,
                                         confirmButtonColor: '#3A57E8',
                                     });
+                                    $('#replyForm').show(); // Tampilkan kembali form balasan jika gagal
                                 }
+                            },
+                            error: function(xhr) {
+                                $('#loading').hide(); // Sembunyikan loader
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Gagal mengirim balasan.',
+                                    confirmButtonColor: '#3A57E8',
+                                });
+                                $('#replyForm').show(); // Tampilkan kembali form balasan jika gagal
                             }
                         });
                     }
                 });
-            }
+            });
 
             // Fungsi untuk mengonversi tanggal ke format yang lebih mudah dibaca
             function convertStringToDate(dateString) {

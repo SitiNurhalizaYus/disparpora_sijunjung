@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('id_user'); // Primary key bigint(20)
-            $table->foreignId('level_id');
+            $table->foreignId('level_id')->nullable();
             $table->string('username')->unique(); 
             $table->string('password'); 
             $table->string('name'); 

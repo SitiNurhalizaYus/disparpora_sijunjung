@@ -31,7 +31,7 @@
             <div class="justify-content-between align-items-center container-table mt-5">
                 <table id="datatable" class="table table-striped" data-toggle="data-table" style="margin-bottom: 0px;">
                     <thead>
-                        <tr class="text-black">
+                        <tr class="text-dark">
                             <th class="">No</th>
                             <th class="">Nama Dokumen</th>
                             <th class="">Kategori</th>

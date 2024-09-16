@@ -31,7 +31,7 @@
                 <div class="row g-5">
                     <!-- Blog Content Start -->
                     <div class="col-lg-8">
-                        <div class="row g-5 mb-5" id="blog-detail">
+                        <div class="text-dark row g-5 mb-5" id="blog-detail">
                             <!-- Konten detail akan dimuat di sini menggunakan AJAX -->
                         </div>
 

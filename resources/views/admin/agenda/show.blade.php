@@ -62,32 +62,32 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-body" id="detail-data-success" style="display: none;">
+                    <div class="card-body text-dark" id="detail-data-success">
                         <div class="mt-2 row">
                             <div class="md-6 col">
-                                <h6 class="mb-1">Judul Agenda</h6>
+                                <h6 class="mb-1"><strong>Judul Agenda</strong></h6>
                                 <p id="title"></p>
                             </div>
                             <div class="col-md-6">
-                                <h6 class="mb-1">Tanggal Acara</h6>
+                                <h6 class="mb-1"><strong>Tanggal Acara</strong></h6>
                                 <p id="event_date"></p>
                             </div>
                         </div>
                         <div class="mt-2 row">
                             <div class="md-6 col">
-                                <h6 class="mb-1">Penyelenggara</h6>
+                                <h6 class="mb-1"><strong>Penyelenggara</strong></h6>
                                 <p id="organizer"></p>
                             </div>
                             <div class="col-md-6">
-                                <h6 class="mb-1">Status</h6>
+                                <h6 class="mb-1"><strong>Status</strong></h6>
                                 <p id="is_active"></p>
                             </div>
                             <div class="col-md-6">
-                                <h6 class="mb-1">Dibuat</h6>
+                                <h6 class="mb-1"><strong>Dibuat</strong></h6>
                                 <p><span id="created_by"></span><br><span id="created_at"></span></p>
                             </div>
                             <div class="col-md-6">
-                                <h6 class="mb-1">Diperbarui</h6>
+                                <h6 class="mb-1"><strong>Diperbarui</strong></h6>
                                 <p><span id="updated_by"></span><br><span id="updated_at"></span></p>
                             </div>
                         </div>
@@ -95,12 +95,12 @@
                             <hr style="height: 2px">
                         </div>
                         <div class="mt-4">
-                            <h6 class="mb-1">Konten</h6>
+                            <h6 class="mb-1"><strong>Konten</strong></h6>
                             <p id="content"></p>
                         </div>
                         @if ($agenda->file_path)
                             <div class="mt-4">
-                                <h6 class="mb-1">File yang diunggah</h6>
+                                <h6 class="mb-1"><strong>File yang diunggah</strong></h6>
                                 <embed src="{{ asset($agenda->file_path) }}" type="application/pdf" width="100%"
                                     height="600px" />
                                 <button class="btn btn-gray btn-sm mt-3"><a href="{{ asset($agenda->file_path) }}"

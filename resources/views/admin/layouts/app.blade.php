@@ -258,7 +258,7 @@
                     </li>
 
                     {{-- galeri --}}
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'galery')) {{ 'active' }} @endif"
                             aria-current="page" href="{{ url('/admin/galeries') }}">
                             <i class="icon">
@@ -277,7 +277,7 @@
                             </i>
                             <span class="item-name">Galeri</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li>
                         <hr class="hr-horizontal" style="background-color: white">

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UploadController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,32 @@ use App\Http\Controllers\Api\UploadController;
 |
 */
 
+Auth::routes(['verify' => true]);
+
 Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function () {
     Route::get('/', [App\Http\Controllers\Client\BerandaController::class, 'index']);
     Route::get('/beranda', [App\Http\Controllers\Client\BerandaController::class, 'index']);
+
+    Route::post('/email/resend', [App\Http\Controllers\Client\EmailVerificationController::class, 'resend'])->name('verification.resend');
+    Route::get('/email/verify/{id_user}/{hash}', [App\Http\Controllers\Client\EmailVerificationController::class, 'verify'])
+    ->name('verification.verify');
+
+
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->middleware('auth')->name('verification.notice');
+
+    // Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\Client\EmailVerificationController::class, 'verify'])
+    //     ->middleware(['auth', 'signed'])
+    //     ->name('verification.verify');
+
+    Route::post('/email/resend', [App\Http\Controllers\Client\EmailVerificationController::class, 'resend'])
+        ->middleware(['auth', 'throttle:6,1'])
+        ->name('verification.resend');
+
+
+    Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index'])->name('client.message.index');
+    Route::post('/message/submit', [App\Http\Controllers\Client\HubungikamiController::class, 'submit']);
 
     Route::get('/profil/{slug}', [App\Http\Controllers\Client\ProfilController::class, 'detail'])->name('client.profil.detail');
 
@@ -29,8 +53,6 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
 
     Route::get('/agenda', [App\Http\Controllers\Client\AgendaController::class, 'index'])->name('client.agenda.index');
     Route::get('/ppid/statistik', [App\Http\Controllers\Client\StatistikController::class, 'index'])->name('client.statistik');
-    Route::get('/message', [App\Http\Controllers\Client\HubungikamiController::class, 'index'])->name('client.message.index');
-    Route::post('/message/submit', [App\Http\Controllers\Client\HubungikamiController::class, 'submit']);
 
     Route::get('/document', [App\Http\Controllers\Client\DocumentController::class, 'index'])->name('client.document.index');
 

@@ -2,10 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Role;
-use App\Models\Event;
-use App\Models\Comment;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
@@ -13,13 +10,14 @@ use RichanFongdasen\EloquentBlameable\BlameableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail // Implementasi MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
     use BlameableTrait;
-    protected $table = 'users'; // Nama tabel
 
-    protected $primaryKey = 'id_user';
+    protected $table = 'users'; // Nama tabel
+    protected $primaryKey = 'id_user'; // Primary key
+
     protected $fillable = [
         'level_id',
         'username',
@@ -56,7 +54,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function levels()
     {
-        return $this->belongsTo(UserLevel::class, 'level_id','id_level');
+        return $this->belongsTo(UserLevel::class, 'level_id', 'id_level');
     }
 
     // Relasi ke Konten yang dibuat oleh user
@@ -106,9 +104,4 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Mitra::class, 'created_by');
     }
-
-    // public function userLevel() {
-    //     return $this->belongsTo(UserLevel::class, 'level_id', 'id_level');
-    // }
-    
 }
