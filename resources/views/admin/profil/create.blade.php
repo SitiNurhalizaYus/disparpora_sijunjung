@@ -171,6 +171,7 @@
         });
 
         //handle upload
+        let uploadedFilePath = ''; // Variable untuk menyimpan path file sementara
         $('#file').on('change', function() {
             var file = $(this).prop('files')[0];
             if (!file || !file.type.match('image.*')) {
@@ -182,9 +183,10 @@
                 });
                 $(this).val('');
                 $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
-                $('#invalid-file').show();
+                $('#image').val('noimage.jpg');
+                $('#invalid-picture').show();
             } else {
-                $('#invalid-file').hide();
+                $('#invalid-picture').hide();
 
                 var oFReader = new FileReader();
                 oFReader.readAsDataURL(file);
@@ -195,20 +197,39 @@
                 var formdata = new FormData();
                 formdata.append("file", file);
 
-                $.ajaxSetup({
-                    headers: {
-                        'Authorization': "Bearer {{ $session_token }}"
+                // Tampilkan loading
+                Swal.fire({
+                    title: 'Mengunggah...',
+                    html: 'Tunggu sebentar, gambar sedang diunggah',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
                     }
                 });
+
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Bearer {{ $session_token }}",
+                    }
+                });
+
                 $.ajax({
-                    url: '/api/upload',
+                    url: '/api/upload', // Endpoint untuk mengunggah gambar
                     type: "POST",
                     data: formdata,
                     processData: false,
                     contentType: false,
                     success: function(result) {
+                        Swal.close(); // Tutup dialog loading
                         if (result['success'] == true) {
-                            $('#image').val(result['data']['url']);
+                            // Simpan path file sementara ke dalam variabel
+                            uploadedFilePath = result['data']['url'].replace('/xxx/', '/500/');
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil",
+                                text: "Gambar berhasil diunggah. Tekan tombol Simpan untuk menyimpan semua data.",
+                                confirmButtonColor: '#3A57E8',
+                            });
                         } else {
                             Swal.fire({
                                 icon: "error",
@@ -218,13 +239,34 @@
                             });
                         }
                     },
-                    error: function() {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Terjadi kesalahan saat mengunggah gambar.",
-                            confirmButtonColor: '#3A57E8',
-                        });
+                    error: function(xhr) {
+                        Swal.close(); // Tutup dialog loading
+
+                        if (xhr.responseJSON && xhr.responseJSON.message.includes('Duplicate entry')) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Gagal Mengunggah",
+                                text: "Nama file gambar sudah ada. Ganti nama file atau unggah file yang berbeda.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+
+                            // Reset file input and image preview
+                            $('#file').val('');
+                            $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                            $('#image').val('noimage.jpg');
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Terjadi kesalahan saat mengunggah gambar.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+
+                            // Reset file input and image preview
+                            $('#file').val('');
+                            $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                            $('#image').val('noimage.jpg');
+                        }
                     }
                 });
             }
