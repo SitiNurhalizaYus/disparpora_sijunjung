@@ -6,7 +6,8 @@
     <div class="container-fluid bg-primary py-5 bg-header">
         <div class="row py-5">
             <div class="col-12 pt-lg-5 mt-lg-5 text-center">
-                <img src="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}" alt="Logo" class="logo">
+                <img src="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}" alt="Logo"
+                    class="logo">
                 <div class="logo-text">
                     <h3 class="text-light">{{ $setting['name-long'] }}</h3>
                     <p>Kabupaten Sijunjung</p>
@@ -19,20 +20,27 @@
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
+                <!-- Bagian Kiri: Informasi dan Alert -->
                 <div class="col-lg-7">
                     <div class="d-flex align-items-start">
                         <img src="{{ asset('assets/images/chat.png') }}" alt="Contact Illustration" class="img-fluid me-3" style="width: 100px; height: 100px;">
                         <div>
                             <h1 class="mb-4">Kirim pertanyaan, saran, atau masukan anda kepada kami</h1>
                             <p>Dinas Pariwisata Pemuda Dan Olahraga Kabupaten Sijunjung</p>
-                        </div>
-                    </div>
 
-                    <!-- Alert if verification required -->
-                    <div id="verificationAlert" class="alert alert-warning text-center w-100 mb-4 d-none">
-                        <h5>Email belum diverifikasi</h5>
-                        <p>Silakan cek email Anda untuk melakukan verifikasi.</p>
-                        <button class="btn btn-primary" id="resendVerification">Kirim Ulang Email Verifikasi</button>
+                            <!-- Alert untuk pesan sukses -->
+                            <div id="successAlert" class="alert alert-success text-center w-100 mb-4 d-none">
+                                <h5>Pesan Berhasil Dikirim</h5>
+                                <p>Terima kasih atas pesan Anda! Kami akan segera membalasnya.</p>
+                            </div>
+
+                            <!-- Alert jika email perlu verifikasi -->
+                            <div id="verificationAlert" class="alert alert-warning text-center w-100 mb-4 d-none">
+                                <h5>Email belum diverifikasi</h5>
+                                <p>Silakan cek email Anda untuk melakukan verifikasi.</p>
+                                <button class="btn btn-primary" id="resendVerification">Kirim Ulang Email Verifikasi</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -88,26 +96,22 @@
             // Buat FormData dari form untuk menangani pengiriman file juga
             let formData = new FormData(this);
 
-            // Kirim data ke server untuk menyimpan user dan memverifikasi email
+            // Kirim data ke API /api/message
             $.ajax({
-                url: "{{ url('/api/user/create-or-verify') }}", // Endpoint untuk membuat user dan mengirim email verifikasi
+                url: "{{ url('/api/message') }}", // Pastikan ini mengarah ke API yang benar
                 method: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    if (response.status === 'verification_required') {
-                        // Tampilkan pesan verifikasi jika diperlukan
-                        $('#verificationAlert').removeClass('d-none');
-                        $('#formAlert').removeClass('alert-danger').addClass('alert-info').text(response.message).removeClass('d-none');
-                    } else {
-                        // Jika email sudah diverifikasi, kirim pesan ke tabel message
-                        $('#formAlert').removeClass('alert-danger').addClass('alert-success').text(response.message).removeClass('d-none');
-                        $('#contactForm')[0].reset(); // Reset form setelah berhasil mengirim
-                    }
+                    $('#successAlert').removeClass('d-none'); // Tampilkan pesan sukses
+                    $('#formAlert').addClass('d-none'); // Sembunyikan alert form jika sebelumnya muncul error
+                    $('#contactForm')[0].reset(); // Reset form setelah berhasil mengirim
                 },
                 error: function(xhr) {
-                    if (xhr.status === 422) {
+                    if (xhr.status === 403) {
+                        $('#verificationAlert').removeClass('d-none'); // Tampilkan verifikasi email
+                    } else if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
                         let errorMessage = '';
 
@@ -119,7 +123,7 @@
                         }
                         $('#formAlert').removeClass('d-none alert-success').addClass('alert-danger').text(errorMessage);
                     } else {
-                        $('#formAlert').removeClass('d-none alert-success').addClass('alert-danger').text('Gagal memproses permintaan.');
+                        $('#formAlert').removeClass('d-none alert-success').addClass('alert-danger').text('Gagal mengirim pesan.');
                     }
                 }
             });
