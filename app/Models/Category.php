@@ -19,4 +19,15 @@ class Category extends Model
     {
         return $this->hasMany(Content::class, 'category_id');
     }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    // Relasi dengan model User sebagai updated_by
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -68,7 +69,7 @@ class DocumentController extends Controller
         $metadata['page'] = $page;
 
         // get count
-        if($count == true) {
+        if ($count == true) {
             $query = $query->count('id');
             $data['count'] = $query;
         }
@@ -82,10 +83,10 @@ class DocumentController extends Controller
             $metadata['page'] = 1;
         } else {
             $data = $query->orderBy($sort[0], $sort[1])
-                          ->limit($per_page)
-                          ->offset(($page - 1) * $per_page)
-                          ->get()
-                          ->toArray();
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page)
+                ->get()
+                ->toArray();
         }
 
         // result
@@ -98,16 +99,28 @@ class DocumentController extends Controller
 
     public function show($id)
     {
-        // query
-        $query = Document::where([['id', '>', '0']]);
+        // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy'
+        $query = Document::with(['createdBy', 'updatedBy'])->where('id', $id);
 
-        // cek token
+        // Jika tidak ada autentikasi, filter hanya konten yang aktif
         if (!auth()->guard('api')->user()) {
-            $query = $query->where('is_active', 1);
+            $query->where('is_active', 1); // Hanya ambil data yang aktif
         }
 
-        // data
-        $data = $query->find($id);
+        $data = $query->first(); // Ambil data pertama yang cocok dengan id
+
+        if (!$data) {
+            return new ApiResource(false, 404, 'Data not found', [], []);
+        }
+
+        // Menampilkan data agenda dan mengubah 'created_by' dan 'updated_by' menjadi nama user
+        $result = $data->toArray();
+        if ($data->createdBy) {
+            $result['created_by'] = $data->createdBy->name; // Menampilkan nama user dari 'created_by'
+        }
+        if ($data->updatedBy) {
+            $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
+        }
 
         // result
         if ($data) {

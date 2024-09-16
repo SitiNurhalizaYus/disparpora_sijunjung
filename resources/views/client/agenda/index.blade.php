@@ -33,7 +33,7 @@
                         <div class="d-flex justify-content-end mb-3">
                             <select id="sort-order" class="form-select w-auto">
                                 <option value="event_date:desc">Terbaru</option>
-                                <option value="event_date:asc">Terlama</option>
+                                <option value="event_date:asc">Terdahulu</option>
                             </select>
                         </div>
 

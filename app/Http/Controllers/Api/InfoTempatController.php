@@ -100,20 +100,28 @@ class InfoTempatController extends Controller
 
     public function show($id)
     {
+        // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy'
+        $query = InfoTempat::with(['createdBy', 'updatedBy'])->where('id', $id);
 
-        // query
-        $query = InfoTempat::where([['id', '>', '0']]);
-
+        // Jika tidak ada autentikasi, filter hanya konten yang aktif
         if (!auth()->guard('api')->user()) {
-            $query->where('is_active', 1);
+            $query->where('is_active', 1); // Hanya ambil data yang aktif
         }
 
-        if (is_numeric($id)) {
-            $data = $query->find($id);
-        } else {
-            $data = $query->where('slug', $id)->first();
+        $data = $query->first(); // Ambil data pertama yang cocok dengan id
+
+        if (!$data) {
+            return new ApiResource(false, 404, 'Data not found', [], []);
         }
 
+        // Menampilkan data agenda dan mengubah 'created_by' dan 'updated_by' menjadi nama user
+        $result = $data->toArray();
+        if ($data->createdBy) {
+            $result['created_by'] = $data->createdBy->name; // Menampilkan nama user dari 'created_by'
+        }
+        if ($data->updatedBy) {
+            $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
+        }
         // result
         if ($data) {
             return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);

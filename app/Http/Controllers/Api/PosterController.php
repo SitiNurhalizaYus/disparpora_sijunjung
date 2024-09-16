@@ -99,16 +99,28 @@ class PosterController extends Controller
 
     public function show($id)
     {
-        // query
-        $query = Poster::where([['id', '>', '0']]);
+         // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy'
+    $query = Poster::with(['createdBy', 'updatedBy'])->where('id', $id);
 
-        // cek token
-        if (!auth()->guard('api')->user()) {
-            $query = $query->where('is_active', 1);
-        }
+    // Jika tidak ada autentikasi, filter hanya konten yang aktif
+    if (!auth()->guard('api')->user()) {
+        $query->where('is_active', 1); // Hanya ambil data yang aktif
+    }
 
-        // data
-        $data = $query->find($id);
+    $data = $query->first(); // Ambil data pertama yang cocok dengan id
+
+    if (!$data) {
+        return new ApiResource(false, 404, 'Data not found', [], []);
+    }
+
+    // Menampilkan data agenda dan mengubah 'created_by' dan 'updated_by' menjadi nama user
+    $result = $data->toArray();
+    if ($data->createdBy) {
+        $result['created_by'] = $data->createdBy->name; // Menampilkan nama user dari 'created_by'
+    }
+    if ($data->updatedBy) {
+        $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
+    }
 
         // result
         if ($data) {

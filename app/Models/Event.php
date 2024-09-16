@@ -21,13 +21,19 @@ class Event extends Model
         'is_active'
     ];
 
-    public function agent()
-    {
-        return $this->belongsTo(Agent::class);
-    }
-
     public function admin()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    // Relasi dengan model User sebagai updated_by
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

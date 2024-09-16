@@ -57,9 +57,13 @@
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                                     <div class="card-header bg-secondary text-white"><strong> Detail Tambahan</strong></div>
                                     <div class="card-body">
-                                        <p class="card-text"><h6>Status: </h6><span id="is_active"></span></p>
-                                        <p class="card-text"><h6>Dibuat: </h6><span id="created_by"></span><br><span id="created_at"></span></p>
-                                        <p class="card-text"><h6>Diperbarui: </h6><span id="updated_by"></span><br><span id="updated_at"></span></p>
+                                        <p class="card-text">
+                                        <h6>Status: </h6><span id="is_active"></span></p>
+                                        <p class="card-text">
+                                        <h6>Dibuat: </h6><span id="created_by"></span><br><span id="created_at"></span></p>
+                                        <p class="card-text">
+                                        <h6>Diperbarui: </h6><span id="updated_by"></span><br><span id="updated_at"></span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -123,9 +127,9 @@
                             '<span class="badge bg-success">Aktif</span>' :
                             '<span class="badge bg-danger">Tidak Aktif</span>');
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
-                        $('#created_by').text(result['data']['created_by']);
+                        $('#created_by').text(result['data']['created_by']['name']);
                         $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
-                        $('#updated_by').text(result['data']['updated_by']);
+                        $('#updated_by').text(result['data']['updated_by']['name']);
                     } else {
                         // Tampilkan pesan error jika gagal memuat data
                         $("#detail-data-success").hide();

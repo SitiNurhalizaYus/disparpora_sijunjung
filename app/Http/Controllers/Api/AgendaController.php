@@ -104,14 +104,30 @@ class AgendaController extends Controller
 
     public function show($id)
     {
-        $data = Agenda::find($id);
+        // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy'
+        $query = Agenda::with(['createdBy', 'updatedBy'])->where('id', $id);
+
+        // Jika tidak ada autentikasi, filter hanya konten yang aktif
+        if (!auth()->guard('api')->user()) {
+            $query->where('is_active', 1); // Hanya ambil data yang aktif
+        }
+
+        $data = $query->first(); // Ambil data pertama yang cocok dengan id
 
         if (!$data) {
             return new ApiResource(false, 404, 'Data not found', [], []);
         }
 
+        // Menampilkan data agenda dan mengubah 'created_by' dan 'updated_by' menjadi nama user
+        $result = $data->toArray();
+        if ($data->createdBy) {
+            $result['created_by'] = $data->createdBy->name; // Menampilkan nama user dari 'created_by'
+        }
+        if ($data->updatedBy) {
+            $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
+        }
         // result
-        if ($data) {
+        if ($result) {
             return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
         } else {
             return new ApiResource(false, 200, 'No data found', [], []);

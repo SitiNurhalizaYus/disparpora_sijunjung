@@ -144,9 +144,9 @@
                         $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
                     }
                     $('#created_at').text(convertStringToDate(result['data']['created_at']));
-                    $('#created_by').text(result['data']['created_by']);
+                    $('#created_by').text(result['data']['created_by']['name']);
                     $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
-                    $('#updated_by').text(result['data']['updated_by']);
+                    $('#updated_by').text(result['data']['updated_by']['name']);
                 } else {
                     $("#detail-data-success").hide();
                     $("#detail-data-failed").show();
