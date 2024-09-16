@@ -28,17 +28,19 @@
                             <h1 class="mb-4">Kirim pertanyaan, saran, atau masukan anda kepada kami</h1>
                             <p>Dinas Pariwisata Pemuda Dan Olahraga Kabupaten Sijunjung</p>
 
-                            <!-- Alert untuk pesan sukses -->
-                            <div id="successAlert" class="alert alert-success text-center w-100 mb-4 d-none">
-                                <h5>Pesan Berhasil Dikirim</h5>
-                                <p>Terima kasih atas pesan Anda! Kami akan segera membalasnya.</p>
-                            </div>
+                            <!-- Tampilkan pesan sukses setelah verifikasi -->
+                            @if (session('status'))
+                                <div id="successAlert" class="alert alert-success text-center w-100 mb-4">
+                                    <h5>{{ session('status') }}</h5>
+                                </div>
+                            @endif
 
-                            <!-- Alert jika email perlu verifikasi -->
-                            <div id="verificationAlert" class="alert alert-warning text-center w-100 mb-4 d-none">
-                                <h5>Email belum diverifikasi</h5>
-                                <p>Silakan cek email Anda untuk melakukan verifikasi.</p>
-                                <button class="btn btn-primary" id="resendVerification">Kirim Ulang Email Verifikasi</button>
+                            <!-- Loading saat menunggu verifikasi -->
+                            <div id="loadingSpinner" class="text-center w-100 mb-4 d-none">
+                                <p>Sedang memproses pesan...</p>
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -49,7 +51,7 @@
                     <div class="bg-primary rounded-lg h-100 d-flex align-items-center p-5 wow zoomIn"
                         data-wow-delay="0.9s" id="form-section">
 
-                        <form id="contactForm" method="POST" enctype="multipart/form-data">
+                        <form id="contactForm" method="POST" enctype="multipart/form-data" action="{{ route('message.store') }}">
                             @csrf
                             <div class="row g-3">
                                 <div class="col-xl-12">
@@ -92,47 +94,38 @@
     $(document).ready(function() {
         $('#contactForm').on('submit', function(event) {
             event.preventDefault();
-
-            // Buat FormData dari form untuk menangani pengiriman file juga
             let formData = new FormData(this);
 
-            // Kirim data ke API /api/message
+            // Tampilkan loading spinner saat memproses
+            $('#loadingSpinner').removeClass('d-none');
+
+            // Kirim pesan dan proses verifikasi
             $.ajax({
-                url: "{{ url('/api/message') }}", // Pastikan ini mengarah ke API yang benar
+                url: "{{ route('message.store') }}", // URL untuk mengirim pesan
                 method: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    $('#successAlert').removeClass('d-none'); // Tampilkan pesan sukses
-                    $('#formAlert').addClass('d-none'); // Sembunyikan alert form jika sebelumnya muncul error
+                    $('#loadingSpinner').addClass('d-none');
+                    $('#successAlert').removeClass('d-none').text(response.message); // Tampilkan pesan sukses
+                    $('#formAlert').addClass('d-none');
                     $('#contactForm')[0].reset(); // Reset form setelah berhasil mengirim
                 },
                 error: function(xhr) {
-                    if (xhr.status === 403) {
-                        $('#verificationAlert').removeClass('d-none'); // Tampilkan verifikasi email
-                    } else if (xhr.status === 422) {
+                    $('#loadingSpinner').addClass('d-none');
+                    let errorMessage = 'Gagal mengirim pesan.';
+                    if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
-                        let errorMessage = '';
-
-                        // Tampilkan pesan error
+                        errorMessage = '';
                         for (let key in errors) {
                             if (errors.hasOwnProperty(key)) {
                                 errorMessage += errors[key][0] + '\n';
                             }
                         }
-                        $('#formAlert').removeClass('d-none alert-success').addClass('alert-danger').text(errorMessage);
-                    } else {
-                        $('#formAlert').removeClass('d-none alert-success').addClass('alert-danger').text('Gagal mengirim pesan.');
                     }
+                    $('#formAlert').removeClass('d-none alert-success').addClass('alert-danger').text(errorMessage);
                 }
-            });
-        });
-
-        // Resend verification email
-        $('#resendVerification').on('click', function() {
-            $.post("{{ route('verification.resend') }}", {_token: '{{ csrf_token() }}'}, function(response) {
-                alert(response.message);
             });
         });
     });
