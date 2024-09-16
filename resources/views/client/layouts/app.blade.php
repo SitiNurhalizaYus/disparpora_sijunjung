@@ -150,16 +150,20 @@
                                 <a href="{{ route('client.document.index') }}" class="dropdown-item">Dokumen
                                     Publik</a>
                                 <a href="{{ route('client.agenda.index') }}" class="dropdown-item">Agenda</a>
+
+                                <a href="{{ route('client.statistik') }}" class="dropdown-item">Statistik Informasi
+                                    Publik</a>
+
                             </div>
                         </div>
-                        <div class="nav-item dropdown me-3">
+                        {{-- <div class="nav-item dropdown me-3">
                             <a href="{{ url('/ppid') }}" class="nav-link dropdown-toggle"
                                 data-bs-toggle="dropdown">PPID</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{{ route('client.statistik') }}" class="dropdown-item">Statistik Informasi
                                     Publik</a>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="nav-item dropdown me-3">
                             <a href="{{ route('client.lokawisata.index') }}" class="nav-link">Lokawisata</a>
                         </div>
