@@ -83,7 +83,7 @@
                                             <div class="flex-grow-1">
                                                 <span class="badge bg-danger text-white mb-2">Agenda</span>
                                                 <h4 class="mb-3">${agenda.title}</h4>
-                                                <p class="mb-0 text-muted">${agenda.content.substring(0, 100)}...</p>
+                                                <p class="mb-0 text-muted">${agenda.content.substring(0, 150)}...</p>
                                             </div>
 
                                             <!-- "Lihat" Button -->

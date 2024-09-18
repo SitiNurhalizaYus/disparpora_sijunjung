@@ -126,30 +126,31 @@
             // Fungsi untuk memuat recent posts dengan AJAX
             function loadRecentPosts(slug) {
                 $.ajax({
-                    url: "{{ url('/api/content') }}",
+                    url: "{{ url('/api/content') }}",  // Request ke API untuk recent posts
                     method: "GET",
                     data: {
                         recent: true,
                         type: 'berita',
-                        per_page: 6, // Membatasi jumlah recent posts
+                        per_page: 5, // Membatasi jumlah recent posts
                         exclude_slug: slug // Kirim slug yang akan dikecualikan
                     },
                     success: function(response) {
                         let recentPostList = '';
                         $.each(response.data, function(index, post) {
+                            // Menggabungkan base URL dengan path gambar recent posts
+                            const postImagePath = `${baseUrl}/uploads/500/${post.image.split('/').pop()}`;
+    
                             recentPostList += `
-                            <div class="d-flex rounded overflow-hidden mb-3">
-                                <img class="img-fluid" src="${post.image}" style="width: 100px; height: 100px; object-fit: cover;" alt="${post.title}">
-                                <a href="{{ url('/berita') }}/${post.slug}" class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">${post.title}</a>
+                                <div class="d-flex rounded overflow-hidden mb-3">
+                                    <img class="img-fluid" src="${postImagePath}" style="width: 100px; height: 100px; object-fit: cover;" alt="${post.title}">
+                                    <a href="{{ route('client.berita.index') }}/${post.slug}" class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">${post.title}</a>
                                 </div>
-                                `;
+                            `;
                         });
                         $('#recent-post-list').html(recentPostList);
                     },
                     error: function(xhr) {
-                        $('#recent-post-list').html(
-                            '<p class="text-center">Gagal memuat postingan terbaru. Silakan coba lagi nanti.</p>'
-                        );
+                        $('#recent-post-list').html('<p class="text-center">Gagal memuat postingan terbaru. Silakan coba lagi nanti.</p>');
                     }
                 });
             }

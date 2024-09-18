@@ -27,7 +27,7 @@
                 <p><strong> Email :</strong> <span id="email"></span></p>
                 <p><strong> Subjek :</strong> <span id="subject"></span></p>
                 <p><strong> Pesan :</strong> <span id="message"></span></p>
-                <p><strong> Gambar :</strong><br><span id="file_path"></span></p>
+                <p><strong> File :</strong><br><span id="file-content"></span></p>
                 <p><strong> Waktu Kirim :</strong> <span id="created_at"></span></p>
             </div>
         </div>
@@ -84,8 +84,19 @@
                         $('#email').text(result.data.email);
                         $('#subject').text(result.data.subject);
                         $('#message').text(result.data.message);
-                        // $("#file_path").attr("src", "{{ url('/') }}/" + result['data']['file_path']
-                        // .replace('/xxx/', '/300/'));
+                        // Cek apakah ada file yang diunggah dan tampilkan sesuai format file
+                        if (result.data.file_path) {
+                            let filePath = "{{ url('/') }}/" + result.data.file_path.replace(
+                                '/xxx/', '/300/');
+                            if (filePath.match(/\.(jpeg|jpg|gif|png)$/)) {
+                                $('#file-content').html(
+                                    `<img src="${filePath}" alt="File Upload" style="max-width: 100%; height: auto;">`
+                                    );
+                            } else {
+                                $('#file-content').html(
+                                    `<a href="${filePath}" target="_blank">Download File</a>`);
+                            }
+                        }
                         $('#created_at').text(convertStringToDate(result.data.created_at));
 
                         // Cek status is_active, jika 1 tampilkan balasan
@@ -166,8 +177,10 @@
                                         text: result.message,
                                         confirmButtonColor: '#3A57E8',
                                     }).then(() => {
-                                        $('#reply').val(''); // Kosongkan form setelah berhasil mengirim balasan
-                                        $('#replyForm').hide(); // Sembunyikan form balasan
+                                        $('#reply').val(
+                                        ''); // Kosongkan form setelah berhasil mengirim balasan
+                                        $('#replyForm')
+                                    .hide(); // Sembunyikan form balasan
                                         $('#reply-section').html(`
                                             <p><strong>Balasan :</strong></p>
                                             <p>${replyData.reply}</p>
@@ -180,7 +193,8 @@
                                         text: result.message,
                                         confirmButtonColor: '#3A57E8',
                                     });
-                                    $('#replyForm').show(); // Tampilkan kembali form balasan jika gagal
+                                    $('#replyForm')
+                                .show(); // Tampilkan kembali form balasan jika gagal
                                 }
                             },
                             error: function(xhr) {
@@ -192,7 +206,8 @@
                                     text: 'Gagal mengirim balasan.',
                                     confirmButtonColor: '#3A57E8',
                                 });
-                                $('#replyForm').show(); // Tampilkan kembali form balasan jika gagal
+                                $('#replyForm')
+                            .show(); // Tampilkan kembali form balasan jika gagal
                             }
                         });
                     }
