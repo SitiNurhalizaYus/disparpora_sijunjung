@@ -47,6 +47,12 @@ class ContentController extends Controller
             $query->where('category_id', $category_id);
         }
 
+        // Filter berdasarkan bulan dan tahun jika ada
+        if ($request->has('month') && $request->has('year')) {
+            $query->whereMonth('created_at', $request->month)
+                ->whereYear('created_at', $request->year);
+        }
+
         // Filter berdasarkan pencarian judul
         if ($search) {
             $query->where('title', 'like', "%{$search}%");
