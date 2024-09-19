@@ -159,14 +159,14 @@
                 <!-- Konten berita akan dimuat melalui AJAX di sini -->
             </div>
             <div class="text-center mt-5">
-                <a href="{{ route('client.berita.index') }}" class="btn btn-primary">Load More</a>
+                <a href="{{ route('client.berita.index') }}" class="btn btn-primary">Lihat Semua <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </div>
     <!-- Berita End -->
 
 
-    <!-- Testimonial Start -->
+    <!-- lokawisata Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-4 mx-auto" style="max-width: 600px;">
@@ -207,7 +207,32 @@
             </div>
         </div>
     </div>
-    <!-- Testimonial End -->
+    <!-- lokawisata End -->
+
+    <!-- Agenda Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                <h5 class="fw-bold text-primary text-uppercase">Agenda</h5>
+                <h1 class="mb-0">Mari ikuti Agenda ataupun Event Terbaru Kami</h1>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div id="agenda-list">
+                        <!-- Data agenda akan dimuat di sini melalui AJAX -->
+                    </div>
+
+                    <!-- Tombol "Lihat Semua Agenda" -->
+                    <div class="text-center mt-4">
+                        <a href="{{ route('client.agenda.index') }}" class="btn btn-primary">Lihat Semua <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Agenda End -->
+
 
     <!-- Service Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -280,14 +305,15 @@
                         if (response.success) {
                             let beritaContainer = $('#berita-container');
                             let beritaHtml = '';
-    
+
                             $.each(response.data, function(index, berita) {
-                                const formattedDate = new Date(berita.created_at).toLocaleDateString('id-ID', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                });
-    
+                                const formattedDate = new Date(berita.created_at)
+                                    .toLocaleDateString('id-ID', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    });
+
                                 beritaHtml += `
                                     <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
                                         <div class="blog-item bg-light rounded overflow-hidden">
@@ -309,23 +335,92 @@
                                         </div>
                                     </div>`;
                             });
-    
+
                             beritaContainer.html(beritaHtml);
                         } else {
-                            $('#berita-container').html('<p class="text-center">Tidak ada berita yang ditemukan.</p>');
+                            $('#berita-container').html(
+                                '<p class="text-center">Tidak ada berita yang ditemukan.</p>');
                         }
                     },
                     error: function(xhr, status, error) {
                         console.log(xhr.responseText); // Log error response
-                        $('#berita-container').html('<p class="text-center">Gagal memuat berita. Silakan coba lagi nanti.</p>');
+                        $('#berita-container').html(
+                            '<p class="text-center">Gagal memuat berita. Silakan coba lagi nanti.</p>'
+                        );
                     }
                 });
             }
-    
+
             loadBeritaTerbaru();
+
+            // Fungsi untuk memuat 3 agenda terbaru
+            function loadAgenda() {
+                $.ajax({
+                    url: "{{ url('/api/agenda') }}", // URL endpoint API agenda
+                    method: "GET",
+                    data: {
+                        per_page: 3, // Ambil hanya 3 agenda terbaru
+                        sort: 'event_date:desc' // Sorting berdasarkan event_date desc
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            let agendaList = '';
+                            response.data.forEach(agenda => {
+                                agendaList += `
+                                    <div class="timeline-item wow slideInUp" data-wow-delay="0.1s">
+                                        <div class="timeline-date">
+                                            <span class="day">${new Date(agenda.event_date).getDate()}</span>
+                                            <span class="month">${new Date(agenda.event_date).toLocaleString('id-ID', { month: 'short' }).toUpperCase()}</span>
+                                        </div>
+                                        <div class="timeline-content bg-light rounded p-4">
+                                            <div class="d-flex justify-content-between">
+                                                <!-- Content -->
+                                                <div class="flex-grow-1">
+                                                    <span class="badge bg-danger text-white mb-2">Agenda</span>
+                                                    <h4 class="mb-3">${agenda.title}</h4>
+                                                    <p class="mb-0 text-muted">${agenda.content.substring(0, 150)}...</p>
+                                                </div>
+
+                                                <!-- "Lihat" Button -->
+                                                <div class="ms-auto d-flex align-items-center">
+                                                    <span class="vertical-divider mx-3"></span>
+                                                    <a class="text-green fw-bold lihat-link" data-file="${agenda.file_path}">
+                                                        Lihat
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            $('#agenda-list').html(agendaList);
+                        } else {
+                            $('#agenda-list').html('<p>Tidak ada agenda.</p>');
+                        }
+                    },
+                    error: function() {
+                        $('#agenda-list').html('<p>Gagal memuat data agenda.</p>');
+                    }
+                });
+            }
+
+            // Panggil fungsi untuk memuat agenda terbaru saat halaman siap
+            loadAgenda();
+
+            // Event listener untuk unduh file saat tombol "Lihat" diklik
+            $(document).on('click', '.lihat-link', function(e) {
+                e.preventDefault();
+                const filePath = $(this).data('file');
+                if (filePath) {
+                    const url = '{{ url('/') }}' + '/' + (filePath);
+                    window.open(url, '_blank');
+                } else {
+                    alert('File tidak tersedia.');
+                }
+            });
         });
     </script>
-    
+
 
     <!-- Vendor Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
