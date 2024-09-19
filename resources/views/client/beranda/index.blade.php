@@ -112,7 +112,7 @@
     </div> --}}
     <!-- Facts Start -->
 
-       <!-- About Start -->
+    <!-- About Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
@@ -148,43 +148,15 @@
     </div>
     <!-- About End -->
 
-     <!-- Berita Start -->
-     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- Berita Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h5 class="fw-bold text-primary text-uppercase">Berita Terbaru</h5>
                 <h1 class="mb-0">Baca Artikel dan Berita Terbaru Kami</h1>
             </div>
-            <div class="row g-5">
-                @foreach (array_slice($beritas, 0, 6) as $berita)
-                    <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                        <div class="blog-item bg-light rounded overflow-hidden">
-                            <div class="blog-img position-relative overflow-hidden">
-                                <img class="img-fluid" src="{{ $berita['image'] }}" alt="{{ $berita['title'] }}">
-                                <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4"
-                                    href="{{ url('/berita', $berita['slug']) }}">
-                                    {{ $berita['category.name'] ?? 'Kategori' }}
-                                </a>
-                            </div>
-                            <div class="p-4">
-                                <div class="d-flex mb-3">
-                                    <small class="me-3">
-                                        <i
-                                            class="far fa-user text-primary me-2"></i>{{ $berita['created_by'] ?? 'Unknown Author' }}
-                                    </small>
-                                    <small>
-                                        <i
-                                            class="far fa-calendar-alt text-primary me-2"></i>{{ \Carbon\Carbon::parse($berita['created_at'])->format('d M, Y') }}
-                                    </small>
-                                </div>
-                                <h4 class="mb-3">{{ $berita['title'] }}</h4>
-                                <p>{{ $berita['description_short'] }}</p>
-                                <a class="text-uppercase" href="{{ url('/artikel', $berita['slug']) }}">Read More <i
-                                        class="bi bi-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+            <div class="row g-5" id="berita-container">
+                <!-- Konten berita akan dimuat melalui AJAX di sini -->
             </div>
             <div class="text-center mt-5">
                 <a href="{{ route('client.berita.index') }}" class="btn btn-primary">Load More</a>
@@ -193,11 +165,12 @@
     </div>
     <!-- Berita End -->
 
+
     <!-- Testimonial Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-4 mx-auto" style="max-width: 600px;">
-                <h5 class="fw-bold text-primary text-uppercase"></h5>
+                <h5 class="fw-bold text-primary text-uppercase">Lokawisata</h5>
                 <h1 class="mb-0">Spot Unggulan Wisata</h1>
             </div>
             <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.6s">
@@ -212,7 +185,8 @@
                         </div>
                     </div>
                     <div class="pt-4 pb-5 px-5">
-                        Ngalau/Goa Basurek merupakan goa pada batuan karst/gamping yang unsur utamanya mengandung karbonat CaCo3.
+                        Ngalau/Goa Basurek merupakan goa pada batuan karst/gamping yang unsur utamanya mengandung karbonat
+                        CaCo3.
                     </div>
                 </div>
                 <div class="testimonial-item bg-light my-4">
@@ -226,7 +200,8 @@
                         </div>
                     </div>
                     <div class="pt-4 pb-5 px-5">
-                        Air terjun ini terkenal karena keindahan alamnya dan suasana yang sejuk, dengan air yang jernih mengalir dari ketinggian tebing ke kolam alami di bawahnya.
+                        Air terjun ini terkenal karena keindahan alamnya dan suasana yang sejuk, dengan air yang jernih
+                        mengalir dari ketinggian tebing ke kolam alami di bawahnya.
                     </div>
                 </div>
             </div>
@@ -292,17 +267,65 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            $.ajax({
-                url: "{{ url('/api/statistik') }}",
-                method: "GET",
-                success: function(response) {
-                    $('#destinations-count').text(response.destinations_count);
-                    $('#projects-count').text(response.projects_count);
-                    $('#visitors-count').text(response.visitors_count);
-                }
-            });
+            function loadBeritaTerbaru() {
+                $.ajax({
+                    url: "{{ url('/api/content') }}", // Endpoint API untuk berita
+                    method: "GET",
+                    data: {
+                        type: 'berita',
+                        per_page: 6
+                    },
+                    success: function(response) {
+                        console.log(response); // Log respons API
+                        if (response.success) {
+                            let beritaContainer = $('#berita-container');
+                            let beritaHtml = '';
+    
+                            $.each(response.data, function(index, berita) {
+                                const formattedDate = new Date(berita.created_at).toLocaleDateString('id-ID', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+    
+                                beritaHtml += `
+                                    <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
+                                        <div class="blog-item bg-light rounded overflow-hidden">
+                                            <div class="blog-img position-relative overflow-hidden">
+                                                <img class="img-fluid" src="${berita.image}" alt="${berita.title}">
+                                                <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="/berita/${berita.slug}">
+                                                    ${berita.category ? berita.category.name : 'Kategori'}
+                                                </a>
+                                            </div>
+                                            <div class="p-4">
+                                                <div class="d-flex mb-3">
+                                                    <small class="me-3"><i class="far fa-user text-primary me-2"></i>${berita.created_by ?? 'Unknown Author'}</small>
+                                                    <small><i class="far fa-calendar-alt text-primary me-2"></i>${formattedDate}</small>
+                                                </div>
+                                                <h4 class="mb-3">${berita.title}</h4>
+                                                <p>${berita.description_short}</p>
+                                                <a class="text-uppercase" href="/berita/${berita.slug}">Read More <i class="bi bi-arrow-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                            });
+    
+                            beritaContainer.html(beritaHtml);
+                        } else {
+                            $('#berita-container').html('<p class="text-center">Tidak ada berita yang ditemukan.</p>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText); // Log error response
+                        $('#berita-container').html('<p class="text-center">Gagal memuat berita. Silakan coba lagi nanti.</p>');
+                    }
+                });
+            }
+    
+            loadBeritaTerbaru();
         });
     </script>
+    
 
     <!-- Vendor Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
