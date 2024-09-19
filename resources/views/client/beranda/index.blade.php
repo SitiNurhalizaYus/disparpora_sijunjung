@@ -11,9 +11,9 @@
                         <div class="p-3" style="max-width: 900px;">
                             <h5 class="text-white text-uppercase mb-3 animated slideInDown">Explore Sijunjung</h5>
                             <h1 class="display-1 text-white mb-md-4 animated zoomIn">Discover the Beauty of Sijunjung</h1>
-                            <a href="{{ url('/destinations') }}"
+                            <a href="{{ url('/lokawisata') }}"
                                 class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Lihat Destinasi</a>
-                            <a href="{{ url('/contact') }}"
+                            <a href="{{ url('/message') }}"
                                 class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Hubungi Kami</a>
                         </div>
                     </div>
@@ -24,9 +24,9 @@
                         <div class="p-3" style="max-width: 900px;">
                             <h5 class="text-white text-uppercase mb-3 animated slideInDown">Sports in Sijunjung</h5>
                             <h1 class="display-1 text-white mb-md-4 animated zoomIn">Enhancing Youth and Sports</h1>
-                            <a href="{{ url('/sports') }}"
+                            <a href="{{ url('/artikel') }}"
                                 class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Explore Sports</a>
-                            <a href="{{ url('/contact') }}"
+                            <a href="{{ url('/message') }}"
                                 class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Hubungi Kami</a>
                         </div>
                     </div>
@@ -112,8 +112,44 @@
     </div> --}}
     <!-- Facts Start -->
 
-    <!-- Berita Start -->
+       <!-- About Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-7">
+                    <div class="section-title position-relative pb-3 mb-4">
+                        {{-- <h5 class="fw-bold text-primary text-uppercase">About Us</h5> --}}
+                        <h1 class="mb-0">Membangun Pariwisata dan Olahraga di Sijunjung</h1>
+                    </div>
+                    <p class="mb-4">Dinas Pariwisata Pemuda dan Olahraga Sijunjung berkomitmen untuk mengembangkan
+                        potensi
+                        pariwisata dan olahraga melalui berbagai program dan kegiatan yang inovatif dan berkelanjutan. Kami
+                        mengundang Anda untuk menjelajahi keindahan alam dan budaya serta mendukung peningkatan prestasi
+                        olahraga di Sijunjung.</p>
+                    <div class="row g-0 mb-3">
+                        <div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
+                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Wisata Alam</h5>
+                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Budaya dan Adat Istiadat</h5>
+                        </div>
+                        <div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
+                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Fasilitas Olahraga</h5>
+                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Kegiatan Pemuda</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5" style="min-height: 500px;">
+                    <div class="position-relative h-100">
+                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
+                            src="{{ asset('landingpage/assets/img/kepala-dinas.jpg') }}" style="object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+     <!-- Berita Start -->
+     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
                 <h5 class="fw-bold text-primary text-uppercase">Berita Terbaru</h5>
@@ -157,80 +193,40 @@
     </div>
     <!-- Berita End -->
 
-
-
-    <!-- About Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-lg-7">
-                    <div class="section-title position-relative pb-3 mb-4">
-                        {{-- <h5 class="fw-bold text-primary text-uppercase">About Us</h5> --}}
-                        <h1 class="mb-0">Membangun Pariwisata dan Olahraga di Sijunjung</h1>
-                    </div>
-                    <p class="mb-4">Dinas Pariwisata Pemuda dan Olahraga Sijunjung berkomitmen untuk mengembangkan
-                        potensi
-                        pariwisata dan olahraga melalui berbagai program dan kegiatan yang inovatif dan berkelanjutan. Kami
-                        mengundang Anda untuk menjelajahi keindahan alam dan budaya serta mendukung peningkatan prestasi
-                        olahraga di Sijunjung.</p>
-                    <div class="row g-0 mb-3">
-                        <div class="col-sm-6 wow zoomIn" data-wow-delay="0.2s">
-                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Wisata Alam</h5>
-                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Budaya dan Adat Istiadat</h5>
-                        </div>
-                        <div class="col-sm-6 wow zoomIn" data-wow-delay="0.4s">
-                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Fasilitas Olahraga</h5>
-                            <h5 class="mb-3"><i class="fa fa-check text-primary me-3"></i>Kegiatan Pemuda</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5" style="min-height: 500px;">
-                    <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
-                            src="{{ asset('landingpage/assets/img/kepala-dinas.jpg') }}" style="object-fit: cover;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- About End -->
-
     <!-- Testimonial Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-4 mx-auto" style="max-width: 600px;">
                 <h5 class="fw-bold text-primary text-uppercase"></h5>
-                <h1 class="mb-0">Apa Kata Pengunjung dan Pelaku Usaha</h1>
+                <h1 class="mb-0">Spot Unggulan Wisata</h1>
             </div>
             <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.6s">
                 <div class="testimonial-item bg-light my-4">
                     <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
                         <img class="img-fluid rounded"
-                            src="{{ asset('landingpage/assets/img/testimonial-sijunjung-1.jpg') }}"
+                            src="{{ asset('uploads/500/WhatsApp Image 2024-09-19 at 10.43.44.jpeg') }}"
                             style="width: 60px; height: 60px;">
                         <div class="ps-4">
-                            <h4 class="text-primary mb-1">Ahmad S.</h4>
-                            <small class="text-uppercase">Wisatawan Lokal</small>
+                            <h4 class="text-primary mb-1">Ngalau Basurek</h4>
+                            <small class="text-uppercase">Goa/ngalau</small>
                         </div>
                     </div>
                     <div class="pt-4 pb-5 px-5">
-                        Sijunjung menawarkan pengalaman wisata yang tak terlupakan dengan keindahan alamnya yang masih asri
-                        dan budaya yang kaya.
+                        Ngalau/Goa Basurek merupakan goa pada batuan karst/gamping yang unsur utamanya mengandung karbonat CaCo3.
                     </div>
                 </div>
                 <div class="testimonial-item bg-light my-4">
                     <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
                         <img class="img-fluid rounded"
-                            src="{{ asset('landingpage/assets/img/testimonial-sijunjung-2.jpg') }}"
+                            src="{{ asset('uploads/500/WhatsApp Image 2024-09-19 at 10.43.44.jpeg') }}"
                             style="width: 60px; height: 60px;">
                         <div class="ps-4">
-                            <h4 class="text-primary mb-1">Siti R.</h4>
-                            <small class="text-uppercase">Pelaku UMKM</small>
+                            <h4 class="text-primary mb-1">Air Terjun Lubuk Kinari</h4>
+                            <small class="text-uppercase">AIR TERJUN</small>
                         </div>
                     </div>
                     <div class="pt-4 pb-5 px-5">
-                        Dukungan dari Dinas Pariwisata membantu mengembangkan usaha saya melalui promosi dan acara yang
-                        diadakan.
+                        Air terjun ini terkenal karena keindahan alamnya dan suasana yang sejuk, dengan air yang jernih mengalir dari ketinggian tebing ke kolam alami di bawahnya.
                     </div>
                 </div>
             </div>
