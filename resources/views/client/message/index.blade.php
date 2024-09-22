@@ -6,7 +6,8 @@
         <div class="container-fluid bg-primary py-5 bg-header">
             <div class="row py-5">
                 <div class="col-12 pt-lg-5 mt-lg-5 text-center">
-                    <img src="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}" alt="Logo" class="logo">
+                    <img src="{{ asset('/' . str_replace('/xxx/', '/100/', $setting['logo-parpora'])) }}" alt="Logo"
+                        class="logo">
                     <div class="logo-text">
                         <h3 class="text-light">{{ $setting['name-long'] }}</h3>
                         <p>Kabupaten Sijunjung</p>
@@ -32,7 +33,8 @@
                     <!-- Bagian Kiri: Informasi dan Alert -->
                     <div class="col-lg-7">
                         <div class="d-flex align-items-start">
-                            <img src="{{ asset('assets/images/chat.png') }}" alt="Contact Illustration" class="img-fluid me-3" style="width: 100px; height: 100px;">
+                            <img src="{{ asset('assets/images/chat.png') }}" alt="Contact Illustration"
+                                class="img-fluid me-3" style="width: 100px; height: 100px;">
                             <div>
                                 <h1 class="mb-4">Kirim pertanyaan, saran, atau masukan anda kepada kami</h1>
                                 <p>Dinas Pariwisata Pemuda Dan Olahraga Kabupaten Sijunjung</p>
@@ -57,39 +59,52 @@
 
                     <!-- Form Section -->
                     <div class="col-lg-5">
-                        <div class="bg-primary rounded-lg h-100 d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s" id="form-section">
+                        <div class="bg-primary rounded-lg h-100 d-flex align-items-center p-5 wow zoomIn"
+                            data-wow-delay="0.9s" id="form-section">
 
                             <form id="contactForm" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row g-3">
                                     <div class="col-xl-12">
                                         <label for="name" class="text-white">Nama Anda</label>
-                                        <input type="text" id="name" name="name" class="form-control bg-light border-0 rounded" placeholder="Nama Anda" required>
+                                        <input type="text" id="name" name="name"
+                                            class="form-control bg-light border-0 rounded" placeholder="Nama Anda" required>
                                     </div>
                                     <div class="col-12">
                                         <label for="email" class="text-white">Email Anda</label>
-                                        <input type="email" id="email" name="email" class="form-control bg-light border-0 rounded" placeholder="Email Anda" required>
+                                        <input type="email" id="email" name="email"
+                                            class="form-control bg-light border-0 rounded" placeholder="Email Anda"
+                                            required>
                                     </div>
                                     <div class="col-12">
                                         <label for="subject" class="text-white">Subjek</label>
-                                        <input type="text" id="subject" name="subject" class="form-control bg-light border-0 rounded" placeholder="Subjek" required>
+                                        <input type="text" id="subject" name="subject"
+                                            class="form-control bg-light border-0 rounded" placeholder="Subjek" required>
                                     </div>
                                     <div class="col-12">
                                         <label for="message" class="text-white">Pesan</label>
-                                        <textarea id="message" name="message" class="form-control bg-light border-0 rounded" rows="3" placeholder="Pesan" required></textarea>
+                                        <textarea id="message" name="message" class="form-control bg-light border-0 rounded" rows="3"
+                                            placeholder="Pesan" required></textarea>
                                     </div>
                                     <div class="col-12">
                                         <label for="file" class="text-white">Unggah File (Opsional)</label>
-                                        <input type="file" id="file" name="file" class="form-control bg-light border-0 rounded short-input" accept="image/jpeg,image/png,image/jpg">
-                                        <input type="hidden" id="file_path" name="file_path" value="noimage.jpg" placeholder="file_path">
+                                        <input type="file" id="file" name="file"
+                                            class="form-control bg-light border-0 rounded short-input"
+                                            accept="image/jpeg,image/png,image/jpg">
+                                        <input type="hidden" id="file_path" name="file_path" value="noimage.jpg"
+                                            placeholder="file_path">
                                         <br>
-                                        <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview" width="300px" style="border-radius: 2%;">
-                                        <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-picture">
+                                        <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview"
+                                            name="image-preview" class="img-fluid"
+                                            style="max-width: 100%; border-radius: 2%;">
+                                        <p class="text-danger" style="display: none; font-size: 0.75rem;"
+                                            id="invalid-picture">
                                             Silakan unggah gambar.</p>
                                     </div>
-                
+
                                     <div class="col-12">
-                                        <button id="submitMessage" class="btn btn-dark w-100 py-3 rounded" type="button">Kirim Pesan</button>
+                                        <button id="submitMessage" class="btn btn-dark w-100 py-3 rounded"
+                                            type="button">Kirim Pesan</button>
                                     </div>
                                 </div>
                             </form>
@@ -152,8 +167,8 @@
                         success: function(result) {
                             Swal.close(); // Tutup dialog loading
                             if (result['success'] == true) {
-                                // Simpan path file sementara ke dalam variabel
-                                uploadedFilePath = result['data']['url'].replace('/xxx/', '/500/');
+                                uploadedFilePath = result['data']['url'].replace('/xxx/',
+                                    '/500/');
                                 Swal.fire({
                                     icon: "success",
                                     title: "Berhasil",
@@ -170,7 +185,7 @@
                             }
                         },
                         error: function(xhr) {
-                            Swal.close(); // Tutup dialog loading
+                            Swal.close();
                             Swal.fire({
                                 icon: "error",
                                 title: "Oops...",
@@ -178,11 +193,13 @@
                                 confirmButtonColor: '#3A57E8',
                             });
                             $('#file').val('');
-                            $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                            $('#image-preview').attr('src',
+                                '{{ asset('/uploads/noimage.jpg') }}');
                         }
                     });
                 }
             });
+
 
             // Handle form submission with confirmation
             $('#submitMessage').on('click', function() {
@@ -203,7 +220,8 @@
                         if (uploadedFilePath !== '') {
                             formData.set('file_path', uploadedFilePath);
                         } else {
-                            formData.set('file_path', 'noimage.jpg'); // Atur gambar default jika tidak ada
+                            formData.set('file_path',
+                                'noimage.jpg'); // Atur gambar default jika tidak ada
                         }
 
                         // Tampilkan loading spinner saat memproses
@@ -223,9 +241,12 @@
                                     text: 'Pesan Anda telah dikirim. Terima kasih atas masukannya.',
                                     confirmButtonColor: '#3A57E8',
                                 });
-                                $('#contactForm')[0].reset(); // Reset form setelah berhasil mengirim
-                                $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
-                                $('#uploadNotification').addClass('d-none'); // Sembunyikan notifikasi upload
+                                $('#contactForm')[0]
+                                    .reset(); // Reset form setelah berhasil mengirim
+                                $('#image-preview').attr('src',
+                                    '{{ asset('/uploads/noimage.jpg') }}');
+                                $('#uploadNotification').addClass(
+                                    'd-none'); // Sembunyikan notifikasi upload
                             },
                             error: function(xhr) {
                                 $('#loadingSpinner').addClass('d-none');
