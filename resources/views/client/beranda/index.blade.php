@@ -159,7 +159,8 @@
                 <!-- Konten berita akan dimuat melalui AJAX di sini -->
             </div>
             <div class="text-center mt-5">
-                <a href="{{ route('client.berita.index') }}" class="btn btn-primary">Lihat Semua <i class="bi bi-arrow-right"></i></a>
+                <a href="{{ route('client.berita.index') }}" class="btn btn-primary">Lihat Semua <i
+                        class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -173,41 +174,29 @@
                 <h5 class="fw-bold text-primary text-uppercase">Lokawisata</h5>
                 <h1 class="mb-0">Spot Unggulan Wisata</h1>
             </div>
-            <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.6s">
-                <div class="testimonial-item bg-light my-4">
-                    <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                        <img class="img-fluid rounded"
-                            src="{{ asset('uploads/500/WhatsApp Image 2024-09-19 at 10.43.44.jpeg') }}"
-                            style="width: 60px; height: 60px;">
-                        <div class="ps-4">
-                            <h4 class="text-primary mb-1">Ngalau Basurek</h4>
-                            <small class="text-uppercase">Goa/ngalau</small>
-                        </div>
-                    </div>
-                    <div class="pt-4 pb-5 px-5">
-                        Ngalau/Goa Basurek merupakan goa pada batuan karst/gamping yang unsur utamanya mengandung karbonat
-                        CaCo3.
-                    </div>
-                </div>
-                <div class="testimonial-item bg-light my-4">
-                    <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                        <img class="img-fluid rounded"
-                            src="{{ asset('uploads/500/WhatsApp Image 2024-09-19 at 10.43.44.jpeg') }}"
-                            style="width: 60px; height: 60px;">
-                        <div class="ps-4">
-                            <h4 class="text-primary mb-1">Air Terjun Lubuk Kinari</h4>
-                            <small class="text-uppercase">AIR TERJUN</small>
-                        </div>
-                    </div>
-                    <div class="pt-4 pb-5 px-5">
-                        Air terjun ini terkenal karena keindahan alamnya dan suasana yang sejuk, dengan air yang jernih
-                        mengalir dari ketinggian tebing ke kolam alami di bawahnya.
-                    </div>
-                </div>
+            <div id="wisata-container">
+                {{-- <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.6s"> --}}
+                {{-- dengan ajax --}}
             </div>
         </div>
     </div>
     <!-- lokawisata End -->
+
+    <!-- Peta Wisata Sijunjung Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="section-title text-center position-relative pb-3 mb-4 mx-auto" style="max-width: 600px;">
+                <h5 class="fw-bold text-primary text-uppercase">Peta Wisata</h5>
+                <h1 class="mb-0">Temukan Lokasi Wisata di Sijunjung</h1>
+            </div>
+            <div class="text-center">
+                <img class="img-fluid rounded" src="{{ asset('uploads/peta-wisata-sijunjung.png') }}"
+                    alt="Peta Wisata Sijunjung">
+            </div>
+        </div>
+    </div>
+    <!-- Peta Wisata Sijunjung End -->
+
 
     <!-- Agenda Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -224,7 +213,8 @@
 
                     <!-- Tombol "Lihat Semua Agenda" -->
                     <div class="text-center mt-4">
-                        <a href="{{ route('client.agenda.index') }}" class="btn btn-primary">Lihat Semua <i class="bi bi-arrow-right"></i></a>
+                        <a href="{{ route('client.agenda.index') }}" class="btn btn-primary">Lihat Semua <i
+                                class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -353,13 +343,75 @@
 
             loadBeritaTerbaru();
 
+            // Fungsi untuk memuat data Lokawisata
+            function loadLokawisata() {
+                $.ajax({
+                    url: "{{ url('/api/lokawisata') }}",
+                    method: "GET",
+                    success: function(response) {
+                        if (response.success) {
+                            let lokawisataHtml =
+                                '<div class="owl-carousel wisata-carousel wow fadeInUp" data-wow-delay="0.6s">';
+                            $.each(response.data, function(index, lokawisata) {
+                                let trimmedDescription = lokawisata.description.length > 100 ?
+                                    lokawisata.description.substring(0, 100) + '...' :
+                                    lokawisata.description;
+                                lokawisataHtml += `
+                                <div class="testimonial-item bg-light my-4">
+                                    <img class="img-fluid rounded" src="${lokawisata.image}" alt="${lokawisata.name}" style="width: 100%; height: 200px; object-fit: cover;">
+                                    <div class="p-3">
+                                        <h4 class="text-primary mb-1" onclick="window.location.href='/lokawisata/${lokawisata.slug}'" style="cursor: pointer;">${lokawisata.name}</h4>
+                                        <small class="text-uppercase">${lokawisata.operating_hours}</small>
+                                        <p>${trimmedDescription}</p>
+                                    </div>
+                                </div>`;
+                            });
+                            lokawisataHtml += '</div>';
+                            $('#wisata-container').html(lokawisataHtml);
+
+                            $('.wisata-carousel').owlCarousel({
+                                loop: true,
+                                margin: 30,
+                                nav: true, // Aktifkan navigasi
+                                navText: false, // Teks kustom untuk navigasi
+                                dots: true,
+                                autoplay: true,
+                                responsive: {
+                                    0: {
+                                        items: 1
+                                    },
+                                    576: {
+                                        items: 2
+                                    },
+                                    992: {
+                                        items: 3
+                                    }
+                                }
+                            });
+                        } else {
+                            $('#wisata-container').html(
+                                '<p class="text-center">Tidak ada data lokawisata yang ditemukan.</p>'
+                            );
+                        }
+                    },
+                    error: function() {
+                        $('#wisata-container').html(
+                            '<p class="text-center">Gagal memuat data lokawisata.</p>');
+                    }
+                });
+            }
+
+            // Memanggil fungsi loadLokawisata saat dokumen siap
+            loadLokawisata();
+
+
             // Fungsi untuk memuat 3 agenda terbaru
             function loadAgenda() {
                 $.ajax({
                     url: "{{ url('/api/agenda') }}", // URL endpoint API agenda
                     method: "GET",
                     data: {
-                        per_page: 3, // Ambil hanya 3 agenda terbaru
+                        per_page: 2, // Ambil hanya 3 agenda terbaru
                         sort: 'event_date:desc' // Sorting berdasarkan event_date desc
                     },
                     success: function(response) {
