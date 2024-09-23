@@ -85,21 +85,22 @@
                     <div class="d-inline-flex align-items-center" style="height: 50px;">
                         <small class="me-3 text-light"><i
                                 class="fa fa-map-marker-alt me-2"></i>{{ $setting['address'] }}</small>
-                        <small class="me-3 text-light"><i
-                                class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small>
+                        {{-- <small class="me-3 text-light"><i
+                                class="fa fa-phone-alt me-2"></i>{{ $setting['phone'] }}</small> --}}
                         <small class="text-light"><i
                                 class="fa fa-envelope-open me-2"></i>{{ $setting['email'] }}</small>
                     </div>
                 </div>
                 <div class="col-lg-4 text-center text-lg-end">
                     <div class="d-inline-flex align-items-center" style="height: 50px;">
-                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
-                                class="bi bi-twitter"></i></i></a>
-                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="{{ $setting['socmed-tiktok'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tiktok" viewBox="0 0 16 16">
+                            <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/>
+                          </svg></a>
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="{{ $setting['socmed-facebook'] }}"><i
                                 class="fab fa-facebook-f fw-normal"></i></a>
-                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="{{ $setting['socmed-instagram'] }}"><i
                                 class="fab fa-instagram fw-normal"></i></a>
-                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
+                        <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="{{ $setting['socmed-youtube'] }}"><i
                                 class="fab fa-youtube fw-normal"></i></a>
                         <!-- Icon Pengaturan untuk login admin-->
                         <a class="btn btn-md rounded-circle" href="{{ url('/admin/login') }}"><i
@@ -201,12 +202,12 @@
                                 d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z" />
                         </svg> <a href="mailto:{{ $setting['email'] }}"
                             class="text-light">{{ $setting['email'] }}</a></p>
-                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    {{-- <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-telephone-fill" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
                                 d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z" />
                         </svg> <a href="tel:{{ $setting['phone'] }}" class="text-light">{{ $setting['phone'] }}</a>
-                    </p>
+                    </p> --}}
                 </div>
 
                 <!-- Quick Links Section -->
@@ -224,14 +225,15 @@
                 <div class="col-lg-6 col-md-12">
                     <h3 class="text-light mb-3">Our Location</h3>
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4172.845819895561!2d100.93594582345908!3d-0.6634303272020157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e2b2101459e56cf%3A0x812aecc4641eabad!2sDinas%20Pariwisata%2C%20Pemuda%2C%20Dan%20Olahraga%20Kabupaten%20Sijunjung!5e0!3m2!1sid!2sid!4v1724945132927!5m2!1sid!2sid"
+                        src="{{ $setting['contact-map'] }}"
                         width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"></iframe>
                     <div class="d-flex mt-3">
+                        <a class="btn btn-primary btn-square me-2" href="{{ $setting['socmed-tiktok'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tiktok" viewBox="0 0 16 16">
+                            <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/>
+                          </svg></a>
                         <a class="btn btn-primary btn-square me-2" href="{{ $setting['socmed-facebook'] }}"><i
                                 class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-primary btn-square me-2" href="{{ $setting['socmed-twitter'] }}"><i
-                                class="fab fa-twitter"></i></a>
                         <a class="btn btn-primary btn-square me-2" href="{{ $setting['socmed-instagram'] }}"><i
                                 class="fab fa-instagram"></i></a>
                     </div>
