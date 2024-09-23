@@ -6,7 +6,7 @@
             <div class="flex-wrap d-flex justify-content-between align-items-center">
                 <div>
                     <div class="header-title">
-                        <h2 class="card-title">Artikel List</h2>
+                        <h2 class="card-title">Artikel</h2>
                         <p>List data artikels</p>
                     </div>
                 </div>

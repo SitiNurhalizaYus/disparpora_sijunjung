@@ -69,22 +69,26 @@
                                         <label for="name" class="text-white">Nama Anda</label>
                                         <input type="text" id="name" name="name"
                                             class="form-control bg-light border-0 rounded" placeholder="Nama Anda" required>
+                                        <div class="invalid-feedback">Nama hanya boleh mengandung huruf dan spasi.</div>
                                     </div>
                                     <div class="col-12">
                                         <label for="email" class="text-white">Email Anda</label>
                                         <input type="email" id="email" name="email"
                                             class="form-control bg-light border-0 rounded" placeholder="Email Anda"
                                             required>
+                                        <div class="invalid-feedback">Masukkan alamat email yang valid.</div>
                                     </div>
                                     <div class="col-12">
                                         <label for="subject" class="text-white">Subjek</label>
                                         <input type="text" id="subject" name="subject"
                                             class="form-control bg-light border-0 rounded" placeholder="Subjek" required>
+                                        <div class="invalid-feedback">Subjek tidak boleh mengandung tautan.</div>
                                     </div>
                                     <div class="col-12">
                                         <label for="message" class="text-white">Pesan</label>
                                         <textarea id="message" name="message" class="form-control bg-light border-0 rounded" rows="3"
                                             placeholder="Pesan" required></textarea>
+                                        <div class="invalid-feedback">Pesan tidak boleh kosong.</div>
                                     </div>
                                     <div class="col-12">
                                         <label for="file" class="text-white">Unggah File (Opsional)</label>
@@ -200,9 +204,78 @@
                 }
             });
 
+            // Fungsi Validasi
+            function validateName(name) {
+                const regex = /^[a-zA-Z\s]+$/;
+                return regex.test(name); // Hanya huruf dan spasi yang diperbolehkan
+            }
+
+            function validateEmail(email) {
+                const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return regex.test(email); // Format email sederhana
+            }
+
+            function validateSubject(subject) {
+                const regex = /(http[s]?:\/\/|www\.)/i;
+                return subject.trim().length > 0 && !regex.test(
+                subject); // Tidak boleh kosong dan tidak boleh mengandung link
+            }
+
+
+            function validateMessage(message) {
+                return message.trim().length > 0; // Tidak boleh kosong
+            }
 
             // Handle form submission with confirmation
             $('#submitMessage').on('click', function() {
+                // Ambil nilai dari form
+                const name = $('#name').val();
+                const email = $('#email').val();
+                const subject = $('#subject').val();
+                const message = $('#message').val();
+
+                // Validasi data
+                if (!validateName(name)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Nama tidak valid",
+                        text: "Nama hanya boleh mengandung huruf dan spasi.",
+                        confirmButtonColor: '#3A57E8',
+                    });
+                    return;
+                }
+
+                if (!validateEmail(email)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Email tidak valid",
+                        text: "Masukkan alamat email yang benar.",
+                        confirmButtonColor: '#3A57E8',
+                    });
+                    return;
+                }
+
+                if (!validateSubject(subject)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Subjek tidak valid",
+                        text: "Subjek tidak boleh kosong atau mengandung tautan.",
+                        confirmButtonColor: '#3A57E8',
+                    });
+                    return;
+                }
+
+                if (!validateMessage(message)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Pesan tidak valid",
+                        text: "Pesan tidak boleh kosong.",
+                        confirmButtonColor: '#3A57E8',
+                    });
+                    return;
+                }
+
+                // Jika semua validasi lolos, tampilkan konfirmasi
                 Swal.fire({
                     title: 'Apakah Anda yakin?',
                     text: "Pastikan Anda sudah memeriksa semua data. Tidak ada perubahan lagi?",
@@ -221,7 +294,7 @@
                             formData.set('file_path', uploadedFilePath);
                         } else {
                             formData.set('file_path',
-                                'noimage.jpg'); // Atur gambar default jika tidak ada
+                            'noimage.jpg'); // Atur gambar default jika tidak ada
                         }
 
                         // Tampilkan loading spinner saat memproses
@@ -242,11 +315,11 @@
                                     confirmButtonColor: '#3A57E8',
                                 });
                                 $('#contactForm')[0]
-                                    .reset(); // Reset form setelah berhasil mengirim
+                            .reset(); // Reset form setelah berhasil mengirim
                                 $('#image-preview').attr('src',
                                     '{{ asset('/uploads/noimage.jpg') }}');
                                 $('#uploadNotification').addClass(
-                                    'd-none'); // Sembunyikan notifikasi upload
+                                'd-none'); // Sembunyikan notifikasi upload
                             },
                             error: function(xhr) {
                                 $('#loadingSpinner').addClass('d-none');

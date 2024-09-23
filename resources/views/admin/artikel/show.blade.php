@@ -41,12 +41,9 @@
                                     <div class="card-header bg-info text-white"><strong>Informasi Artikel</strong></div>
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="title"></span></h4>
-                                        <p class="card-text">
-                                        <h6>Deskripsi Singkat: </h6><span id="description_short"></span></p>
-                                        <p class="card-text">
-                                        <h6>Slug: </h6><span id="slug"></span></p>
-                                        <p class="card-text">
-                                        <h6>Kategori: </h6><span id="category"></span></p>
+                                        <p class="card-text"><h6>Deskripsi Singkat: </h6><span id="description_short"></span></p>
+                                        <p class="card-text"><h6>Slug: </h6><span id="slug"></span></p>
+                                        <p class="card-text"><h6>Kategori: </h6><span id="category"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -75,8 +72,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-gray text-white text-center"><strong>Konten Artikel</strong>
-                                    </div>
+                                    <div class="card-header bg-gray text-white text-center"><strong>Konten Artikel</strong></div>
                                     <div class="card-body">
                                         <div id="description_long" style="color: black;"></div>
                                     </div>
@@ -149,8 +145,7 @@
                             `;
                         }
 
-                        $('#action-buttons').html(
-                            actionButtonsHtml); // Masukkan tombol ke dalam div action-buttons
+                        $('#action-buttons').html(actionButtonsHtml); // Masukkan tombol ke dalam div action-buttons
 
                         // Menampilkan data konten
                         $('#title').text(result['data']['title']);
@@ -160,8 +155,8 @@
                         $("#image").attr("src", "{{ url('/') }}/" + result['data']['image']);
                         $('#description_long').html(result['data']['content']);
                         $('#is_active').html(result['data']['is_active'] == 1 ?
-                            '<span class="badge bg-success">Aktif</span>' :
-                            '<span class="badge bg-danger">Tidak Aktif</span>');
+                        '<span class="badge bg-success">Aktif</span>' :
+                        '<span class="badge bg-danger">Tidak Aktif</span>');
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
                         $('#created_by').text(result['data']['created_by']);
                         $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
@@ -183,8 +178,8 @@
             });
         });
 
-        // Fungsi untuk menghapus data
-        function removeData(id_content) {
+                // Fungsi untuk menghapus data
+                function removeData(id_content) {
             Swal.fire({
                 title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
@@ -238,14 +233,9 @@
 
         // Fungsi untuk mengonversi string tanggal menjadi format yang lebih ramah
         function convertStringToDate(dateString) {
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             return new Date(dateString).toLocaleDateString('id-ID', options);
         }
     </script>
 @endsection
+

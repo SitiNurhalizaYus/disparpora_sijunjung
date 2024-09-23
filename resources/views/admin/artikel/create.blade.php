@@ -31,9 +31,9 @@
                             {{ csrf_field() }}
                             <input type="hidden" name="type" value="artikel">
                             <div class="form-group">
-                                <label class="form-label" for="title">Judul artikel</label>
+                                <label class="form-label" for="title">Judul Artikel</label>
                                 <input class="form-control" type="text" id="title" name="title"
-                                    placeholder="Masukkan Judul artikel" required pattern="[A-Za-z0-9\s]+$">
+                                    placeholder="Masukkan Judul Artikel" required pattern="[A-Za-z0-9\s]+$">
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul
                                     harus diisi dan tidak boleh ada simbol.</p>
                             </div>
@@ -61,7 +61,7 @@
                                     Silahkan pilih category</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="content">Konten artikel</label>
+                                <label class="form-label" for="content">Konten Artikel</label>
                                 <textarea class="form-control" type="text" id="content" name="content" style="display: none" required></textarea>
                                 <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
                             </div>

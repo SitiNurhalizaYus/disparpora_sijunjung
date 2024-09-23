@@ -45,7 +45,7 @@
                 <!-- Deskripsi, Fasilitas, Jam Operasional, Harga Tiket -->
                 <div class="col-md-6">
                     <div class="detail-section mb-4">
-                        <h2 >Deskripsi</h2>
+                        <h2>Deskripsi</h2>
                         <p id="lokawisata-description"></p>
                     </div>
 
@@ -87,13 +87,15 @@
         }
 
         // Fungsi untuk memuat detail konten berdasarkan slug dari URL
+        // Fungsi untuk memuat detail konten berdasarkan slug dari URL
         function loadContentDetail(slug) {
             $.ajax({
                 url: '/api/lokawisata/' + slug, // API endpoint untuk mengambil detail berdasarkan slug
                 method: 'GET',
                 success: function(response) {
+                    // Jika data API diterima dalam bentuk object, langsung gunakan response.data
                     if (response.success) {
-                        const lokawisata = response.data;
+                        const lokawisata = response.data; // data langsung diambil dari response.data
 
                         // Isi data pada elemen HTML
                         $('#lokawisata-image').attr('src', '/' + lokawisata.image);
@@ -128,6 +130,7 @@
                 }
             });
         }
+
 
         // Saat dokumen sudah siap, jalankan fungsi ini
         $(document).ready(function() {

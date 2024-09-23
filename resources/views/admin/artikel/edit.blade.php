@@ -32,9 +32,9 @@
                             <input type="hidden" name="_method" value="PUT"> <!-- Simulasi metode PUT dengan POST -->
                             <input type="hidden" name="type" value="artikel">
                             <div class="form-group">
-                                <label class="form-label" for="title">Judul artikel</label>
+                                <label class="form-label" for="title">Judul Artikel</label>
                                 <input class="form-control" type="text" id="title" name="title"
-                                    value="" placeholder="Masukkan Judul artikel" required
+                                    value="" placeholder="Masukkan Judul Artikel" required
                                     pattern="[A-Za-z0-9\s]+$">
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul
                                     harus diisi dan tidak boleh ada simbol.</p>
@@ -67,7 +67,7 @@
                                     Silahkan pilih category</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="content">Konten artikel</label>
+                                <label class="form-label" for="content">Konten Artikel</label>
                                 <textarea class="form-control" type="text" id="content" name="content" style="display: none" required></textarea>
                                 <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
                             </div>
@@ -200,7 +200,7 @@
                 $('#invalid-file').show();
                 $('#file').val(''); // Kosongkan input file jika tidak valid
 
-                // Tampilkan pemartikelhuan menggunakan Swal
+                // Tampilkan pemberitahuan menggunakan Swal
                 Swal.fire({
                     icon: 'error',
                     title: 'File tidak valid',

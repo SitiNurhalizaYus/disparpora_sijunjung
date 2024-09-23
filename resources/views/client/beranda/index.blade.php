@@ -351,7 +351,7 @@
                     success: function(response) {
                         if (response.success) {
                             let lokawisataHtml =
-                                '<div class="owl-carousel wisata-carousel wow fadeInUp" data-wow-delay="0.6s">';
+                                '<div class="owl-carousel wisata-carousel wow fadeInUp" data-wow-delay="0.4s">';
                             $.each(response.data, function(index, lokawisata) {
                                 let trimmedDescription = lokawisata.description.length > 100 ?
                                     lokawisata.description.substring(0, 100) + '...' :

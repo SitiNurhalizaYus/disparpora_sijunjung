@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Models\Content;
@@ -25,7 +24,7 @@ class ContentController extends Controller
         $search = $request->get('search', '');
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));
-        $type = $request->get('type', null);
+        $type = $request->get('type', null);  // Mengambil type dari request
         $category_id = $request->get('category_id', null);
 
         // Menentukan kolom dan arah sorting (default 'id_content:asc')
@@ -108,9 +107,11 @@ class ContentController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
+        // Validasi input, termasuk validasi tipe yang diperbolehkan
         $request->validate([
             'title' => 'required',
+            'type' => 'required|in:berita,artikel,profil',  // Validasi untuk type
+            'category_id' => 'required_if:type,!=profil',  // Wajib jika bukan tipe profil
         ]);
 
         // Generate slug unik berdasarkan title
@@ -129,11 +130,6 @@ class ContentController extends Controller
             $req['is_active'] = 0;
         }
 
-        // Jika tipe bukan profil, tambahkan category_id
-        if ($request->input('type', 'berita') !== 'profil') {
-            $req['category_id'] = $request->category_id;
-        }
-
         // Simpan data ke dalam tabel content
         $data = Content::create($req);
 
@@ -144,13 +140,14 @@ class ContentController extends Controller
         ]);
     }
 
-
     public function update(Request $request, $id_content)
     {
         $data = Content::findOrFail($id_content);
 
         $request->validate([
             'title' => 'required',
+            'type' => 'required|in:berita,artikel,profil',  // Validasi untuk type
+            'category_id' => 'required_if:type,!=profil',  // Wajib jika bukan tipe profil
         ]);
 
         $slug = $this->generateUniqueSlug($request->input('title'));
@@ -168,10 +165,6 @@ class ContentController extends Controller
                 ], 403);
             }
             unset($data['is_active']);
-        }
-
-        if ($request->input('type', 'berita') !== 'profil') {
-            $data['category_id'] = $request->category_id;
         }
 
         $data->update($req);

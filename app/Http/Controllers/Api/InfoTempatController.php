@@ -98,38 +98,31 @@ class InfoTempatController extends Controller
         }
     }
 
-    public function show($slug)
+    public function show($id)
     {
-        // Query dengan eager loading untuk mengambil 'createdBy' dan 'updatedBy', serta mencari berdasarkan slug
-        $query = InfoTempat::with(['createdBy', 'updatedBy'])->where('slug', $slug);
+        // Cek apakah user tidak autentikasi, filter konten aktif
+        $query = InfoTempat::with(['createdBy', 'updatedBy']);
 
-        // Jika tidak ada autentikasi, filter hanya konten yang aktif
         if (!auth()->guard('api')->user()) {
-            $query->where('is_active', 1); // Hanya ambil data yang aktif
+            // Hanya ambil data yang aktif jika tidak autentikasi
+            $query->where('is_active', 1);
         }
 
-        $data = $query->first(); // Ambil data pertama yang cocok dengan slug
-
+        // Ambil data berdasarkan id atau slug
+        if (is_numeric($id)) {
+            $data = $query->where('id', $id)->first();  // Jika ID berupa angka
+        } else {
+            $data = $query->where('slug', $id)->first(); // Jika ID berupa slug
+        }
+        // Cek apakah data ditemukan
         if (!$data) {
             return new ApiResource(false, 404, 'Data not found', [], []);
         }
 
-        // Menampilkan data agenda dan mengubah 'created_by' dan 'updated_by' menjadi nama user
-        $result = $data->toArray();
-        if ($data->createdBy) {
-            $result['created_by'] = $data->createdBy->name; // Menampilkan nama user dari 'created_by'
-        }
-        if ($data->updatedBy) {
-            $result['updated_by'] = $data->updatedBy->name; // Menampilkan nama user dari 'updated_by'
-        }
-
-        // result
-        if ($result) {
-            return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
-        } else {
-            return new ApiResource(false, 200, 'No data found', [], []);
-        }
+        // Jika data ditemukan, kembalikan respons
+        return new ApiResource(true, 200, 'Get data successful', $data->toArray(), []);
     }
+
 
     public function store(Request $request)
     {
@@ -137,7 +130,9 @@ class InfoTempatController extends Controller
             'name' => 'required',
         ]);
 
-        $slug = $this->generateUniqueSlug($request->input('title'));
+
+        // Generate slug unik berdasarkan title
+        $slug = $this->generateUniqueSlug($request->input('name'));
         $req = $request->all();
         $req['slug'] = $slug;
         $req['created_by'] = auth()->id();
@@ -151,7 +146,7 @@ class InfoTempatController extends Controller
         $data = InfoTempat::create($req);
 
         if ($data) {
-            return new ApiResource(true, 201, 'Data berhasil ditambahkan', $data, []);
+            return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Data gagal ditambahkan', [], []);
         }
@@ -159,14 +154,18 @@ class InfoTempatController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = InfoTempat::findOrFail($id);
+        $data = InfoTempat::find($id);
+
+        if (!$data) {
+            return new ApiResource(false, 404, 'Data not found', [], []);
+        }
 
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255'
         ]);
 
-        $slug = $this->generateUniqueSlug($request->input('name'));
 
+        $slug = $this->generateUniqueSlug($request->input('name'));
         $req = $request->all();
         $data['slug'] = $slug;
         $data['updated_by'] = auth()->id();
@@ -185,7 +184,7 @@ class InfoTempatController extends Controller
         $data->update($req);
 
         if ($data) {
-            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data, []);
+            return new ApiResource(true, 201, 'Data berhasil diperbarui', $data->toArray(), []);
         } else {
             return new ApiResource(false, 400, 'Data gagal diperbarui', [], []);
         }
@@ -194,7 +193,12 @@ class InfoTempatController extends Controller
 
     public function destroy($id)
     {
-        $query = InfoTempat::findOrFail($id);
+        $query = InfoTempat::find($id);
+
+        if (!$query) {
+            return new ApiResource(false, 404, 'Data not found', [], []);
+        }
+
         $query->delete();
 
         if ($query) {

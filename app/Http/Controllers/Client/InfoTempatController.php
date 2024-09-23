@@ -15,27 +15,27 @@ class InfoTempatController extends Controller
     {
         $data = [];
         $data['og'] = [];
-        $data['og']['url'] = url('/').'/infotempat';
-        $data['og']['title'] = 'InfoTempat';
-        $data['og']['description'] = 'infotempat';
+        $data['og']['url'] = url('/').'/lokawisata';
+        $data['og']['title'] = 'Lokawista';
+        $data['og']['description'] = 'Lokawisata';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
         $data['info_tempats'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/lokawisata');
         return view('client.lokawisata.index', $data);
-            // Tambahkan ini untuk debug
    
     }
 
     public function detail($id)
     {
         $data = [];
-        $data['lokawisata'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/lokawisata/'.$id);
+        $data['info_tempat'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/lokawisata/'.$id);
+        // dd($data['info_tempat']);
         $data['og'] = [];
-        $data['og']['url'] = url('/').'/lokawisata/'.$data['lokawisata']['slug'];
-        $data['og']['title'] = $data['lokawisata']['name'];
+        $data['og']['url'] = url('/').'/lokawisata/'.$data['info_tempat']['slug'];
+        $data['og']['title'] = $data['info_tempat']['name'];
         $data['og']['description'] = 'Lokawisata';
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
-        $data['pages'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/page');
+        $data['info_tempats'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/lokawisata');
         return view('client.lokawisata.detail', $data);
     }
 }

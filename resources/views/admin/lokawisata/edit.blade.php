@@ -141,7 +141,7 @@
             });
             // Ambil data lokawisata menggunakan AJAX
             $.ajax({
-                url: '/api/lokawisata/{{ $slug }}',
+                url: '/api/lokawisata/{{ $id }}',
                 type: "GET",
                 dataType: "json",
                 success: function(result) {
@@ -378,7 +378,7 @@
                 form.set('slug', $('#slug').val());
 
                 $.ajax({
-                    url: '/api/lokawisata/{{ $slug }}',
+                    url: '/api/lokawisata/{{ $id }}',
                     type: "POST", // Menggunakan POST dengan _method PUT
                     data: form,
                     contentType: false, // Supaya FormData bisa bekerja dengan benar

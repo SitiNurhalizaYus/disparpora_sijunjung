@@ -28,14 +28,14 @@ class InfoTempatController extends Controller
         }
     }
 
-    public function show($slug)
+    public function show($id)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'lokawisata-show';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['slug'] = $slug;
+        $data['id'] = $id;
         return view('admin.lokawisata.show', $data);
     }
 
@@ -49,14 +49,14 @@ class InfoTempatController extends Controller
         return view('admin.lokawisata.create', $data);
     }
 
-    public function edit($slug)
+    public function edit($id)
     {
         $data = [];
         $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
         $data['menu'] = 'lokawisata-edit';
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-        $data['slug'] = $slug;
+        $data['id'] = $id;
         return view('admin.lokawisata.edit', $data);
     }
 
