@@ -143,7 +143,7 @@
                                 </div>
                                 <h4 class="mb-3">${content.title}</h4>
                                 <p>${content.description_short}</p>
-                                <a class="text-uppercase" href="{{ url('/artikel') }}/${content.slug}">Read More <i class="bi bi-arrow-right"></i></a>
+                                <a class="text-uppercase" href="{{ url('/artikel') }}/${content.slug}">Baca Selengkapnya <i class="bi bi-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>`;

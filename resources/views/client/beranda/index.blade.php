@@ -320,7 +320,7 @@
                                                 </div>
                                                 <h4 class="mb-3">${berita.title}</h4>
                                                 <p>${berita.description_short}</p>
-                                                <a class="text-uppercase" href="/berita/${berita.slug}">Read More <i class="bi bi-arrow-right"></i></a>
+                                                <a class="text-uppercase" href="/berita/${berita.slug}">Baca Selengkapnya <i class="bi bi-arrow-right"></i></a>
                                             </div>
                                         </div>
                                     </div>`;
