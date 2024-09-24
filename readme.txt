@@ -1,19 +1,19 @@
 # open terminal
 composer install
 composer update
-php artisan migrate:fresh
-php artisan migrate
-php artisan db:seed
-php artisan serve
+database ada pada db_disparpora.sql
  
-
-# open browser
-ketik url localhost:8000
-
-
 
 # default user
 level: admin
-email: admin@gmail.com
+username: dinas
+pass: admin
+
+level: editor
+username: editor
+pass: password
+
+level: pokdarwis
+username: kontributor
 pass: password
 

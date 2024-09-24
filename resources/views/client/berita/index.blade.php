@@ -200,7 +200,7 @@
                             let categoryList = '';
                             $.each(response.data, function(index, category) {
                                 categoryList += `
-                            <a href="#" class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2" data-category-id="${category.id_category}" data-category-name="${category.name}">
+                            <a href="${category.name}" class="h5 fw-semi-bold bg-light rounded py-2 px-3 mb-2" data-category-id="${category.id_category}" data-category-name="${category.name}">
                                 <i class="bi bi-arrow-right me-2"></i>${category.name}
                             </a>
                         `;

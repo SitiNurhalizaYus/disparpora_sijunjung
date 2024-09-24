@@ -224,7 +224,7 @@
     <!-- Agenda End -->
 
 
-    <!-- Service Start -->
+    {{-- <!-- Service Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
@@ -241,7 +241,7 @@
                         <h4 class="mb-3">Pengembangan Destinasi Wisata</h4>
                         <p class="m-0">Kami menyediakan informasi lengkap tentang destinasi wisata yang ada di Kabupaten
                             Sijunjung.</p>
-                        <a class="btn btn-lg btn-primary rounded" href="{{ url('/destinations') }}">
+                        <a class="btn btn-lg btn-primary rounded" href="{{ url('/lokawisata') }}">
                             <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -254,7 +254,7 @@
                         </div>
                         <h4 class="mb-3">Fasilitas Olahraga</h4>
                         <p class="m-0">Fasilitas olahraga untuk mendukung kegiatan olahraga di Kabupaten Sijunjung.</p>
-                        <a class="btn btn-lg btn-primary rounded" href="{{ url('/sports') }}">
+                        <a class="btn btn-lg btn-primary rounded" href="{{ route('client.berita.index', ['category_id' => 2]) }}">
                             <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -268,7 +268,7 @@
                         <h4 class="mb-3">Kegiatan Pemuda</h4>
                         <p class="m-0">Program dan kegiatan untuk mendukung pengembangan pemuda di Kabupaten Sijunjung.
                         </p>
-                        <a class="btn btn-lg btn-primary rounded" href="{{ url('/youth-activities') }}">
+                        <a class="btn btn-lg btn-primary rounded" href="{{ route('client.berita.index', ['category_id' => 2]) }}">
                             <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -276,7 +276,7 @@
             </div>
         </div>
     </div>
-    <!-- Service End -->
+    <!-- Service End --> --}}
 
     <!-- AJAX Script -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

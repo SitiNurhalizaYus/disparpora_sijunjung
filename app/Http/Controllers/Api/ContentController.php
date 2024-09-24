@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Models\Content;
@@ -25,7 +26,7 @@ class ContentController extends Controller
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));
         $type = $request->get('type', null);  // Mengambil type dari request
-        $category_id = $request->get('category_id', null);
+        $category_id = $request->get('category_id', null);  // Mengambil category_id dari request
 
         // Menentukan kolom dan arah sorting (default 'id_content:asc')
         $sort = explode(':', $sort);
@@ -43,7 +44,9 @@ class ContentController extends Controller
 
         // Filter berdasarkan category_id
         if ($category_id) {
-            $query->where('category_id', $category_id);
+            $query->whereHas('category', function ($q) use ($category_id) {
+                $q->where('id_category', $category_id);
+            });
         }
 
         // Filter berdasarkan bulan dan tahun jika ada
@@ -78,6 +81,7 @@ class ContentController extends Controller
             'metadata' => $metadata
         ]);
     }
+
 
     public function show($id_content)
     {
