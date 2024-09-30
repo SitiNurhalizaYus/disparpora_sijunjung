@@ -30,52 +30,52 @@ class ContentController extends Controller
         $author_id = $request->get('author_id', null);  // Mengambil author_id dari request
         $month = $request->get('month', null);  // Mengambil bulan dari request
         $year = $request->get('year', null);    // Mengambil tahun dari request
-    
+
         // Menentukan kolom dan arah sorting (default 'id_content:asc')
         $sort = explode(':', $sort);
         if (count($sort) !== 2 || !Schema::hasColumn('contents', $sort[0])) {
             $sort = ['id_content', 'asc']; // Default sorting jika tidak valid
         }
-    
+
         // Membuat query dasar untuk tabel Content dengan relasi category dan penulis
         $query = Content::with(['category', 'createdBy', 'updatedBy']);
-    
+
         // Filter berdasarkan tipe konten (berita, artikel, profil, dll.)
         if ($type) {
             $query->where('type', $type);
         }
-    
+
         // Filter berdasarkan kategori
         if ($category_id) {
             $query->whereHas('category', function ($q) use ($category_id) {
                 $q->where('id_category', $category_id);
             });
         }
-    
+
         // Filter berdasarkan bulan dan tahun
         if ($month && $year) {
             $query->whereMonth('created_at', $month)
-                  ->whereYear('created_at', $year);
+                ->whereYear('created_at', $year);
         } elseif ($year) {
             $query->whereYear('created_at', $year);
         }
-    
-        // Filter berdasarkan penulis (author_id)
+
+        // Filter berdasarkan penulis jika ada
         if ($author_id) {
             $query->where('created_by', $author_id);
         }
-    
+
         // Filter berdasarkan pencarian (judul konten)
         if ($search) {
             $query->where('title', 'like', "%{$search}%");
         }
-    
+
         // Paginasi dan sorting
         $metadata['total_data'] = $query->count();
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
-    
+
         // Dapatkan data berdasarkan limit, offset, dan urutan
         if ($per_page > 0) {
             $data = $query->orderBy($sort[0], $sort[1])
@@ -85,14 +85,14 @@ class ContentController extends Controller
         } else {
             $data = $query->orderBy($sort[0], $sort[1])->get();
         }
-    
+
         // Return response dengan data dan metadata
         return ContentResource::collection($data)->additional([
             'success' => true,
             'message' => 'Get data successful',
             'metadata' => $metadata
         ]);
-    }    
+    }
 
 
     public function show($id_content)

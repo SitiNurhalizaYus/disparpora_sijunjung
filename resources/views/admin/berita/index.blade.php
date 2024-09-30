@@ -16,13 +16,61 @@
             </div>
         </div>
 
+        <!-- Filter Section -->
+        <div class="card mb-4 p-3 shadow-sm">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <!-- Filter Kategori -->
+                    <select id="filter-category" class="form-select">
+                        <option value="">Semua Kategori</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id_category }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <!-- Filter Tahun -->
+                    <select id="filter-year" class="form-select">
+                        <option value="">Pilih Tahun</option>
+                        @php
+                            $currentYear = date('Y');
+                        @endphp
+                        @for ($year = $currentYear; $year >= $currentYear - 10; $year--)
+                            <option value="{{ $year }}">{{ $year }}</option>
+                        @endfor
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <!-- Filter Bulan -->
+                    <select id="filter-month" class="form-select" disabled>
+                        <option value="">Pilih Bulan</option>
+                        @for ($m = 1; $m <= 12; ++$m)
+                            <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                        @endfor
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <!-- Filter Penulis -->
+                    <select id="filter-author" class="form-select">
+                        <option value="">Semua Penulis</option>
+                        @foreach ($authors as $author)
+                            <option value="{{ $author->id_user }}">{{ $author->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <!-- Dropdown Filter -->
-        <div class="row mb-3">
+        {{-- <div class="row mb-3">
             <div class="col-md-3">
                 <!-- Filter Kategori -->
                 <select id="filter-category" class="form-control">
                     <option value="">Semua Kategori</option>
-                    @foreach($categories as $category)
+                    @foreach ($categories as $category)
                         <option value="{{ $category->id_category }}">{{ $category->name }}</option>
                     @endforeach
                 </select>
@@ -35,7 +83,7 @@
                     @php
                         $currentYear = date('Y');
                     @endphp
-                    @for($year = $currentYear; $year >= $currentYear - 10; $year--)
+                    @for ($year = $currentYear; $year >= $currentYear - 10; $year--)
                         <option value="{{ $year }}">{{ $year }}</option>
                     @endfor
                 </select>
@@ -45,7 +93,7 @@
                 <!-- Filter Bulan (Akan ter-update sesuai dengan tahun yang dipilih) -->
                 <select id="filter-month" class="form-control" disabled>
                     <option value="">Semua Bulan</option>
-                    @for($m=1; $m<=12; ++$m)
+                    @for ($m = 1; $m <= 12; ++$m)
                         <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
                     @endfor
                 </select>
@@ -55,12 +103,12 @@
                 <!-- Filter Penulis -->
                 <select id="filter-author" class="form-control">
                     <option value="">Semua Penulis</option>
-                    @foreach($authors as $author)
+                    @foreach ($authors as $author)
                         <option value="{{ $author->id }}">{{ $author->name }}</option>
                     @endforeach
                 </select>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-sm-12">
@@ -122,39 +170,39 @@
                     });
 
                     $.get('{{ url('/api/content') }}', {
-                            per_page: data.length,
-                            page: (data.start / data.length) + 1,
-                            sort: sort_col_name + ':' + sort_col_order,
-                            search: data.search.value,
-                            type: 'berita', // Tipe konten berita
-                            category_id: category, // Kirim kategori yang dipilih
-                            month: month, // Kirim bulan yang dipilih
-                            year: year, // Kirim tahun yang dipilih
-                            author_id: author // Kirim penulis yang dipilih
-                        },
-                        function(json) {
-                            callback({
-                                recordsTotal: json.metadata.total_data,
-                                recordsFiltered: json.metadata.total_data,
-                                data: json.data
+                                per_page: data.length,
+                                page: (data.start / data.length) + 1,
+                                sort: sort_col_name + ':' + sort_col_order,
+                                search: data.search.value,
+                                type: 'berita', // Tipe konten berita
+                                category_id: category, // Kirim kategori yang dipilih
+                                month: month, // Kirim bulan yang dipilih
+                                year: year, // Kirim tahun yang dipilih
+                                author_id: author // Kirim penulis yang dipilih
+                            },
+                            function(json) {
+                                callback({
+                                    recordsTotal: json.metadata.total_data,
+                                    recordsFiltered: json.metadata.total_data,
+                                    data: json.data
+                                });
+                            })
+                        .fail(function() {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Terjadi kesalahan saat memuat data.",
+                                confirmButtonColor: '#3A57E8',
                             });
-                        })
-                    .fail(function() {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Terjadi kesalahan saat memuat data.",
-                            confirmButtonColor: '#3A57E8',
                         });
-                    });
                 },
-                columns: [
-                    {
+                columns: [{
                         data: null, // Nomor urut
                         className: 'text-center',
                         orderable: false,
                         render: function(data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1; // Menghasilkan nomor urut
+                            return meta.row + meta.settings._iDisplayStart +
+                            1; // Menghasilkan nomor urut
                         }
                     },
                     {
@@ -175,8 +223,10 @@
                         className: 'text-center',
                         render: function(data, type, row, meta) {
                             if (data && data !== null) { // Pastikan data tidak null
-                                var imagePath = "{{ asset('/') }}" + data.replace('/xxx/', '/500/');
-                                return '<img src="' + imagePath + '" style="max-width:100px; max-height:100px;">';
+                                var imagePath = "{{ asset('/') }}" + data.replace('/xxx/',
+                                    '/500/');
+                                return '<img src="' + imagePath +
+                                    '" style="max-width:100px; max-height:100px;">';
                             } else {
                                 return '<span>No Image</span>'; // Tampilkan pesan jika tidak ada gambar
                             }
@@ -193,14 +243,16 @@
                         data: 'created_at',
                         className: 'text-center',
                         render: function(data) {
-                            return '<span style="white-space: normal;">' + convertStringToDate(data) + '</span>';
+                            return '<span style="white-space: normal;">' + convertStringToDate(
+                                data) + '</span>';
                         }
                     },
                     {
                         data: 'is_active',
                         className: 'text-center',
                         render: function(data) {
-                            return data == '1' ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-danger">Tidak Aktif</span>';
+                            return data == '1' ? '<span class="badge bg-success">Aktif</span>' :
+                                '<span class="badge bg-danger">Tidak Aktif</span>';
                         }
                     },
                     {
@@ -237,13 +289,13 @@
                                     </span>
                                 </button>`;
 
-                            return '<div style="display: flex;">' + btn_detail + '&nbsp;' + btn_edit + '&nbsp;' + btn_delete + '</div>';
+                            return '<div style="display: flex;">' + btn_detail + '&nbsp;' +
+                                btn_edit + '&nbsp;' + btn_delete + '</div>';
                         }
                     }
 
                 ],
-                columnDefs: [
-                    {
+                columnDefs: [{
                         targets: [0],
                         width: "5%"
                     },
