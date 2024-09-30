@@ -24,9 +24,9 @@
                                 <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Type</th>
-                                        <th>Key</th>
                                         <th>Value</th>
+                                        <th>Key</th>
+                                        <th>Type</th>
                                         <th>Created At</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -79,19 +79,19 @@
                     data: 'id'
                 },
                 {
-                    data: 'type',
+                    data: 'value',
+                    render: function (data, type, row, meta) {
+                        return '<span style="white-space: normal;">' + data.replace(/<[^>]*>?/gm, '').substring(0, 50) + '...</span>';
+                    }
+                },                
+                {
+                    data: 'key',
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + data + '</span>';
                     }
                 },
                 {
-                    data: 'value',
-                    render: function (data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data.replace(/<[^>]*>?/gm, '').substring(0, 50) + '...</span>';
-                    }
-                },
-                {
-                    data: 'key',
+                    data: 'type',
                     render: function (data, type, row, meta) {
                         return '<span style="white-space: normal;">' + data + '</span>';
                     }

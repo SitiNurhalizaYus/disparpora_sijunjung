@@ -106,6 +106,29 @@
                         orderable: false
                     }
                 ],
+                language: {
+                    "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+                    "sProcessing": "Sedang memproses...",
+                    "sLengthMenu": "Tampilkan _MENU_ data",
+                    "sZeroRecords": "Tidak ditemukan data yang sesuai",
+                    "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
+                    "sInfoFiltered": "(disaring dari _MAX_ total data)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Cari:",
+                    "sUrl": "",
+                    "sLoadingRecords": "Sedang memuat...",
+                    "oPaginate": {
+                        "sFirst": "Pertama",
+                        "sPrevious": "Sebelumnya",
+                        "sNext": "Berikutnya",
+                        "sLast": "Terakhir"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": aktifkan untuk mengurutkan kolom secara ascending",
+                        "sSortDescending": ": aktifkan untuk mengurutkan kolom secara descending"
+                    }
+                },
                 columnDefs: [{
                         targets: [0],
                         width: "10%"

@@ -51,7 +51,7 @@
             ],
             lengthMenu: [
                 [5, 15, 25, 100, -1],
-                [5, 15, 25, 100, 'All']
+                [5, 15, 25, 100, 'Semua']
             ],
             pageLength: 5,
             processing: true,
@@ -140,8 +140,8 @@
                     }
                 },
                 {
-                        render: function(data, type, row, meta) {
-                            var btn_detail = `
+                    render: function(data, type, row, meta) {
+                        var btn_detail = `
                             <a href="{{ url('/admin/posters/`+row.id+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -151,10 +151,10 @@
                                 </span>
                             </a>`;
 
-                            // Cek apakah pengguna adalah kontributor dan status is_active = 1
-                            if ({{ $session_data['user_level_id'] }} == 3 && row.is_active == 1) {
-                                // Jika kontributor dan konten sudah aktif, disable edit dan delete
-                                var btn_edit = `
+                        // Cek apakah pengguna adalah kontributor dan status is_active = 1
+                        if ({{ $session_data['user_level_id'] }} == 3 && row.is_active == 1) {
+                            // Jika kontributor dan konten sudah aktif, disable edit dan delete
+                            var btn_edit = `
                             <a href="javascript:void(0);" class="btn btn-sm btn-icon btn-warning flex-end disabled" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -165,7 +165,7 @@
                                 </span>
                             </a>`;
 
-                                var btn_delete = `
+                            var btn_delete = `
                             <button class="btn btn-sm btn-icon btn-danger flex-end disabled" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
@@ -175,8 +175,8 @@
                                     </svg>
                                 </span>
                             </button>`;
-                            } else {
-                                var btn_edit = `
+                        } else {
+                            var btn_edit = `
                             <a href="{{ url('/admin/posters/`+row.id+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -186,7 +186,7 @@
                                 </span>
                             </a>`;
 
-                                var btn_delete = `
+                            var btn_delete = `
                             <button onclick="removeData(` + row.id + `)" class="btn btn-sm btn-icon btn-danger flex-end" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
@@ -196,14 +196,37 @@
                                     </svg>
                                 </span>
                             </button>`;
-                            }
-
-                            return '<div style="display: flex;">' + btn_detail + '&nbsp;' +
-                                btn_edit +
-                                '&nbsp;' + btn_delete + '</div>';
                         }
+
+                        return '<div style="display: flex;">' + btn_detail + '&nbsp;' +
+                            btn_edit +
+                            '&nbsp;' + btn_delete + '</div>';
                     }
+                }
             ],
+            language: {
+                "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+                "sProcessing": "Sedang memproses...",
+                "sLengthMenu": "Tampilkan _MENU_ data",
+                "sZeroRecords": "Tidak ditemukan data yang sesuai",
+                "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
+                "sInfoFiltered": "(disaring dari _MAX_ total data)",
+                "sInfoPostFix": "",
+                "sSearch": "Cari:",
+                "sUrl": "",
+                "sLoadingRecords": "Sedang memuat...",
+                "oPaginate": {
+                    "sFirst": "Pertama",
+                    "sPrevious": "Sebelumnya",
+                    "sNext": "Berikutnya",
+                    "sLast": "Terakhir"
+                },
+                "oAria": {
+                    "sSortAscending": ": aktifkan untuk mengurutkan kolom secara ascending",
+                    "sSortDescending": ": aktifkan untuk mengurutkan kolom secara descending"
+                }
+            },
             columnDefs: [{
                     targets: [0],
                     width: "5%"
