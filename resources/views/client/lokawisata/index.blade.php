@@ -133,8 +133,8 @@
                                         <img src="${item.image}" alt="${item.name}">
                                     </div>
                                     <div class="event-details">
-                                        <h3 class="event-title">${item.name}</h3>
-                                        <a href="{{ url('/lokawisata') }}/${item.slug}" class="event-link">Detail</a>
+                                        <h3 class="event-title text-capitalize">${item.name}</h3>
+                                        <a href="{{ url('/lokawisata') }}/${item.slug}" class="event-link">Detail <i class="bi bi-search"></i></a>
                                     </div>
                                 </div>
                             `;

@@ -24,6 +24,9 @@ class InfoTempatController extends Controller
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
         $page = $request->has('page') ? intval($request->get('page')) : 1;
+        $author_id = $request->get('author_id', null);
+        $month = $request->get('month', null);
+        $year = $request->get('year', null);
 
         // Validasi per_page dan page agar tidak bernilai negatif atau nol
         if ($per_page <= 0) {
@@ -40,8 +43,8 @@ class InfoTempatController extends Controller
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-        // query
-        $query = InfoTempat::where([['id', '>', '0']]);
+        // Membuat query dasar untuk tabel Content dengan relasi category dan penulis
+        $query = InfoTempat::with(['createdBy', 'updatedBy']);
 
         // cek token
         if (!auth()->guard('api')->user()) {
@@ -56,6 +59,20 @@ class InfoTempatController extends Controller
                     $query = $query->where($key, $value);
                 }
             }
+        }
+
+        // Filter berdasarkan penulis
+        if ($request->has('author') && !empty($request->author)) {
+            $query->where('created_by', $request->author);
+        }
+
+
+        // Filter berdasarkan bulan dan tahun
+        if ($month && $year) {
+            $query->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year);
+        } elseif ($year) {
+            $query->whereYear('created_at', $year);
         }
 
         if ($search) {

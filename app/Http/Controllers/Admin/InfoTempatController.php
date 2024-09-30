@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class InfoTempatController extends Controller
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function index()
     {
         $has_session = \App\Helpers\AppHelper::instance()->checkSession();
 
-        if($has_session) {
+        if ($has_session) {
             $data = [];
             $data['setting'] = \App\Helpers\AppHelper::instance()->requestApiSetting();
             $data['menu'] = 'lokawisata-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
+            $authors = User::all(); // Ambil daftar penulis
+            $data['authors'] = $authors; // Kirim penulis ke view
             return view('admin.lokawisata.index', $data);
         } else {
             session()->flash('message', 'Session expired.');
@@ -36,6 +37,8 @@ class InfoTempatController extends Controller
         $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
         $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
         $data['id'] = $id;
+        $authors = User::all(); // Ambil daftar penulis
+        $data['authors'] = $authors; // Kirim penulis ke view
         return view('admin.lokawisata.show', $data);
     }
 
@@ -59,5 +62,4 @@ class InfoTempatController extends Controller
         $data['id'] = $id;
         return view('admin.lokawisata.edit', $data);
     }
-
 }

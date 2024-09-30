@@ -7,16 +7,65 @@
                 <div>
                     <div class="header-title">
                         <h2 class="card-title">Lokawisata</h2>
-                        <p>List data</p>
+                        <p>List data Lokawisata</p>
                     </div>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/lokawisatas/create') }}" class="btn btn-md 2 btn-primary">
-                        Tambah Data +
-                    </a>
+                    <a href="{{ url('/admin/lokawisatas/create') }}" class="btn btn-md btn-primary">Tambah Data +</a>
                 </div>
             </div>
         </div>
+
+        <!-- Filter Section -->
+        <div class="card mb-4 p-4 shadow-sm">
+            <h5 class="mb-3" style="color: #017454;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-funnel" viewBox="0 0 16 16" style="color: #017454;">
+                    <path
+                        d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+                </svg> Filter
+                <button id="reset-filters" class="btn btn-outline-danger btn-sm ms-3">Reset Filter</button>
+                <!-- Tombol Reset -->
+            </h5>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <!-- Filter Tahun -->
+                    <label for="filter-year" class="form-label">Tahun</label>
+                    <select id="filter-year" class="form-select">
+                        <option value="">Pilih Tahun</option>
+                        @php
+                            $currentYear = date('Y');
+                        @endphp
+                        @for ($year = $currentYear; $year >= $currentYear - 10; $year--)
+                            <option value="{{ $year }}">{{ $year }}</option>
+                        @endfor
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <!-- Filter Bulan -->
+                    <label for="filter-month" class="form-label">Bulan</label>
+                    <select id="filter-month" class="form-select" disabled>
+                        <option value="">Pilih Bulan</option>
+                        @for ($m = 1; $m <= 12; ++$m)
+                            <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                        @endfor
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <!-- Filter Penulis -->
+                    <label for="filter-author" class="form-label">Penulis</label>
+                    <select id="filter-author" class="form-select">
+                        <option value="">Pilih Penulis</option>
+                        @foreach ($authors as $author)
+                            <option value="{{ $author->id_user }}">{{ $author->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -30,12 +79,12 @@
                                         <th>Nama</th>
                                         <th>Gambar</th>
                                         <th>Dibuat</th>
+                                        <th>Penulis</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -45,102 +94,144 @@
     </div>
 
     <script>
-        $('#datatable').DataTable({
-            order: [
-                [0, 'asc'] // Pastikan pengurutan berdasarkan kolom pertama secara default
-            ],
-            lengthMenu: [
-                [5, 15, 25, 100, -1],
-                [5, 15, 25, 100, 'Semua']
-            ],
-            pageLength: 5,
-            processing: true,
-            serverSide: true,
-            autoWidth: false,
-            scrollX: true,
-            ajax: function(data, callback, settings) {
-                var sort_col_index = data.order[0].column;
-                var sort_col_order = data.order[0].dir;
-                var sort_col_name = data.columns[sort_col_index].data;
-
-                // Pastikan sort_col_name valid
-                if (!sort_col_name || sort_col_name === null) {
-                    sort_col_name = 'id'; // Set kolom default untuk pengurutan jika tidak valid
+        $(document).ready(function() {
+            // Aktifkan atau nonaktifkan filter bulan berdasarkan pilihan tahun
+            $('#filter-year').on('change', function() {
+                if ($(this).val()) {
+                    $('#filter-month').prop('disabled', false);
+                } else {
+                    $('#filter-month').val('').prop('disabled', true);
                 }
+                $('#datatable').DataTable().ajax.reload(); // Reload data tabel setelah filter berubah
+            });
 
-                $.ajaxSetup({
-                    headers: {
-                        'Authorization': "Bearer {{ $session_token }}"
+            $('#filter-month').on('change', function() {
+                $('#datatable').DataTable().ajax.reload(); // Reload data tabel setelah filter berubah
+            });
+
+            // Tambahkan event listener untuk filter penulis
+            $('#filter-author').on('change', function() {
+                $('#datatable').DataTable().ajax.reload(); // Reload data tabel setelah filter berubah
+            });
+
+            // Tombol reset untuk menghapus filter
+            $('#reset-filters').on('click', function() {
+                $('#filter-year').val(''); // Reset tahun
+                $('#filter-month').val('').prop('disabled', true); // Reset bulan dan nonaktifkan
+                $('#filter-author').val(''); // Reset penulis
+                $('#datatable').DataTable().ajax.reload(); // Reload data tabel
+            });
+
+            $('#datatable').DataTable({
+                order: [
+                    [0, 'asc']
+                ], // Default urutan berdasarkan kolom pertama
+                lengthMenu: [
+                    [5, 15, 25, 100, -1],
+                    [5, 15, 25, 100, 'Semua']
+                ],
+                pageLength: 5,
+                processing: true,
+                serverSide: true,
+                autoWidth: false,
+                scrollX: true,
+                ajax: function(data, callback, settings) {
+                    var sort_col_index = data.order[0].column;
+                    var sort_col_order = data.order[0].dir;
+                    var sort_col_name = data.columns[sort_col_index].data;
+
+                    if (!sort_col_name) {
+                        sort_col_name = 'id'; // Default sorting by id
                     }
-                });
 
-                $.get('/api/lokawisata', {
+                    var year = $('#filter-year').val();
+                    var month = $('#filter-month').val();
+                    var author = $('#filter-author').val();
+
+                    $.ajaxSetup({
+                        headers: {
+                            'Authorization': "Bearer {{ $session_token }}"
+                        }
+                    });
+
+                    $.get('/api/lokawisata', {
                         per_page: data.length,
                         page: (data.start / data.length) + 1,
                         sort: sort_col_name + ':' + sort_col_order,
-                        search: data.search.value
-                    },
-                    function(json) {
+                        search: data.search.value,
+                        year: year,
+                        month: month,
+                        author: author // Kirim filter penulis ke server
+                    }, function(json) {
                         callback({
                             recordsTotal: json.metadata.total_data,
                             recordsFiltered: json.metadata.total_data,
                             data: json.data
                         });
-                    }).fail(function(xhr, status, error) {
-                    console.log(xhr.responseText); // Debugging response
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Terjadi kesalahan saat memuat data.",
-                        confirmButtonColor: '#3A57E8',
+                    }).fail(function() {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat memuat data.",
+                            confirmButtonColor: '#3A57E8',
+                        });
                     });
-                });
-            },
-            columns: [{
-                    data: null, // Kolom urutan nomor
-                    className: 'text-center',
-                    render: function(data, type, row, meta) {
-                        return meta.row + 1; // Nomor urut
-                    }
                 },
-                {
-                    data: 'name',
-                    render: function(data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + data + '</span>';
-                    }
-                },
-                {
-                    data: 'image',
-                    render: function(data, type, row, meta) {
-                        if (data && data !== null) { // Pastikan data tidak null
-                            var imagePath = "{{ asset('/') }}" + data.replace('/xxx/', '/100/');
-                            return '<img src="' + imagePath +
-                                '" style="max-width:100px; max-height:100px;">';
-                        } else {
-                            return '<span>No Image</span>'; // Tampilkan pesan jika tidak ada gambar
+                columns: [{
+                        data: null, // Kolom urutan nomor
+                        className: 'text-center',
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1; // Nomor urut
                         }
-                    }
-                },
-                {
-                    data: 'created_at',
-                    render: function(data, type, row, meta) {
-                        return '<span style="white-space: normal;">' + convertStringToDate(data) +
-                            '</span>';
-                    }
-                },
-                {
-                    data: 'is_active',
-                    render: function(data, type, row, meta) {
-                        if (data == '1') {
-                            return '<span class="badge bg-success">Aktif</span>';
-                        } else {
-                            return '<span class="badge bg-danger">Tidak Aktif</span>';
+                    },
+                    {
+                        data: 'name',
+                        render: function(data, type, row, meta) {
+                            return '<span style="white-space: normal;">' + data + '</span>';
                         }
-                    }
-                },
-                {
-                    render: function(data, type, row, meta) {
-                        var btn_detail = `
+                    },
+                    {
+                        data: 'image',
+                        render: function(data, type, row, meta) {
+                            if (data && data !== null) { // Pastikan data tidak null
+                                var imagePath = "{{ asset('/') }}" + data.replace('/xxx/',
+                                    '/100/');
+                                return '<img src="' + imagePath +
+                                    '" style="max-width:100px; max-height:100px;">';
+                            } else {
+                                return '<span>No Image</span>'; // Tampilkan pesan jika tidak ada gambar
+                            }
+                        }
+                    },
+                    {
+                        data: 'created_at',
+                        render: function(data, type, row, meta) {
+                            return '<span style="white-space: normal;">' + convertStringToDate(
+                                    data) +
+                                '</span>';
+                        }
+                    },
+                    {
+                        data: 'created_by.name', // Pastikan ini benar sesuai dengan data yang dikirim dari API
+                        className: 'text-center',
+                        render: function(data) {
+                            return data ? data : '<span>Unknown</span>';
+                        }
+                    },
+
+                    {
+                        data: 'is_active',
+                        render: function(data, type, row, meta) {
+                            if (data == '1') {
+                                return '<span class="badge bg-success">Aktif</span>';
+                            } else {
+                                return '<span class="badge bg-danger">Tidak Aktif</span>';
+                            }
+                        }
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            var btn_detail = `
                             <a href="{{ url('/admin/lokawisatas/`+row.id+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -150,10 +241,10 @@
                                 </span>
                             </a>`;
 
-                        // Cek apakah pengguna adalah kontributor dan status is_active = 1
-                        if ({{ $session_data['user_level_id'] }} == 3 && row.is_active == 1) {
-                            // Jika kontributor dan konten sudah aktif, disable edit dan delete
-                            var btn_edit = `
+                            // Cek apakah pengguna adalah kontributor dan status is_active = 1
+                            if ({{ $session_data['user_level_id'] }} == 3 && row.is_active == 1) {
+                                // Jika kontributor dan konten sudah aktif, disable edit dan delete
+                                var btn_edit = `
                             <a href="javascript:void(0);" class="btn btn-sm btn-icon btn-warning flex-end disabled" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -164,7 +255,7 @@
                                 </span>
                             </a>`;
 
-                            var btn_delete = `
+                                var btn_delete = `
                             <button class="btn btn-sm btn-icon btn-danger flex-end disabled" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
@@ -174,8 +265,8 @@
                                     </svg>
                                 </span>
                             </button>`;
-                        } else {
-                            var btn_edit = `
+                            } else {
+                                var btn_edit = `
                             <a href="{{ url('/admin/lokawisatas/`+row.id+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +276,7 @@
                                 </span>
                             </a>`;
 
-                            var btn_delete = `
+                                var btn_delete = `
                             <button onclick="removeData(` + row.id + `)" class="btn btn-sm btn-icon btn-danger flex-end" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
                                 <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
@@ -195,77 +286,80 @@
                                     </svg>
                                 </span>
                             </button>`;
-                        }
+                            }
 
-                        return '<div style="display: flex;">' + btn_detail + '&nbsp;' +
-                            btn_edit +
-                            '&nbsp;' + btn_delete + '</div>';
+                            return '<div style="display: flex;">' + btn_detail + '&nbsp;' +
+                                btn_edit +
+                                '&nbsp;' + btn_delete + '</div>';
+                        }
                     }
-                }
-            ],
-            language: {
-                "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
-                "sProcessing": "Sedang memproses...",
-                "sLengthMenu": "Tampilkan _MENU_ data",
-                "sZeroRecords": "Tidak ditemukan data yang sesuai",
-                "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
-                "sInfoFiltered": "(disaring dari _MAX_ total data)",
-                "sInfoPostFix": "",
-                "sSearch": "Cari:",
-                "sUrl": "",
-                "sLoadingRecords": "Sedang memuat...",
-                "oPaginate": {
-                    "sFirst": "Pertama",
-                    "sPrevious": "Sebelumnya",
-                    "sNext": "Berikutnya",
-                    "sLast": "Terakhir"
+                ],
+                language: {
+                    "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+                    "sProcessing": "Sedang memproses...",
+                    "sLengthMenu": "Tampilkan _MENU_ data",
+                    "sZeroRecords": "Tidak ditemukan data yang sesuai",
+                    "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
+                    "sInfoFiltered": "(disaring dari _MAX_ total data)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Cari:",
+                    "sUrl": "",
+                    "sLoadingRecords": "Sedang memuat...",
+                    "oPaginate": {
+                        "sFirst": "Pertama",
+                        "sPrevious": "Sebelumnya",
+                        "sNext": "Berikutnya",
+                        "sLast": "Terakhir"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": aktifkan untuk mengurutkan kolom secara ascending",
+                        "sSortDescending": ": aktifkan untuk mengurutkan kolom secara descending"
+                    }
                 },
-                "oAria": {
-                    "sSortAscending": ": aktifkan untuk mengurutkan kolom secara ascending",
-                    "sSortDescending": ": aktifkan untuk mengurutkan kolom secara descending"
-                }
-            },
-            columnDefs: [{
-                    targets: [0],
-                    width: "5%"
-                },
-                {
-                    targets: [1],
-                    width: "25%"
-                },
-                {
-                    targets: [2],
-                    width: "15%"
-                },
-                {
-                    targets: [3],
-                    width: "15%"
-                },
-                {
-                    targets: [4],
-                    width: "10%"
-                },
-                {
-                    targets: [5],
-                    width: "10%",
-                    orderable: false
-                }
-            ],
+                columnDefs: [{
+                        targets: [0],
+                        width: "5%"
+                    },
+                    {
+                        targets: [1],
+                        width: "25%"
+                    },
+                    {
+                        targets: [2],
+                        width: "15%"
+                    },
+                    {
+                        targets: [3],
+                        width: "15%"
+                    },
+                    {
+                        targets: [4],
+                        width: "10%"
+                    },
+                    {
+                        targets: [5],
+                        width: "10%"
+                    },
+                    {
+                        targets: [6],
+                        width: "10%",
+                        orderable: false
+                    }
+                ],
+
+            });
         });
 
         function removeData(id) {
             Swal.fire({
                 title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
-                showCancelButton: false,
                 confirmButtonText: "Yes",
                 denyButtonText: "No",
                 confirmButtonColor: '#1AA053',
             }).then((result) => {
                 if (result.isConfirmed) {
-
-                    // delete
                     $.ajaxSetup({
                         headers: {
                             'Authorization': "Bearer {{ $session_token }}"
@@ -274,24 +368,21 @@
                     $.ajax({
                         url: '/api/lokawisata/' + id,
                         type: "DELETE",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        processData: false,
                         success: function(result) {
-                            if (result['success'] == true) {
+                            if (result.success) {
                                 Swal.fire({
                                     icon: "success",
                                     title: "Success",
-                                    text: result['message'],
+                                    text: result.message,
                                     confirmButtonColor: '#3A57E8',
-                                }).then((result) => {
-                                    window.location.replace("{{ url('/admin/lokawisatas') }}");
+                                }).then(() => {
+                                    $('#datatable').DataTable().ajax.reload();
                                 });
                             } else {
                                 Swal.fire({
                                     icon: "error",
                                     title: "Oops...",
-                                    text: result['message'],
+                                    text: result.message,
                                     confirmButtonColor: '#3A57E8',
                                 });
                             }
