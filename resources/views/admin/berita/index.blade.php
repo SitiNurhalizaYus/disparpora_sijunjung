@@ -105,9 +105,12 @@
                 ],
                 pageLength: 5,
                 processing: true,
+                searching: true,
+                paging: true,
                 serverSide: true,
-                autoWidth: false,
+                autoWidth: true,
                 scrollX: true,
+                responsive: true,
                 ajax: function(data, callback, settings) {
                     var sort_col_id = data.order[0].column;
                     var sort_col_order = data.order[0].dir;
