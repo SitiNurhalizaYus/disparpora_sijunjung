@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/profils/create') }}" class="btn btn-md btn-primary">ADD+</a>
+                    <a href="{{ url('/admin/profils/create') }}" class="btn btn-md btn-primary">Tambah Data +</a>
                 </div>
             </div>
         </div>

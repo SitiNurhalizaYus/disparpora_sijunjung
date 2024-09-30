@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/beritas/create') }}" class="btn btn-md btn-primary">ADD+</a>
+                    <a href="{{ url('/admin/beritas/create') }}" class="btn btn-md btn-primary">Tambah Data +</a>
                 </div>
             </div>
         </div>
@@ -63,52 +63,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Dropdown Filter -->
-        {{-- <div class="row mb-3">
-            <div class="col-md-3">
-                <!-- Filter Kategori -->
-                <select id="filter-category" class="form-control">
-                    <option value="">Semua Kategori</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id_category }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <!-- Filter Tahun -->
-                <select id="filter-year" class="form-control">
-                    <option value="">Semua Tahun</option>
-                    @php
-                        $currentYear = date('Y');
-                    @endphp
-                    @for ($year = $currentYear; $year >= $currentYear - 10; $year--)
-                        <option value="{{ $year }}">{{ $year }}</option>
-                    @endfor
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <!-- Filter Bulan (Akan ter-update sesuai dengan tahun yang dipilih) -->
-                <select id="filter-month" class="form-control" disabled>
-                    <option value="">Semua Bulan</option>
-                    @for ($m = 1; $m <= 12; ++$m)
-                        <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
-                    @endfor
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <!-- Filter Penulis -->
-                <select id="filter-author" class="form-control">
-                    <option value="">Semua Penulis</option>
-                    @foreach ($authors as $author)
-                        <option value="{{ $author->id }}">{{ $author->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div> --}}
 
         <div class="row">
             <div class="col-sm-12">
@@ -173,7 +127,7 @@
                                 per_page: data.length,
                                 page: (data.start / data.length) + 1,
                                 sort: sort_col_name + ':' + sort_col_order,
-                                search: data.search.value,
+                                // search: data.search.value,
                                 type: 'berita', // Tipe konten berita
                                 category_id: category, // Kirim kategori yang dipilih
                                 month: month, // Kirim bulan yang dipilih

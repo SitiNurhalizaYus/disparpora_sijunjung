@@ -12,7 +12,7 @@
                 </div>
                 <div>
                     <a href="{{ url('/admin/documents/create') }}" class="btn btn-md btn-primary">
-                        ADD+
+                        Tambah Data +
                     </a>
                 </div>
             </div>

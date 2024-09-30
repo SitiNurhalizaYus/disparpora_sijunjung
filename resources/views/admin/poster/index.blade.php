@@ -12,7 +12,7 @@
                 </div>
                 <div>
                     <a href="{{ url('/admin/posters/create') }}" class="btn btn-md 2 btn-primary">
-                        ADD+
+                        Tambah Data +
                     </a>
                 </div>
             </div>
