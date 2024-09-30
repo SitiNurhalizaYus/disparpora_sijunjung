@@ -148,7 +148,7 @@
                                     <span class="item-name">Poster</span>
                                 </a>
                             </li> --}}
-
+                            @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'mitra')) active @endif"
                                     href="{{ url('/admin/mitras') }}">
@@ -162,6 +162,7 @@
                                 </a>
                                 <hr class="hr-horizontal" style="background-color: white">
                             </li>
+                            @endif
 
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                                 <li class="nav-item">
@@ -236,6 +237,7 @@
                     </li>
 
                     {{-- dokumen publik --}}
+                    @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'document')) {{ 'active' }} @endif"
                             aria-current="page" href="{{ url('/admin/documents') }}">
@@ -256,6 +258,7 @@
                             <span class="item-name">Dokumen Publik</span>
                         </a>
                     </li>
+                    @endif
 
                     {{-- galeri --}}
                     {{-- <li class="nav-item">
@@ -284,6 +287,7 @@
                     </li>
 
                     {{-- agenda --}}
+                    @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'agenda')) {{ 'active' }} @endif"
                             aria-current="page" href="{{ url('/admin/agendas') }}">
@@ -301,8 +305,9 @@
                             <span class="item-name">Agenda</span>
                         </a>
                     </li>
+                    @endif
 
-                    {{-- pengumuman --}}
+                    {{-- lokawista --}}
                     <li class="nav-item">
                         <a class="nav-link @if (str_contains($menu, 'lokawisata')) {{ 'active' }} @endif"
                             aria-current="page" href="{{ url('/admin/lokawisatas') }}">

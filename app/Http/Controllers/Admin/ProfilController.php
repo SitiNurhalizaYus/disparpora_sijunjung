@@ -23,7 +23,7 @@ class ProfilController extends Controller
                 $data['menu'] = 'profil-list';
                 $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
                 $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-                $data['contents'] = Content::where('type', Content::TYPE_PROFIL)->paginate(10); // Hanya mengambil konten dengan tipe 'profil'
+                $data['contents'] = Content::where('type', Content::TYPE_PROFIL); // Hanya mengambil konten dengan tipe 'profil'
                 return view('admin.profil.index', $data);
             } else {
                 session()->flash('message', 'Forbidden access.');

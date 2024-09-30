@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\Content;
 use App\Models\Category;
 use Illuminate\Support\Str;
@@ -22,7 +23,14 @@ class BeritaController extends Controller
             $data['menu'] = 'berita-list';
             $data['session_data'] = \App\Helpers\AppHelper::instance()->getSessionData();
             $data['session_token'] = \App\Helpers\AppHelper::instance()->getSessionToken();
-            $data['contents'] = Content::where('type', Content::TYPE_BERITA)->paginate(10); // Hanya mengambil konten dengan tipe 'berita'
+            $data['contents'] = Content::where('type', Content::TYPE_BERITA); 
+
+             // Dapatkan kategori dan penulis untuk filter di view
+             $categories = Category::all()->unique('name');
+             $authors = User::all(); // Ambil daftar penulis
+             $data['categories'] = $categories;
+             $data['authors'] = $authors; // Kirim penulis ke view
+
             return view('admin.berita.index', $data);
         } else {
             session()->flash('message', 'Session expired.');

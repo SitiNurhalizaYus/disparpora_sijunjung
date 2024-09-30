@@ -19,7 +19,9 @@ class InfoTempat extends Model
         'ticket_price',
         'image',
         'link',
-        'is_active'
+        'is_active',
+        'created_by',
+        'updated_by'
     ];
 
     public function users()

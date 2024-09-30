@@ -40,17 +40,38 @@ class InfoTempatController extends Controller
         if (count($sort) !== 2) {
             $sort = ['id', 'asc']; // Default sorting jika tidak valid
         }
+        // Default sorting column
+        $sort = $request->get('sort', 'id:asc');
+        $sort = explode(':', $sort);
+        if (count($sort) !== 2 || !in_array($sort[0], ['id', 'name', 'created_at'])) {  // Validasi kolom yang bisa diurutkan
+            $sort = ['id', 'asc']; // Gunakan 'id' sebagai default sorting
+        }
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-        // Membuat query dasar untuk tabel Content dengan relasi category dan penulis
+        // Membuat query dasar untuk tabel InfoTempat dengan relasi createdBy dan updatedBy
         $query = InfoTempat::with(['createdBy', 'updatedBy']);
 
-        // cek token
+        // Cek user yang login
+        $user = auth()->user();
+
+        // Filter data hanya untuk user yang memiliki level_id == 3 (kontributor)
+        if ($user && $user->level_id == 3) {
+            // Jika user adalah kontributor, tampilkan hanya data yang dibuat oleh user tersebut
+            $query->where('created_by', $user->id);  // Hanya data yang dibuat oleh user login
+        }
+
+        // Jika user bukan kontributor (level_id != 3), bisa menampilkan semua data atau filter lain
+        if ($request->has('author') && !empty($request->author)) {
+            $query->where('created_by', $request->author);
+        }
+
+        // Jika tidak ada token API (pengguna belum login), tampilkan data yang aktif saja
         if (!auth()->guard('api')->user()) {
             $query = $query->where('is_active', 1);
         }
 
+        // Filter berdasarkan where clause jika ada
         if ($where) {
             foreach ($where as $key => $value) {
                 if (is_array($value)) {
@@ -61,13 +82,7 @@ class InfoTempatController extends Controller
             }
         }
 
-        // Filter berdasarkan penulis
-        if ($request->has('author') && !empty($request->author)) {
-            $query->where('created_by', $request->author);
-        }
-
-
-        // Filter berdasarkan bulan dan tahun
+        // Filter berdasarkan bulan dan tahun (jika ada)
         if ($month && $year) {
             $query->whereMonth('created_at', $month)
                 ->whereYear('created_at', $year);
@@ -75,22 +90,17 @@ class InfoTempatController extends Controller
             $query->whereYear('created_at', $year);
         }
 
+        // Filter berdasarkan pencarian
         if ($search) {
             $query = $query->where('name', 'like', "%{$search}%");
         }
 
-        // metadata dan data
+        // Metadata dan data
         $metadata = [];
         $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
         $metadata['per_page'] = $per_page;
         $metadata['total_page'] = ceil($metadata['total_data'] / $metadata['per_page']);
         $metadata['page'] = $page;
-
-        // get count
-        if ($count == true) {
-            $query = $query->count('id');
-            $data['count'] = $query;
-        }
 
         // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'
         if ($per_page == 0 || $per_page == 'all') {
@@ -114,6 +124,7 @@ class InfoTempatController extends Controller
             return new ApiResource(false, 200, 'No data found', [], $metadata);
         }
     }
+
 
     public function show($id)
     {

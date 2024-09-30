@@ -18,11 +18,22 @@
 
         <!-- Filter Section -->
         <div class="card mb-4 p-4 shadow-sm">
-            <h5 class="mb-3" style="color: #017454;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-3" style="color: #017454;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                     fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" style="color: #017454;">
                     <path
                         d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
                 </svg> Filter</h5>
+                <button id="reset-filters" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+                        <path
+                            d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                    </svg>
+                </button>
+            </div>
+
             <div class="row g-4">
                 <div class="col-md-3">
                     <!-- Filter Kategori -->
@@ -33,7 +44,6 @@
                             <option value="{{ $category->id_category }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
-                    {{-- <small class="form-text text-muted">Pilih kategori artikel.</small> --}}
                 </div>
 
                 <div class="col-md-3">
@@ -48,7 +58,6 @@
                             <option value="{{ $year }}">{{ $year }}</option>
                         @endfor
                     </select>
-                    {{-- <small class="form-text text-muted">Filter berdasarkan tahun terbit.</small> --}}
                 </div>
 
                 <div class="col-md-3">
@@ -60,7 +69,6 @@
                             <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
                         @endfor
                     </select>
-                    {{-- <small class="form-text text-muted">Pilih bulan dalam tahun terpilih.</small> --}}
                 </div>
 
                 <div class="col-md-3">
@@ -72,7 +80,6 @@
                             <option value="{{ $author->id_user }}">{{ $author->name }}</option>
                         @endforeach
                     </select>
-                    {{-- <small class="form-text text-muted">Filter artikel berdasarkan penulis.</small> --}}
                 </div>
             </div>
         </div>
@@ -140,31 +147,30 @@
                     });
 
                     $.get('{{ url('/api/content') }}', {
-                                per_page: data.length,
-                                page: (data.start / data.length) + 1,
-                                sort: sort_col_name + ':' + sort_col_order,
-                                // search: data.search.value,
-                                type: 'berita', // Tipe konten berita
-                                category_id: category, // Kirim kategori yang dipilih
-                                month: month, // Kirim bulan yang dipilih
-                                year: year, // Kirim tahun yang dipilih
-                                author_id: author // Kirim penulis yang dipilih
-                            },
-                            function(json) {
-                                callback({
-                                    recordsTotal: json.metadata.total_data,
-                                    recordsFiltered: json.metadata.total_data,
-                                    data: json.data
-                                });
-                            })
-                        .fail(function() {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Terjadi kesalahan saat memuat data.",
-                                confirmButtonColor: '#3A57E8',
+                            per_page: data.length,
+                            page: (data.start / data.length) + 1,
+                            sort: sort_col_name + ':' + sort_col_order,
+                            type: 'berita', // Tipe konten berita
+                            category_id: category, // Kirim kategori yang dipilih
+                            month: month, // Kirim bulan yang dipilih
+                            year: year, // Kirim tahun yang dipilih
+                            author_id: author // Kirim penulis yang dipilih
+                        },
+                        function(json) {
+                            callback({
+                                recordsTotal: json.metadata.total_data,
+                                recordsFiltered: json.metadata.total_data,
+                                data: json.data
                             });
+                        })
+                    .fail(function() {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat memuat data.",
+                            confirmButtonColor: '#3A57E8',
                         });
+                    });
                 },
                 columns: [{
                         data: null, // Nomor urut
@@ -337,13 +343,35 @@
                     $('#filter-month').val('').prop('disabled', true); // Reset bulan saat tahun direset
                 }
             });
+
+            // Tombol reset untuk menghapus filter
+            $('#reset-filters').on('click', function() {
+                var level_name = '{{ $session_data['user_level_name'] }}';
+
+                // Reset semua filter, kecuali untuk kontributor (level_name = "Kontributor")
+                $('#filter-year').val(''); // Reset tahun
+                $('#filter-month').val('').prop('disabled', true); // Reset bulan dan nonaktifkan
+
+                if (level_name !== 'Kontributor') {
+                    $('#filter-author').val('');
+                }
+
+                $('#filter-category').val('');
+                table.ajax.reload(); // Reload data tabel setelah reset
+            });
+
+            // Jika user adalah kontributor, set filter penulis otomatis dan nonaktifkan
+            if ('{{ $session_data['user_level_name'] }}' === 'Kontributor') {
+                var author_id = '{{ $session_data['user_id'] }}';
+                $('#filter-author').val(author_id).trigger('change');
+                $('#filter-author').prop('disabled', true);
+            }
         });
 
         function removeData(id_content) {
             Swal.fire({
                 title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
-                showCancelButton: false,
                 confirmButtonText: "Yes",
                 denyButtonText: "No",
                 confirmButtonColor: '#1AA053',
@@ -357,9 +385,6 @@
                     $.ajax({
                         url: '{{ url('/api/content') }}/' + id_content + '?type=berita',
                         type: "DELETE",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        processData: false,
                         success: function(result) {
                             if (result.success) {
                                 Swal.fire({
