@@ -96,17 +96,94 @@
             }
         }
 
-        // Validate file upload
+        // Validasi file PDF yang diunggah
         function validateFile() {
-            const fileInput = $('#file').prop('files')[0];
-            if (!fileInput) {
+            const file = $('#file')[0].files[0];
+
+            if (file && file.type !== 'application/pdf') {
                 $('#invalid-file').show();
+                $('#file').val(''); // Kosongkan input file jika tidak valid
+
+                // Tampilkan pemberitahuan menggunakan Swal
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File tidak valid',
+                    text: 'File yang diunggah harus berupa PDF.',
+                    confirmButtonColor: '#3A57E8',
+                });
+
                 return false;
             } else {
                 $('#invalid-file').hide();
                 return true;
             }
         }
+
+        // Handle upload file PDF
+        $('#file').change(function() {
+            if (validateFile()) {
+                var formdata = new FormData();
+                var file = $('#file')[0].files[0];
+                formdata.append("file", file);
+
+                // Tampilkan loading
+                Swal.fire({
+                    title: 'Mengunggah...',
+                    html: 'Tunggu sebentar, file sedang diunggah',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Bearer {{ $session_token }}",
+                    }
+                });
+
+                $.ajax({
+                    url: '/api/upload', // Endpoint untuk mengunggah PDF
+                    type: "POST",
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        Swal.close(); // Tutup dialog loading
+                        if (result['success'] == true) {
+                            // Simpan path file ke dalam variabel hidden
+                            $('#file_path').val(result['data']['url']);
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil",
+                                text: "File PDF berhasil diunggah.",
+                                timer: 2000, // Notifikasi akan ditutup otomatis setelah 2 detik
+                                showConfirmButton: false, // Tidak menampilkan tombol OK
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Gagal mengunggah file.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.close(); // Tutup dialog loading
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat mengunggah file.",
+                            confirmButtonColor: '#3A57E8',
+                        });
+
+                        // Reset file input
+                        $('#file').val('');
+                    }
+                });
+            }
+        });
 
         // Validasi form sebelum disubmit
         function validateForm() {
@@ -115,7 +192,7 @@
             isValid = validateInput('event_date', 'invalid-event_date') && isValid;
             isValid = validateInput('organizer', 'invalid-organizer') && isValid;
             isValid = validateInput('content', 'invalid-content') && isValid;
-            isValid = validateFile('file_path', 'invalid-file') && isValid;
+            isValid = validateFile() && isValid;
             return isValid;
         }
 
@@ -192,63 +269,6 @@
                 ed.on('change', function(e) {
                     $('#content').val(ed.getContent());
                     validateInput('content', 'invalid-content'); // Hide error message if content is valid
-                });
-            }
-        });
-
-        // Handle file upload PDF
-        $('#file').on('change', function() {
-            var file = $(this).prop('files')[0];
-            if (file.type !== 'application/pdf') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "File yang diunggah bukan PDF. Silakan unggah file dalam format PDF.",
-                    confirmButtonColor: '#3A57E8',
-                });
-                // Hapus file dari input jika tidak valid
-                $(this).val('');
-                $('#invalid-file').show();
-            } else {
-                // Jika file valid, hapus pesan error dan lakukan unggah file
-                $('#invalid-file').hide();
-
-                // Unggah file ke server
-                var formdata = new FormData();
-                formdata.append("file", file);
-
-                $.ajaxSetup({
-                    headers: {
-                        'Authorization': "Bearer {{ $session_token }}"
-                    }
-                });
-                $.ajax({
-                    url: '/api/upload',
-                    type: "POST",
-                    data: formdata,
-                    processData: false,
-                    contentType: false,
-                    success: function(result) {
-                        if (result['success'] == true) {
-                            // Simpan URL file ke input hidden
-                            $('#file_path').val(result['data']['url']);
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Gagal mengunggah file.",
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Terjadi kesalahan saat mengunggah file.",
-                            confirmButtonColor: '#3A57E8',
-                        });
-                    }
                 });
             }
         });

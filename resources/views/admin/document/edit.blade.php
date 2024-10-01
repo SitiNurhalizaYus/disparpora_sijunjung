@@ -32,20 +32,20 @@
                             {{ method_field('PUT') }}
                             <div class="form-group">
                                 <label class="form-label" for="title">Judul Dokumen</label>
-                                <input class="form-control" type="text" id="title" name="title" value=""
+                                <input class="form-control" type="text" id="title" name="title" value="{{ $document->title }}"
                                     placeholder="Masukkan Judul Dokumen" required>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul dokumen harus diisi.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="category">Kategori</label>
-                                <input class="form-control" type="text" id="category" name="category" value=""
+                                <input class="form-control" type="text" id="category" name="category" value="{{ $document->category }}"
                                     placeholder="Masukkan Kategori" required>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-category">Kategori harus diisi.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="file">Unggah Dokumen (PDF)</label>
                                 <input class="form-control" type="file" id="file" name="file" accept="application/pdf">
-                                <input class="form-control" type="hidden" id="file_path" name="file_path" value="">
+                                <input class="form-control" type="hidden" id="file_path" name="file_path" value="{{ $document->file_path }}">
                                 <!-- Menampilkan nama file yang sudah ada -->
                                 @if ($document->file_path)
                                     <p>File saat ini: <a href="{{ asset($document->file_path) }}" target="_blank">{{ basename($document->file_path) }}</a></p>
@@ -54,12 +54,12 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="description">Catatan</label>
-                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3">{{ $document->description }}</textarea>
                             </div>
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                                 <div class="form-group">
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
+                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {{ $document->is_active ? 'checked' : '' }}>
                                         <label class="form-check-label" for="is_active">Status Aktif</label>
                                     </div>
                                 </div>
@@ -80,10 +80,22 @@
     </div>
 
     <script>
-        // Validate file upload
+        // Validasi file PDF yang diunggah
         function validateFile() {
-            if ($('#file_path').val() === '' && !$('#file').val()) {
+            const file = $('#file')[0].files[0];
+
+            if (file && file.type !== 'application/pdf') {
                 $('#invalid-file').show();
+                $('#file').val(''); // Kosongkan input file jika tidak valid
+
+                // Tampilkan pemberitahuan menggunakan Swal
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File tidak valid',
+                    text: 'File yang diunggah harus berupa PDF.',
+                    confirmButtonColor: '#3A57E8',
+                });
+
                 return false;
             } else {
                 $('#invalid-file').hide();
@@ -91,42 +103,47 @@
             }
         }
 
-        // Handle file upload
-        $('#file').on('change', function() {
-            var file = $(this).prop('files')[0];
-            if (file.type !== 'application/pdf') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "File yang diunggah bukan PDF. Silakan unggah file dalam format PDF.",
-                    confirmButtonColor: '#3A57E8',
-                });
-                // Hapus file dari input jika tidak valid
-                $(this).val('');
-                $('#invalid-file').show();
-            } else {
-                // Jika file valid, hapus pesan error dan lakukan unggah file
-                $('#invalid-file').hide();
-
-                // Unggah file ke server
+        // Handle upload file PDF
+        $('#file').change(function() {
+            if (validateFile()) {
                 var formdata = new FormData();
+                var file = $('#file')[0].files[0];
                 formdata.append("file", file);
+
+                // Tampilkan loading
+                Swal.fire({
+                    title: 'Mengunggah...',
+                    html: 'Tunggu sebentar, file sedang diunggah',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
 
                 $.ajaxSetup({
                     headers: {
-                        'Authorization': "Bearer {{ $session_token }}"
+                        'Authorization': "Bearer {{ $session_token }}",
                     }
                 });
+
                 $.ajax({
-                    url: '/api/upload',
+                    url: '/api/upload', // Endpoint untuk mengunggah PDF
                     type: "POST",
                     data: formdata,
                     processData: false,
                     contentType: false,
                     success: function(result) {
+                        Swal.close(); // Tutup dialog loading
                         if (result['success'] == true) {
-                            // Simpan URL file ke input hidden
+                            // Simpan path file ke dalam variabel hidden
                             $('#file_path').val(result['data']['url']);
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil",
+                                text: "File PDF berhasil diunggah.",
+                                timer: 2000, // Notifikasi akan ditutup otomatis setelah 2 detik
+                                showConfirmButton: false, // Tidak menampilkan tombol OK
+                            });
                         } else {
                             Swal.fire({
                                 icon: "error",
@@ -136,70 +153,24 @@
                             });
                         }
                     },
-                    error: function() {
+                    error: function(xhr) {
+                        Swal.close(); // Tutup dialog loading
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
                             text: "Terjadi kesalahan saat mengunggah file.",
                             confirmButtonColor: '#3A57E8',
                         });
+
+                        // Reset file input
+                        $('#file').val('');
                     }
                 });
             }
         });
 
-        // Ambil data agenda menggunakan AJAX
-        $.ajax({
-                url: '/api/document/{{ $id }}',
-                type: "GET",
-                dataType: "json",
-                success: function(result) {
-                    if (result['success']) {
-                        // Isi data form dengan data yang diterima dari API
-                        $('#title').val(result['data']['title']);
-                        $('#category').val(result['data']['category']);
-                        $('#description').val(result['data']['description']);
-                        $('#file_path').val(result['data']['file_path']);
-
-                        // Tampilkan preview file jika file_path tersedia
-                        if (result['data']['file_path']) {
-                            const fileType = result['data']['file_path'].split('.').pop().toLowerCase();
-                            let fileUrl = `{{ url('/') }}/uploads/${result['data']['file_path']}`;
-
-                            if (fileType === 'pdf') {
-                                $('#file-preview').html(
-                                    `<a href="${fileUrl}" target="_blank">Lihat PDF</a>`);
-                            } else if (['jpg', 'jpeg', 'png'].includes(fileType)) {
-                                $('#file-preview').html(
-                                    `<img src="${fileUrl}" alt="Image Preview" class="img-fluid rounded" style="max-width: 200px;">`
-                                    );
-                            }
-                        }
-
-                        $('#is_active').prop('checked', result['data']['is_active']);
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: result['message'],
-                            confirmButtonColor: '#3A57E8',
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Gagal mengambil data agenda.",
-                        confirmButtonColor: '#3A57E8',
-                    });
-                }
-            });
-
-        
-            // Validate the entire form before submission
-        
-            function validateForm() {
+        // Validasi seluruh form sebelum dikirim
+        function validateForm() {
             let isValid = true;
             isValid = validateInput('title', 'invalid-title') && isValid;
             isValid = validateInput('category', 'invalid-category') && isValid;
@@ -207,7 +178,7 @@
             return isValid;
         }
 
-        // handle form submission
+        // Handle submit form
         $("#form-data").submit(function(event) {
             event.preventDefault();
 
@@ -260,7 +231,6 @@
                     confirmButtonColor: '#3A57E8',
                 });
             }
-            return false;
         });
 
         // Helper for input validation
