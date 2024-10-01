@@ -12,7 +12,7 @@ class Category extends Model
 
     protected $primaryKey = 'id_category';
 
-    protected $fillable = ['name', 'slug','notes','is_active'];
+    protected $fillable = ['name', 'slug','note','is_active'];
 
     // Relasi dengan model Content
     public function contents()

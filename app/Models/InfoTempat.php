@@ -20,6 +20,7 @@ class InfoTempat extends Model
         'image',
         'link',
         'is_active',
+        'note',
         'created_by',
         'updated_by'
     ];

@@ -19,6 +19,7 @@ class Content extends Model
         'type',
         'category_id',
         'is_active',
+        'note',
         'created_by',
         'updated_by'
     ];
