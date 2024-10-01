@@ -168,10 +168,10 @@
                         <div class="nav-item dropdown me-3">
                             <a href="{{ route('client.lokawisata.index') }}" class="nav-link">Lokawisata</a>
                         </div>
-                        <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
+                        {{-- <button type="button" class="btn text-secondary ms-3" data-bs-toggle="modal"
                             data-bs-target="#searchModal">
                             <i class="fa fa-search"></i>
-                        </button>
+                        </button> --}}
                         <a href="{{ route('client.message.index') }}" class="btn btn-primary py-2 px-4 ms-3">Hubungi
                             Kami</a>
                     </div>

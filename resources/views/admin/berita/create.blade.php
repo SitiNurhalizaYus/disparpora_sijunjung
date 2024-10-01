@@ -37,10 +37,13 @@
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul
                                     harus diisi dan tidak boleh ada simbol.</p>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label" for="slug">Slug</label>
+                             <!-- Slug Field (Auto-filled) -->
+                             <div class="form-group">
+                                <label class="form-label" for="slug">Slug </label>
                                 <input class="form-control" type="text" id="slug" name="slug"
-                                    placeholder="Otomatis terisi" required pattern="[A-Za-z0-9\-]+$">
+                                    placeholder="Slug terisi otomatis" required>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-slug">Slug
+                                    harus diisi.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="description_short">Deskripsi Singkat</label>
@@ -204,18 +207,10 @@
             validateKategori(); // Call the validation function when a category is selected
         });
 
-        // Validate file upload
-        function validateFile() {
-            const fileInput = $('#file').prop('files')[0];
-            if (!fileInput) {
-                $('#invalid-file').show();
-                return false;
-            } else {
-                $('#invalid-file').hide();
-                return true;
-            }
+         // Validate file upload
+         function validateFile() {
+            return validateInput('file', 'invalid-file', $('#file').prop('files').length > 0);
         }
-
         // Attach real-time validation to inputs
         $('#title').on('input', function() {
             validateTitle();
@@ -242,7 +237,9 @@
             }
         });
 
-        //handle upload
+        
+        // Handle file upload
+        let uploadedFilePath = ''; // Variable untuk menyimpan path file sementara
         $('#file').on('change', function() {
             var file = $(this).prop('files')[0];
             if (!file || !file.type.match('image.*')) {
@@ -254,6 +251,7 @@
                 });
                 $(this).val('');
                 $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                $('#image').val('noimage.jpg');
                 $('#invalid-file').show();
             } else {
                 $('#invalid-file').hide();
@@ -267,20 +265,39 @@
                 var formdata = new FormData();
                 formdata.append("file", file);
 
-                $.ajaxSetup({
-                    headers: {
-                        'Authorization': "Bearer {{ $session_token }}"
+                // Tampilkan loading
+                Swal.fire({
+                    title: 'Mengunggah...',
+                    html: 'Tunggu sebentar, gambar sedang diunggah',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
                     }
                 });
+
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Bearer {{ $session_token }}",
+                    }
+                });
+
                 $.ajax({
-                    url: '/api/upload',
+                    url: '/api/upload', // Endpoint untuk mengunggah gambar
                     type: "POST",
                     data: formdata,
                     processData: false,
                     contentType: false,
                     success: function(result) {
+                        Swal.close(); // Tutup dialog loading
                         if (result['success'] == true) {
-                            $('#image').val(result['data']['url'].replace('/xxx/', '/500/'));
+                            // Simpan path file sementara ke dalam variabel
+                            uploadedFilePath = result['data']['url'].replace('/xxx/', '/500/');
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil",
+                                text: "Gambar berhasil diunggah. Tekan tombol Simpan untuk menyimpan semua data.",
+                                confirmButtonColor: '#3A57E8',
+                            });
                         } else {
                             Swal.fire({
                                 icon: "error",
@@ -290,13 +307,34 @@
                             });
                         }
                     },
-                    error: function() {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Terjadi kesalahan saat mengunggah gambar.",
-                            confirmButtonColor: '#3A57E8',
-                        });
+                    error: function(xhr) {
+                        Swal.close(); // Tutup dialog loading
+
+                        if (xhr.responseJSON && xhr.responseJSON.message.includes('Duplicate entry')) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Gagal Mengunggah",
+                                text: "Nama file gambar sudah ada. Ganti nama file atau unggah file yang berbeda.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+
+                            // Reset file input and image preview
+                            $('#file').val('');
+                            $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                            $('#image').val('noimage.jpg');
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Terjadi kesalahan saat mengunggah gambar.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+
+                            // Reset file input and image preview
+                            $('#file').val('');
+                            $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                            $('#image').val('noimage.jpg');
+                        }
                     }
                 });
             }
@@ -322,6 +360,14 @@
 
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+
+                // Sertakan path gambar yang telah diunggah
+                if (uploadedFilePath !== '') {
+                    form.set('image', uploadedFilePath);
+                } else {
+                    form.set('image', 'noimage.jpg'); // Atur gambar default jika tidak ada
+                }
+
 
                 // Debugging: Tampilkan semua data form ke console
                 for (var pair of form.entries()) {

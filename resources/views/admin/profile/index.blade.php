@@ -17,7 +17,7 @@
                         <form method="POST" id="form-data" name="form-data" enctype="multipart/form-data" novalidate>
                             {{ csrf_field() }}
                             {{ method_field('PUT') }}
-
+                            {{-- @if ($session_data['user_level_id'] == 1)
                             <div class="form-group">
                                 <label class="form-label" for="level_id">Peran</label>
                                 <select class="form-select" id="level_id" name="level_id" required>
@@ -28,6 +28,7 @@
                                 </select>
                                 <p class="text-danger" id="error-level_id" style="display: none;">Level ID is required.</p>
                             </div>
+                            @endif --}}
 
                             <div class="form-group">
                                 <label class="form-label" for="username">Username</label>

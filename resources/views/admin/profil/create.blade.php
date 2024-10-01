@@ -282,7 +282,7 @@
             return isValid;
         }
 
-        //handle post
+        //handle submit
         $("#form-data").submit(function(event) {
             event.preventDefault();
 
@@ -291,6 +291,13 @@
 
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+
+                // Sertakan path gambar yang telah diunggah
+                if (uploadedFilePath !== '') {
+                    form.set('image', uploadedFilePath);
+                } else {
+                    form.set('image', 'noimage.jpg'); // Atur gambar default jika tidak ada
+                }
 
                 // Debugging: Tampilkan semua data form ke console
                 for (var pair of form.entries()) {

@@ -257,7 +257,6 @@
         }
 
         //handle upload
-        //handle upload
         $('#file').change(function() {
             if (validateFile()) {
                 // Preview image
