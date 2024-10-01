@@ -114,8 +114,36 @@
                                         <label class="form-check-label" for="is_active">Status Aktif</label>
                                     </div>
                                 </div>
+                            
+                            <!-- Keterangan Status (opsi muncul jika tidak aktif) -->
+                            <div class="form-group" id="note-section" style="display: none;">
+                                <label class="form-label" for="note-inactive">Keterangan</label>
+                                <select class="form-control" id="note-inactive" name="note"> <!-- Ganti name menjadi note -->
+                                    <option value="">Pilih Keterangan</option>
+                                    <option value="Draft">Draft</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                    <option value="Lakukan Perbaikan">Lakukan Perbaikan</option>
+                                </select>
+                            </div>
+
+                            <!-- Keterangan Status Aktif (opsi muncul jika aktif) -->
+                            <div class="form-group" id="active-note-section" style="display: none;">
+                                <label class="form-label" for="note-active">Keterangan</label>
+                                <select class="form-control" id="note-active" name="note"> <!-- Ganti name menjadi note -->
+                                    <option value="">Pilih Keterangan</option>
+                                    <option value="Diposting/Disetujui">Diposting/Disetujui</option>
+                                    <option value="Diposting/Disetujui Dengan Perubahan">Diposting/Disetujui Dengan Perubahan</option>
+                                </select>
+                            </div>
                             @endif
+
                             @if ($session_data['user_level_id'] == 3)
+                                <div class="form-group">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft">
+                                        <label class="form-check-label" for="is_draft">Draft</label>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="is_active" value="0">
                             @endif
 
@@ -132,56 +160,6 @@
     </div>
 
     <script>
-        $(document).ready(function() {
-            // Ambil data beritas menggunakan AJAX
-            $.ajaxSetup({
-                headers: {
-                    'Authorization': "Bearer {{ $session_token }}"
-                }
-            });
-            // Ambil data lokawisata menggunakan AJAX
-            $.ajax({
-                url: '/api/lokawisata/{{ $id }}',
-                type: "GET",
-                dataType: "json",
-                success: function(result) {
-                    if (result['success']) {
-                        // Isi data form dengan data yang diterima dari API
-                        $('#name').val(result['data']['name']);
-                        $('#slug').val(result['data']['slug']);
-                        $('#link').val(result['data']['link']);
-                        $('#facilities').val(result['data']['facilities']);
-                        $('#operating_hours').val(result['data']['operating_hours']);
-                        $('#ticket_price').val(result['data']['ticket_price']);
-                        $('#description_long').val(result['data']['description']);
-                        $('#description').val(result['data']['description']);
-                        $('#image').val(result['data']['image']);
-                        $("#image-preview").attr("src", "{{ url('/') }}/" + result['data'][
-                            'image'
-                        ].replace(
-                            '/xxx/', '/300/'));
-
-                        $('#is_active').prop('checked', result['data']['is_active']);
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: result['message'],
-                            confirmButtonColor: '#3A57E8',
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Gagal mengambil data Lokawisata.",
-                        confirmButtonColor: '#3A57E8',
-                    });
-                }
-            });
-        });
-
         // Handle validation display
         function validateInput(inputId, errorId, condition = true) {
             const input = $(`#${inputId}`);
@@ -363,27 +341,119 @@
             return isValid;
         }
 
-        // Handle form submission
-        $("#form-data").submit(function(event) {
-            event.preventDefault();
+        $(document).ready(function() {
+            // Ambil data lokawisata menggunakan AJAX
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': "Bearer {{ $session_token }}"
+                }
+            });
 
-            if (validateForm()) {
+            $.ajax({
+                url: '/api/lokawisata/{{ $id }}',
+                type: "GET",
+                dataType: "json",
+                success: function(result) {
+                    if (result['success']) {
+                        // Isi data form dengan data yang diterima dari API
+                        $('#name').val(result['data']['name']);
+                        $('#slug').val(result['data']['slug']);
+                        $('#link').val(result['data']['link']);
+                        $('#facilities').val(result['data']['facilities']);
+                        $('#operating_hours').val(result['data']['operating_hours']);
+                        $('#ticket_price').val(result['data']['ticket_price']);
+                        $('#description_long').val(result['data']['description']);
+                        $('#description').val(result['data']['description']);
+                        $('#image').val(result['data']['image']);
+                        $("#image-preview").attr("src", "{{ url('/') }}/" + result['data'][
+                            'image'
+                        ].replace(
+                            '/xxx/', '/300/'));
+
+                        $('#is_active').prop('checked', result['data']['is_active']);
+                        
+                        // Set note berdasarkan status aktif
+                        if (result['data']['is_active']) {
+                            $('#note-active').val(result['data']['note']);
+                            $('#active-note-section').show();
+                            $('#note-section').hide();
+                        } else {
+                            $('#note-inactive').val(result['data']['note']);
+                            $('#note-section').show();
+                            $('#active-note-section').hide();
+                        }
+
+                        // Jika kontributor, atur is_draft
+                        if (result['data']['note'] === 'Draft') {
+                            $('#is_draft').prop('checked', true);
+                        } else {
+                            $('#is_draft').prop('checked', false);
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: result['message'],
+                            confirmButtonColor: '#3A57E8',
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Gagal mengambil data Lokawisata.",
+                        confirmButtonColor: '#3A57E8',
+                    });
+                }
+            });
+
+            // Toggle visibility of note fields based on is_active checkbox
+            $('#is_active').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#note-section').hide();
+                    $('#active-note-section').show();
+                } else {
+                    $('#note-section').show();
+                    $('#active-note-section').hide();
+                }
+            });
+
+            // Handle form submission
+            $("#form-data").submit(function(event) {
+                event.preventDefault();
+                
                 var form = new FormData(document.getElementById("form-data"));
-
+                
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+                
+                // Set note sesuai dengan pilihan yang dibuat
+                if ($('#is_active').is(":checked")) {
+                    form.set('note', $('#note-active').val());
+                } else {
+                    form.set('note', $('#note-inactive').val());
+                }
 
-                form.set('name', $('#name').val());
-                form.set('slug', $('#slug').val());
+                // Khusus untuk kontributor
+                @if ($session_data['user_level_id'] == 3)
+                    if ($('#is_draft').is(":checked")) {
+                        form.set('note', 'Draft');
+                    } else {
+                        form.set('note', 'Menunggu Persetujuan');
+                    }
+                @endif
+
+
 
                 $.ajax({
                     url: '/api/lokawisata/{{ $id }}',
-                    type: "POST", // Menggunakan POST dengan _method PUT
+                    type: "POST",
                     data: form,
-                    contentType: false, // Supaya FormData bisa bekerja dengan benar
-                    processData: false, // Supaya FormData bisa bekerja dengan benar
+                    contentType: false,
+                    processData: false,
                     success: function(result) {
-                        if (result['success'] == true) {
+                        if (result['success']) {
                             Swal.fire({
                                 icon: "success",
                                 title: "Success",
@@ -402,38 +472,15 @@
                         }
                     },
                     error: function(xhr) {
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            let errorMessage = '';
-                            Object.keys(errors).forEach(function(key) {
-                                errorMessage += errors[key][0] + '\n';
-                            });
-                            Swal.fire({
-                                icon: "error",
-                                title: "Validasi Gagal",
-                                text: errorMessage,
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Terjadi kesalahan saat menyimpan data.",
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat menyimpan data.",
+                            confirmButtonColor: '#3A57E8',
+                        });
                     }
                 });
-            } else {
-                // Jika validasi gagal, tampilkan pesan kesalahan dan jangan kirim form
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Anda harus melengkapi seluruh form dengan benar.",
-                    confirmButtonColor: '#3A57E8',
-                });
-            }
-            return false; // Menghentikan submit jika validasi gagal
+            });
         });
     </script>
 @endsection

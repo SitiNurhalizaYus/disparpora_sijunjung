@@ -37,8 +37,8 @@
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul
                                     harus diisi dan tidak boleh ada simbol.</p>
                             </div>
-                             <!-- Slug Field (Auto-filled) -->
-                             <div class="form-group">
+                            <!-- Slug Field (Auto-filled) -->
+                            <div class="form-group">
                                 <label class="form-label" for="slug">Slug </label>
                                 <input class="form-control" type="text" id="slug" name="slug"
                                     placeholder="Slug terisi otomatis" required>
@@ -82,7 +82,9 @@
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">
                                     Silakan unggah gambar.</p>
                             </div>
+
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
+                                <!-- Admin/Editor Status Aktif -->
                                 <div class="form-group">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
@@ -91,8 +93,17 @@
                                 </div>
                             @endif
                             @if ($session_data['user_level_id'] == 3)
+                                <!-- Kontributor Status Draft -->
+                                <div class="form-group">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft">
+                                        <label class="form-check-label" for="is_draft">Draft</label>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="is_active" value="0">
                             @endif
+
+
                             <br><br>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <a href="{{ URL::previous() }}" class="btn btn-danger" id="cancel-button">Batal</a>
@@ -207,8 +218,8 @@
             validateKategori(); // Call the validation function when a category is selected
         });
 
-         // Validate file upload
-         function validateFile() {
+        // Validate file upload
+        function validateFile() {
             return validateInput('file', 'invalid-file', $('#file').prop('files').length > 0);
         }
         // Attach real-time validation to inputs
@@ -237,7 +248,7 @@
             }
         });
 
-        
+
         // Handle file upload
         let uploadedFilePath = ''; // Variable untuk menyimpan path file sementara
         $('#file').on('change', function() {
@@ -360,6 +371,23 @@
 
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+
+                // Kondisi untuk kontributor
+                @if ($session_data['user_level_id'] == 3)
+                    if ($('#is_draft').is(":checked")) {
+                        form.set('note', 'Draft'); // Set note as Draft if checked
+                    } else {
+                        form.set('note', 'Menunggu Persetujuan'); // Set note as Menunggu Persetujuan
+                    }
+                @else
+                    // Kondisi untuk admin/editor
+                    form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+                    if ($('#is_active').is(":checked")) {
+                        form.set('note', 'Diposting/Disetujui');
+                    } else {
+                        form.set('note', 'Draft');
+                    }
+                @endif
 
                 // Sertakan path gambar yang telah diunggah
                 if (uploadedFilePath !== '') {

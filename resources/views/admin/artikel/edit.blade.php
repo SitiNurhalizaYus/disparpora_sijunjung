@@ -33,17 +33,15 @@
                             <input type="hidden" name="type" value="artikel">
                             <div class="form-group">
                                 <label class="form-label" for="title">Judul Artikel</label>
-                                <input class="form-control" type="text" id="title" name="title"
-                                    value="" placeholder="Masukkan Judul Artikel" required
-                                    pattern="[A-Za-z0-9\s]+$">
+                                <input class="form-control" type="text" id="title" name="title" value=""
+                                    placeholder="Masukkan Judul Artikel" required pattern="[A-Za-z0-9\s]+$">
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-title">Judul
                                     harus diisi dan tidak boleh ada simbol.</p>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="slug">Slug</label>
-                                <input class="form-control" type="text" id="slug" name="slug"
-                                    value="" placeholder="Otomatis terisi" required
-                                    pattern="[A-Za-z0-9\-]+$">
+                                <input class="form-control" type="text" id="slug" name="slug" value=""
+                                    placeholder="Otomatis terisi" required pattern="[A-Za-z0-9\-]+$">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="description_short">Deskripsi Singkat</label>
@@ -73,7 +71,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
-                                <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/jpg">
+                                <input class="form-control" type="file" id="file" name="file"
+                                    accept="image/jpeg,image/png,image/jpg">
                                 <input class="form-control" type="hidden" id="image" name="image"
                                     value="{{ old('image', $content->image) }}">
                                 <br>
@@ -84,6 +83,8 @@
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-file">
                                     Silakan unggah gambar.</p>
                             </div>
+
+                            <!-- Status Aktif -->
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                                 <div class="form-group">
                                     <div class="form-check form-switch">
@@ -91,10 +92,40 @@
                                         <label class="form-check-label" for="is_active">Status Aktif</label>
                                     </div>
                                 </div>
+                            
+                            <!-- Keterangan Status (opsi muncul jika tidak aktif) -->
+                            <div class="form-group" id="note-section" style="display: none;">
+                                <label class="form-label" for="note-inactive">Keterangan</label>
+                                <select class="form-control" id="note-inactive" name="note"> <!-- Ganti name menjadi note -->
+                                    <option value="">Pilih Keterangan</option>
+                                    <option value="Draft">Draft</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                    <option value="Lakukan Perbaikan">Lakukan Perbaikan</option>
+                                </select>
+                            </div>
+
+                            <!-- Keterangan Status Aktif (opsi muncul jika aktif) -->
+                            <div class="form-group" id="active-note-section" style="display: none;">
+                                <label class="form-label" for="note-active">Keterangan</label>
+                                <select class="form-control" id="note-active" name="note"> <!-- Ganti name menjadi note -->
+                                    <option value="">Pilih Keterangan</option>
+                                    <option value="Diposting/Disetujui">Diposting/Disetujui</option>
+                                    <option value="Diposting/Disetujui Dengan Perubahan">Diposting/Disetujui Dengan Perubahan</option>
+                                </select>
+                            </div>
                             @endif
+
                             @if ($session_data['user_level_id'] == 3)
+                                <div class="form-group">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft">
+                                        <label class="form-check-label" for="is_draft">Draft</label>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="is_active" value="0">
                             @endif
+
+
                             <br><br>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <a href="{{ URL::previous() }}" class="btn btn-danger">Batal</a>
@@ -108,51 +139,6 @@
     </div>
 
     <script>
-        $(document).ready(function() {
-            // Ambil data artikels menggunakan AJAX
-            $.ajaxSetup({
-                headers: {
-                    'Authorization': "Bearer {{ $session_token }}"
-                }
-            });
-
-            $.ajax({
-                url: '/api/content/{{ $content->id_content }}', // URL untuk mengambil data artikels
-                type: "GET",
-                dataType: "json",
-                success: function(result) {
-                    if (result['success']) {
-                        // Isi data form dengan data yang diterima dari API
-                        $('#title').val(result['data']['title']);
-                        $('#slug').val(result['data']['slug']);
-                        $('#description_short').val(result['data']['description_short']);
-                        $('#description_long').val(result['data']['content']);
-                        $('#content').val(result['data']['content']);
-                        $('#image').val(result['data']['image']);
-                        $('#image-preview').attr('src', "{{ url('/') }}/" + result['data'][
-                            'image'
-                        ]);
-                        $('#is_active').prop('checked', result['data']['is_active']);
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: result['message'],
-                            confirmButtonColor: '#3A57E8',
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Gagal mengambil data artikels.",
-                        confirmButtonColor: '#3A57E8',
-                    });
-                }
-            });
-        });
-
         // Fungsi validasi
         function validateTitle() {
             const titleInput = $('#title');
@@ -339,28 +325,113 @@
             return isValid;
         }
 
-        // Handle form submission
-        $("#form-data").submit(function(event) {
-            event.preventDefault();
+        $(document).ready(function() {
+            // Ambil data artikel menggunakan AJAX
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': "Bearer {{ $session_token }}"
+                }
+            });
 
-            if (validateForm()) {
+            $.ajax({
+                url: '/api/content/{{ $content->id_content }}',
+                type: "GET",
+                dataType: "json",
+                success: function(result) {
+                    if (result['success']) {
+                        $('#title').val(result['data']['title']);
+                        $('#slug').val(result['data']['slug']);
+                        $('#description_short').val(result['data']['description_short']);
+                        $('#description_long').val(result['data']['content']);
+                        $('#content').val(result['data']['content']);
+                        $('#image').val(result['data']['image']);
+                        $('#image-preview').attr('src', "{{ url('/') }}/" + result['data'][
+                            'image'
+                        ]);
+                        $('#is_active').prop('checked', result['data']['is_active']);
+                        
+                        // Set note berdasarkan status aktif
+                        if (result['data']['is_active']) {
+                            $('#note-active').val(result['data']['note']);
+                            $('#active-note-section').show();
+                            $('#note-section').hide();
+                        } else {
+                            $('#note-inactive').val(result['data']['note']);
+                            $('#note-section').show();
+                            $('#active-note-section').hide();
+                        }
+
+                        // Jika kontributor, atur is_draft
+                        if (result['data']['note'] === 'Draft') {
+                            $('#is_draft').prop('checked', true);
+                        } else {
+                            $('#is_draft').prop('checked', false);
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: result['message'],
+                            confirmButtonColor: '#3A57E8',
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Gagal mengambil data artikel.",
+                        confirmButtonColor: '#3A57E8',
+                    });
+                }
+            });
+
+            // Toggle visibility of note fields based on is_active checkbox
+            $('#is_active').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#note-section').hide();
+                    $('#active-note-section').show();
+                } else {
+                    $('#note-section').show();
+                    $('#active-note-section').hide();
+                }
+            });
+
+            // Handle form submission
+            $("#form-data").submit(function(event) {
+                event.preventDefault();
+                
                 var form = new FormData(document.getElementById("form-data"));
-
+                
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+                
+                // Set note sesuai dengan pilihan yang dibuat
+                if ($('#is_active').is(":checked")) {
+                    form.set('note', $('#note-active').val());
+                } else {
+                    form.set('note', $('#note-inactive').val());
+                }
 
-                // Pastikan title dan slug terkirim dengan benar
-                form.set('title', $('#title').val());
-                form.set('slug', $('#slug').val());
+                // Khusus untuk kontributor
+                @if ($session_data['user_level_id'] == 3)
+                    if ($('#is_draft').is(":checked")) {
+                        form.set('note', 'Draft');
+                    } else {
+                        form.set('note', 'Menunggu Persetujuan');
+                    }
+                @endif
+
+
 
                 $.ajax({
                     url: '/api/content/{{ $content->id_content }}',
-                    type: "POST", // Menggunakan POST dengan _method PUT
+                    type: "POST",
                     data: form,
-                    contentType: false, // Supaya FormData bisa bekerja dengan benar
-                    processData: false, // Supaya FormData bisa bekerja dengan benar
+                    contentType: false,
+                    processData: false,
                     success: function(result) {
-                        if (result['success'] == true) {
+                        if (result['success']) {
                             Swal.fire({
                                 icon: "success",
                                 title: "Success",
@@ -379,38 +450,15 @@
                         }
                     },
                     error: function(xhr) {
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            let errorMessage = '';
-                            Object.keys(errors).forEach(function(key) {
-                                errorMessage += errors[key][0] + '\n';
-                            });
-                            Swal.fire({
-                                icon: "error",
-                                title: "Validasi Gagal",
-                                text: errorMessage,
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Terjadi kesalahan saat menyimpan data.",
-                                confirmButtonColor: '#3A57E8',
-                            });
-                        }
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat menyimpan data.",
+                            confirmButtonColor: '#3A57E8',
+                        });
                     }
                 });
-            } else {
-                // Jika validasi gagal, tampilkan pesan kesalahan dan jangan kirim form
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Anda harus melengkapi seluruh form dengan benar.",
-                    confirmButtonColor: '#3A57E8',
-                });
-            }
-            return false; // Menghentikan submit jika validasi gagal
+            });
         });
     </script>
 @endsection

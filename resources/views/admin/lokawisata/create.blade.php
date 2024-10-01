@@ -108,6 +108,7 @@
                             </div>
 
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
+                                <!-- Admin/Editor Status Aktif -->
                                 <div class="form-group">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
@@ -116,6 +117,13 @@
                                 </div>
                             @endif
                             @if ($session_data['user_level_id'] == 3)
+                                <!-- Kontributor Status Draft -->
+                                <div class="form-group">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft">
+                                        <label class="form-check-label" for="is_draft">Draft</label>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="is_active" value="0">
                             @endif
 
@@ -198,6 +206,10 @@
         $('#operating_hours').on('input', validateOperatingHours);
         $('#ticket_price').on('input', validateTicketPrice);
         $('#file').on('change', validateFile);
+
+        $('#description_short').on('input', function() {
+            validateInput('description_short', 'invalid-description_short');
+        });
 
         // Handle wysiwyg
         tinymce.init({
@@ -326,6 +338,7 @@
             }
         });
 
+
         // Handle form submission
         $("#form-data").submit(function(event) {
             event.preventDefault();
@@ -337,6 +350,23 @@
             // Validasi seluruh form sebelum mengirim data
             if (validateForm()) {
                 var form = new FormData(document.getElementById("form-data"));
+
+                // Kondisi untuk kontributor
+                @if ($session_data['user_level_id'] == 3)
+                    if ($('#is_draft').is(":checked")) {
+                        form.set('note', 'Draft'); // Set note as Draft if checked
+                    } else {
+                        form.set('note', 'Menunggu Persetujuan'); // Set note as Menunggu Persetujuan
+                    }
+                @else
+                    // Kondisi untuk admin/editor
+                    form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+                    if ($('#is_active').is(":checked")) {
+                        form.set('note', 'Diposting/Disetujui');
+                    } else {
+                        form.set('note', 'Draft');
+                    }
+                @endif
 
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);

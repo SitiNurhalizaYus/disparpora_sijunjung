@@ -60,7 +60,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-3" @if ($session_data['user_level_name'] === 'Kontributor') style="display: none;" @endif>
                     <!-- Filter Penulis -->
                     <label for="filter-author" class="form-label">Penulis</label>
                     <select id="filter-author" class="form-select">
@@ -88,6 +88,7 @@
                                         <th class="text-center">Dibuat</th>
                                         <th class="text-center">Penulis</th>
                                         <th class="text-center">Status</th>
+                                        <th class="text-center">Keterangan</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -234,7 +235,6 @@
                             return data ? data : '<span>Unknown</span>';
                         }
                     },
-
                     {
                         data: 'is_active',
                         render: function(data, type, row, meta) {
@@ -242,6 +242,27 @@
                                 return '<span class="badge bg-success">Aktif</span>';
                             } else {
                                 return '<span class="badge bg-danger">Tidak Aktif</span>';
+                            }
+                        }
+                    },
+                    {
+                        data: 'note',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === 'Draft') {
+                                return '<span class="badge bg-gray">Draft</span>';
+                            } else if (data === 'Menunggu Persetujuan') {
+                                return '<span class="badge bg-info">Menunggu Persetujuan</span>';
+                            } else if (data === 'Ditolak') {
+                                return '<span class="badge bg-danger">Ditolak</span>'; 
+                            } else if (data === 'Lakukan Perbaikan') {
+                                return '<span class="badge bg-warning">Lakukan Perbaikan</span>';
+                            } else if (data === 'Diposting/Disetujui') {
+                                return '<span class="badge bg-success">Diposting/Disetujui</span>';
+                            } else if (data === 'Diposting/Disetujui Dengan Perubahan') {
+                                return '<span class="badge bg-success">Diposting/Disetujui<br>Dengan Perubahan</span>';
+                            } else {
+                                return '<span class="badge bg-light">Belum ada keterangan</span>';
                             }
                         }
                     },
@@ -352,6 +373,10 @@
                     },
                     {
                         targets: [6],
+                        width: "10%"
+                    },
+                    {
+                        targets: [7],
                         width: "10%",
                         orderable: false
                     }
