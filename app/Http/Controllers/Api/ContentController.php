@@ -40,6 +40,11 @@ class ContentController extends Controller
         // Membuat query dasar untuk tabel Content dengan relasi category dan penulis
         $query = Content::with(['category', 'createdBy', 'updatedBy']);
 
+        // Jika pengguna tidak terautentikasi, hanya menampilkan konten yang aktif
+        if (!auth()->guard('api')->user()) {
+            $query->where('is_active', 1);
+        }
+
         // Filter berdasarkan tipe konten (berita, artikel, profil, dll.)
         if ($type) {
             $query->where('type', $type);
