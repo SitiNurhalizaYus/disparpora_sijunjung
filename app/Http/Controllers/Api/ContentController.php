@@ -21,7 +21,7 @@ class ContentController extends Controller
     {
         // Ambil parameter dari request
         $count = $request->get('count', false);
-        $sort = $request->get('sort', 'id_content:asc');
+        $sort = $request->get('sort', 'id_content:desc');
         $search = $request->get('search', '');
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));

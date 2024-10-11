@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('operating_hours')->nullable();
             $table->string('ticket_price')->nullable();
             $table->string('image')->nullable();
+            $table->string('vr')->nullable();
             $table->string('link')->nullable();
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(0);

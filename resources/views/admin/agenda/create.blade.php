@@ -47,7 +47,7 @@
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-organizer">Penyelenggara harus diisi.</p>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="content">Konten Agenda</label>
+                                <label class="form-label" for="content">Deskripsi Agenda</label>
                                 <textarea class="form-control" id="content" name="content" rows="4"
                                     placeholder="Masukkan Konten Agenda" required></textarea>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-content">Konten harus diisi.</p>
@@ -201,8 +201,8 @@
             event.preventDefault();
 
             // Ambil nilai dari TinyMCE dan set ke input content
-            var contentValue = tinymce.get('content').getContent();
-            $('#content').val(contentValue);
+            // var contentValue = tinymce.get('content').getContent();
+            // $('#content').val(contentValue);
 
             if (validateForm()) {
                 var form = new FormData(document.getElementById("form-data"));
@@ -259,19 +259,19 @@
             return false;
         });
 
-        // Handle TinyMCE initialization
-        tinymce.init({
-            selector: 'textarea#content',
-            plugins: 'code table lists',
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
-            promotion: false,
-            setup: function(ed) {
-                ed.on('change', function(e) {
-                    $('#content').val(ed.getContent());
-                    validateInput('content', 'invalid-content'); // Hide error message if content is valid
-                });
-            }
-        });
+        // // Handle TinyMCE initialization
+        // tinymce.init({
+        //     selector: 'textarea#content',
+        //     plugins: 'code table lists',
+        //     toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
+        //     promotion: false,
+        //     setup: function(ed) {
+        //         ed.on('change', function(e) {
+        //             $('#content').val(ed.getContent());
+        //             validateInput('content', 'invalid-content'); // Hide error message if content is valid
+        //         });
+        //     }
+        // });
 
         // Real-time validation: Hide error messages when the input is correct
         $('#title').on('input', function() {

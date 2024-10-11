@@ -24,6 +24,7 @@ class ContentResource extends JsonResource
             'image' => $this->image,
             'type' => $this->type,
             'is_active' => $this->is_active,
+            'note' => $this->note,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->createdBy ? $this->createdBy->name : 'Unknown',

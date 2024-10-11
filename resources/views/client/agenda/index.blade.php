@@ -17,7 +17,7 @@
 
         <!-- Breadcrumbs -->
         <div class="container-fluid bg-primary py-3 bg-light">
-            <div class="text-star px-5">
+            <div class="text-start px-5">
                 <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
                 <span class="text-green">Agenda</span>
@@ -28,7 +28,7 @@
         <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
             <div class="container py-5">
                 <div class="row">
-                    <div class="col-lg-8 mx-auto">
+                    <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
                         <!-- Sort Order Dropdown -->
                         <div class="d-flex justify-content-end mb-3">
                             <select id="sort-order" class="form-select w-auto">
@@ -51,6 +51,48 @@
         </div>
     </div>
     <!-- Agenda End -->
+
+    <style>
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .timeline-item .timeline-content {
+                padding: 20px; /* Kurangi padding pada layar kecil */
+            }
+
+            .timeline-item .timeline-date {
+                display: flex;
+                justify-content: space-around; /* Atur tanggal agar lebih baik di layar kecil */
+                font-size: 14px; /* Sesuaikan ukuran teks */
+            }
+
+            .vertical-divider {
+                display: none; /* Sembunyikan elemen yang tidak perlu di layar kecil */
+            }
+
+            .lihat-link {
+                font-size: 12px; /* Sesuaikan ukuran font */
+            }
+
+            .page-link {
+                padding: 5px 10px; /* Sesuaikan ukuran pagination di layar kecil */
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .timeline-item .timeline-content {
+                padding: 15px; /* Kurangi padding lebih jauh di layar lebih kecil */
+            }
+
+            .timeline-item h4 {
+                font-size: 18px; /* Kurangi ukuran font judul */
+            }
+
+            .lihat-link {
+                font-size: 11px; /* Sesuaikan ukuran font untuk layar kecil */
+            }
+        }
+    </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>

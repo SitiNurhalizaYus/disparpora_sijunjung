@@ -29,6 +29,7 @@
                                         <th class="text-center">No</th>
                                         <th class="text-center">Kategori</th>
                                         <th class="text-center">Status</th>
+                                        <th class="text-center">Keterangan</th>
                                         <th class="text-center">Dibuat</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -116,6 +117,27 @@
                             return '<span class="badge bg-success">Aktif</span>';
                         } else {
                             return '<span class="badge bg-danger">Tidak Aktif</span>';
+                        }
+                    }
+                },
+                {
+                    data: 'note',
+                    className: 'text-center',
+                    render: function(data) {
+                        if (data === 'Draft') {
+                            return '<span class="badge bg-gray">Draft</span>';
+                        } else if (data === 'Menunggu Persetujuan') {
+                            return '<span class="badge bg-info">Menunggu Persetujuan</span>';
+                        } else if (data === 'Ditolak') {
+                            return '<span class="badge bg-danger">Ditolak</span>';
+                        } else if (data === 'Lakukan Perbaikan') {
+                            return '<span class="badge bg-warning">Lakukan Perbaikan</span>';
+                        } else if (data === 'Diposting/Disetujui') {
+                            return '<span class="badge bg-success">Diposting/Disetujui</span>';
+                        } else if (data === 'Diposting/Disetujui Dengan Perubahan') {
+                            return '<span class="badge bg-success">Diposting/Disetujui<br>Dengan Perubahan</span>';
+                        } else {
+                            return '<span class="badge bg-light">Belum ada keterangan</span>';
                         }
                     }
                 },
@@ -227,8 +249,11 @@
             }, {
                 targets: [3],
                 width: "15%"
-            }, {
+            },{
                 targets: [4],
+                width: "10%"
+            }, {
+                targets: [5],
                 width: "5%",
                 orderable: false
             }],

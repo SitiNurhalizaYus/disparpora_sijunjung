@@ -8,6 +8,7 @@ use App\Mail\ReplyMessageMail;
 use App\Http\Resources\ApiResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmationEmail;
 
 class MessageController extends Controller
 {
@@ -75,10 +76,10 @@ class MessageController extends Controller
             $metadata['page'] = 1;
         } else {
             $data = $query->orderBy($sort[0], $sort[1])
-                          ->limit($per_page)
-                          ->offset(($page - 1) * $per_page)
-                          ->get()
-                          ->toArray();
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page)
+                ->get()
+                ->toArray();
         }
 
         if ($data) {
@@ -123,6 +124,8 @@ class MessageController extends Controller
             return new ApiResource(false, 400, 'Failed to insert data', [], []);
         }
     }
+
+
 
     public function update(Request $request, $id)
     {
@@ -174,6 +177,24 @@ class MessageController extends Controller
             return new ApiResource(true, 200, 'Balasan berhasil dikirim dan email terkirim ke pengirim pesan.', [], []);
         } catch (\Exception $e) {
             return new ApiResource(false, 500, 'Gagal mengirim balasan. Silakan coba lagi.', [], []);
+        }
+    }
+
+    public function sendConfirmationEmail($id)
+    {
+        $message = Message::findOrFail($id);
+
+        try {
+            // Mengirim email menggunakan Mail Facade dan mailable yang sudah dibuat
+            Mail::to($message->email)->send(new ConfirmationEmail($message));
+
+            // Update kolom 'verified' menjadi 1 di tabel message
+            $message->verified = 1;
+            $message->save();
+
+            return response()->json(['success' => true, 'message' => 'Email konfirmasi berhasil dikirim.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal mengirim email.']);
         }
     }
 }

@@ -48,6 +48,15 @@
                                     harus diisi.</p>
                             </div>
 
+                            <!-- Vr Field (Opsional) -->
+                            <div class="form-group">
+                                <label class="form-label" for="vr">Link Virtual Tour (jika tersedia)</label>
+                                <input class="form-control" type="url" id="vr" name="vr"
+                                    placeholder="Masukkan Link (Opsional)" pattern="https?://.+">
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-vr">Format
+                                    link vr tidak valid, pastikan menggunakan URL yang benar.</p>
+                            </div>
+
                             <!-- Link Field (Opsional) -->
                             <div class="form-group">
                                 <label class="form-label" for="link">Link (Opsional)</label>
@@ -167,6 +176,12 @@
             return validateInput('slug', 'invalid-slug', slugValue !== '');
         }
 
+        function validateVr() {
+            const vrValue = $('#vr').val();
+            const urlPattern = /^(https?:\/\/).+/;
+            return vrValue ? validateInput('vr', 'invalid-vr', urlPattern.test(vrValue)) : true;
+        }
+
         // Custom validation for link field (optional)
         function validateLink() {
             const linkValue = $('#link').val();
@@ -201,6 +216,7 @@
             generateSlug(); // Automatically generate slug when name is input
         });
         $('#slug').on('input', validateSlug);
+        $('#vr').on('input', validateVr);
         $('#link').on('input', validateLink);
         $('#facilities').on('input', validateFacilities);
         $('#operating_hours').on('input', validateOperatingHours);
@@ -442,6 +458,7 @@
             let isValid = true;
             isValid = validateName() && isValid;
             isValid = validateSlug() && isValid;
+            isValid = validateVr() && isValid;
             isValid = validateLink() && isValid;
             isValid = validateFacilities() && isValid;
             isValid = validateOperatingHours() && isValid;

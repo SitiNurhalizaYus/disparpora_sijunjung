@@ -19,7 +19,7 @@
             <div class="text-star px-5">
                 <a href="{{ url('/beranda') }}" class="text-green">Beranda</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
-                <a href="{{ route('client.lokawisata.index') }}" class="text-green">Lokawisata</a>
+                <a href="{{ route('client.virtual_tour.index') }}" class="text-green">Lokawisata</a>
                 <i class="bi bi-arrow-right-short text-green px-2"></i>
                 <span class="text-green" id="breadcrumb-title">Detail</span>
             </div>
@@ -31,15 +31,15 @@
                 <!-- Gambar dan Petunjuk Arah -->
                 <div class="col-md-6 mb-4">
                     <div class="card">
-                        <img id="lokawisata-image" src="" alt="" class="card-img-top">
+                        <img id="virtual_tour-image" src="" alt="" class="card-img-top">
                         <div class="card-body text-center">
-                            <h1 id="lokawisata-name" class="card-title"></h1>
+                            <h1 id="virtual_tour-name" class="card-title"></h1>
                             <!-- Tampilkan tombol hanya jika link tidak null -->
-                            <a id="lokawisata-link" href="#" class="btn btn-primary mt-3" style="display:none;">
+                            <a id="virtual_tour-link" href="#" class="btn btn-primary mt-3" style="display:none;">
                                 <i class="bi bi-geo-alt-fill"></i> Petunjuk Arah
                             </a>
                             <!-- Tampilkan tombol hanya jika link vr tidak null -->
-                            <a id="lokawisata-vr" href="#" class="btn btn-primary mt-3" style="display:none;">
+                            <a id="virtual_tour-vr" href="#" class="btn btn-primary mt-3" style="display:none;">
                                 <i class="bi bi-geo-alt-fill"></i> Virtual Tour
                             </a>
                         </div>
@@ -50,22 +50,22 @@
                 <div class="col-md-6">
                     <div class="detail-section mb-4">
                         <h2>Deskripsi</h2>
-                        <p id="lokawisata-description"></p>
+                        <p id="virtual_tour-description"></p>
                     </div>
 
                     <div class="detail-section mb-4">
                         <h2>Fasilitas</h2>
-                        <ul id="lokawisata-facilities"></ul>
+                        <ul id="virtual_tour-facilities"></ul>
                     </div>
 
                     <div class="detail-section mb-4">
                         <h2>Jam Operasional</h2>
-                        <p id="lokawisata-operating-hours"></p>
+                        <p id="virtual_tour-operating-hours"></p>
                     </div>
 
                     <div class="detail-section mb-4">
                         <h2>Harga Tiket</h2>
-                        <p id="lokawisata-ticket-price"></p>
+                        <p id="virtual_tour-ticket-price"></p>
                     </div>
                 </div>
             </div>
@@ -94,43 +94,43 @@
         // Fungsi untuk memuat detail konten berdasarkan slug dari URL
         function loadContentDetail(slug) {
             $.ajax({
-                url: '/api/lokawisata/' + slug, // API endpoint untuk mengambil detail berdasarkan slug
+                url: '/api/virtual_tour/' + slug, // API endpoint untuk mengambil detail berdasarkan slug
                 method: 'GET',
                 success: function(response) {
                     // Jika data API diterima dalam bentuk object, langsung gunakan response.data
                     if (response.success) {
-                        const lokawisata = response.data; // data langsung diambil dari response.data
+                        const virtual_tour = response.data; // data langsung diambil dari response.data
 
                         // Isi data pada elemen HTML
-                        $('#lokawisata-image').attr('src', '/' + lokawisata.image);
-                        $('#lokawisata-name').text(lokawisata.name);
-                        $('#breadcrumb-title').text(lokawisata.name);
-                        $('#lokawisata-description').html(lokawisata.description);
-                        $('#lokawisata-operating-hours').text(lokawisata.operating_hours);
+                        $('#virtual_tour-image').attr('src', '/' + virtual_tour.image);
+                        $('#virtual_tour-name').text(virtual_tour.name);
+                        $('#breadcrumb-title').text(virtual_tour.name);
+                        $('#virtual_tour-description').html(virtual_tour.description);
+                        $('#virtual_tour-operating-hours').text(virtual_tour.operating_hours);
 
                         // Format fasilitas menjadi list
-                        const facilities = lokawisata.facilities.split(',');
+                        const facilities = virtual_tour.facilities.split(',');
                         let facilitiesHtml = '';
                         facilities.forEach(function(facility) {
                             facilitiesHtml += '<li>' + facility.trim() + '</li>';
                         });
-                        $('#lokawisata-facilities').html(facilitiesHtml);
+                        $('#virtual_tour-facilities').html(facilitiesHtml);
 
                         // Format harga tiket ke format Rupiah
-                        $('#lokawisata-ticket-price').text(formatRupiah(lokawisata.ticket_price));
+                        $('#virtual_tour-ticket-price').text(formatRupiah(virtual_tour.ticket_price));
 
                         // Tampilkan tombol petunjuk arah jika link tidak null
-                        if (lokawisata.link) {
-                            $('#lokawisata-link').attr('href', lokawisata.link).show();
+                        if (virtual_tour.link) {
+                            $('#virtual_tour-link').attr('href', virtual_tour.link).show();
                         } else {
-                            $('#lokawisata-link').hide();
+                            $('#virtual_tour-link').hide();
                         }
 
                         // Tampilkan tombol petunjuk arah jika link vr tidak null
-                        if (lokawisata.vr) {
-                            $('#lokawisata-vr').attr('href', lokawisata.vr).show();
+                        if (virtual_tour.vr) {
+                            $('#virtual_tour-vr').attr('href', virtual_tour.vr).show();
                         } else {
-                            $('#lokawisata-vr').hide();
+                            $('#virtual_tour-vr').hide();
                         }
                     } else {
                         console.error('Gagal mengambil data');

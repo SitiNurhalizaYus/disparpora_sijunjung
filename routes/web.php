@@ -77,9 +77,10 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
 
     Route::get('/document', [App\Http\Controllers\Client\DocumentController::class, 'index'])->name('client.document.index');
 
-
     Route::get('/lokawisata', [App\Http\Controllers\Client\InfoTempatController::class, 'index'])->name('client.lokawisata.index');
     Route::get('/lokawisata/{id}', [App\Http\Controllers\Client\InfoTempatController::class, 'detail'])->name('client.lokawisata.detail');
+    Route::get('/virtual_tour', [App\Http\Controllers\Client\VirtualTourController::class, 'index'])->name('client.virtual_tour.index');
+    Route::get('/virtual_tour/{id}', [App\Http\Controllers\Client\VirtualTourController::class, 'detail'])->name('client.virtual_tour.detail');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function () {
@@ -115,4 +116,7 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('messages', App\Http\Controllers\Admin\MessageController::class);
     Route::resource('settings', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+    Route::resource('survey', App\Http\Controllers\Admin\SurveyController::class);
+   
+
 });

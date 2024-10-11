@@ -151,6 +151,7 @@
                                 per_page: data.length,
                                 page: (data.start / data.length) + 1,
                                 sort: sort_col_name + ':' + sort_col_order,
+                                search: data.search.value,
                                 type: 'berita', // Tipe konten berita
                                 category_id: category, // Kirim kategori yang dipilih
                                 month: month, // Kirim bulan yang dipilih

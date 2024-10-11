@@ -33,7 +33,7 @@
                 <div class="row g-5">
                     <!-- Blog Content Start -->
                     <div class="col-lg-8">
-                        <div class="text-dark row g-5 mb-3" id="blog-detail">
+                        <div class="text-dark row g-3 mb-2" id="blog-detail">
                             <!-- Konten detail akan dimuat di sini menggunakan AJAX -->
                         </div>
 
@@ -94,39 +94,53 @@
     <script>
         $(document).ready(function() {
             const baseUrl = "{{ url('/') }}"; // Mengambil base URL dari aplikasi Laravel
-    
+
             // Fungsi untuk memuat detail konten dengan AJAX
             function loadContentDetail(slug) {
                 $.ajax({
-                    url: `/api/content/${slug}`,  // Request ke API berdasarkan slug
+                    url: `/api/content/${slug}`, // Request ke API berdasarkan slug
                     method: "GET",
                     success: function(response) {
                         const content = response.data;
-                        
+
                         // Menggabungkan base URL dengan path gambar
                         const imagePath = `${baseUrl}/uploads/${content.image.split('/').pop()}`;
-    
+
+                        const formattedDate = new Date(content.created_at)
+                            .toLocaleDateString('id-ID', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+
                         const detailHtml = `
-                            <img class="img-fluid w-100 rounded mb-5" src="${imagePath}" alt="${content.title}">
-                            <h1 class="mb-4">${content.title}</h1>
-                            <p>${content.content}</p>
+                            <img class="img-fluid w-100 rounded mb-2" src="${imagePath}" alt="${content.title}">
+                            <div class="d-flex justify-content-left mb-2">
+                                <small class="me-3"><i class="far fa-user text-primary me-2"></i>${content.created_by ?? 'Unknown Author'}</small>
+                                <small><i class="far fa-calendar-alt text-primary me-2"></i>${formattedDate}</small>
+                            </div>
+                            <h1 class="mb-2">${content.title}</h1>
+                            <p class="mb-2">${content.content}</p>
                         `;
                         $('#blog-detail').html(detailHtml);
                         $('#breadcrumb-title').text(content.title);
-    
+
+
                         // Setelah detail dimuat, muat recent posts tanpa konten ini
                         loadRecentPosts(slug);
                     },
                     error: function(xhr) {
-                        $('#blog-detail').html('<p class="text-center">Gagal memuat detail berita. Silakan coba lagi nanti.</p>');
+                        $('#blog-detail').html(
+                            '<p class="text-center">Gagal memuat detail berita. Silakan coba lagi nanti.</p>'
+                        );
                     }
                 });
             }
-    
+
             // Fungsi untuk memuat recent posts dengan AJAX
             function loadRecentPosts(slug) {
                 $.ajax({
-                    url: "{{ url('/api/content') }}",  // Request ke API untuk recent posts
+                    url: "{{ url('/api/content') }}", // Request ke API untuk recent posts
                     method: "GET",
                     data: {
                         recent: true,
@@ -136,29 +150,39 @@
                     },
                     success: function(response) {
                         let recentPostList = '';
-                        $.each(response.data, function(index, post) {
-                            // Menggabungkan base URL dengan path gambar recent posts
-                            const postImagePath = `${baseUrl}/uploads/500/${post.image.split('/').pop()}`;
-    
-                            recentPostList += `
-                                <div class="d-flex rounded overflow-hidden mb-3">
-                                    <img class="img-fluid" src="${postImagePath}" style="width: 100px; height: 100px; object-fit: cover;" alt="${post.title}">
-                                    <a href="{{ route('client.berita.index') }}/${post.slug}" class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">${post.title}</a>
-                                </div>
-                            `;
-                        });
+                        if (response.data && response.data.length > 0) {
+                            $.each(response.data, function(index, post) {
+                                // Menggabungkan base URL dengan path gambar recent posts
+                                const postImagePath =
+                                    `${baseUrl}/uploads/500/${post.image.split('/').pop()}`;
+
+                                // Menampilkan post hanya jika slug-nya tidak sama dengan slug yang sedang ditampilkan
+                                if (post.slug !== slug) {
+                                    recentPostList += `
+                            <div class="d-flex rounded overflow-hidden mb-3">
+                                <img class="img-fluid" src="${postImagePath}" style="width: 100px; height: 100px; object-fit: cover;" alt="${post.title}">
+                                <a href="{{ route('client.berita.index') }}/${post.slug}" class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">${post.title}</a>
+                            </div>
+                        `;
+                                }
+                            });
+                        } else {
+                            recentPostList = '<p class="text-center">Tidak ada postingan terbaru.</p>';
+                        }
                         $('#recent-post-list').html(recentPostList);
                     },
                     error: function(xhr) {
-                        $('#recent-post-list').html('<p class="text-center">Gagal memuat postingan terbaru. Silakan coba lagi nanti.</p>');
+                        $('#recent-post-list').html(
+                            '<p class="text-center">Gagal memuat postingan terbaru. Silakan coba lagi nanti.</p>'
+                        );
                     }
                 });
             }
-    
+
+
             // Muat detail konten berdasarkan slug dari URL
             const slug = window.location.pathname.split('/').pop();
             loadContentDetail(slug);
         });
     </script>
-    
 @endsection

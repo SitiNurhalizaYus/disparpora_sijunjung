@@ -13,7 +13,7 @@ class Message extends Model
     use BlameableTrait;
 
     protected $fillable = [
-    'name', 'email', 'subject', 'message', 'file_path', 'verified', 'created_by', 'updated_by','is_active'
+    'name', 'email', 'subject', 'message', 'file_path', 'created_by', 'updated_by','is_active'
     ];
 
     protected $casts = [

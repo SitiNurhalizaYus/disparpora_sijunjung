@@ -27,7 +27,7 @@ class BerandaController extends Controller
         $data['posters'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/poster');
         $data['big_numbers'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/big_number');
         $data['teams'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/team');
-        $data['partners'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/mitra');
+        $data['mitras'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/mitra');
         $data['testimonies'] = \App\Helpers\AppHelper::instance()->requestApiGet('api/testimony');
 
         return view('client.beranda.index', $data);

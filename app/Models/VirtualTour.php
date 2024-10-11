@@ -6,7 +6,7 @@ use App\Models\Agent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class InfoTempat extends Model
+class VirtualTour extends Model
 {
     use HasFactory;
 
@@ -18,7 +18,6 @@ class InfoTempat extends Model
         'operating_hours',
         'ticket_price',
         'image',
-        'vr',
         'link',
         'is_active',
         'note',

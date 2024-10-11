@@ -90,7 +90,7 @@
                                 '/xxx/', '/300/');
                             if (filePath.match(/\.(jpeg|jpg|gif|png)$/)) {
                                 $('#file-content').html(
-                                    `<img src="${filePath}" alt="File Upload" style="max-width: 100%; height: auto;">`
+                                    `<img src="${filePath}" alt="File Belum DiUpload" style="max-width: 100%; height: auto;">`
                                     );
                             } else {
                                 $('#file-content').html(

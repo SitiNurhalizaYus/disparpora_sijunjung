@@ -40,11 +40,8 @@
                                 <input class="form-control" type="text" id="slug" name="slug"
                                     placeholder="Otomatis terisi" required pattern="[A-Za-z0-9\-]+$">
                             </div>
-                            <div class="form-group">
-                                <label class="form-label" for="notes">Catatan</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
-                            </div>
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
+                                <!-- Admin/Editor Status Aktif -->
                                 <div class="form-group">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
@@ -53,6 +50,13 @@
                                 </div>
                             @endif
                             @if ($session_data['user_level_id'] == 3)
+                                <!-- Kontributor Status Draft -->
+                                <div class="form-group">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft">
+                                        <label class="form-check-label" for="is_draft">Draft</label>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="is_active" value="0">
                             @endif
                             <br><br>
@@ -145,6 +149,22 @@
 
                 formdata['is_active'] = $('#is_active').is(":checked") ? 1 : 0;
 
+                // Kondisi untuk kontributor
+                @if ($session_data['user_level_id'] == 3)
+                    if ($('#is_draft').is(":checked")) {
+                        formdata['note'] = 'Draft'; // Set note as Draft if checked
+                    } else {
+                        formdata['note'] = 'Menunggu Persetujuan'; // Set note as Menunggu Persetujuan
+                    }
+                @else
+                    // Kondisi untuk admin/editor
+                    if ($('#is_active').is(":checked")) {
+                        formdata['note'] = 'Diposting/Disetujui';
+                    } else {
+                        formdata['note'] = 'Draft';
+                    }
+                @endif
+
                 $.ajaxSetup({
                     headers: {
                         'Authorization': "Bearer {{ $session_token }}"
@@ -175,6 +195,14 @@
                                 confirmButtonColor: '#3A57E8',
                             });
                         }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat menyimpan data.",
+                            confirmButtonColor: '#3A57E8',
+                        });
                     }
                 });
             } else {

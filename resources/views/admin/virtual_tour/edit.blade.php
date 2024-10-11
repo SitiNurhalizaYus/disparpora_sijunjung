@@ -14,7 +14,7 @@
                                     <path fill="black"
                                         fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                                 </svg>
-                                Lokawisata/Edit
+                                Virtual Tour/Edit
                             </a>
                         </h3>
                     </div>
@@ -358,7 +358,7 @@
         }
 
         $(document).ready(function() {
-            // Ambil data lokawisata menggunakan AJAX
+            // Ambil data virtual-tour menggunakan AJAX
             $.ajaxSetup({
                 headers: {
                     'Authorization': "Bearer {{ $session_token }}"
@@ -366,7 +366,7 @@
             });
 
             $.ajax({
-                url: '/api/lokawisata/{{ $id }}',
+                url: '/api/virtual-tour/{{ $id }}',
                 type: "GET",
                 dataType: "json",
                 success: function(result) {
@@ -419,7 +419,7 @@
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: "Gagal mengambil data Lokawisata.",
+                        text: "Gagal mengambil data Virtual Tour.",
                         confirmButtonColor: '#3A57E8',
                     });
                 }
@@ -464,7 +464,7 @@
 
 
                 $.ajax({
-                    url: '/api/lokawisata/{{ $id }}',
+                    url: '/api/virtual-tour/{{ $id }}',
                     type: "POST",
                     data: form,
                     contentType: false,

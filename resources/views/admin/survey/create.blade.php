@@ -11,25 +11,24 @@
                             <a href="{{ URL::previous() }}" style="text-decoration: none; color: inherit;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
                                     class="bi bi-arrow-left-short" viewBox="0 0 16 16" style="text-decoration: none;">
-                                    <path fill="black"
-                                        fill-rule="evenodd"d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
+                                    <path fill="black" fill-rule="evenodd"
+                                        d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5" />
                                 </svg>
-                                Lokawisata/Edit
+                                Lokawisata/Tambah
                             </a>
                         </h3>
                     </div>
                 </div>
-                <div>
-                </div>
+                <div></div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" class="needs-validation" id="form-data" name="form-data" novalidate>
+                        <form method="POST" class="needs-validation" id="form-data" name="form-data"
+                            enctype="multipart/form-data" novalidate>
                             {{ csrf_field() }}
-                            {{ method_field('PUT') }}
 
                             <!-- Nama Field -->
                             <div class="form-group">
@@ -47,15 +46,6 @@
                                     placeholder="Slug terisi otomatis" required>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-slug">Slug
                                     harus diisi.</p>
-                            </div>
-
-                             <!-- Link Vr Field (Opsional) -->
-                             <div class="form-group">
-                                <label class="form-label" for="vr">Link Virtual Tour (jika tersedia)</label>
-                                <input class="form-control" type="url" id="vr" name="vr"
-                                    placeholder="Masukkan Link (Opsional)" pattern="https?://.+">
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-vr">Format
-                                    link vr tidak valid, pastikan menggunakan URL yang benar.</p>
                             </div>
 
                             <!-- Link Field (Opsional) -->
@@ -98,10 +88,12 @@
                             <div class="form-group">
                                 <label class="form-label" for="image">Gambar</label>
                                 <input class="form-control" type="file" id="file" name="file"
-                                    accept="image/jpeg,image/png,image/jpg">
-                                <input class="form-control" type="hidden" id="image" name="image">
+                                    accept="image/jpeg,image/png,image/jpg" required>
+                                <input class="form-control" type="hidden" id="image" name="image"
+                                    value="noimage.jpg" placeholder="image">
                                 <br>
-                                <img id="image-preview" name="image-preview" width="300px" style="border-radius: 2%;">
+                                <img src="{{ asset('/uploads/noimage.jpg') }}" id="image-preview" name="image-preview"
+                                    width="300px" style="border-radius: 2%;">
                                 <br><label class="form-label" for="photo" style="font-size: 10pt">*Format JPG, JPEG,
                                     dan PNG</label>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-picture">
@@ -115,38 +107,17 @@
                                 <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
                             </div>
 
-                            <!-- Status Aktif -->
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
+                                <!-- Admin/Editor Status Aktif -->
                                 <div class="form-group">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
                                         <label class="form-check-label" for="is_active">Status Aktif</label>
                                     </div>
                                 </div>
-                            
-                            <!-- Keterangan Status (opsi muncul jika tidak aktif) -->
-                            <div class="form-group" id="note-section" style="display: none;">
-                                <label class="form-label" for="note-inactive">Keterangan</label>
-                                <select class="form-control" id="note-inactive" name="note"> <!-- Ganti name menjadi note -->
-                                    <option value="">Pilih Keterangan</option>
-                                    <option value="Draft">Draft</option>
-                                    <option value="Ditolak">Ditolak</option>
-                                    <option value="Lakukan Perbaikan">Lakukan Perbaikan</option>
-                                </select>
-                            </div>
-
-                            <!-- Keterangan Status Aktif (opsi muncul jika aktif) -->
-                            <div class="form-group" id="active-note-section" style="display: none;">
-                                <label class="form-label" for="note-active">Keterangan</label>
-                                <select class="form-control" id="note-active" name="note"> <!-- Ganti name menjadi note -->
-                                    <option value="">Pilih Keterangan</option>
-                                    <option value="Diposting/Disetujui">Diposting/Disetujui</option>
-                                    <option value="Diposting/Disetujui Dengan Perubahan">Diposting/Disetujui Dengan Perubahan</option>
-                                </select>
-                            </div>
                             @endif
-
                             @if ($session_data['user_level_id'] == 3)
+                                <!-- Kontributor Status Draft -->
                                 <div class="form-group">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft">
@@ -197,13 +168,6 @@
         }
 
         // Custom validation for link field (optional)
-        function validateVr() {
-            const vrValue = $('#vr').val();
-            const urlPattern = /^(https?:\/\/).+/;
-            return vrValue ? validateInput('vr', 'invalid-vr', urlPattern.test(vrValue)) : true;
-        }
-
-        // Custom validation for link field (optional)
         function validateLink() {
             const linkValue = $('#link').val();
             const urlPattern = /^(https?:\/\/).+/;
@@ -226,47 +190,79 @@
             return validateInput('ticket_price', 'invalid-ticket_price', ticketPrice !== '' && ticketPrice >= 0);
         }
 
-        // Validasi file gambar yang diunggah
+        // Validate file upload
         function validateFile() {
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            const file = $('#file')[0].files[0];
+            return validateInput('file', 'invalid-picture', $('#file').prop('files').length > 0);
+        }
 
-            if (file && !allowedTypes.includes(file.type)) {
-                $('#invalid-file').show();
-                $('#file').val(''); // Kosongkan input file jika tidak valid
+        // Attach real-time validation to inputs
+        $('#name').on('input', function() {
+            validateName();
+            generateSlug(); // Automatically generate slug when name is input
+        });
+        $('#slug').on('input', validateSlug);
+        $('#link').on('input', validateLink);
+        $('#facilities').on('input', validateFacilities);
+        $('#operating_hours').on('input', validateOperatingHours);
+        $('#ticket_price').on('input', validateTicketPrice);
+        $('#file').on('change', validateFile);
 
-                // Tampilkan pemberitahuan menggunakan Swal
-                Swal.fire({
-                    icon: 'error',
-                    title: 'File tidak valid',
-                    text: 'File yang diunggah harus berupa gambar (.jpg, .jpeg, .png).',
-                    confirmButtonColor: '#3A57E8',
+        $('#description_short').on('input', function() {
+            validateInput('description_short', 'invalid-description_short');
+        });
+
+        // Handle wysiwyg
+        tinymce.init({
+            selector: 'textarea#description_long',
+            plugins: 'code table lists',
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
+            promotion: false,
+            setup: function(ed) {
+                ed.on('change', function() {
+                    $('#description').val(ed.getContent());
                 });
-
-                return false;
-            } else {
-                $('#invalid-file').hide();
-                return true;
             }
+        });
+
+        // Generate slug based on the name input
+        function generateSlug() {
+            const nameValue = $('#name').val();
+            const slugValue = nameValue
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '') // Remove invalid characters
+                .replace(/\s+/g, '-') // Replace spaces with hyphens
+                .replace(/-+/g, '-'); // Replace multiple hyphens with a single one
+
+            $('#slug').val(slugValue);
         }
 
         //handle upload
-        $('#file').change(function() {
-            if (validateFile()) {
-                // Preview image
-                $('#image-preview').attr('display', 'block');
+        let uploadedFilePath = ''; // Variable untuk menyimpan path file sementara
+        $('#file').on('change', function() {
+            var file = $(this).prop('files')[0];
+            if (!file || !file.type.match('image.*')) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "File yang diunggah bukan gambar yang valid. Silakan unggah file dalam format JPG, JPEG, atau PNG.",
+                    confirmButtonColor: '#3A57E8',
+                });
+                $(this).val('');
+                $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                $('#image').val('noimage.jpg');
+                $('#invalid-picture').show();
+            } else {
+                $('#invalid-picture').hide();
+
                 var oFReader = new FileReader();
-                oFReader.readAsDataURL($("#file")[0].files[0]);
+                oFReader.readAsDataURL(file);
                 oFReader.onload = function(oFREvent) {
                     $('#image-preview').attr('src', oFREvent.target.result);
                 };
 
-                // Upload image
                 var formdata = new FormData();
-                if ($(this).prop('files').length > 0) {
-                    var file = $(this).prop('files')[0];
-                    formdata.append("file", file);
-                }
+                formdata.append("file", file);
+
                 // Tampilkan loading
                 Swal.fire({
                     title: 'Mengunggah...',
@@ -293,13 +289,12 @@
                         Swal.close(); // Tutup dialog loading
                         if (result['success'] == true) {
                             // Simpan path file sementara ke dalam variabel
-                            $('#image').val(result['data']['url'].replace('/xxx/', '/500/'));
+                            uploadedFilePath = result['data']['url'].replace('/xxx/', '/500/');
                             Swal.fire({
                                 icon: "success",
                                 title: "Berhasil",
-                                text: "Gambar berhasil diunggah.",
-                                timer: 2000, // Notifikasi akan ditutup otomatis setelah 2 detik
-                                showConfirmButton: false, // Tidak menampilkan tombol OK
+                                text: "Gambar berhasil diunggah. Tekan tombol Simpan untuk menyimpan semua data.",
+                                confirmButtonColor: '#3A57E8',
                             });
                         } else {
                             Swal.fire({
@@ -312,168 +307,97 @@
                     },
                     error: function(xhr) {
                         Swal.close(); // Tutup dialog loading
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Terjadi kesalahan saat mengunggah gambar.",
-                            confirmButtonColor: '#3A57E8',
-                        });
 
-                        // Reset file input and image preview
-                        $('#file').val('');
-                        $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
-                        $('#picture').val('noimage.jpg');
+                        if (xhr.responseJSON && xhr.responseJSON.message.includes('Duplicate entry')) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Gagal Mengunggah",
+                                text: "Nama file gambar sudah ada. Ganti nama file atau unggah file yang berbeda.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+
+                            // Reset file input and image preview
+                            $('#file').val('');
+                            $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                            $('#image').val('noimage.jpg');
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Terjadi kesalahan saat mengunggah gambar.",
+                                confirmButtonColor: '#3A57E8',
+                            });
+
+                            // Reset file input and image preview
+                            $('#file').val('');
+                            $('#image-preview').attr('src', '{{ asset('/uploads/noimage.jpg') }}');
+                            $('#image').val('noimage.jpg');
+                        }
                     }
-
                 });
             }
         });
 
-        $('#description').on('input', function() {
-            validateInput('description', 'invalid-description');
-        });
 
-        // Handle wysiwyg
-        tinymce.init({
-            selector: 'textarea#description_long',
-            plugins: 'code table lists',
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
-            promotion: false,
-            setup: function(ed) {
-                ed.on('change', function(e) {
-                    $('#description').val(ed.getContent());
-                });
-            }
-        });
+        // Handle form submission
+        $("#form-data").submit(function(event) {
+            event.preventDefault();
+            tinymce.triggerSave(); // Pastikan TinyMCE menyimpan kontennya
 
-        // Validate the entire form before submission
-        function validateForm() {
-            let isValid = true;
-            isValid = validateInput('name', 'invalid-name') && isValid;
-            isValid = validateInput('slug', 'invalid-slug') && isValid;
-            isValid = validateInput('facilities', 'invalid-facilities') && isValid;
-            isValid = validateInput('operating_hours', 'invalid-operating_hours') && isValid;
-            isValid = validateInput('ticket_price', 'invalid-ticket_price') && isValid;
-            return isValid;
-        }
+            // Set deskripsi dari editor TinyMCE
+            $('#description').val(tinymce.get('description_long').getContent());
 
-        $(document).ready(function() {
-            // Ambil data lokawisata menggunakan AJAX
-            $.ajaxSetup({
-                headers: {
-                    'Authorization': "Bearer {{ $session_token }}"
-                }
-            });
-
-            $.ajax({
-                url: '/api/lokawisata/{{ $id }}',
-                type: "GET",
-                dataType: "json",
-                success: function(result) {
-                    if (result['success']) {
-                        // Isi data form dengan data yang diterima dari API
-                        $('#name').val(result['data']['name']);
-                        $('#slug').val(result['data']['slug']);
-                        $('#vr').val(result['data']['vr']);
-                        $('#link').val(result['data']['link']);
-                        $('#facilities').val(result['data']['facilities']);
-                        $('#operating_hours').val(result['data']['operating_hours']);
-                        $('#ticket_price').val(result['data']['ticket_price']);
-                        $('#description_long').val(result['data']['description']);
-                        $('#description').val(result['data']['description']);
-                        $('#image').val(result['data']['image']);
-                        $("#image-preview").attr("src", "{{ url('/') }}/" + result['data'][
-                            'image'
-                        ].replace(
-                            '/xxx/', '/300/'));
-
-                        $('#is_active').prop('checked', result['data']['is_active']);
-                        
-                        // Set note berdasarkan status aktif
-                        if (result['data']['is_active']) {
-                            $('#note-active').val(result['data']['note']);
-                            $('#active-note-section').show();
-                            $('#note-section').hide();
-                        } else {
-                            $('#note-inactive').val(result['data']['note']);
-                            $('#note-section').show();
-                            $('#active-note-section').hide();
-                        }
-
-                        // Jika kontributor, atur is_draft
-                        if (result['data']['note'] === 'Draft') {
-                            $('#is_draft').prop('checked', true);
-                        } else {
-                            $('#is_draft').prop('checked', false);
-                        }
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: result['message'],
-                            confirmButtonColor: '#3A57E8',
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Gagal mengambil data Lokawisata.",
-                        confirmButtonColor: '#3A57E8',
-                    });
-                }
-            });
-
-            // Toggle visibility of note fields based on is_active checkbox
-            $('#is_active').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#note-section').hide();
-                    $('#active-note-section').show();
-                } else {
-                    $('#note-section').show();
-                    $('#active-note-section').hide();
-                }
-            });
-
-            // Handle form submission
-            $("#form-data").submit(function(event) {
-                event.preventDefault();
-                
+            // Validasi seluruh form sebelum mengirim data
+            if (validateForm()) {
                 var form = new FormData(document.getElementById("form-data"));
-                
-                // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
-                form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
-                
-                // Set note sesuai dengan pilihan yang dibuat
-                if ($('#is_active').is(":checked")) {
-                    form.set('note', $('#note-active').val());
-                } else {
-                    form.set('note', $('#note-inactive').val());
-                }
 
-                // Khusus untuk kontributor
+                // Kondisi untuk kontributor
                 @if ($session_data['user_level_id'] == 3)
                     if ($('#is_draft').is(":checked")) {
-                        form.set('note', 'Draft');
+                        form.set('note', 'Draft'); // Set note as Draft if checked
                     } else {
-                        form.set('note', 'Menunggu Persetujuan');
+                        form.set('note', 'Menunggu Persetujuan'); // Set note as Menunggu Persetujuan
+                    }
+                @else
+                    // Kondisi untuk admin/editor
+                    form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
+                    if ($('#is_active').is(":checked")) {
+                        form.set('note', 'Diposting/Disetujui');
+                    } else {
+                        form.set('note', 'Draft');
                     }
                 @endif
 
+                // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
+                form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
 
+                // Sertakan path gambar yang telah diunggah
+                if (uploadedFilePath !== '') {
+                    form.set('image', uploadedFilePath);
+                } else {
+                    form.set('image', 'noimage.jpg'); // Atur gambar default jika tidak ada
+                }
+
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Bearer {{ $session_token }}",
+                    }
+                });
 
                 $.ajax({
-                    url: '/api/lokawisata/{{ $id }}',
+                    url: '/api/lokawisata', // URL endpoint untuk menyimpan data
                     type: "POST",
                     data: form,
-                    contentType: false,
-                    processData: false,
+                    contentType: false, // Supaya FormData bisa bekerja dengan benar
+                    processData: false, // Supaya FormData bisa bekerja dengan benar
                     success: function(result) {
-                        if (result['success']) {
+                        // Debugging: Periksa respons dari server
+                        console.log(result);
+
+                        if (result['success'] == true) {
                             Swal.fire({
                                 icon: "success",
-                                title: "Success",
+                                title: "Sukses",
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
@@ -489,15 +413,41 @@
                         }
                     },
                     error: function(xhr) {
+                        // Debugging: Periksa kesalahan dari server
+                        console.error(xhr);
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Terjadi kesalahan saat menyimpan data.",
+                            text: xhr.responseJSON ? xhr.responseJSON.message :
+                                "Terjadi kesalahan saat menyimpan data.",
                             confirmButtonColor: '#3A57E8',
                         });
                     }
                 });
-            });
+            } else {
+                // Jika validasi gagal, tampilkan pesan kesalahan dan jangan kirim form
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Anda harus melengkapi seluruh form dengan benar.",
+                    confirmButtonColor: '#3A57E8',
+                });
+            }
+            return false; // Menghentikan submit jika validasi gagal
         });
+
+
+        // Validate the entire form before submission
+        function validateForm() {
+            let isValid = true;
+            isValid = validateName() && isValid;
+            isValid = validateSlug() && isValid;
+            isValid = validateLink() && isValid;
+            isValid = validateFacilities() && isValid;
+            isValid = validateOperatingHours() && isValid;
+            isValid = validateTicketPrice() && isValid;
+            isValid = validateFile() && isValid;
+            return isValid;
+        }
     </script>
 @endsection

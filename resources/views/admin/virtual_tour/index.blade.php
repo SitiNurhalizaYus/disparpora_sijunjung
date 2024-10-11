@@ -6,12 +6,12 @@
             <div class="flex-wrap d-flex justify-content-between align-items-center">
                 <div>
                     <div class="header-title">
-                        <h2 class="card-title">Artikel</h2>
-                        <p>List data artikel</p>
+                        <h2 class="card-title">Virtual Tour</h2>
+                        <p>List data Virtual Tour</p>
                     </div>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/artikels/create') }}" class="btn btn-md btn-primary">Tambah Data +</a>
+                    <a href="{{ url('/admin/lokawisatas/create') }}" class="btn btn-md btn-primary">Tambah Data +</a>
                 </div>
             </div>
         </div>
@@ -35,17 +35,6 @@
             </div>
 
             <div class="row g-4">
-                <div class="col-md-3">
-                    <!-- Filter Kategori -->
-                    <label for="filter-category" class="form-label">Kategori</label>
-                    <select id="filter-category" class="form-select">
-                        <option value="">Semua Kategori</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id_category }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
                 <div class="col-md-3">
                     <!-- Filter Tahun -->
                     <label for="filter-year" class="form-label">Tahun</label>
@@ -75,7 +64,7 @@
                     <!-- Filter Penulis -->
                     <label for="filter-author" class="form-label">Penulis</label>
                     <select id="filter-author" class="form-select">
-                        <option value="">Semua Penulis</option>
+                        <option value="">Pilih Penulis</option>
                         @foreach ($authors as $author)
                             <option value="{{ $author->id_user }}">{{ $author->name }}</option>
                         @endforeach
@@ -94,11 +83,10 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
-                                        <th class="text-center">Judul</th>
-                                        <th class="text-center">Kategori</th>
+                                        <th class="text-center">Nama</th>
                                         <th class="text-center">Gambar</th>
-                                        <th class="text-center">Penulis</th>
                                         <th class="text-center">Dibuat</th>
+                                        <th class="text-center">Penulis</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Keterangan</th>
                                         <th class="text-center">Action</th>
@@ -115,31 +103,67 @@
 
     <script>
         $(document).ready(function() {
+            // Aktifkan atau nonaktifkan filter bulan berdasarkan pilihan tahun
+            $('#filter-year').on('change', function() {
+                if ($(this).val()) {
+                    $('#filter-month').prop('disabled', false);
+                } else {
+                    $('#filter-month').val('').prop('disabled', true);
+                }
+                $('#datatable').DataTable().ajax.reload(); // Reload data tabel setelah filter berubah
+            });
+
+            $('#filter-month').on('change', function() {
+                $('#datatable').DataTable().ajax.reload(); // Reload data tabel setelah filter berubah
+            });
+
+            // Tambahkan event listener untuk filter penulis
+            $('#filter-author').on('change', function() {
+                $('#datatable').DataTable().ajax.reload(); // Reload data tabel setelah filter berubah
+            });
+
+            // Tombol reset filter
+            $('#reset-filters').on('click', function() {
+                var level_name = '{{ $session_data['user_level_name'] }}';
+
+                // Reset semua filter, kecuali untuk kontributor (level_name = "Kontributor")
+                $('#filter-year').val(''); // Reset tahun
+                $('#filter-month').val('').prop('disabled', true); // Reset bulan dan nonaktifkan
+
+                if (level_name !== 'Kontributor') {
+                    // Hanya user yang bukan kontributor yang bisa mereset filter penulis
+                    $('#filter-author').val('');
+                }
+
+                $('#datatable').DataTable().ajax.reload(); // Reload data tabel
+            });
+
             // Inisialisasi DataTable
-            var table = $('#datatable').DataTable({
+            $('#datatable').DataTable({
                 order: [
                     [0, 'asc']
-                ],
+                ], // Default urutan berdasarkan kolom pertama
                 lengthMenu: [
                     [5, 15, 25, 100, -1],
                     [5, 15, 25, 100, 'Semua']
                 ],
                 pageLength: 5,
                 processing: true,
-                searching: true,
-                paging: true,
                 serverSide: true,
-                autoWidth: true,
+                autoWidth: false,
                 scrollX: true,
-                responsive: true,
                 ajax: function(data, callback, settings) {
-                    var sort_col_id = data.order[0].column;
+                    var sort_col_index = data.order[0].column;
                     var sort_col_order = data.order[0].dir;
-                    var sort_col_name = data.columns[data.order[0].column].data;
-                    var category = $('#filter-category').val(); // Ambil kategori yang dipilih
-                    var month = $('#filter-month').val(); // Ambil bulan yang dipilih
-                    var year = $('#filter-year').val(); // Ambil tahun yang dipilih
-                    var author = $('#filter-author').val(); // Ambil penulis yang dipilih
+                    var sort_col_name = data.columns[sort_col_index].data;
+
+                    if (!sort_col_name) {
+                        sort_col_name = 'id'; // Default sorting by id
+                    }
+
+                    var year = $('#filter-year').val();
+                    var month = $('#filter-month').val();
+                    var author = $('#filter-author').val();
 
                     $.ajaxSetup({
                         headers: {
@@ -147,75 +171,48 @@
                         }
                     });
 
-                    $.get('{{ url('/api/content') }}', {
-                                per_page: data.length,
-                                page: (data.start / data.length) + 1,
-                                sort: sort_col_name + ':' + sort_col_order,
-                                search: data.search.value,
-                                type: 'artikel', // Tipe konten artikel
-                                category_id: category, // Kirim kategori yang dipilih
-                                month: month, // Kirim bulan yang dipilih
-                                year: year, // Kirim tahun yang dipilih
-                                author_id: author // Kirim penulis yang dipilih
-                            },
-                            function(json) {
-                                callback({
-                                    recordsTotal: json.metadata.total_data,
-                                    recordsFiltered: json.metadata.total_data,
-                                    data: json.data
-                                });
-                            })
-                        .fail(function() {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Terjadi kesalahan saat memuat data.",
-                                confirmButtonColor: '#3A57E8',
-                            });
+                    $.get('/api/virtual-tour', {
+                        per_page: data.length,
+                        page: (data.start / data.length) + 1,
+                        sort: sort_col_name + ':' + sort_col_order,
+                        search: data.search.value,
+                        year: year,
+                        month: month,
+                        author: author // Kirim filter penulis ke server
+                    }, function(json) {
+                        callback({
+                            recordsTotal: json.metadata.total_data,
+                            recordsFiltered: json.metadata.total_data,
+                            data: json.data
                         });
+                    }).fail(function() {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Terjadi kesalahan saat memuat data.",
+                            confirmButtonColor: '#3A57E8',
+                        });
+                    });
                 },
                 columns: [{
-                        data: null, // Nomor urut
+                        data: null, // Kolom urutan nomor
                         className: 'text-center',
-                        orderable: false,
                         render: function(data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart +
-                                1; // Menghasilkan nomor urut
+                            return meta.row + 1; // Nomor urut
                         }
                     },
                     {
-                        data: 'title',
-                        render: function(data) {
+                        data: 'name',
+                        render: function(data, type, row, meta) {
                             return '<span style="white-space: normal;">' + data + '</span>';
-                        }
-                    },
-                    // {
-                    //     data: 'content',
-                    //     render: function(data) {
-                    //         if (data && data.length > 50) {
-                    //             return '<span style="white-space: normal;">' + data.substring(0,
-                    //                 50) + '...</span>';
-                    //         } else if (data) {
-                    //             return '<span style="white-space: normal;">' + data + '</span>';
-                    //         } else {
-                    //             return '<span>Tidak ada konten</span>';
-                    //         }
-                    //     }
-                    // },
-                    {
-                        data: 'category.name', // Menampilkan nama kategori
-                        className: 'text-center',
-                        render: function(data) {
-                            return data ? data : '<span>Tidak ada kategori</span>';
                         }
                     },
                     {
                         data: 'image',
-                        className: 'text-center',
                         render: function(data, type, row, meta) {
                             if (data && data !== null) { // Pastikan data tidak null
                                 var imagePath = "{{ asset('/') }}" + data.replace('/xxx/',
-                                    '/500/');
+                                    '/100/');
                                 return '<img src="' + imagePath +
                                     '" style="max-width:100px; max-height:100px;">';
                             } else {
@@ -224,26 +221,28 @@
                         }
                     },
                     {
-                        data: 'created_by',
+                        data: 'created_at',
+                        render: function(data, type, row, meta) {
+                            return '<span style="white-space: normal;">' + convertStringToDate(
+                                    data) +
+                                '</span>';
+                        }
+                    },
+                    {
+                        data: 'created_by.name', // Pastikan ini benar sesuai dengan data yang dikirim dari API
                         className: 'text-center',
                         render: function(data) {
                             return data ? data : '<span>Unknown</span>';
                         }
                     },
                     {
-                        data: 'created_at',
-                        className: 'text-center',
-                        render: function(data) {
-                            return '<span style="white-space: normal;">' + convertStringToDate(
-                                data) + '</span>';
-                        }
-                    },
-                    {
                         data: 'is_active',
-                        className: 'text-center',
-                        render: function(data) {
-                            return data == '1' ? '<span class="badge bg-success">Aktif</span>' :
-                                '<span class="badge bg-danger">Tidak Aktif</span>';
+                        render: function(data, type, row, meta) {
+                            if (data == '1') {
+                                return '<span class="badge bg-success">Aktif</span>';
+                            } else {
+                                return '<span class="badge bg-danger">Tidak Aktif</span>';
+                            }
                         }
                     },
                     {
@@ -270,7 +269,7 @@
                     {
                         render: function(data, type, row, meta) {
                             var btn_detail = `
-                        <a href="{{ url('/admin/artikels/`+row.id_content+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
+                        <a href="{{ url('/admin/lokawisatas/`+row.id+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
                             <span class="btn-inner">
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
@@ -305,7 +304,7 @@
                         </button>`;
                             } else {
                                 var btn_edit = `
-                        <a href="{{ url('/admin/artikels/`+row.id_content+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
+                        <a href="{{ url('/admin/lokawisatas/`+row.id+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                             <span class="btn-inner">
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -315,7 +314,7 @@
                         </a>`;
 
                                 var btn_delete = `
-                        <button onclick="removeData(` + row.id_content + `)" class="btn btn-sm btn-icon btn-danger flex-end" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
+                        <button onclick="removeData(` + row.id + `)" class="btn btn-sm btn-icon btn-danger flex-end" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
                             <span class="btn-inner">
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                     <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -331,7 +330,6 @@
                                 '&nbsp;' + btn_delete + '</div>';
                         }
                     }
-
                 ],
                 language: {
                     "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
@@ -341,19 +339,12 @@
                     "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                     "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
                     "sInfoFiltered": "(disaring dari _MAX_ total data)",
-                    "sInfoPostFix": "",
                     "sSearch": "Cari:",
-                    "sUrl": "",
-                    "sLoadingRecords": "Sedang memuat...",
                     "oPaginate": {
                         "sFirst": "Pertama",
                         "sPrevious": "Sebelumnya",
                         "sNext": "Berikutnya",
                         "sLast": "Terakhir"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": aktifkan untuk mengurutkan kolom secara ascending",
-                        "sSortDescending": ": aktifkan untuk mengurutkan kolom secara descending"
                     }
                 },
                 columnDefs: [{
@@ -362,11 +353,11 @@
                     },
                     {
                         targets: [1],
-                        width: "20%"
+                        width: "25%"
                     },
                     {
                         targets: [2],
-                        width: "25%"
+                        width: "15%"
                     },
                     {
                         targets: [3],
@@ -386,55 +377,25 @@
                     },
                     {
                         targets: [7],
-                        width: "10%"
-                    },
-                    {
-                        targets: [8],
                         width: "10%",
                         orderable: false
                     }
-                ]
-            });
+                ],
 
-            // Ketika filter berubah, reload data tabel
-            $('#filter-category, #filter-month, #filter-year, #filter-author').on('change', function() {
-                table.ajax.reload();
-            });
-
-            // Mengaktifkan atau menonaktifkan filter bulan tergantung pada apakah tahun dipilih
-            $('#filter-year').on('change', function() {
-                if ($(this).val()) {
-                    $('#filter-month').prop('disabled', false);
-                } else {
-                    $('#filter-month').val('').prop('disabled', true); // Reset bulan saat tahun direset
+                // Ketika halaman dimuat, cek level user dan set filter otomatis jika levelnya kontributor
+                initComplete: function(settings, json) {
+                    @if ($session_data['user_level_name'] === 'Kontributor')
+                        // Jika user adalah kontributor, otomatis pilih filternya
+                        var author_id = '{{ $session_data['user_id'] }}';
+                        $('#filter-author').val(author_id).trigger('change');
+                        // Disable filter penulis agar tidak bisa diubah
+                        $('#filter-author').prop('disabled', true);
+                    @endif
                 }
             });
-
-            // Tombol reset untuk menghapus filter
-            $('#reset-filters').on('click', function() {
-                var level_name = '{{ $session_data['user_level_name'] }}';
-
-                // Reset semua filter, kecuali untuk kontributor (level_name = "Kontributor")
-                $('#filter-year').val(''); // Reset tahun
-                $('#filter-month').val('').prop('disabled', true); // Reset bulan dan nonaktifkan
-
-                if (level_name !== 'Kontributor') {
-                    $('#filter-author').val('');
-                }
-
-                $('#filter-category').val('');
-                table.ajax.reload(); // Reload data tabel setelah reset
-            });
-
-            // Jika user adalah kontributor, set filter penulis otomatis dan nonaktifkan
-            if ('{{ $session_data['user_level_name'] }}' === 'Kontributor') {
-                var author_id = '{{ $session_data['user_id'] }}';
-                $('#filter-author').val(author_id).trigger('change');
-                $('#filter-author').prop('disabled', true);
-            }
         });
 
-        function removeData(id_content) {
+        function removeData(id) {
             Swal.fire({
                 title: "Kamu yakin ingin menghapus?",
                 showDenyButton: true,
@@ -449,7 +410,7 @@
                         }
                     });
                     $.ajax({
-                        url: '{{ url('/api/content') }}/' + id_content + '?type=artikel',
+                        url: '/api/virtual-tour/' + id,
                         type: "DELETE",
                         success: function(result) {
                             if (result.success) {

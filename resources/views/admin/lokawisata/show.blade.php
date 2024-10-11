@@ -47,6 +47,8 @@
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="name"></span></h4>
                                         <p class="card-text">
+                                        <h6>Virtual Tour: </h6><a href="#" id="vr"></a></p>
+                                        <p class="card-text">
                                         <h6>Link: </h6><a href="#" id="link"></a></p>
                                         <p class="card-text">
                                         <h6>Fasilitas: </h6><span id="facilities"></span></p>
@@ -62,7 +64,8 @@
                                     <div class="card-header bg-secondary text-white"><strong>Detail Tambahan</strong></div>
                                     <div class="card-body">
                                         <p class="card-text">
-                                        <h6>Status: </h6><span id="is_active"></span></p>
+                                        <h6>Status: </h6><span id="is_active"></span> <span class="badge bg-black"
+                                            id="note"></span></p>
                                         <p class="card-text">
                                         <h6>Dibuat: </h6><span id="created_by"></span><br><span id="created_at"></span></p>
                                         <p class="card-text">
@@ -145,6 +148,7 @@
                         $("#detail-data-failed").hide();
 
                         $('#name').text(result['data']['name']);
+                        $('#vr').attr('href', result['data']['vr']).text(result['data']['vr']);
                         $('#link').attr('href', result['data']['link']).text(result['data']['link']);
                         $("#image").attr("src", "{{ url('/') }}/" + result['data']['image']
                             .replace('/xxx/', '/300/'));
@@ -156,6 +160,7 @@
                         $('#is_active').html(result['data']['is_active'] == 1 ?
                             '<span class="badge bg-success">Aktif</span>' :
                             '<span class="badge bg-danger">Tidak Aktif</span>');
+                        $('#note').html(result['data']['note']);
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
                         $('#created_by').text(result['data']['created_by']['name']);
                         $('#updated_at').text(convertStringToDate(result['data']['updated_at']));

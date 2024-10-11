@@ -77,7 +77,7 @@
                         <div class="mt-2 row">
                             <div class="col-md-6">
                                 <h6 class="mb-1">Status </h6>
-                                <p id="is_active"> </p>
+                                <p><span id="is_active"></span> <span class="badge bg-black" id="note"></span></p>
                             </div>
                             <div class="col-md-3">
                                 <h6 class="mb-1">Dibuat</h6>
@@ -118,13 +118,13 @@
 
                     $('#name').html(result['data']['name']);
                     $('#slug').html(result['data']['slug']);
-                    $('#notes').html(result['data']['notes']);
-
+                    
                     if (result['data']['is_active'] == 1) {
                         $('#is_active').html('<span class="badge bg-success">Aktif</span>');
                     } else {
                         $('#is_active').html('<span class="badge bg-danger">Tidak Aktif</span>');
                     }
+                    $('#note').html(result['data']['note']);
                     $('#created_at').text(convertStringToDate(result['data']['created_at']));
                     $('#created_by').text(result['data']['created_by']['name']);
                     $('#updated_at').text(convertStringToDate(result['data']['updated_at']));

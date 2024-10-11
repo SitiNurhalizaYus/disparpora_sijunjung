@@ -18,12 +18,14 @@ class AgendaController extends Controller
     public function index(Request $request)
     {
         // parameter
-        $count = $request->has('count') ? $request->get('count') : false;
+        $count = $request->get('count', false);
         $sort = $request->has('sort') ? $request->get('sort') : 'event_date:desc'; // Default sorting berdasarkan tanggal terbaru
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
         $per_page = $request->has('per_page') ? intval($request->get('per_page')) : 10;
         $page = $request->has('page') ? intval($request->get('page')) : 1;
+        $month = $request->get('month', null);  // Mengambil bulan dari request
+        $year = $request->get('year', null);    // Mengambil tahun dari request
 
         // Validasi per_page dan page agar tidak bernilai negatif atau nol
         if ($per_page <= 0) {
@@ -65,6 +67,14 @@ class AgendaController extends Controller
             $query = $query->where('name', 'like', "%{$search}%");
         }
 
+        // Filter berdasarkan bulan dan tahun
+        if ($month && $year) {
+            $query->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year);
+        } elseif ($year) {
+            $query->whereYear('created_at', $year);
+        }
+
         // metadata dan data
         $metadata = [];
         $metadata['total_data'] = $query->count(); // Hitung total data sebelum paginasi
@@ -74,8 +84,8 @@ class AgendaController extends Controller
 
         // get count
         if ($count == true) {
-            $query = $query->count('id');
-            $data['count'] = $query;
+            $total_count = $query->count();
+            return new ApiResource(true, 200, 'Data count retrieved successfully', [], ['count' => $total_count]);
         }
 
         // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'

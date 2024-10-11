@@ -19,7 +19,8 @@ class BeritaController extends Controller
     {
         // Mengambil parameter dari request
         $count = $request->get('count', false);
-        $sort = $request->get('sort', 'id_content:asc');
+        // $sort = $request->get('sort', 'id_content:asc');
+        $sort = $request->get('sort', 'id_content:desc');
         $per_page = intval($request->get('per_page', 10));
         $page = intval($request->get('page', 1));
         $search = $request->get('search', '');
@@ -37,7 +38,7 @@ class BeritaController extends Controller
         // Mengatur sorting
         $sort = explode(':', $sort);
         if (count($sort) !== 2) {
-            $sort = ['id_content', 'asc']; // Default sorting jika format tidak valid
+            $sort = ['created_at', 'desc']; 
         }
 
         // Membuat query untuk mengambil data tipe 'berita'

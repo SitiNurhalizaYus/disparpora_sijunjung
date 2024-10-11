@@ -7,8 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Resources\ApiResource;
 use App\Http\Controllers\Controller;
+use App\Models\VirtualTour;
 
-class InfoTempatController extends Controller
+class VirtualTourController extends Controller
 {
     public function __construct()
     {
@@ -50,7 +51,7 @@ class InfoTempatController extends Controller
         $where = json_decode($where, true);
 
         // Membuat query dasar untuk tabel InfoTempat dengan relasi createdBy dan updatedBy
-        $query = InfoTempat::with(['createdBy', 'updatedBy']);
+        $query = VirtualTour::with(['createdBy', 'updatedBy']);
 
         // Cek user yang login
         $user = auth()->user();

@@ -17,7 +17,7 @@ class DocumentController extends Controller
     public function index(Request $request)
     {
         // parameter
-        $count = $request->has('count') ? $request->get('count') : false;
+        $count = $request->get('count', false);
         $sort = $request->has('sort') ? $request->get('sort') : 'id:asc';
         $where = $request->has('where') ? $request->get('where') : '{}';
         $search = $request->has('search') ? $request->get('search') : '';
@@ -70,8 +70,8 @@ class DocumentController extends Controller
 
         // get count
         if ($count == true) {
-            $query = $query->count('id');
-            $data['count'] = $query;
+            $total_count = $query->count();
+            return new ApiResource(true, 200, 'Data count retrieved successfully', [], ['count' => $total_count]);
         }
 
         // Ambil data dengan paginasi jika per_page bukan 0 atau 'all'

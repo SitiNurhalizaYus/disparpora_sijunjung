@@ -34,7 +34,7 @@ class MitraController extends Controller
 
         $sort = explode(':', $sort);
         if (count($sort) !== 2) {
-            $sort = ['id', 'asc']; // Default sorting jika tidak valid
+            $sort = ['id', 'desc']; // Default sorting jika tidak valid
         }
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);

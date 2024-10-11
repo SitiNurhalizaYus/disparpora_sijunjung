@@ -128,7 +128,7 @@
                             </i>
                         </a>
                         <ul class="sub-nav collapse @if (str_contains($menu, 'poster') ||
-                                str_contains($menu, 'mitra') ||
+                                // str_contains($menu, 'mitra') ||
                                 str_contains($menu, 'profils') ||
                                 str_contains($menu, 'beritas') ||
                                 str_contains($menu, 'artikels') ||
@@ -148,7 +148,7 @@
                                     <span class="item-name">Poster</span>
                                 </a>
                             </li> --}}
-                            @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
+                            {{-- @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                             <li class="nav-item">
                                 <a class="nav-link @if (str_contains($menu, 'mitra')) active @endif"
                                     href="{{ url('/admin/mitras') }}">
@@ -162,7 +162,7 @@
                                 </a>
                                 <hr class="hr-horizontal" style="background-color: white">
                             </li>
-                            @endif
+                            @endif --}}
 
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                                 <li class="nav-item">
@@ -391,6 +391,21 @@
                                     </svg>
                                 </i>
                                 <span class="item-name">Pengaturan</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if ($session_data['user_level_id'] == 3)
+                        {{-- setting --}}
+                        <li class="nav-item">
+                            <a class="nav-link @if (str_contains($menu, 'survey')) {{ 'active' }} @endif"
+                                aria-current="page" href="{{ url('/admin/survey') }}">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                                        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+                                      </svg>
+                                </i>
+                                <span class="item-name">Survey</span>
                             </a>
                         </li>
                     @endif

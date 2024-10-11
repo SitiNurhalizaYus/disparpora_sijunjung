@@ -56,12 +56,15 @@
             pageLength: 5,
             processing: true,
             serverSide: true,
-            autoWidth: false,
+            autoWidth: true,
             scrollX: true,
             ajax: function(data, callback, settings) {
                 var sort_col_id = data.order[0].column;
                 var sort_col_order = data.order[0].dir;
                 var sort_col_name = data.columns[data.order[0].column].data;
+                if (!sort_col_name) {
+                        sort_col_name = 'id'; // Default sorting by id
+                    }
                 $.ajaxSetup({
                     headers:{
                         'Authorization': "Bearer {{$session_token}}"
