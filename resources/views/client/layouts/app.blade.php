@@ -103,7 +103,7 @@
                         <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="{{ $setting['socmed-youtube'] }}"><i
                                 class="fab fa-youtube fw-normal"></i></a>
                         <!-- Icon Pengaturan untuk login admin-->
-                        <a class="btn btn-md rounded-circle" href="{{ url('/admin/login') }}"><i
+                        <a class="btn btn-md rounded-circle" target="_blank" href="{{ url('/admin/login') }}"><i
                                 class="bi bi-gear"></i></a>
                     </div>
                 </div>

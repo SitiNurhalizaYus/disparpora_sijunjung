@@ -43,6 +43,12 @@
         </div>
     </div>
 
+    {{-- 
+    <div class="event-image" style="cursor: pointer;"onmouseover="this.style.cursor='pointer';"
+        onclick="window.location.href='/virtual_tour/${item.slug}'">
+                <img src="${item.image}" alt="${item.name}">
+    </div> --}}
+
     <!-- Font Awesome untuk ikon -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
@@ -77,7 +83,7 @@
                                     <div class="event-image"
                                         style="cursor: pointer;"
                                         onmouseover="this.style.cursor='pointer';"
-                                        onclick="window.location.href='/virtual_tour/${item.slug}'">
+                                        onclick="window.location.href='${item.link}'">
                                         <img src="${item.image}" alt="${item.name}">
                                     </div>
                                     <div class="event-details">

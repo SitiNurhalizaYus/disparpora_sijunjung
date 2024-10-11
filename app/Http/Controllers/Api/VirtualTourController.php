@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\InfoTempat;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Resources\ApiResource;
@@ -50,7 +49,6 @@ class VirtualTourController extends Controller
         $where = str_replace("'", "\"", $where);
         $where = json_decode($where, true);
 
-        // Membuat query dasar untuk tabel InfoTempat dengan relasi createdBy dan updatedBy
         $query = VirtualTour::with(['createdBy', 'updatedBy']);
 
         // Cek user yang login
@@ -135,7 +133,7 @@ class VirtualTourController extends Controller
     public function show($id)
     {
         // Cek apakah user tidak autentikasi, filter konten aktif
-        $query = InfoTempat::with(['createdBy', 'updatedBy']);
+        $query = VirtualTour::with(['createdBy', 'updatedBy']);
 
         if (!auth()->guard('api')->user()) {
             // Hanya ambil data yang aktif jika tidak autentikasi
@@ -177,7 +175,7 @@ class VirtualTourController extends Controller
             $req['is_active'] = 0;
         }
 
-        $data = InfoTempat::create($req);
+        $data = VirtualTour::create($req);
 
         if ($data) {
             return new ApiResource(true, 201, 'Data telah berhasil ditambahkan', $data->toArray(), []);
@@ -188,7 +186,7 @@ class VirtualTourController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = InfoTempat::find($id);
+        $data = VirtualTour::find($id);
 
         if (!$data) {
             return new ApiResource(false, 404, 'Data not found', [], []);
@@ -230,7 +228,7 @@ class VirtualTourController extends Controller
 
     public function destroy($id)
     {
-        $query = InfoTempat::find($id);
+        $query = VirtualTour::find($id);
 
         if (!$query) {
             return new ApiResource(false, 404, 'Data not found', [], []);
@@ -251,7 +249,7 @@ class VirtualTourController extends Controller
         $originalSlug = $slug;
         $count = 1;
 
-        while (InfoTempat::where('slug', $slug)->exists()) {
+        while (VirtualTour::where('slug', $slug)->exists()) {
             $slug = $originalSlug . '-' . $count;
             $count++;
         }

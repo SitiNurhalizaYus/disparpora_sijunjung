@@ -50,11 +50,10 @@
 
                             <!-- Link Field (Opsional) -->
                             <div class="form-group">
-                                <label class="form-label" for="link">Link (Opsional)</label>
+                                <label class="form-label" for="link">Link</label>
                                 <input class="form-control" type="url" id="link" name="link"
-                                    placeholder="Masukkan Link (Opsional)" pattern="https?://.+">
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-link">Format
-                                    link tidak valid, pastikan menggunakan URL yang benar.</p>
+                                    placeholder="Masukkan Link" pattern="https?://.+" required>
+                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-link">Wajib di isi, pastikan menggunakan URL yang benar.</p>
                             </div>
 
                             <!-- Gambar Field -->
@@ -73,12 +72,12 @@
                                     Silakan unggah gambar.</p>
                             </div>
 
-                            <!-- Deskripsi Field -->
+                            {{-- <!-- Deskripsi Field -->
                             <div class="form-group">
                                 <label class="form-label" for="description">Deskripsi</label>
                                 <textarea class="form-control" type="text" id="description" name="description" style="display: none" required></textarea>
                                 <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
-                            </div>
+                            </div> --}}
 
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                                 <!-- Admin/Editor Status Aktif -->
@@ -144,8 +143,9 @@
         function validateLink() {
             const linkValue = $('#link').val();
             const urlPattern = /^(https?:\/\/).+/;
-            return linkValue ? validateInput('link', 'invalid-link', urlPattern.test(linkValue)) : true;
+            return validateInput('link', 'invalid-link', urlPattern.test(linkValue));
         }
+
 
         // Validate file upload
         function validateFile() {
@@ -160,22 +160,6 @@
         $('#slug').on('input', validateSlug);
         $('#link').on('input', validateLink);
         $('#file').on('change', validateFile);
-        $('#description_short').on('input', function() {
-            validateInput('description_short', 'invalid-description_short');
-        });
-
-        // Handle wysiwyg
-        tinymce.init({
-            selector: 'textarea#description_long',
-            plugins: 'code table lists',
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
-            promotion: false,
-            setup: function(ed) {
-                ed.on('change', function() {
-                    $('#description').val(ed.getContent());
-                });
-            }
-        });
 
         // Generate slug based on the name input
         function generateSlug() {
@@ -295,31 +279,11 @@
         // Handle form submission
         $("#form-data").submit(function(event) {
             event.preventDefault();
-            tinymce.triggerSave(); // Pastikan TinyMCE menyimpan kontennya
-
-            // Set deskripsi dari editor TinyMCE
-            $('#description').val(tinymce.get('description_long').getContent());
 
             // Validasi seluruh form sebelum mengirim data
             if (validateForm()) {
                 var form = new FormData(document.getElementById("form-data"));
 
-                // Kondisi untuk kontributor
-                @if ($session_data['user_level_id'] == 3)
-                    if ($('#is_draft').is(":checked")) {
-                        form.set('note', 'Draft'); // Set note as Draft if checked
-                    } else {
-                        form.set('note', 'Menunggu Persetujuan'); // Set note as Menunggu Persetujuan
-                    }
-                @else
-                    // Kondisi untuk admin/editor
-                    form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
-                    if ($('#is_active').is(":checked")) {
-                        form.set('note', 'Diposting/Disetujui');
-                    } else {
-                        form.set('note', 'Draft');
-                    }
-                @endif
 
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
@@ -354,7 +318,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/lokawisatas') }}");
+                                window.location.replace("{{ url('/admin/virtual_tours') }}");
                             });
                         } else {
                             Swal.fire({

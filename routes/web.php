@@ -80,17 +80,17 @@ Route::middleware([\App\Http\Middleware\AutoCreateLogs::class])->group(function 
     Route::get('/lokawisata', [App\Http\Controllers\Client\InfoTempatController::class, 'index'])->name('client.lokawisata.index');
     Route::get('/lokawisata/{id}', [App\Http\Controllers\Client\InfoTempatController::class, 'detail'])->name('client.lokawisata.detail');
     Route::get('/virtual_tour', [App\Http\Controllers\Client\VirtualTourController::class, 'index'])->name('client.virtual_tour.index');
-    Route::get('/virtual_tour/{slug}', function ($slug) {
-        // Path ke file index.htm di folder virtual_tour
-        $path = base_path("virtual_tour/$slug/index.htm");
+    // Route::get('/virtual_tour/{slug}', function ($slug) {
+    //     // Path ke file index.htm di folder virtual_tour
+    //     $path = base_path("virtual_tour/$slug/index.htm");
 
-        // Pastikan file index.htm ada
-        if (file_exists($path)) {
-            return response()->file($path);  // Kembalikan file index.htm jika ditemukan
-        } else {
-            abort(404, 'File not found');  // Tampilkan 404 jika file tidak ditemukan
-        }
-    });
+    //     // Pastikan file index.htm ada
+    //     if (file_exists($path)) {
+    //         return response()->file($path);  // Kembalikan file index.htm jika ditemukan
+    //     } else {
+    //         abort(404, 'File not found');  // Tampilkan 404 jika file tidak ditemukan
+    //     }
+    // });
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCreateLogs::class]], function () {
@@ -123,6 +123,7 @@ Route::group(['prefix' => 'admin', 'middleware' => [\App\Http\Middleware\AutoCre
     Route::resource('galeries', App\Http\Controllers\Admin\DocumentController::class);
     Route::resource('agendas', App\Http\Controllers\Admin\AgendaController::class);
     Route::resource('lokawisatas', App\Http\Controllers\Admin\InfoTempatController::class);
+    Route::resource('virtual_tours', App\Http\Controllers\Admin\VirtualTourController::class);
     Route::resource('messages', App\Http\Controllers\Admin\MessageController::class);
     Route::resource('settings', App\Http\Controllers\Admin\SettingController::class);
     Route::resource('users', App\Http\Controllers\Admin\UserController::class);

@@ -47,15 +47,7 @@
                                     <div class="card-body">
                                         <h4 class="card-title"><span id="name"></span></h4>
                                         <p class="card-text">
-                                        <h6>Virtual Tour: </h6><a href="#" id="vr"></a></p>
-                                        <p class="card-text">
                                         <h6>Link: </h6><a href="#" id="link"></a></p>
-                                        <p class="card-text">
-                                        <h6>Fasilitas: </h6><span id="facilities"></span></p>
-                                        <p class="card-text">
-                                        <h6>Jam Operasi: </h6><span id="operating_hours"></span></p>
-                                        <p class="card-text">
-                                        <h6>Harga Tiket: </h6><span id="ticket_price"></span></p>
                                     </div>
                                 </div>
                             </div>
@@ -82,13 +74,6 @@
                                     <div class="card-body text-center">
                                         <img id="image" class="img-fluid rounded" alt="Virtual Tour Image"
                                             style="max-width: 100%;">
-                                    </div>
-                                </div>
-                                <div class="card mb-3" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
-                                    <div class="card-header bg-gray text-white text-center"><strong>Deskripsi</strong>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="description_long" style="color: black;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +119,7 @@
 
             // Request untuk mendapatkan data lokawisatas
             $.ajax({
-                url: '/api/virtual-tour/{{ $id }}',
+                url: '/api/virtual_tour/{{ $id }}',
                 type: "GET",
                 dataType: "json",
                 processData: false,
@@ -148,19 +133,13 @@
                         $("#detail-data-failed").hide();
 
                         $('#name').text(result['data']['name']);
-                        $('#vr').attr('href', result['data']['vr']).text(result['data']['vr']);
                         $('#link').attr('href', result['data']['link']).text(result['data']['link']);
                         $("#image").attr("src", "{{ url('/') }}/" + result['data']['image']
                             .replace('/xxx/', '/300/'));
-                        $('#description_long').html(result['data']['description']);
-                        $('#facilities').text(result['data']['facilities']);
-                        $('#operating_hours').text(result['data']['operating_hours']);
-                        // Format harga tiket ke format rupiah
-                        $('#ticket_price').text(formatRupiah(result['data']['ticket_price']));
+                        
                         $('#is_active').html(result['data']['is_active'] == 1 ?
                             '<span class="badge bg-success">Aktif</span>' :
                             '<span class="badge bg-danger">Tidak Aktif</span>');
-                        $('#note').html(result['data']['note']);
                         $('#created_at').text(convertStringToDate(result['data']['created_at']));
                         $('#created_by').text(result['data']['created_by']['name']);
                         $('#updated_at').text(convertStringToDate(result['data']['updated_at']));
@@ -199,7 +178,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/api/virtual-tour/' + id,
+                        url: '/api/virtual_tour/' + id,
                         type: "DELETE",
                         dataType: "json",
                         processData: false,

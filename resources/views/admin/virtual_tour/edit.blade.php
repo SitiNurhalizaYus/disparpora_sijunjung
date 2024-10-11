@@ -49,49 +49,13 @@
                                     harus diisi.</p>
                             </div>
 
-                             <!-- Link Vr Field (Opsional) -->
-                             <div class="form-group">
-                                <label class="form-label" for="vr">Link Virtual Tour (jika tersedia)</label>
-                                <input class="form-control" type="url" id="vr" name="vr"
-                                    placeholder="Masukkan Link (Opsional)" pattern="https?://.+">
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-vr">Format
-                                    link vr tidak valid, pastikan menggunakan URL yang benar.</p>
-                            </div>
-
                             <!-- Link Field (Opsional) -->
                             <div class="form-group">
-                                <label class="form-label" for="link">Link (Opsional)</label>
+                                <label class="form-label" for="link">Link</label>
                                 <input class="form-control" type="url" id="link" name="link"
-                                    placeholder="Masukkan Link (Opsional)" pattern="https?://.+">
+                                    placeholder="Masukkan Link" pattern="https?://.+" required>
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-link">Format
                                     link tidak valid, pastikan menggunakan URL yang benar.</p>
-                            </div>
-
-                            <!-- Fasilitas Field -->
-                            <div class="form-group">
-                                <label class="form-label" for="facilities">Fasilitas </label>
-                                <textarea class="form-control" id="facilities" name="facilities" rows="3" placeholder="Masukkan Fasilitas"
-                                    required></textarea>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-facilities">
-                                    Fasilitas harus diisi.</p>
-                            </div>
-
-                            <!-- Jam Operasional Field -->
-                            <div class="form-group">
-                                <label class="form-label" for="operating_hours">Jam Operasional </label>
-                                <input class="form-control" type="text" id="operating_hours" name="operating_hours"
-                                    placeholder="Masukkan Jam Operasional" required>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;"
-                                    id="invalid-operating_hours">Jam Operasional harus diisi.</p>
-                            </div>
-
-                            <!-- Harga Tiket Field -->
-                            <div class="form-group">
-                                <label class="form-label" for="ticket_price">Harga Tiket </label>
-                                <input class="form-control" type="number" id="ticket_price" name="ticket_price"
-                                    placeholder="Masukkan Harga Tiket" required>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-ticket_price">
-                                    Harga Tiket harus diisi dengan format yang benar.</p>
                             </div>
 
                             <!-- Gambar Field -->
@@ -108,13 +72,6 @@
                                     Silakan unggah gambar.</p>
                             </div>
 
-                            <!-- Deskripsi Field -->
-                            <div class="form-group">
-                                <label class="form-label" for="description">Deskripsi</label>
-                                <textarea class="form-control" type="text" id="description" name="description" style="display: none" required></textarea>
-                                <textarea class="form-control" id="description_long" name="description_long" placeholder="Masukkan konten" required></textarea>
-                            </div>
-
                             <!-- Status Aktif -->
                             @if ($session_data['user_level_id'] == 1 || $session_data['user_level_id'] == 2)
                                 <div class="form-group">
@@ -123,37 +80,6 @@
                                         <label class="form-check-label" for="is_active">Status Aktif</label>
                                     </div>
                                 </div>
-                            
-                            <!-- Keterangan Status (opsi muncul jika tidak aktif) -->
-                            <div class="form-group" id="note-section" style="display: none;">
-                                <label class="form-label" for="note-inactive">Keterangan</label>
-                                <select class="form-control" id="note-inactive" name="note"> <!-- Ganti name menjadi note -->
-                                    <option value="">Pilih Keterangan</option>
-                                    <option value="Draft">Draft</option>
-                                    <option value="Ditolak">Ditolak</option>
-                                    <option value="Lakukan Perbaikan">Lakukan Perbaikan</option>
-                                </select>
-                            </div>
-
-                            <!-- Keterangan Status Aktif (opsi muncul jika aktif) -->
-                            <div class="form-group" id="active-note-section" style="display: none;">
-                                <label class="form-label" for="note-active">Keterangan</label>
-                                <select class="form-control" id="note-active" name="note"> <!-- Ganti name menjadi note -->
-                                    <option value="">Pilih Keterangan</option>
-                                    <option value="Diposting/Disetujui">Diposting/Disetujui</option>
-                                    <option value="Diposting/Disetujui Dengan Perubahan">Diposting/Disetujui Dengan Perubahan</option>
-                                </select>
-                            </div>
-                            @endif
-
-                            @if ($session_data['user_level_id'] == 3)
-                                <div class="form-group">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft">
-                                        <label class="form-check-label" for="is_draft">Draft</label>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="is_active" value="0">
                             @endif
 
                             <br><br>
@@ -197,33 +123,10 @@
         }
 
         // Custom validation for link field (optional)
-        function validateVr() {
-            const vrValue = $('#vr').val();
-            const urlPattern = /^(https?:\/\/).+/;
-            return vrValue ? validateInput('vr', 'invalid-vr', urlPattern.test(vrValue)) : true;
-        }
-
-        // Custom validation for link field (optional)
         function validateLink() {
             const linkValue = $('#link').val();
             const urlPattern = /^(https?:\/\/).+/;
             return linkValue ? validateInput('link', 'invalid-link', urlPattern.test(linkValue)) : true;
-        }
-
-        // Validate facilities field (now textarea)
-        function validateFacilities() {
-            return validateInput('facilities', 'invalid-facilities');
-        }
-
-        // Validate operating hours field
-        function validateOperatingHours() {
-            return validateInput('operating_hours', 'invalid-operating_hours');
-        }
-
-        // Validate ticket price field
-        function validateTicketPrice() {
-            const ticketPrice = $('#ticket_price').val();
-            return validateInput('ticket_price', 'invalid-ticket_price', ticketPrice !== '' && ticketPrice >= 0);
         }
 
         // Validasi file gambar yang diunggah
@@ -329,31 +232,11 @@
             }
         });
 
-        $('#description').on('input', function() {
-            validateInput('description', 'invalid-description');
-        });
-
-        // Handle wysiwyg
-        tinymce.init({
-            selector: 'textarea#description_long',
-            plugins: 'code table lists',
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager | print preview media | forecolor backcolor emoticons | codesample",
-            promotion: false,
-            setup: function(ed) {
-                ed.on('change', function(e) {
-                    $('#description').val(ed.getContent());
-                });
-            }
-        });
-
         // Validate the entire form before submission
         function validateForm() {
             let isValid = true;
             isValid = validateInput('name', 'invalid-name') && isValid;
             isValid = validateInput('slug', 'invalid-slug') && isValid;
-            isValid = validateInput('facilities', 'invalid-facilities') && isValid;
-            isValid = validateInput('operating_hours', 'invalid-operating_hours') && isValid;
-            isValid = validateInput('ticket_price', 'invalid-ticket_price') && isValid;
             return isValid;
         }
 
@@ -366,7 +249,7 @@
             });
 
             $.ajax({
-                url: '/api/virtual-tour/{{ $id }}',
+                url: '/api/virtual_tour/{{ $id }}',
                 type: "GET",
                 dataType: "json",
                 success: function(result) {
@@ -374,13 +257,7 @@
                         // Isi data form dengan data yang diterima dari API
                         $('#name').val(result['data']['name']);
                         $('#slug').val(result['data']['slug']);
-                        $('#vr').val(result['data']['vr']);
                         $('#link').val(result['data']['link']);
-                        $('#facilities').val(result['data']['facilities']);
-                        $('#operating_hours').val(result['data']['operating_hours']);
-                        $('#ticket_price').val(result['data']['ticket_price']);
-                        $('#description_long').val(result['data']['description']);
-                        $('#description').val(result['data']['description']);
                         $('#image').val(result['data']['image']);
                         $("#image-preview").attr("src", "{{ url('/') }}/" + result['data'][
                             'image'
@@ -388,24 +265,6 @@
                             '/xxx/', '/300/'));
 
                         $('#is_active').prop('checked', result['data']['is_active']);
-                        
-                        // Set note berdasarkan status aktif
-                        if (result['data']['is_active']) {
-                            $('#note-active').val(result['data']['note']);
-                            $('#active-note-section').show();
-                            $('#note-section').hide();
-                        } else {
-                            $('#note-inactive').val(result['data']['note']);
-                            $('#note-section').show();
-                            $('#active-note-section').hide();
-                        }
-
-                        // Jika kontributor, atur is_draft
-                        if (result['data']['note'] === 'Draft') {
-                            $('#is_draft').prop('checked', true);
-                        } else {
-                            $('#is_draft').prop('checked', false);
-                        }
                     } else {
                         Swal.fire({
                             icon: "error",
@@ -425,17 +284,6 @@
                 }
             });
 
-            // Toggle visibility of note fields based on is_active checkbox
-            $('#is_active').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#note-section').hide();
-                    $('#active-note-section').show();
-                } else {
-                    $('#note-section').show();
-                    $('#active-note-section').hide();
-                }
-            });
-
             // Handle form submission
             $("#form-data").submit(function(event) {
                 event.preventDefault();
@@ -445,26 +293,8 @@
                 // Mengubah is_active menjadi boolean (1 atau 0) sesuai dengan nilai checkbox
                 form.set('is_active', $('#is_active').is(":checked") ? 1 : 0);
                 
-                // Set note sesuai dengan pilihan yang dibuat
-                if ($('#is_active').is(":checked")) {
-                    form.set('note', $('#note-active').val());
-                } else {
-                    form.set('note', $('#note-inactive').val());
-                }
-
-                // Khusus untuk kontributor
-                @if ($session_data['user_level_id'] == 3)
-                    if ($('#is_draft').is(":checked")) {
-                        form.set('note', 'Draft');
-                    } else {
-                        form.set('note', 'Menunggu Persetujuan');
-                    }
-                @endif
-
-
-
                 $.ajax({
-                    url: '/api/virtual-tour/{{ $id }}',
+                    url: '/api/virtual_tour/{{ $id }}',
                     type: "POST",
                     data: form,
                     contentType: false,
@@ -477,7 +307,7 @@
                                 text: result['message'],
                                 confirmButtonColor: '#3A57E8',
                             }).then((result) => {
-                                window.location.replace("{{ url('/admin/lokawisatas') }}");
+                                window.location.replace("{{ url('/admin/virtual_tours') }}");
                             });
                         } else {
                             Swal.fire({

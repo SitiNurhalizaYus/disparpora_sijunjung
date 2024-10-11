@@ -11,64 +11,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="{{ url('/admin/lokawisatas/create') }}" class="btn btn-md btn-primary">Tambah Data +</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Filter Section -->
-        <div class="card mb-4 p-4 shadow-sm">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-3" style="color: #017454;"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                        height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" style="color: #017454;">
-                        <path
-                            d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
-                    </svg> Filter</h5>
-                <button id="reset-filters" class="btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                        class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
-                        <path
-                            d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <!-- Filter Tahun -->
-                    <label for="filter-year" class="form-label">Tahun</label>
-                    <select id="filter-year" class="form-select">
-                        <option value="">Pilih Tahun</option>
-                        @php
-                            $currentYear = date('Y');
-                        @endphp
-                        @for ($year = $currentYear; $year >= $currentYear - 10; $year--)
-                            <option value="{{ $year }}">{{ $year }}</option>
-                        @endfor
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <!-- Filter Bulan -->
-                    <label for="filter-month" class="form-label">Bulan</label>
-                    <select id="filter-month" class="form-select" disabled>
-                        <option value="">Pilih Bulan</option>
-                        @for ($m = 1; $m <= 12; ++$m)
-                            <option value="{{ $m }}">{{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
-                        @endfor
-                    </select>
-                </div>
-
-                <div class="col-md-3" @if ($session_data['user_level_name'] === 'Kontributor') style="display: none;" @endif>
-                    <!-- Filter Penulis -->
-                    <label for="filter-author" class="form-label">Penulis</label>
-                    <select id="filter-author" class="form-select">
-                        <option value="">Pilih Penulis</option>
-                        @foreach ($authors as $author)
-                            <option value="{{ $author->id_user }}">{{ $author->name }}</option>
-                        @endforeach
-                    </select>
+                    <a href="{{ url('/admin/virtual_tours/create') }}" class="btn btn-md btn-primary">Tambah Data +</a>
                 </div>
             </div>
         </div>
@@ -85,10 +28,8 @@
                                         <th class="text-center">No</th>
                                         <th class="text-center">Nama</th>
                                         <th class="text-center">Gambar</th>
-                                        <th class="text-center">Dibuat</th>
-                                        <th class="text-center">Penulis</th>
+                                        <th class="text-center">Link</th>
                                         <th class="text-center">Status</th>
-                                        <th class="text-center">Keterangan</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -150,7 +91,7 @@
                 pageLength: 5,
                 processing: true,
                 serverSide: true,
-                autoWidth: false,
+                autoWidth: true,
                 scrollX: true,
                 ajax: function(data, callback, settings) {
                     var sort_col_index = data.order[0].column;
@@ -171,7 +112,7 @@
                         }
                     });
 
-                    $.get('/api/virtual-tour', {
+                    $.get('/api/virtual_tour', {
                         per_page: data.length,
                         page: (data.start / data.length) + 1,
                         sort: sort_col_name + ':' + sort_col_order,
@@ -209,6 +150,7 @@
                     },
                     {
                         data: 'image',
+                        className: 'text-center',
                         render: function(data, type, row, meta) {
                             if (data && data !== null) { // Pastikan data tidak null
                                 var imagePath = "{{ asset('/') }}" + data.replace('/xxx/',
@@ -221,22 +163,14 @@
                         }
                     },
                     {
-                        data: 'created_at',
+                        data: 'link',
                         render: function(data, type, row, meta) {
-                            return '<span style="white-space: normal;">' + convertStringToDate(
-                                    data) +
-                                '</span>';
-                        }
-                    },
-                    {
-                        data: 'created_by.name', // Pastikan ini benar sesuai dengan data yang dikirim dari API
-                        className: 'text-center',
-                        render: function(data) {
-                            return data ? data : '<span>Unknown</span>';
+                            return '<span style="white-space: normal;">' + data + '</span>';
                         }
                     },
                     {
                         data: 'is_active',
+                        className: 'text-center',
                         render: function(data, type, row, meta) {
                             if (data == '1') {
                                 return '<span class="badge bg-success">Aktif</span>';
@@ -246,30 +180,10 @@
                         }
                     },
                     {
-                        data: 'note',
                         className: 'text-center',
-                        render: function(data) {
-                            if (data === 'Draft') {
-                                return '<span class="badge bg-gray">Draft</span>';
-                            } else if (data === 'Menunggu Persetujuan') {
-                                return '<span class="badge bg-info">Menunggu Persetujuan</span>';
-                            } else if (data === 'Ditolak') {
-                                return '<span class="badge bg-danger">Ditolak</span>'; 
-                            } else if (data === 'Lakukan Perbaikan') {
-                                return '<span class="badge bg-warning">Lakukan Perbaikan</span>';
-                            } else if (data === 'Diposting/Disetujui') {
-                                return '<span class="badge bg-success">Diposting/Disetujui</span>';
-                            } else if (data === 'Diposting/Disetujui Dengan Perubahan') {
-                                return '<span class="badge bg-success">Diposting/Disetujui<br>Dengan Perubahan</span>';
-                            } else {
-                                return '<span class="badge bg-light">Belum ada keterangan</span>';
-                            }
-                        }
-                    },
-                    {
                         render: function(data, type, row, meta) {
                             var btn_detail = `
-                        <a href="{{ url('/admin/lokawisatas/`+row.id+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
+                        <a href="{{ url('/admin/virtual_tours/`+row.id+`') }}" class="btn btn-sm btn-icon btn-info flex-end" data-bs-toggle="tooltip" aria-label="Detail" data-bs-original-title="Detail">
                             <span class="btn-inner">
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
@@ -304,7 +218,7 @@
                         </button>`;
                             } else {
                                 var btn_edit = `
-                        <a href="{{ url('/admin/lokawisatas/`+row.id+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
+                        <a href="{{ url('/admin/virtual_tours/`+row.id+`/edit') }}" class="btn btn-sm btn-icon btn-warning flex-end" data-bs-toggle="tooltip" aria-label="Edit" data-bs-original-title="Edit">
                             <span class="btn-inner">
                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -353,33 +267,21 @@
                     },
                     {
                         targets: [1],
-                        width: "25%"
+                        width: "30%"
                     },
                     {
                         targets: [2],
-                        width: "15%"
+                        width: "25%"
                     },
                     {
                         targets: [3],
-                        width: "15%"
+                        width: "10%"
                     },
                     {
                         targets: [4],
-                        width: "10%"
-                    },
-                    {
-                        targets: [5],
-                        width: "10%"
-                    },
-                    {
-                        targets: [6],
-                        width: "10%"
-                    },
-                    {
-                        targets: [7],
-                        width: "10%",
+                        width: "5%",
                         orderable: false
-                    }
+                    },
                 ],
 
                 // Ketika halaman dimuat, cek level user dan set filter otomatis jika levelnya kontributor
@@ -410,7 +312,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/api/virtual-tour/' + id,
+                        url: '/api/virtual_tour/' + id,
                         type: "DELETE",
                         success: function(result) {
                             if (result.success) {
