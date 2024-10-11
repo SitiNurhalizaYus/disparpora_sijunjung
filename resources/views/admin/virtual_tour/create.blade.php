@@ -48,15 +48,6 @@
                                     harus diisi.</p>
                             </div>
 
-                            <!-- Vr Field (Opsional) -->
-                            <div class="form-group">
-                                <label class="form-label" for="vr">Link Virtual Tour (jika tersedia)</label>
-                                <input class="form-control" type="url" id="vr" name="vr"
-                                    placeholder="Masukkan Link (Opsional)" pattern="https?://.+">
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-vr">Format
-                                    link vr tidak valid, pastikan menggunakan URL yang benar.</p>
-                            </div>
-
                             <!-- Link Field (Opsional) -->
                             <div class="form-group">
                                 <label class="form-label" for="link">Link (Opsional)</label>
@@ -64,33 +55,6 @@
                                     placeholder="Masukkan Link (Opsional)" pattern="https?://.+">
                                 <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-link">Format
                                     link tidak valid, pastikan menggunakan URL yang benar.</p>
-                            </div>
-
-                            <!-- Fasilitas Field -->
-                            <div class="form-group">
-                                <label class="form-label" for="facilities">Fasilitas </label>
-                                <textarea class="form-control" id="facilities" name="facilities" rows="3" placeholder="Masukkan Fasilitas"
-                                    required></textarea>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-facilities">
-                                    Fasilitas harus diisi.</p>
-                            </div>
-
-                            <!-- Jam Operasional Field -->
-                            <div class="form-group">
-                                <label class="form-label" for="operating_hours">Jam Operasional </label>
-                                <input class="form-control" type="text" id="operating_hours" name="operating_hours"
-                                    placeholder="Masukkan Jam Operasional" required>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;"
-                                    id="invalid-operating_hours">Jam Operasional harus diisi.</p>
-                            </div>
-
-                            <!-- Harga Tiket Field -->
-                            <div class="form-group">
-                                <label class="form-label" for="ticket_price">Harga Tiket </label>
-                                <input class="form-control" type="number" id="ticket_price" name="ticket_price"
-                                    placeholder="Masukkan Harga Tiket" required>
-                                <p class="text-danger" style="display: none; font-size: 0.75rem;" id="invalid-ticket_price">
-                                    Harga Tiket harus diisi dengan format yang benar.</p>
                             </div>
 
                             <!-- Gambar Field -->
@@ -176,33 +140,11 @@
             return validateInput('slug', 'invalid-slug', slugValue !== '');
         }
 
-        function validateVr() {
-            const vrValue = $('#vr').val();
-            const urlPattern = /^(https?:\/\/).+/;
-            return vrValue ? validateInput('vr', 'invalid-vr', urlPattern.test(vrValue)) : true;
-        }
-
         // Custom validation for link field (optional)
         function validateLink() {
             const linkValue = $('#link').val();
             const urlPattern = /^(https?:\/\/).+/;
             return linkValue ? validateInput('link', 'invalid-link', urlPattern.test(linkValue)) : true;
-        }
-
-        // Validate facilities field (now textarea)
-        function validateFacilities() {
-            return validateInput('facilities', 'invalid-facilities');
-        }
-
-        // Validate operating hours field
-        function validateOperatingHours() {
-            return validateInput('operating_hours', 'invalid-operating_hours');
-        }
-
-        // Validate ticket price field
-        function validateTicketPrice() {
-            const ticketPrice = $('#ticket_price').val();
-            return validateInput('ticket_price', 'invalid-ticket_price', ticketPrice !== '' && ticketPrice >= 0);
         }
 
         // Validate file upload
@@ -216,13 +158,8 @@
             generateSlug(); // Automatically generate slug when name is input
         });
         $('#slug').on('input', validateSlug);
-        $('#vr').on('input', validateVr);
         $('#link').on('input', validateLink);
-        $('#facilities').on('input', validateFacilities);
-        $('#operating_hours').on('input', validateOperatingHours);
-        $('#ticket_price').on('input', validateTicketPrice);
         $('#file').on('change', validateFile);
-
         $('#description_short').on('input', function() {
             validateInput('description_short', 'invalid-description_short');
         });
@@ -458,11 +395,7 @@
             let isValid = true;
             isValid = validateName() && isValid;
             isValid = validateSlug() && isValid;
-            isValid = validateVr() && isValid;
             isValid = validateLink() && isValid;
-            isValid = validateFacilities() && isValid;
-            isValid = validateOperatingHours() && isValid;
-            isValid = validateTicketPrice() && isValid;
             isValid = validateFile() && isValid;
             return isValid;
         }

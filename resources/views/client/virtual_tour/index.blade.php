@@ -74,14 +74,14 @@
                         response.data.forEach(function(item) {
                             eventCards += `
                                 <div class="event-card">
-                                    <div class="event-image">
+                                    <div class="event-image"
+                                        style="cursor: pointer;"
+                                        onmouseover="this.style.cursor='pointer';"
+                                        onclick="window.location.href='/virtual_tour/${item.slug}'">
                                         <img src="${item.image}" alt="${item.name}">
                                     </div>
                                     <div class="event-details">
-                                         <h3 class="event-title text-capitalize" 
-                                            style="cursor: pointer;" 
-                                            onmouseover="this.style.cursor='pointer';" 
-                                            onclick="window.location.href='${item.link}'">
+                                        <h3 class="event-title text-capitalize">
                                             ${item.name}
                                         </h3>
                                     </div>
